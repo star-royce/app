@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>修改过期物流报价</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">失效日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="FailureTime" class="layui-input" id="FailureTime" placeholder="yyyy-MM-dd" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">国家</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="Country" name="Country" lay-verify="required" lay-reqtext="国家不能为空" disabled placeholder="请输入国家"  class="layui-input layui-disabled" autocomplete="off">
+                </div>
+                <label class="layui-form-label required">国家二字码</label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="CountryCode" name="CountryCode" lay-verify="required" lay-reqtext="国家二字码不能为空" disabled placeholder="请输入国家二字码"  class="layui-input layui-disabled" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">最小重量</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="MinWeight" name="MinWeight" lay-verify="required" lay-reqtext="最小重量不能为空" disabled placeholder="请输入最小重量"  class="layui-input layui-disabled" autocomplete="off">
+                </div>
+                <label class="layui-form-label required">最大重量</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="MaxWeight" name="MaxWeight" lay-verify="required" lay-reqtext="最大重量不能为空" disabled placeholder="请输入最大重量"  class="layui-input layui-disabled" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">属性</label>
+                <div class="layui-input-inline">
+                    <input type="text"id="Attribute" name="Attribute" lay-verify="required" lay-reqtext="属性不能为空" disabled placeholder="请输入属性 " layui-disabled value="" class="layui-input layui-disabled" autocomplete="off">
+                </div>
+                <label class="layui-form-label required">单价(USD/KG)</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="Price" name="Price" lay-verify="required" lay-reqtext="单价不能为空" placeholder="请输入单价"  class="layui-input" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">挂号费</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="RegistrationFee" name="RegistrationFee" lay-verify="required" lay-reqtext="挂号费不能为空" placeholder="请输入挂号费" class="layui-input" autocomplete="off">
+                </div>
+                <label class="layui-form-label required">操作费</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="HandlingFee" name="HandlingFee" lay-verify="required" lay-reqtext="操作费不能为空" placeholder="请输入操作费"  class="layui-input" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">渠道</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="Channel" name="Channel" lay-verify="required" lay-reqtext="渠道不能为空" disabled placeholder="请输入渠道 " class="layui-input layui-disabled" autocomplete="off">
+                </div>
+                <label class="layui-form-label required">产品时效</label>
+                <div class="layui-input-inline">
+                    <input type="text"id="Aging" name="Aging" lay-verify="required" lay-reqtext="产品时效不能为空" disabled placeholder="请输入产品时效"  class="layui-input layui-disabled" autocomplete="off">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" style="float:right">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+    </div>
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var PriceId = GetRequest("PriceId");
+     
+        var app = null;
+        layui.use(['form', 'app'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                layer = layui.layer,
+                laydate = layui.laydate,
+                app = layui.app;
+        
+
+            app.Load("manage");
+
+            //渲染日期
+            laydate.render({
+                elem: '#FailureTime'
+            });
+
+
+            //初始化赋值
+            GetPriceInfo(PriceId)
+            function GetPriceInfo(PriceId) {
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json;",
+                    url: BackgroundDomain +'/api/Price/QueryPriceRuleInfoById',
+                    data: JSON.stringify({ ID: PriceId }),
+                    success: function (msg) {
+                        var re = JSON.stringify(msg.dto)
+                        re = $.parseJSON(re)
+                        $("#FailureTime").attr("value", re.failureTime.substr(0, 10));
+                        $("#Country").attr("value", re.country);
+                        $("#CountryCode").attr("value", re.countryCode);
+                        $("#MinWeight").attr("value", re.minWeight);
+                        $("#MaxWeight").attr("value", re.maxWeight);
+                        $("#Attribute").attr("value", re.attribute);
+                        $("#Price").attr("value", re.price);
+                        $("#RegistrationFee").attr("value", re.registrationFee);
+                        $("#HandlingFee").attr("value", re.handlingFee);
+                        $("#Channel").attr("value", re.channel);
+                        $("#Aging").attr("value", re.aging);
+
+                    }
+                })
+            }
+
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                var price = new Object();
+                console.log(data.field);
+                price.Id = PriceId;
+                price.FailureTime = data.field.FailureTime;
+                price.Price = data.field.Price;
+                price.RegistrationFee = data.field.RegistrationFee;
+                price.HandlingFee = data.field.HandlingFee;
+                
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Price/UpdatePrice",
+                    contentType: "application/json;",
+                    data: JSON.stringify(price),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            layer.msg("修改过期物流报价成功！");
+                            setTimeout(function () {
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            }, 3000);
+                        }
+                        return false;
+                    },
+                    error: function (jqXHR) {
+                        layer.msg(jqXHR.responseJSON.message);
+                        setTimeout(function () {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                        }, 3000);
+                        return false;
+                    }
+                });
+            });
+        })
+    </script>
+</body>
+</html>

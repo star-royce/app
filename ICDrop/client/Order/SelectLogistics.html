@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>选择物流</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button i18n_Text="OrderList.orderModule.button.SelectLogistics" class="layui-btn layui-btn-normal layui-btn-sm " lay-event="select_price" >选择物流</button>
+                </div>
+            </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+        </div>
+    </div>
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var orderId = window.GetRequest("orderId");
+        var app = null;
+        layui.use(['i18n','form', 'table', 'app'], function () {
+            var $ = layui.jquery,
+                i18n = layui.i18n,
+                form = layui.form,
+                table = layui.table;
+
+            app = layui.app;
+            app.Load("client");
+     
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id =  "en_us";;
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+       
+            table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#currentTableId',
+                url: BackgroundDomain +'/api/Price/QueryPriceListByOrderId',
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    { type: "checkbox", width: 50 },
+                    { type: "numbers", width: 100, title: i18n.map['No'] },
+                    { field: 'id', width: 80, title: 'ID', hide: true },
+                    { field: 'money', width: 150, title: i18n.map['Price'] },
+                    { field: 'channel', width: 150, title: i18n.map['Channel'] },
+                    { field: 'aging', width: 150, title: i18n.map['Aging']},
+                    { field: 'use', minWidth: 100, title: i18n.map['Use'], fixed: 'right'  }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                where: {
+                    dto: parseInt(orderId) 
+                },
+                done: function (res, curr, count) {
+                    // 上面的表格执行完成出来在国际化
+                    i18n.loadProperties(id);
+                }
+            });
+
+              
+            //监听头部工具栏事件
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                var checkStatus = table.checkStatus('currentTableId');
+                if (checkStatus.data.length == 0) {
+                    if (id == "zh_cn") {
+                        layer.alert("请勾选要使用的物流");
+                    }
+                    else if (id == "en_us") {
+                        layer.alert("Please check the logistics to use");
+                    }
+     
+                    return false;
+                }
+                else if (checkStatus.data.length > 1) {
+                    if (id == "zh_cn") {
+                        layer.alert("只能使用一个物流");
+                    }
+                    else if (id == "en_us") {
+                        layer.alert("Only one logistics can be used");
+                    }
+                    return false;
+                }
+                var HintInfo = "";
+                if (id == "zh_cn") {
+                    HintInfo="确认使用该物流吗";
+                }
+                else if (id == "en_us") {
+                    HintInfo="Are you sure to use this logistics";
+                }
+                layer.confirm(HintInfo, function (index) {
+                    // 修改操作状态
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json;",
+                        url:BackgroundDomain + '/api/Price/SelectPrice',
+                        data: JSON.stringify(checkStatus.data[0]),
+                        success: function (msg) {
+                            if (id == "zh_cn") {
+                                layer.msg("选择物流成功");
+                            }
+                            else if (id == "en_us") {
+                                layer.msg("Choose logistics success");
+                            }
+                            setTimeout(function () {
+                                layer.close(index);
+                                //执行搜索重载
+                                table.reload('currentTableId', {
+                                    page: {
+                                        curr: 1
+                                    }
+
+                                });
+                                //修改成功后刷新父界面
+                                window.parent.location.reload();
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+
+                            }, 2000);
+                        }
+                    })
+           
+                });
+
+            })
+
+
+           
+            i18n.loadProperties(id);
+
+        });
+    </script>
+</body>
+</html>

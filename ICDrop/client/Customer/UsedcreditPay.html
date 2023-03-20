@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/OrderPay.css?v=2" media="all">
+</head>
+<body>
+    <hr style="background: #029803; width: 440px; margin-left: 30px; " />
+    <div class="contant">
+        <div class="line">
+            <div class="PayText" i18n_Text="You.need.to.pay">你需要支付</div>
+            <div class="PayAmout"><span id="UsedcreditCost">$0</span></div>
+        </div>
+        <hr style="border-bottom: 1px solid #029803 !important;  width: 440px;" />
+        <div class="paybody" id="paybody">
+            <div class="payline">
+                <img src="../../../images/pay/balance.png" />
+                <span>Balance<a class="BalanceAmout" id="BalanceAmout">(Balance:$0)</a></span>
+                <input style='float:right;margin-top:14px;margin-right:20px; border-color: #DDDDDD;border-radius: 20px;width: 20px;height: 20px;cursor:pointer;' type='checkbox' id='balanceChk' checked="checked" onclick="checkBalanceChange(this)">
+            </div>
+            <div class="payline">
+                <img src="../../../images/pay/paypal.png" />
+                <span>Paypal</span>
+                <input style='float:right;margin-top:14px;margin-right:20px; border-color: #DDDDDD;border-radius: 20px;width: 20px;height: 20px;cursor:pointer;' type='checkbox' id='PaypalChk' onclick="checkPaypalChange(this)">
+            </div>
+            <div style="text-align:center;height:32px;line-height:32px;margin-top:64px;">
+                <button type="button" id="pay_submit" class="submit" onclick="paysubmit()" style="display:none;" i18n_Text="OrderList.orderModule.button.PayOrder">支付</button>
+            </div>
+            <div style="margin-top:20px;"><label i18n_Text="Thanks.for.your.business" style=" font-size: 14px;  font-weight: 400; color: #999999;">谢谢您的惠顾</label></div>
+            <!--<div id="paypaldiv">
+        <div class="paylogo"><img id="paylogo" src="../../../images/paypal.png" /></div>
+        <div class="line" id="balancediv" style=" display:none;">
+            <div class="left" i18n_Text="Your.Balance" style="font-size: 16px;  font-weight: 400; color: #333333;">余额</div>
+            <div class="right"><span id="Balance" style="font-size: 20px;  font-weight: bold; color: #333333;">$300</span></div>
+        </div>
+
+        <div class="line">
+            <div class="left" i18n_Text="Payment.amount" style="font-size: 16px;  font-weight: 400; color: #333333;">支付金额</div>
+            <div class="right"><span id="Total" style="font-size: 20px;  font-weight: bold;color: #FF5555;">$300</span></div>
+        </div>
+        <div style="text-align:center;height:32px;line-height:32px;margin-top:20px;">
+            <button type="button" id="paypal_submit" class="submit" onclick="paypalsubmit()" i18n_Text="submit">提交</button>
+            <button type="button" id="banlance_pay" class="submit" onclick="balancesubmit()" style="display:none;" i18n_Text="submit">提交</button>
+            <button type="button" id="InsufficientBalance" class="InsufficientBalance" style="display:none;" i18n_Text="InsufficientBalance">余额不足</button>
+            <label id="Recharge" i18n_Text="Recharge" style="font-size: 14px;  font-weight: 400; color: #3399FF; float: right; display: none;" onclick="RechargeBalance()">Recharge</label>
+        </div>
+        <div style="margin-top:20px;"><label i18n_Text="Thanks.for.your.business" style=" font-size: 14px;  font-weight: 400; color: #999999;">谢谢您的惠顾</label></div>
+    </div>-->
+        </div>
+    </div>
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var id = "en_us";
+        var UsedcreditCost = window.GetRequest("UsedcreditCost");
+        var email;
+        var BalanceAmout;
+        layui.use(['i18n', 'app', 'layer'], function () {
+            $ = layui.jquery;
+            app = layui.app;
+            var layer = layui.layer,
+                i18n = layui.i18n;
+           
+
+
+            app.Load("client");
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+            // 获取登录的用户名
+            var YDHCustomer = layui.data('YDH-Customer');
+            if (YDHCustomer.email) {
+                email = YDHCustomer.email;
+
+            }
+             //获取用户余额判断是否可以仅通过余额来完成支付，如果余额大于所需支付金额则支付按钮可用，否则置灰不可用
+            QueryBalance();
+
+            var UsedcreditCostDiv = document.getElementById("UsedcreditCost");
+            UsedcreditCostDiv.innerHTML = "$" + UsedcreditCost;
+
+        })
+
+        //获取用户余额判断是否可以仅通过余额来完成支付，如果余额大于所需支付金额则支付按钮可用，否则置灰不可用
+        function QueryBalance() {
+            $.ajax({
+                url: BackgroundDomain +"/api/Customer/GetCusCustomerAccount",
+                type: "post",
+                contentType: "application/json;",
+                data: JSON.stringify({ 'email': email }),
+                success: function (msg) {
+                    BalanceAmout = msg.balance;
+                    var BalanceAmoutDIv = document.getElementById("BalanceAmout");
+                    BalanceAmoutDIv.innerHTML = "(Balance:$" + Number(BalanceAmout) + ")";
+                    if (Number(BalanceAmout) < Number(UsedcreditCost)) {
+                        var payDiv = document.getElementById("pay_submit");
+                        payDiv.setAttribute("style", "background: #F2F3F5;display:inline;");
+                        payDiv.disabled = true;
+                    }
+                    else {
+                        var payDiv = document.getElementById("pay_submit");
+                        payDiv.setAttribute("style", "background: #029803;display:inline;");
+                        payDiv.disabled = false;
+                    }
+                }
+            })
+        }
+
+        //取消或勾选余额支付选项
+        function checkBalanceChange(check) {
+            var paypalChk = document.getElementById("PaypalChk");
+            if (paypalChk.checked) {
+                var payDiv = document.getElementById("pay_submit");
+                payDiv.setAttribute("style", "background: #029803;display:inline;");
+                payDiv.disabled = false;
+            }
+            else {
+                if (check.checked == true && Number(BalanceAmout) > Number(UsedcreditCost)) {
+                    var payDiv = document.getElementById("pay_submit");
+                    payDiv.setAttribute("style", "background: #029803;display:inline;");
+                    payDiv.disabled = false;
+                }
+                else {
+                    var payDiv = document.getElementById("pay_submit");
+                    payDiv.setAttribute("style", "background: #F2F3F5;display:inline;");
+                    payDiv.disabled = true;
+                }
+            }
+        }
+        //取消或勾选paypal支付选项
+        function checkPaypalChange(check) {
+            var balanceChk = document.getElementById("balanceChk");
+            if (check.checked) {
+                var payDiv = document.getElementById("pay_submit");
+                payDiv.setAttribute("style", "background: #029803;display:inline;");
+                payDiv.disabled = false;
+            }
+            else {
+                if (balanceChk.checked == true && Number(BalanceAmout) > Number(UsedcreditCost)) {
+                    var payDiv = document.getElementById("pay_submit");
+                    payDiv.setAttribute("style", "background: #029803;display:inline;");
+                    payDiv.disabled = false;
+                }
+                else {
+                    var payDiv = document.getElementById("pay_submit");
+                    payDiv.setAttribute("style", "background: #F2F3F5;display:inline;");
+                    payDiv.disabled = true;
+                }
+            }
+        }
+
+        //支付点击提交按钮事件
+        function paysubmit() {
+         
+            var paypalChk = document.getElementById("PaypalChk");
+            var balanceChk = document.getElementById("balanceChk");
+             //仅使用余额付款
+            if (!paypalChk.checked && balanceChk.checked) {
+                balancesubmit();
+            }
+            //仅使用paypal付款
+            else if (paypalChk.checked && !balanceChk.checked) {
+                paypalpay();
+            }
+            //使用余额和paypal组合付款
+            else if (paypalChk.checked && balanceChk.checked) {
+                //如果余额大于还款额度则使用余额付款
+                if (Number(BalanceAmout) >= Number(UsedcreditCost)) {
+                    balancesubmit();
+                }
+                //否则组合付款
+                else { 
+                    BalanceAndPayPalToPay();
+                }
+            }
+
+       
+        }
+
+        //使用paypa支付
+        function paypalpay() {
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/PaypalPayAllChkCreditOrder",
+                contentType: "application/json;",
+                data: JSON.stringify(email),
+                dataType: "json",
+                async: false,//同步
+                success: function (data) {
+                    if (!data) {
+                        layer.msg("支付异常！");
+                    } else {
+                        window.open(data.data, '_blank').location;
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        /*使用余额付款*/
+        function balancesubmit() {
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/BalancePayCredit",
+                contentType: "application/json;",
+                data: JSON.stringify(email),
+                dataType: "json",
+                async: false,//同步
+                success: function (data) {
+                    if (!data) {
+                        layer.msg("支付异常！");
+                    } else {
+
+                        if (id == "zh_cn") {
+                            layer.msg("支付成功！");
+                        }
+                        else {
+                            layer.msg("payment success！");
+                        }
+                        /* layer.close(layer.index);*/
+                        /*  return true;*/
+                    }
+                    setTimeout(function () {
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                        parent.location.reload();
+                    }, 2000);
+                    return false;
+                }
+            });
+        }
+        //使用余额和paypal组合付款
+        function BalanceAndPayPalToPay() {
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/PaypalAndBalanceToRefund",
+                contentType: "application/json;",
+                data: JSON.stringify(email),
+                dataType: "json",
+                async: false,//同步
+                success: function (data) {
+                    if (!data) {
+                        layer.msg("Pay the abnormal！");
+                    } else {
+                        window.open(data.data, '_blank').location;
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+    </script>
+  
+</body>
+</html>

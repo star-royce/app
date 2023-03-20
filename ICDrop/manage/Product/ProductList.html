@@ -1,0 +1,1305 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>进口商品</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="/css/manage/Product.css?v=2" media="all">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">
+
+</head>
+<body>
+    <div class="layuimini-main">
+        <div class="" style="width: 100%;height:40px; margin: 20px 0px;">
+            <form class="layui-form layui-form-pane" action="/share/ImportCommodity.html" method="get">
+                <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle">
+                <button i18n_Text="search" type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"> 搜 索</button>
+            </form>
+        </div>
+
+        <div id="productList" class="productList">
+        </div>
+
+        <!--分页-->
+        <div id="test1" style="float:right;margin-right:40px;"></div>
+    </div>
+
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../../js/lay-module/wangEditor/wangEditor.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script type="text/javascript">
+        var form = null;
+        layui.use(['form', 'app', 'laypage', 'i18n'], function () {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                app = layui.app,
+                i18n = layui.i18n,
+                laypage = layui.laypage;
+            form = layui.form;
+            app.Load("manage");
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id = "zh_cn";
+            if (YDHConfig.Lang) {
+                id = YDHConfig.Lang.id
+            }
+
+            var count;
+            var SerchproductInfo = new Object();
+            //查找出该客户（管理员）的进口商品信息
+            QueryImportProduct(count, SerchproductInfo);
+
+            var prev = "";
+            var next = "";
+            if (id == "zh_cn") {
+                prev = "上一页";
+                next = "下一页";
+            }
+            else if (id == "en_us") {
+                prev = "previous page";
+                next = "next page ";
+            }
+
+
+            var YDHCustomer = layui.data('YDH-Customer');
+            function QueryImportProduct(count, SerchproductInfo) {
+                var dto_obj = new Object();
+                dto_obj.page = 1;
+                dto_obj.limit = 10;
+                dto_obj.dto = SerchproductInfo;
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url:BackgroundDomain + '/api/Product/QueryImportProductList',
+                    data: JSON.stringify(dto_obj),
+                    success: function (msg) {
+                        count = msg.count;
+                        //分页
+                        laypage.render({
+                            elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+                            , prev: prev
+                            , next: next
+                            , count: count //数据总数，从服务端得到
+                            , limit: 10
+                            , jump: function (obj, first) {
+                                dto_obj.page = obj.curr;
+                                dto_obj.limit = obj.limit;
+                                dto_obj.dto = SerchproductInfo;
+                                $.ajax({
+                                    type: "post",
+                                    contentType: "application/json",
+                                    url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                                    data: JSON.stringify(dto_obj),
+                                    success: function (msg) {
+                                        $("#productList").empty();
+                                        var data = msg.data.length;
+                                        //获取div
+                                        var divf = document.getElementById("productList");
+
+                                        for (var i = 0; i < data; i++) {
+
+                                            var html = "";
+                                            //添加div ，
+                                            var div = document.createElement("div");
+                                            div.setAttribute('class', 'product');
+                                            div.setAttribute('id', 'product' + msg.data[i].id);
+                                            divf.appendChild(div);
+
+                                            var div1 = document.createElement("div");
+                                            div1.setAttribute('class', 'producttop');
+                                            div.appendChild(div1);
+
+                                            var ul = document.createElement("ul");
+                                            ul.setAttribute('class', 'productinfo');
+                                            ul.setAttribute('id', 'productinfo' + msg.data[i].id);
+                                            div1.appendChild(ul);
+                                            /*   html += "<li style='width:20px;'><input style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:15px;' data-key='" + msg.data[i].id + "' type='checkbox' id='chk" + msg.data[i].id + "'></li>";*/
+                                            html += "<li style='width:20px;'></li>";
+                                            html += "<li class='select' id='Images_Title" + msg.data[i].id + "'><font style='vertical-align:inherit;'><font class='in18product' style='vertical-align:inherit;'>产品</font></font></li>";
+                                            html += "<li  id='Images_Price" + msg.data[i].id + "' ><font style='vertical-align:inherit;'><font class='in18price' style='vertical-align:inherit;'>价格</font></font></li>";
+                                            html += "<li  id='Images_Description" + msg.data[i].id + "'><font style='vertical-align:inherit;'><font class='in18description' style='vertical-align:inherit;'>描叙</font></font></li>";
+                                            html += "<li  id='Images" + msg.data[i].id + "'><font style='vertical-align:inherit;'><font class='in18picture' style='vertical-align:inherit;'>图片</font></font></li>";
+
+                                            ul.innerHTML = html;
+                                            $(".in18product").html($.i18n.prop('product'));
+                                            $(".in18price").html($.i18n.prop('price'));
+                                            $(".in18description").html($.i18n.prop('description'));
+                                            $(".in18picture").html($.i18n.prop('picture'));
+
+                                            //分隔符
+                                            var fg = document.createElement("div");
+                                            fg.setAttribute('class', 'cutoff_rule');
+                                            div.appendChild(fg);
+
+                                            var div2 = document.createElement("div");
+                                            div2.setAttribute('class', 'productbody');
+                                            div2.setAttribute('id', 'productbody' + msg.data[i].id);
+                                            div.appendChild(div2);
+                                            //左边放图片
+                                            var div3 = document.createElement("div");
+                                            div3.setAttribute('class', 'pic');
+                                            div3.setAttribute('style', 'float:left;width:200px;height:200px;margin-top:30px;');
+                                            div2.appendChild(div3);
+                                            var img = "<img class='lazy-load' src= '" + msg.data[i].indexPicture + "' style='width:200px;height:200px;vertical-align:center' referrerPolicy='no-referrer'>";
+                                            div3.innerHTML = img;
+                                            //右边
+                                            var div4 = document.createElement("div");
+                                            div4.setAttribute('class', 'right');
+                                            div2.appendChild(div4);
+                                            //title
+                                            var div5 = document.createElement("div");
+                                            div5.setAttribute('class', 'title');
+                                            div5.innerHTML = msg.data[i].productTitle;
+                                            div4.appendChild(div5);
+                                            //更改名称
+                                            var div6 = document.createElement("div");
+                                            div6.setAttribute('class', 'upNameText');
+                                            div6.innerHTML = $.i18n.prop('updatetitle');
+                                            div4.appendChild(div6);
+
+                                            var input = document.createElement("input");
+                                            input.setAttribute('type', 'text');
+                                            input.setAttribute('id', 'update_title' + msg.data[i].id);
+                                            input.setAttribute('class', 'upNameInput');
+                                            input.setAttribute('value', msg.data[i].productTitle);
+                                            //数据发生变化时更新
+                                            input.setAttribute('onchange', "UpdateInfo('updatetitle'," + msg.data[i].id + " )");
+                                            div4.appendChild(input);
+
+                                            //类型
+                                            var div7 = document.createElement("div");
+                                            div7.setAttribute('class', 'select-type');
+                                            var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
+                                            div7.innerHTML = type;
+                                            div4.appendChild(div7);
+                                            $(".changetype").html($.i18n.prop('type'));
+
+                                            var input1 = document.createElement("input");
+                                            input1.setAttribute('type', 'text');
+                                            input1.setAttribute('class', 'input-type');
+                                            input1.setAttribute('id', 'update_type' + msg.data[i].id);
+                                            var type = msg.data[i].productType;
+                                            if (msg.data[i].productType == null) {
+                                                type = '';
+                                            }
+                                            input1.setAttribute('value', type);
+                                            input1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
+                                            //数据发生变化时更新
+                                            input1.setAttribute('onchange', "UpdateInfo('updatetype'," + msg.data[i].id + " )");
+                                            div7.appendChild(input1);
+
+                                            //标签
+                                            var div8 = document.createElement("div");
+                                            div8.setAttribute('class', 'select-lable');
+                                            var lable = "<font style='vertical-align:inherit;'><font  class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>标签</font></font></br>";
+                                            div8.innerHTML = lable;
+                                            div4.appendChild(div8);
+                                            $(".changelable").html($.i18n.prop('tags'));
+
+                                            var input2 = document.createElement("input");
+                                            input2.setAttribute('type', 'text');
+                                            input2.setAttribute('class', 'input-lable');
+                                            input2.setAttribute('id', 'update_label' + msg.data[i].id);
+
+                                            var label = msg.data[i].label;
+                                            if (msg.data[i].label == null) {
+                                                label = '';
+                                            }
+                                            input2.setAttribute('value', label);
+                                            input2.setAttribute('placeholder', $.i18n.prop('Separate.multiple.entries.with.commas'));
+                                            //数据发生变化时更新
+                                            input2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[i].id + " )");
+                                            div8.appendChild(input2);
+
+                                            //下分隔符
+                                            var fg1 = document.createElement("div");
+                                            fg1.setAttribute('class', 'cutoff_rule_button');
+                                            div.appendChild(fg1);
+
+                                            //下部分
+                                            var divbuttom = document.createElement("div");
+                                            divbuttom.setAttribute('class', 'productbuttom');
+                                            div.appendChild(divbuttom);
+
+                                            //添加删除和推送按钮
+                                            var budiv = document.createElement("div");
+                                            budiv.setAttribute('class', 'pro');
+                                            divbuttom.appendChild(budiv);
+
+                                            var delinput = document.createElement("input");
+                                            delinput.setAttribute('type', 'button');
+                                            delinput.setAttribute('id', 'delproduct' + msg.data[i].id);
+                                            delinput.setAttribute('class', 'deletepro');
+                                            delinput.setAttribute('i18n_Text', 'deleteproduct');
+                                            delinput.setAttribute('value', '删除商品');
+                                            delinput.setAttribute('onclick', 'DelProduct(' + msg.data[i].id + ')');
+                                            budiv.appendChild(delinput);
+                                            $(".deletepro").val($.i18n.prop('deleteproduct'));
+
+                                            if (YDHCustomer.Secret != null) {
+                                                var pushInput = document.createElement("input");
+                                                pushInput.setAttribute('type', 'button');
+                                                pushInput.setAttribute('id', 'pushproduct' + msg.data[i].id);
+                                                pushInput.setAttribute('class', 'pushpro');
+                                                pushInput.setAttribute('value', '推送到商店');
+                                                pushInput.setAttribute('onclick', 'PushProduct(' + msg.data[i].id + ')');
+                                                budiv.appendChild(pushInput);
+                                                $(".pushpro").val($.i18n.prop('pushpro'));
+                                            }
+
+                                            //li选中切换
+                                            $(function () {
+                                                var pircturelist = msg.data[i].pictureJson;
+                                                var id = msg.data[i].id;
+                                                var flag = 0;
+                                                //点击价格,获取价格信息
+                                                $("#Images_Price" + msg.data[i].id).click(function () {
+
+                                                    $(this).addClass('select');
+                                                    $("#productinfo" + id + " li").not($(this)).removeClass('select');
+                                                    //获取价格信息
+                                                    var productprice = new Object();
+                                                    productprice.productId = id;
+                                                    $.ajax({
+                                                        type: "post",
+                                                        contentType: "application/json",
+                                                        url:BackgroundDomain + '/api/Product/QueryProductPriceInfo',
+                                                        data: JSON.stringify(productprice),
+                                                        success: function (data) {
+                                                            document.getElementById("productbody" + id).innerHTML = "";
+                                                            //添加表格头部
+                                                            var pricehtml = "";
+                                                            var pricediv = document.getElementById("productbody" + id);
+                                                            var priceul = document.createElement("ul");
+                                                            priceul.setAttribute('style', 'height:40px;text-align:center;line-height:40px;margin-top:20px;');
+                                                            priceul.setAttribute('class', 'table-header');
+                                                            priceul.setAttribute('id', 'price' + data.data[0].productId);
+                                                            pricediv.appendChild(priceul);
+                                                            pricehtml += "<li id='image" + id + "' class='head_font'style='width:9%;' >图片<br></li>";
+                                                            pricehtml += "<li  class='head_font'style='width:14%;' >sku<br></li>";
+                                                            //将属性字段分隔成单个属性
+                                                            var att = JSON.parse(data.data[0].attribute);
+                                                            if (att != null) {
+                                                                var attcount = Object.keys(att).length;
+                                                                var width = Math.floor(34 / attcount);
+                                                                for (var key in att) {
+                                                                    pricehtml += "<li  class='head_font'style='width:" + width + "%;text-align:left;' ><div style='width=auto !important;text-align:center;max-width:320px;margin-top:0px;'><input type = 'text' style='width:60%;max-width:320px;border:1px solid #EEEEEE;min-width:150px;height:28px;'    data-type='" + key + "' data-key='" + id + "'  value = '" + key + "' onchange='UpdateAttributetitel(this)'/></div></li>";
+                                                                }
+                                                            }
+                                                            else {
+                                                                pricehtml += "<li id='attribute" + id + "'  class='head_font'style='width:34%;text-align:left;' >属性<br/></li>";
+
+                                                            }
+                                                            pricehtml += "<li class='head_font'style='width:4%;' ><button type='button' class='layui-btn layui-btn-primary layui-btn-xs AllQuantity ' data-quantity='" + id + "' >维护库存</button><br></li>";
+                                                            pricehtml += "<li id='currency" + id + "' class='head_font'style='width:4%;' >币种<br></li>";
+                                                            pricehtml += "<li id='cost" + id + "' class='head_font'style='width:7%;'>阿里价<br></li>";
+                                                            pricehtml += "<li id='in18price" + id + "' class='head_font'style='width:7%;'>采购价</li>";
+                                                            pricehtml += "<li class='head_font'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs AllPurchusePrice ' data-productid='" + id + "'>维护采购价</button></li>";
+                                                            pricehtml += "<li class='head_font'style='width:5%;'>已维护属性</li>";
+                                                            pricehtml += "<li class='head_font'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs AllEetendChange 'data-productid='" + id + "'>维护扩展属性</button></li>";
+                                                            priceul.innerHTML = pricehtml;
+
+                                                            //循环数据添加主体部分
+                                                            for (var i = 0; i < data.data.length; i++) {
+                                                                var pricediv1 = document.createElement("div");
+                                                                pricediv1.setAttribute('class', 'table-body');
+                                                                pricediv.appendChild(pricediv1);
+
+                                                                var priceul1 = document.createElement("ul");
+                                                                priceul1.setAttribute("style", "clear:both");
+                                                                pricediv1.appendChild(priceul1);
+                                                                var pricehtml1 = "";
+                                                                pricehtml1 += "<li class='price_body' style='width:20px;'><label><input  type='checkbox'  data-key='" + data.data[i].id + "' id='prchk" + data.data[i].id + "' onchange='Updatecheckvariant(this)'/></label></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:calc(9% - 20px);'><img src='" + data.data[i].pictureUrl + "' style='height:50px' referrerPolicy='no-referrer'><br></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:14%;'>" + data.data[i].sku + "<br></li>";
+                                                                //将属性字段分隔成单个属性
+                                                                var att1 = JSON.parse(data.data[i].attribute);
+                                                                if (att1 != null) {
+                                                                    var attcount1 = Object.keys(att1).length;
+                                                                    var width1 = Math.floor(34 / attcount1);
+                                                                    for (var key in att1) {
+                                                                        pricehtml1 += "<li  class='price_body'style='width:" + width1 + "%;text-align:left;'>" +
+                                                                            "<input type = 'text' class='layui-input' style='float:left;width:95%;max-width:320px;'  data-type='" + key + "' data-key='" + data.data[i].id + "'  value = '" + att1[key] + "' onchange='UpdateAttribute(this)'/> <br/></li> ";
+                                                                    }
+                                                                } else {
+                                                                    pricehtml1 += "<li  class='price_body'style='width:34%;float:left;'><br/></li > "
+                                                                }
+                                                                pricehtml1 += "<li class='price_body'style='width:4%;'><input type = 'text' class='layui-input' style='float:left;width:100%;' data-productid = '" + id + "'  data-key='" + data.data[i].id + "'  value = '" + data.data[i].quantity + "' onchange='UpdateQuantity(this)'/> </li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:4%;'>" + data.data[i].currency + "<br></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:7%;'>" + data.data[i].cost + "<br></li>";
+                                                                var onchange = "UpdatePrice(" + data.data[i].id + ")";
+                                                                pricehtml1 += "<li class='price_body'style='width:7%;' id='PurchasePrice" + data.data[i].id + "' data-product='" + id + "'>" + data.data[i].price + "<br></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs PurchusePrice ' data-productid='" + id + "' data-wareid='" + data.data[i].id + "'>维护采购价</button></li>";
+                                                                var IsCompleteExtend = "否";
+                                                                if (data.data[i].isCompleteExtend == "1") {
+                                                                    IsCompleteExtend = "是";
+                                                                }
+                                                                pricehtml1 += "<li class='price_body'style='width:5%;'>" + IsCompleteExtend+"</li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs EetendChange ' data-productid='" + id + "' data-wareid='" + data.data[i].id + "'>维护扩展属性</button></li>";
+
+                                                                priceul1.innerHTML = pricehtml1;
+
+                                                                if (data.data[i].ischeck == "0") {
+                                                                    document.getElementById("prchk" + data.data[i].id).checked = true;
+                                                                }
+                                                            }
+                                                        }
+                                                    })
+                                                });
+
+
+                                                //点击产品标题,获取标题信息
+                                                $("#Images_Title" + msg.data[i].id).click(function () {
+
+                                                    $(this).addClass('select');
+                                                    $("#productinfo" + id + " li").not($(this)).removeClass('select');
+                                                    //获取标题信息
+                                                    var producttitle = new Object();
+                                                    /*producttitle.productId = id;*/
+                                                    producttitle.page = 1;
+                                                    producttitle.limit = 10;
+                                                    producttitle.dto = { id: id }
+                                                    $.ajax({
+                                                        type: "post",
+                                                        contentType: "application/json",
+                                                        url:BackgroundDomain + '/api/Product/QueryImportProductList',
+                                                        data: JSON.stringify(producttitle),
+                                                        success: function (data) {
+                                                            document.getElementById("productbody" + id).innerHTML = "";
+                                                            var titlediv = document.getElementById("productbody" + id);
+
+
+                                                            //左边放图片
+                                                            var titlediv3 = document.createElement("div");
+                                                            titlediv3.setAttribute('class', 'pic');
+                                                            titlediv3.setAttribute('style', 'float:left;width:200px;height:200px;margin-top:30px;');
+                                                            titlediv.appendChild(titlediv3);
+                                                            var img = "<img class='lazy-load' src= '" + data.data[0].indexPicture + "' style='width:200px;height:200px;vertical-align:center' referrerPolicy='no-referrer'>";
+                                                            titlediv3.innerHTML = img;
+                                                            //右边
+                                                            var titlediv4 = document.createElement("div");
+                                                            titlediv4.setAttribute('class', 'right');
+                                                            titlediv.appendChild(titlediv4);
+                                                            //title
+                                                            var titlediv5 = document.createElement("div");
+                                                            titlediv5.setAttribute('class', 'title');
+                                                            titlediv5.innerHTML = data.data[0].productTitle;;
+                                                            titlediv4.appendChild(titlediv5);
+                                                            //更改名称
+                                                            var titlediv6 = document.createElement("div");
+                                                            titlediv6.setAttribute('class', 'upNameText');
+                                                            titlediv6.innerHTML = $.i18n.prop('updatetitle');
+                                                            titlediv4.appendChild(titlediv6);
+
+
+                                                            var titleinput = document.createElement("input");
+                                                            titleinput.setAttribute('type', 'text');
+                                                            titleinput.setAttribute('id', 'update_title' + data.data[0].id);
+                                                            titleinput.setAttribute('class', 'upNameInput');
+                                                            titleinput.setAttribute('value', data.data[0].productTitle);
+                                                            //数据发生变化时更新
+                                                            titleinput.setAttribute('onchange', "UpdateInfo('updatetitle'," + data.data[0].id + " )");
+                                                            titlediv4.appendChild(titleinput);
+
+
+                                                            //类型
+                                                            var titlediv7 = document.createElement("div");
+                                                            titlediv7.setAttribute('class', 'select-type');
+                                                            var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
+                                                            titlediv7.innerHTML = type;
+                                                            titlediv4.appendChild(titlediv7);
+                                                            $(".changetype").html($.i18n.prop('type'));
+
+                                                            var titleinput1 = document.createElement("input");
+                                                            titleinput1.setAttribute('type', 'text');
+                                                            titleinput1.setAttribute('class', 'input-type');
+                                                            titleinput1.setAttribute('id', 'update_type' + data.data[0].id);
+                                                            var type = data.data[0].productType;
+                                                            if (data.data[0].productType == null) {
+                                                                type = '';
+                                                            }
+                                                            titleinput1.setAttribute('value', type);
+                                                            titleinput1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
+                                                            //数据发生变化时更新
+                                                            titleinput1.setAttribute('onchange', "UpdateInfo('updatetype'," + data.data[0].id + " )");
+                                                            titlediv7.appendChild(titleinput1);
+
+                                                            //标签
+                                                            var titlediv8 = document.createElement("div");
+                                                            titlediv8.setAttribute('class', 'select-lable');
+                                                            var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>标签</font></font></br>";
+                                                            titlediv8.innerHTML = lable;
+                                                            titlediv4.appendChild(titlediv8);
+                                                            $(".changelable").html($.i18n.prop('tags'));
+
+                                                            var titleinput2 = document.createElement("input");
+                                                            titleinput2.setAttribute('type', 'text');
+                                                            titleinput2.setAttribute('class', 'input-lable');
+                                                            titleinput2.setAttribute('id', 'update_label' + data.data[0].id);
+                                                            var label = data.data[0].label;
+                                                            if (data.data[0].label == null) {
+                                                                label = '';
+                                                            }
+                                                            titleinput2.setAttribute('value', label);
+                                                            titleinput2.setAttribute('placeholder', $.i18n.prop('Separate.multiple.entries.with.commas'));
+                                                            //数据发生变化时更新
+                                                            titleinput2.setAttribute('onchange', "UpdateInfo('updatelabel'," + data.data[0].id + " )");
+                                                            titlediv8.appendChild(titleinput2);
+
+                                                        }
+                                                    })
+
+
+                                                });
+
+                                                //点击产品描述,,获取描述信息
+                                                $("#Images_Description" + msg.data[i].id).click(function () {
+
+                                                    $(this).addClass('select');
+                                                    $("#productinfo" + id + " li").not($(this)).removeClass('select');
+
+                                                    var productdescription = new Object();
+                                                    productdescription.productId = id;
+                                                    $.ajax({
+                                                        type: "post",
+                                                        contentType: "application/json",
+                                                        url:BackgroundDomain + '/api/Product/QueryProductDescriptionInfo',
+                                                        data: JSON.stringify(productdescription),
+                                                        success: function (data) {
+                                                            document.getElementById("productbody" + id).innerHTML = "";
+                                                            var descriptiondiv = document.getElementById("productbody" + id);
+                                                            var descriptiondiv1 = document.createElement("div");
+                                                            descriptiondiv1.setAttribute('id', 'Description' + data.dto.id);
+                                                            descriptiondiv1.setAttribute('class', 'Description');
+                                                            descriptiondiv.appendChild(descriptiondiv1);
+                                                            //富文本编辑器
+                                                            var E = window.wangEditor;
+                                                            const editor = new E('#Description' + data.dto.id)
+                                                            var change = 0;
+                                                            editor.customConfig.onchange = (html) => {
+                                                                if (change != 0) {
+                                                                    /*console.log(`获取到的富文本数据:${html}`);*/
+                                                                    UpdateDescription(data.dto.id, html);
+                                                                }
+                                                                change = 1;
+                                                            };
+                                                            editor.create()
+                                                            editor.txt.html(data.dto.content)
+                                                        }
+
+                                                    })
+                                                });
+
+                                                //点击产品图片
+                                                $("#Images" + msg.data[i].id).click(function () {
+                                                    // 这里能获取到当前点击的li标签当前的value值
+                                                    $(this).addClass('select');
+                                                    $("#productinfo" + id + " li").not($(this)).removeClass('select');
+                                                    var productpicture = new Object();
+                                                    productpicture.productId = id;
+
+                                                    var picture = pircturelist.replace('[', '').replace(']', '').split(",");
+
+
+                                                    document.getElementById("productbody" + id).innerHTML = "";
+                                                    var picturehtml = "";
+                                                    var picturediv = document.getElementById("productbody" + id);
+                                                    var pictureul1 = document.createElement("ul");
+                                                    picturediv.appendChild(pictureul1);
+
+
+                                                    ////循环数据添加主体部分
+                                                    //for (var i = 0; i < picture.length; i++) {
+                                                    //    picturehtml += "<li class='pirturebody'style='width:200px;height:20opx;;float:left'><img src=" + picture[i] + " style='width:200px;height:200px;'></li>";
+                                                    //}
+
+
+                                                    $.ajax({
+                                                        type: "post",
+                                                        contentType: "application/json",
+                                                        url: BackgroundDomain +'/api/Product/QueryProductImagesInfo',
+                                                        data: JSON.stringify(productpicture),
+                                                        success: function (data) {
+                                                            if (data.data) {
+                                                                //循环数据添加主体部分
+                                                                for (var i = 0; i < data.data.length; i++) {
+                                                                    if (data.data[i].isVisible == 0) {
+                                                                        picturehtml += "<li id= 'pirture" + data.data[i].id + "' data-key='" + data.data[i].id + "' class='pirturebody'style='width:200px;;float:left'onclick='changeImageState(this)' ><i class='layui-icon icon-a-check' id='icon" + data.data[i].id + "'></i> <img src=" + data.data[i].pictureUrl + " style='width:200px;height:200px;'></li>";
+                                                                    }
+                                                                }
+                                                                pictureul1.innerHTML = picturehtml;
+                                                            }
+
+                                                        }
+
+                                                    })
+
+
+                                                });
+                                            })
+
+
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    }
+                })
+            }
+
+
+
+
+
+            i18n.loadProperties(id);
+
+
+            $("#btnsearch").click(function (data) {
+                var result = document.getElementById("productTitle").value;
+
+
+                if ($.isEmptyObject(result) != true) {
+                    SerchproductInfo.productTitle = result;
+                }
+                QueryImportProduct(count, SerchproductInfo);
+            })
+
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                //var obj = new Object();
+                //obj.productTitle = $("#productTitle").val();
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+                if ($.isEmptyObject(obj.productTitle) != true) {
+                    SerchproductInfo.productTitle = obj.productTitle;
+                }
+                QueryImportProduct(count, SerchproductInfo);
+                return false;
+            })
+        })
+
+
+
+        ////提交增删改数据(标题，标签，类型)
+        function UpdateInfo(type, id) {
+            console.log(type + id);
+            //修改标题
+            if (type == "updatetitle") {
+                var change = document.getElementById('update_title' + id).value;
+                var productInfo = new Object();
+                productInfo.id = id;
+                productInfo.productTitle = change;
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    data: JSON.stringify(productInfo),
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg($.i18n.prop('The.update.is.successful'))
+                        }
+                    }
+                })
+            }
+
+            //修改类型
+            if (type == "updatetype") {
+                var change = document.getElementById('update_type' + id).value;
+                var productInfo = new Object();
+                productInfo.id = id;
+                productInfo.productType = change;
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url:BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    data: JSON.stringify(productInfo),
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg($.i18n.prop('The.update.is.successful'))
+                        }
+                    }
+                })
+            }
+
+            //修改标签
+            if (type == "updatelabel") {
+                var change = document.getElementById('update_label' + id).value;
+                var productInfo = new Object();
+                productInfo.id = id;
+                productInfo.label = change;
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url:BackgroundDomain + '/api/Product/UpdateProductInfo',
+                    data: JSON.stringify(productInfo),
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg($.i18n.prop('The.update.is.successful'))
+                        }
+                    }
+                })
+            }
+
+        }
+
+        
+        //维护产品所有sku的采购价格
+        $(document).on('click', '.AllPurchusePrice', function () {
+            var data = new Object();
+            var productId = $(this).attr("data-productid");
+            var system = "product";
+            data.productId = productId;
+            data.system = system;
+            layer.open({
+                type: 1,
+                title: "维护产品采购价格",
+                area: ['80%', '70%'],
+                content: $("#MaintainPurchase")//引用的弹出层的页面层的方式加载修改界面表单
+
+            });
+            //动态向表传递赋值
+            UPPurchasePrice(data);
+
+        });
+
+        //维护商品sku的采购价格
+        $(document).on('click', '.PurchusePrice', function () {
+            var data = new Object();
+            var productId = $(this).attr("data-productid");
+            var wareId = $(this).attr("data-wareid");
+            var system = "sku";
+            data.productId = productId;
+            data.system = system;
+            data.wareId = wareId;
+            layer.open({
+                type: 1,
+                title: "维护sku采购价格",
+                area: ['80%', '70%'],
+                content: $("#MaintainPurchase")//引用的弹出层的页面层的方式加载修改界面表单
+
+            });
+            //动态向表传递赋值
+            UPPurchasePrice(data);
+
+        });
+
+        //修改商品/sku的采购价格
+        function UPPurchasePrice(data) {
+            //修改整个商品的采购价格
+            if (data.system == "product") {
+                form.val("MaintainPurchase", {
+                    "PurchaseSystem": data.system,
+                    "PurchaseCost": "",
+                    "PurchaseProfit": "",
+                    "TaxesProfit":"",
+                    "FreightProfit":""
+                });
+                //点击确认修改所有商品的采购价格
+                form.on('submit(up_Purchase)', function (massage) {
+                    var dto_obj = new Object();
+                    dto_obj.ProductId = parseInt(data.productId);
+                    dto_obj.Currency = massage.field.currency;
+                    dto_obj.ExchangeRate = massage.field.exchangeRate;
+                    dto_obj.PurchaseCost = massage.field.PurchaseCost;
+                    dto_obj.PurchaseProfit = massage.field.PurchaseProfit;
+                    dto_obj.TaxesProfit = massage.field.TaxesProfit;
+                    dto_obj.FreightProfit = massage.field.FreightProfit;
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json",
+                        url: BackgroundDomain +'/api/Product/UpdatePurchasePrice',
+                        data: JSON.stringify(dto_obj),
+                        success: function (data) {
+                            setTimeout(function () {
+                                // 这里就是处理的事件
+                                layer.msg("修改成功", { time: 2000 })
+                            }, 2000);
+
+                            layer.closeAll();
+                            //修改页面总价格
+                            if (massage.field.currency == "RMB") {
+                                var cost = parseFloat(massage.field.PurchaseCost);
+                                var profit = parseFloat(massage.field.PurchaseProfit);
+                                var exchangeRate = parseFloat(massage.field.exchangeRate);
+                                var price = ((cost + profit) / exchangeRate).toFixed(2);
+                                $("[data-product='" + dto_obj.ProductId + "']").html(price);
+                            }
+                            else {
+                                var cost = parseFloat(massage.field.PurchaseCost);
+                                var profit = parseFloat(massage.field.PurchaseProfit);
+                                var price = (cost + profit).toFixed(2);
+                                $("[data-product='" + dto_obj.ProductId + "']").html(price);
+                            }
+                        }
+                    })
+                    return false;
+                });
+            }
+            //修改单个sku变体的采购价格
+            if (data.system == "sku") {
+                var id = parseInt(data.wareId);
+                //获取变体的信息,并赋值
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json;",
+                    url: BackgroundDomain +'/api/Product/QueryVariantInfoByVariantId',
+                    data: JSON.stringify(id),
+                    success: function (msg) {
+                        if (msg.purchaseCost != "0") {
+                            form.val("MaintainPurchase", {
+                                "PurchaseSystem": data.system,
+                                "PurchaseCost": msg.purchaseCost,
+                                "PurchaseProfit": msg.purchaseProfit,
+                                "TaxesProfit": msg.taxesProfit,
+                                "FreightProfit": msg.freightProfit
+                            });
+                        }
+                        else {
+                            form.val("MaintainPurchase", {
+                                "PurchaseSystem": data.system,
+                                "PurchaseCost": "",
+                                "PurchaseProfit": "",
+                                "TaxesProfit":"",
+                                "FreightProfit": ""
+                            });
+                        }
+                    }
+
+                })
+                //点击确认修改sku的采购价格
+                form.on('submit(up_Purchase)', function (massage) {
+                    var dto_obj = new Object();
+                    dto_obj.Id = parseInt(data.wareId);
+                    dto_obj.Currency = massage.field.currency;
+                    dto_obj.ExchangeRate = massage.field.exchangeRate;
+                    dto_obj.PurchaseCost = massage.field.PurchaseCost;
+                    dto_obj.PurchaseProfit = massage.field.PurchaseProfit;
+                    dto_obj.TaxesProfit = massage.field.TaxesProfit;
+                    dto_obj.FreightProfit = massage.field.FreightProfit;
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json",
+                        url: BackgroundDomain +'/api/Product/UpdatePurchasePrice',
+                        data: JSON.stringify(dto_obj),
+                        success: function (data) {
+                            setTimeout(function () {
+                                // 这里就是处理的事件
+                                layer.msg("修改成功", { time: 2000 })
+                            }, 1000);
+                            layer.closeAll();
+                            //修改页面总价格
+                            if (massage.field.currency == "RMB") {
+                                var cost = parseFloat(massage.field.PurchaseCost);
+                                var profit = parseFloat(massage.field.PurchaseProfit);
+                                var exchangeRate = parseFloat(massage.field.exchangeRate);
+                                var price = ((cost + profit) / exchangeRate).toFixed(2);
+                                $("#PurchasePrice" + dto_obj.Id).html(price);
+                            }
+                            else {
+                                var cost = parseFloat(massage.field.PurchaseCost);
+                                var profit = parseFloat(massage.field.PurchaseProfit);
+                                var price = (cost + profit).toFixed(2);
+                                $("#PurchasePrice" + dto_obj.Id).html(price);
+                            }
+                        }
+                    })
+                    return false;
+                });
+            }
+
+
+        };
+
+        //维护产品所有sku的扩展属性
+        $(document).on('click', '.AllEetendChange', function () {
+            var data = new Object();
+            var productId = $(this).attr("data-productid");
+            var system = "product";
+            data.productId = productId;
+            data.system = system;
+            layer.open({
+                type: 1,
+                title: "维护产品扩展属性",
+                area: ['80%', '70%'],
+                content: $("#MaintainExtend")//引用的弹出层的页面层的方式加载修改界面表单
+
+            });
+            //动态向表传递赋值
+            UPVariantExtend(data);
+
+        });
+
+        //维护商品sku的扩展属性
+        $(document).on('click', '.EetendChange', function () {
+            var data = new Object();
+            var productId = $(this).attr("data-productid");
+            var wareId = $(this).attr("data-wareid");
+            var system = "sku";
+            data.productId = productId;
+            data.system = system;
+            data.wareId = wareId;
+            layer.open({
+                type: 1,
+                title: "维护sku扩展属性",
+                area: ['80%', '70%'],
+                content: $("#MaintainExtend")//引用的弹出层的页面层的方式加载修改界面表单
+
+            });
+            ////动态向表传递赋值
+            UPVariantExtend(data);
+
+        });
+
+        //修改商品/sku的扩展属性
+        function UPVariantExtend(data) {
+            //修改整个商品的采购价格
+            if (data.system == "product") {
+                form.val("MaintainExtend", {
+                    "PurchaseSystem": data.system,
+                    "length": "",
+                    "width": "",
+                    "height": "",
+                    "volumeCoefficient": "",
+                    "attribute": "",
+                    "weight": "",
+                });
+                //点击确认修改所有商品的扩展属性
+                form.on('submit(up_Extend)', function (massage) {
+                    var dto_obj = new Object();
+                    dto_obj.ProductId = parseInt(data.productId);
+                  /*  dto_obj.WareId = parseInt(data.wareId);*/
+                    dto_obj.Length = massage.field.length;
+                    dto_obj.Width = massage.field.width;
+                    dto_obj.Height = massage.field.height;
+                    dto_obj.VolumeCoefficient = massage.field.volumeCoefficient;
+                    dto_obj.Weight = massage.field.weight;
+                    dto_obj.Attribute = massage.field.attribute;
+
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json",
+                        url: BackgroundDomain +'/api/Product/UpdateAllVariantExtend',
+                        data: JSON.stringify(dto_obj),
+                        success: function (data) {
+                            setTimeout(function () {
+                                // 这里就是处理的事件
+                                layer.msg("修改成功", { time: 2000 })
+                            }, 2000);
+
+                            layer.closeAll();
+                        }
+                    })
+                    return false;
+                });
+            }
+            //修改单个sku变体的扩展属性
+            if (data.system == "sku") {
+                var id = parseInt(data.wareId);
+                //获取变体的信息,并赋值
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json;",
+                    url: BackgroundDomain +'/api/Product/QueryVariantInfoByVariantId',
+                    data: JSON.stringify(id),
+                    success: function (msg) {
+                        if (msg.variantExtend != null) {
+                            form.val("MaintainExtend", {
+                                "PurchaseSystem": data.system,
+                                "length": msg.variantExtend.length,
+                                "width": msg.variantExtend.width,
+                                "height": msg.variantExtend.height,
+                                "volumeCoefficient": msg.variantExtend.volumeCoefficient,
+                                "attribute": msg.variantExtend.attribute,
+                                "weight": msg.variantExtend.weight,
+                            });
+                        }
+                        else {
+                            form.val("MaintainExtend", {
+                                "PurchaseSystem": data.system,
+                                "length":"",
+                                "width": "",
+                                "height": "",
+                                "volumeCoefficient": "",
+                                "attribute": "",
+                                "weight": "",
+                            });
+                        }
+                    }
+
+                })
+                //点击确认修改sku的扩展属性
+                form.on('submit(up_Extend)', function (massage) {
+                    var dto_obj = new Object();
+                    dto_obj.ProductId = parseInt(data.productId);
+                    dto_obj.WareId = parseInt(data.wareId);
+                    dto_obj.Length = massage.field.length;
+                    dto_obj.Width = massage.field.width;
+                    dto_obj.Height = massage.field.height;
+                    dto_obj.VolumeCoefficient = massage.field.volumeCoefficient;
+                    dto_obj.Weight = massage.field.weight;
+                    dto_obj.Attribute = massage.field.attribute;
+
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json",
+                        url: BackgroundDomain +'/api/Product/UpdateVariantExtend',
+                        data: JSON.stringify(dto_obj),
+                        success: function (data) {
+                            setTimeout(function () {
+                                // 这里就是处理的事件
+                                layer.msg("修改成功", { time: 2000 })
+                            }, 1000);
+                            layer.closeAll();
+                        }
+                    })
+                    return false;
+                });
+            }
+
+
+        };
+
+        //修改属性
+        function UpdateAttribute(input) {
+            var priceInfo = new Object();
+            priceInfo.id = $(input).attr("data-key");
+            priceInfo.AttrKey = $(input).attr("data-type");
+            priceInfo.AttrValue = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProductAttribute',
+                data: JSON.stringify(priceInfo),
+                success: function (data) {
+                    if (data.data > 0) {
+                        layer.msg($.i18n.prop('The.update.is.successful'))
+                    }
+                }
+            })
+        }
+        //修改属性标题 UpdateAttributetitel
+        function UpdateAttributetitel(input) {
+            var Attributetitel = new Object();
+            Attributetitel.ProductId = $(input).attr("data-key");
+            Attributetitel.OldAttributeName = $(input).attr("data-type");
+            Attributetitel.NewAttributeName = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/ModifyProductAttriName',
+                data: JSON.stringify(Attributetitel),
+                success: function (data) {
+                    if (data.data > 0) {
+                        layer.msg($.i18n.prop('The.update.is.successful'), {
+
+                        })
+                    }
+                }
+            })
+        }
+        //修改变体是否选中状态
+        function Updatecheckvariant(check) {
+            var id = $(check).attr("data-key");
+            var checked = check.checked ? 0 : 1;
+            var pro = new Object();
+            pro.id = id;
+            pro.Ischeck = checked;
+            /*            alert(check.checked);*/
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/ModifyProductVariantCheck',
+                data: JSON.stringify(pro),
+                success: function (data) {
+                    if (data.data > 0) {
+                        layer.msg($.i18n.prop('The.update.is.successful'))
+                    }
+                    else {
+                        $(check).prop("checked", true);
+                        layer.alert($.i18n.prop('variant.check.update.is.failure'), {
+                            closeBtn: 1  // 是否显示关闭按钮
+                            , title: "hint"
+                            , btn: ['confirm']
+                            , style: {
+                                "background-color": "#FFD401;"
+                            }
+                        })
+                    }
+                }
+            })
+
+        }
+
+        ////修改描叙
+        function UpdateDescription(id, change) {
+            console.log(change);
+            var DescriptionInfo = new Object();
+            DescriptionInfo.id = id;
+            DescriptionInfo.content = change;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProductDescription',
+                data: JSON.stringify(DescriptionInfo),
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg($.i18n.prop('The.update.is.successful'))
+                    }
+                }
+            })
+        }
+        //删除产品
+        function DelProduct(id) {
+            var product = new Object();
+            product.id = id;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/DeleteProduct',
+                data: JSON.stringify(product),
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg($.i18n.prop('Deleted.successfully'));
+                        var product = document.getElementById("product" + id);
+                        if (product != null)
+                            product.parentNode.removeChild(product);
+
+                    }
+                }
+            })
+        }
+        //推送到商店
+        function PushProduct(id) {
+            var loading = layer.load(0, {
+                shade: false,
+                time: 60 * 1000
+            });
+            var product = new Object();
+            product.id = id;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url:BackgroundDomain + '/api/Product/PushShopifyProduct',
+                data: JSON.stringify(product),
+                success: function (data) {
+                    layer.close(loading);
+                    if (data.code == 1) {
+                        layer.msg($.i18n.prop('Successful.push'));
+                    }
+                    else {
+
+                        layer.alert(data.message);
+                    }
+                }
+            })
+        }
+
+        //改变图片状态
+        function changeImageState(image) {
+            var imageId = $(image).attr("data-key");
+            console.log(imageId)
+            var productpicture = new Object();
+            productpicture.id = imageId;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProImageStatus',
+                data: JSON.stringify(productpicture),
+                success: function (data) {
+                    if (data.dto) {
+                        if (data.dto.isVisible == 0) {
+                            $("#icon" + imageId).attr("style", "display:block;");
+
+                        }
+                        else {
+                            /*           var icon = document.getElementById();*/
+                            $("#icon" + imageId).attr("style", "display:none;");
+                        }
+                    }
+                }
+            })
+
+        }
+        //修改变体库存
+        function UpdateQuantity(input) {
+            var priceInfo = new Object();
+            priceInfo.id = $(input).attr("data-key");
+            priceInfo.Quantity = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProductQuantity',
+                data: JSON.stringify(priceInfo),
+                success: function (data) {
+                    if (data.data > 0) {
+                        layer.msg("修改库存成功!")
+                    }
+                }
+            })
+        }
+
+        // 修改商品所有库存
+        $(document).on('click', '.AllQuantity', function () {
+
+            var id = $(this).attr("data-quantity");
+
+            layer.prompt({ title: '请输入库存', formType: 3 }, function (pass, index) {
+
+                layer.close(index);
+
+                if (!pass || isNaN(pass)) {
+                    layer.msg("只能输入数字!");
+                    return;
+                }
+                var priceInfo = new Object();
+                priceInfo.ProductId = id;
+                priceInfo.Quantity = Number(pass);
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url: BackgroundDomain +'/api/Product/UpdateProductQuantity',
+                    data: JSON.stringify(priceInfo),
+                    success: function (data) {
+                      
+                       $("[data-productid='" + id + "']").val(pass);
+                        layer.msg('修改库存成功');
+                       
+                    }
+                })
+            });
+
+
+
+        });
+
+
+    </script>
+
+    <!--维护商品采购价格-->
+    <div class="layui-row" id="MaintainPurchase" style="display:none;">
+        <div class="layui-col-md10">
+            <form class="layui-form layui-from-pane" lay-filter="MaintainPurchase" action="" style="margin-top:20px">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">维护体系</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input" readonly="readonly">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">币种</label>
+                    <div class="layui-input-inline">
+                        <select id="currency" name="currency" lay-search lay-verify="required">
+                            <option value="">请选择</option>
+                            <option value="USD">美元</option>
+                            <option value="RMB">人名币</option>
+                            <option value="EURO">欧元</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">汇率：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单件采购成本：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input " type="text" name="PurchaseCost" value="" lay-verify="required" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单件采购利润：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input " type="text" name="PurchaseProfit" value="" lay-verify="required" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单件税费利润：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input " type="text" name="TaxesProfit" value="" lay-verify="required" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单件运费利润：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input " type="text" name="FreightProfit" value="" lay-verify="required" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-top:40px">
+                    <div class="layui-input-block">
+                        <button class="layui-btn  layui-btn-submit " lay-submit="" lay-filter="up_Purchase">确认修改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--维护商品扩展属性-->
+    <div class="layui-row" id="MaintainExtend" style="display:none;">
+        <div class="layui-col-md10">
+            <form class="layui-form layui-from-pane" lay-filter="MaintainExtend"  action="" style="margin-top:20px">
+                <h2 style="color:red;margin-left:30px;">长，宽，高单位为厘米，最多保留一位小数，材积重计算公式：（长*高*宽）/材积系数，重量最多保留5位小数</h2>
+                <h2 style="color: red; margin-left: 30px;">是否带电框中，如果带电请填Y否则填N</h2>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">维护体系</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input" readonly="readonly">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">长：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input length" type="text" name="length" value="" lay-verify="required" lay-reqtext="长度不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">宽：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input width" type="text" name="width" value="" lay-verify="required" lay-reqtext="商品宽不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">高：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input height" type="text" name="height" value="" lay-verify="required" lay-reqtext="商品高不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">材积系数：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input volumeCoefficient" type="text" name="volumeCoefficient" value="" lay-verify="required" lay-reqtext="材积系数不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否带电：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input attribute" type="text" name="attribute" value="" lay-verify="required" lay-reqtext="属性不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">重量：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input weight" type="text" name="weight" value="" lay-verify="required" lay-reqtext="重量不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-top:40px">
+                    <div class="layui-input-block">
+                        <button class="layui-btn  layui-btn-submit " lay-submit="" lay-filter="up_Extend">确认修改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

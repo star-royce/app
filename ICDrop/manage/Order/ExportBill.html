@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>按店铺导出赊账账单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <form class="layui-form" action=""></form>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">店铺</label>
+                <div class="layui-input-block">
+                    <select id="shop" name="shop" lay-search lay-verify="required">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+
+        
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var app = null;
+        layui.use(['form', 'app'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+            app = layui.app;
+            app.Load("manage");
+
+
+            //获取有赊账记录且未还清的店铺
+            $.ajax({
+                //动态获取下拉选项的接口，返回数据主要是id+name
+                type: "post",
+                contentType: "application/json;",
+                url: BackgroundDomain +'/api/PayBill/QueryDebtShopifyList',
+                success: function (data) {
+                    let str = "<option value=''>请选择</option>";
+
+                    for (let i of data.data) {
+                        //组装数据
+                        str += `<option value='${i.id}'>${i.shopifyShop}</option>`;
+                    }
+
+                    //jquery赋值方式
+                    $("#shop").html(str);
+                    //重新渲染生效
+                    form.render();
+                }
+            });
+
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                var result = JSON.stringify(data.field);
+                var obj = $.parseJSON(result);
+                var Shop = new Object();
+                Shop.Id = obj.shop;
+
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json;",
+                    url: BackgroundDomain +'/api/PayBill/ExportBillByShopid',
+                    mimeType: 'text/plain; charset=x-user-defined',
+                    responseType: 'blob',
+                    data: JSON.stringify(Shop),
+                    success: function (data) {
+                        var rawLength = data.length;
+                        var array = new Uint8Array(new ArrayBuffer(rawLength));
+                        for (i = 0; i < rawLength; i++) {
+                            array[i] = data.charCodeAt(i) & 0xff;
+                        }
+                        //上面是把后台请求到的文件流进行转化为符合的流
+                        var blob = new Blob([array], { type: 'application/pdf;charset-UTF-8' });
+                        var nowtime = getNowTime();
+                        var nowdate = new Date(nowtime);
+                        //1:拿到select对象： 
+                        var myselect = document.getElementById("shop");
+                        //2：拿到选中项的索引：
+                        var index = myselect.selectedIndex; // selectedIndex代表的是你所选中项的index
+                        var shop = (myselect.options[index].text).replace('.myshopify.com','');
+                        var fileName = shop + nowdate.getFullYear() + (nowdate.getMonth() + 1) + nowdate.getDate() + 'BILL.pdf';
+                        if ('download' in document.createElement('a')) {
+                            //非IE下载
+                            const elink = document.createElement('a');
+                            elink.download = fileName;
+                            elink.style.display = 'none';
+                            elink.href = URL.createObjectURL(blob);
+                            document.body.appendChild(elink);
+                            elink.click();
+                            URL.revokeObjectURL(elink.href);
+                            document.body.removeChild(elink);
+                        } else {
+                            navigator.msSaveBlob(blob, fileName);
+                        }
+
+                        return false;
+                    }
+                })
+
+            });
+
+
+        })
+
+        // 获取当前时间
+        function getNowTime() {
+            let dateTime
+            let yy = new Date().getFullYear()
+            let mm = new Date().getMonth() + 1
+            let dd = new Date().getDate()
+            let hh = new Date().getHours()
+            let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes()
+                :
+                new Date().getMinutes()
+            let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds()
+                :
+                new Date().getSeconds()
+            dateTime = yy + '-' + mm + '-' + dd + ' ' + hh + ':' + mf + ':' + ss
+            return dateTime
+        }
+        
+
+    </script>
+</body>
+</html>

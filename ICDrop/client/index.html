@@ -1,0 +1,964 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Anderdrop</title>
+    <meta name="keywords" content="anderdrop">
+    <meta name="description" content="anderdrop。">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link href="/lib/icomoon-v1.0/style.css" rel="stylesheet" />
+    <!--<link href="/lib/icomoon-v1.0/demo-files/demo.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/layuimini.css?v=2.0.4.2" media="all">
+    <link rel="stylesheet" href="/css/themes/default.css" media="all">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            font-family: 'poppins-light' !important;
+            font-size: 18px;
+        }
+        .layui-layout-admin .layui-side {
+            width: 215px !important;
+        }
+        .layui-nav-tree {
+            width: 215px !important;
+        }
+
+        .layui-form-select dl dd, .layui-form-select dl dt {
+            background: #FFFFFF;
+            border: 1px solid #DDDDDD;
+            color: black;
+        }
+
+            .layui-form-select dl dd.layui-this {
+                background-color: #029803;
+                color: #fff;
+            }
+        /*        弹出框的头部样式*/
+        .layui-layer-title {
+            height: 0px !important;
+        }
+        /*左侧菜单样式*/
+        .layui-left-nav {
+            color: #333333;
+            font-size: 13px;
+            
+            font-weight: 400;
+        }
+
+        layui-nav-item menu-li {
+            line-height: 50px;
+        }
+        /*左侧菜单图标样式*/
+        .layui-icon:before {
+            color: #333333;
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        /*左侧菜单鼠标移入样式样式*/
+        .layuimini-menu-left .layui-nav .layui-nav-item a:hover {
+            background-color: #F5F5F5 !important;
+        }
+        /*左侧菜单鼠标选中移入样式不变*/
+        .layuimini-menu-left .layui-nav-tree .layui-this a:hover {
+            /* background-color: #029803 !important;*/
+        }
+        /*头部切换中英文矢量图标样式*/
+        .layui-icon-down:before {
+            font-size: 14px;
+            color: #333333;
+        }
+
+
+
+        .layui-btn-container .layui-btn {
+            margin: 0px;
+        }
+        /*  账号样式*/
+        .layui-layout-admin .layui-header .layui-nav .layui-nav-item a {
+            color: #333333;
+        }
+        /*中英文切换样式*/
+        #Lang {
+            color: #333333;
+        }
+
+        .layuimini-tab .layui-tab-content {
+            height: 100% !important;
+        }
+        /*头部加阴影*/
+        .layui-layout-admin .layui-header {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        /* .layuimini-header-content {
+            height: 60px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }*/
+
+        #multi_module_bottom {
+            position: fixed;
+            bottom: 0px;
+        }
+        /*大的店铺选择框DIV*/
+        .model-select-box {
+            line-height: 32px !important;
+            float: left !important;
+            /* margin-right: 20px;*/
+            position: relative;
+            /* text-align: center;*/
+            width: 280px;
+            height: 40px;
+            background: #FFFFFF;
+            /*  border: 1px solid #DDDDDD;*/
+            opacity: 1;
+            border-radius: 5px;
+            font-size: 14px;
+            
+            font-weight: 400;
+            color: #333333;
+            border-radius: 20px;
+        }
+        /*店铺选择框显示的那个div*/
+        .model-select-text {
+            line-height: 40px !important;
+            float: right;
+            position: relative;
+            /*  text-align: center;*/
+            width: 280px;
+            height: 40px;
+            background: #FFFFFF;
+            border: 1px solid #DDDDDD;
+            opacity: 1;
+            border-radius: 5px;
+            font-size: 14px;
+            
+            font-weight: 400;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        /*店铺选择框的ul选项列表*/
+        .model-select-option {
+            display: none;
+            position: absolute;
+            background: #FFFFFF;
+            width: 100%;
+            left: -1px;
+            border: 1px solid #DDDDDD;
+            margin-top: 42px;
+            border-radius: 5px;
+            opacity: 1;
+            z-index: 999;
+            height: 200px;
+            overflow-y: auto;
+        }
+            /*店铺选择框的单个选项li样式*/
+            .model-select-option li {
+                border-radius: 5px;
+                height: 40px;
+                line-height: 40px;
+                color: #333333 !important;
+                cursor: pointer;
+                opacity: 1;
+            }
+                /*店铺选择框选择的li样式*/
+                .model-select-option li.selected {
+                    background: #F5F5F5;
+                    color: #fff;
+                }
+        /* 小三角 */
+        .bg1 {
+            position: absolute;
+            top: 16px;
+            right: 10px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #DDDDDD transparent transparent transparent;
+        }
+        /*下拉框中shopify店铺图标样式*/
+        .shoplogo {
+            margin-right: 10px;
+            margin-left: 16px;
+        }
+        /*图片选中样式*/
+        .pirturebody {
+            height: 150px;
+            overflow: hidden;
+            border: 2px solid #029803;
+            float: left;
+            border-radius: 3px;
+            text-align: center;
+            margin: 15px 0.7% 0px 0;
+            position: relative;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .pirturebody i {
+                width: 24px;
+                height: 22px;
+                background: #029803;
+                color: #333333;
+                border: 1px solid #029803;
+                position: absolute;
+                margin-left: 126px;
+                border-bottom-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+        .layui-icon:before {
+            font-size: 24px;
+            vertical-align: middle;
+        }
+        /*模拟checkbox样式*/
+        .simulatecheckbox {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #DDDDDD;
+            opacity: 1;
+            border-radius: 5px;
+            margin-top: 13px;
+            display: inline-block;
+        }
+
+        .simulatechecked {
+            background: #029803;
+            content: "\e60b";
+            font-size: 24px;
+            vertical-align: middle;
+        }
+        /*layui.msg的样式*/
+        .layui-layer-msg .layui-layer-content {
+            font-size: 16px;
+        }
+        /*layui.msg的样式改为圆角为5px透明度为0.8*/
+        .layui-layer-hui {
+            background-color: rgba(0,0,0,.8) !important;
+            border-radius: 5px !important;
+        }
+
+        .layui-tab-item.layui-show {
+            border: 1px #ECE9EC solid;
+        }
+    </style>
+
+
+    <!--<script type="text/javascript">
+        //window.$crisp = [];
+        //window.CRISP_WEBSITE_ID = "f245e093-5d90-4ab7-94e9-51f4477e3037";
+        //(function () {
+        //    d = document; s = d.createElement("script");
+        //    s.src = "https://client.crisp.chat/l.js"; s.async = 1;
+        //    d.getElementsByTagName("head")[0].appendChild(s);
+        //})();
+        //$crisp.push(["config", "position:reverse", [false]]);
+    </script>-->
+</head>
+
+<body class="layui-layout-body layuimini-all" id="index_body">
+
+    <!--提示框-->
+    <div class="hint" style="display:none;" id="hint">
+        <div class="hintContain">
+            <img class="hintimg" />
+            <label class="hinttext"></label>
+        </div>
+        <label class="hintdescribe"></label>
+    </div>
+
+    <div class="layui-layout layui-layout-admin">
+
+        <div class="layui-header header">
+            <div style="float:left;">
+                <div style="height: 60px; width: 150px; margin-left: 20px; float: left;">
+                    <a href="">
+                        <img src="../../images/ander/Ander rop .svg" style="height:60px;width:150px;" />
+                        <!--<img src="../../images/logo2x.png" style="height:60px;width:150px;" />-->
+                    </a>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; padding-top: 10px; padding-left: 35px;">
+                    <form class="layui-form" action="" lay-filter="formTest" id="addProduct">
+                        <div class="layui-input-inline" style="height: 60px; width: 150px; margin-left: 20px; float: left;">
+                            <select name="PlatformName" is="template" lay-verify="required" class="select" id="select">
+                            </select>
+                        </div>
+                        <input type="text" i18n_Attr="placeholder:Input.Url;" name="Url" required lay-verify="required" placeholder="请输入URL" autocomplete="off" class="layui-input" style=" width: 200px; height: 38px; background: #FFFFFF; border: 1px solid #DDDDDD; opacity: 1; float: left; padding-left: 20px;">
+                        <button type="submit" i18n_Text="Add" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn" style=" width: 100px; height: 38px; background: #029803; opacity: 1; border-color: #FFFFFF;color:#ffffff; border-style: solid; border-top-right-radius: 6px; border-bottom-right-radius: 6px; cursor: pointer;"> 添 加</button>
+                    </form>
+
+                    <!--<div class="model-select-box" id="bindShopify" style="display:none">
+                        <div class="model-select-text" id="selectshop" value="" i18n_text="Input.Please.select;"><img class="shoplogo" src="../../../images/shop.png" />Please Select</div>
+                        <b class="bg1"></b>
+                        <ul class="model-select-option" id="model-select-option">
+                        </ul>
+                    </div>-->
+
+
+                </div>
+
+                <template id="template" rule="v-">
+                    <option v-for="(item,index) in data" value="${item.platformCode}"> ${item.platformNameEn} </option>
+                </template>
+            </div>
+
+
+            <div class="layuimini-header-content">
+                <!--<a>
+                    <div class="layuimini-tool" style="display:none;"><i title="展开" class="fa fa-outdent" data-side-fold="1"></i></div>
+                </a>-->
+
+                <form class="layui-form">
+                    <ul class="layui-nav layui-layout-right">
+
+
+                        <li class="layui-nav-item" lay-unselect>
+                            <div class="layui-btn-container">
+                                <button class="layui-btn  demo1" style="background-color: White; color: rgba(107, 107, 107, 0.7); ">
+                                    <span id="Lang">English</span>
+                                    <i class="layui-nav-more"></i>
+                                </button>
+                            </div>
+                        </li>
+
+                        <!--<li class="layui-nav-item" lay-unselect>
+                            <select name="Shopify" id="Shopify" lay-verify="" class="select" lay-filter="Shopify">
+                                动态添加
+                            </select>
+                        </li>-->
+                        <!--<li class="layui-nav-item" lay-unselect>
+                            <a href="javascript:;" class="shopify"></a>
+                        </li>-->
+
+                        <li class="layui-nav-item layuimini-setting">
+                            <img src="/images/portrait.png" style="width: 45px; height: 45px; padding-left: 10px;" />
+                        </li>
+                        <li class="layui-nav-item layuimini-setting">
+                            <a href="javascript:;" i18n_Text="login.out" class="login-out">退出</a>
+                        </li>
+                        <li class="layui-nav-item " lay-unselect>
+                            <a href="javascript:;"></a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+
+        <!--无限极左侧菜单-->
+        <div class="layui-side layui-bg-white layuimini-menu-left" style="background:#FFFFFF;" id="leftmenu">
+
+        </div>
+
+        <!--初始化加载层-->
+        <div class="layuimini-loader">
+            <div class="layuimini-loader-inner"></div>
+        </div>
+
+        <!--手机端遮罩层-->
+        <div class="layuimini-make"></div>
+
+        <!-- 移动导航 -->
+        <div class="layuimini-site-mobile"><i class="layui-icon">></i></div>
+
+        <div class="layui-body" style=" padding-bottom: 0px;">
+
+            <div class="layuimini-tab layui-tab-rollTool layui-tab" lay-filter="layuiminiTab" lay-allowclose="true">
+                <ul class="layui-tab-title" style="display:none">
+                    <li class="layui-this" id="layuiminiHomeTabId" lay-id=""></li>
+                </ul>
+                <div class="layui-tab-control">
+                    <!--<li class="layuimini-tab-roll-left layui-icon layui-icon-left"></li>
+                    <li class="layuimini-tab-roll-right layui-icon layui-icon-right"></li>-->
+                    <!--<li class="layui-tab-tool layui-icon layui-icon-down">
+                        <ul class="layui-nav close-box">
+                            <li class="layui-nav-item">
+                                <a href="javascript:;"><span class="layui-nav-more"></span></a>
+                                <dl class="layui-nav-child">
+                                    <dd><a href="javascript:;" layuimini-tab-close="current">关 闭 当 前</a></dd>
+                                    <dd><a href="javascript:;" layuimini-tab-close="other">关 闭 其 他</a></dd>
+                                    <dd><a href="javascript:;" layuimini-tab-close="all">关 闭 全 部</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </li>-->
+                </div>
+                <div class="layui-tab-content">
+                    <div id="layuiminiHomeTabIframe" class="layui-tab-item layui-show"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--<div id="MarketingDetail" style="display: none; z-index: 999; position: fixed; right: 16px; bottom: 170px; background-image: url(../../images/Marketing/MarketingDetail.png);width:298px;height:318px;">
+        <button id="Join" style="width: 140px; height: 30px !important; background: #6F6EF0; border-radius: 15px 15px 15px 15px; opacity: 1; border: 0px; margin-top: 268px; margin-left: 79px; height: 17px; font-size: 16px;  font-weight: bold; color: #FFFFFF; ">Join</button>
+    </div>
+    <div id="Marketing" style=" z-index:999;position:fixed;right:16px;bottom:100px;"><img src="../../images/Marketing/Marketing.png" /></div>-->
+    <!--Messenger Chat plugin Code
+    <div id="fb-root"></div>
+    Your Chat plugin code
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>-->
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-diff.js"></script>
+    <script>
+
+        var app = null;
+        var element;
+        var miniTab;
+
+        layui.use(['i18n', 'form', 'app', 'layer', 'miniAdmin', 'miniTongji', 'miniTab', 'element'], function () {
+
+            layer = layui.layer,
+                form = layui.form,
+                miniAdmin = layui.miniAdmin,
+                dropdown = layui.dropdown,
+
+                i18n = layui.i18n;
+            element = layui.element;
+            miniTab = layui.miniTab,
+                app = layui.app;
+            // 权限
+            app.Load("client");
+
+
+
+            // 获取登录的用户名
+            var YDHConfig = layui.data('YDH-Customer');
+            var createtime = YDHConfig.CreateTime;
+            var createDate = new Date(createtime);
+
+            var iniUrl = "/api/Clientinit.json";
+            var dto_obj = new Object();
+            var Dto = new Object();
+            Dto.Email = YDHConfig.email;
+            dto_obj.Dto = Dto;
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Customer/GetCusCustomerList",
+                contentType: "application/json;",
+                data: JSON.stringify(dto_obj),
+                dataType: "json",
+                success: function (e) {
+                    var json = JSON.stringify(e);
+                    var date_obj = JSON.parse(json);
+                    var arrValue = date_obj.data;
+                    if (arrValue[0].orderTotal == "0") {
+                        iniUrl = "/api/ClientMenus.json";
+                    }
+                    var options = {
+                        iniUrl: iniUrl,    // 初始化接口
+                        clearUrl: "/api/clear.json", // 缓存清理接口
+                        urlHashLocation: true,      // 是否打开hash定位
+                        bgColorDefault: "0",      // 主题默认配置
+                        multiModule: true,          // 是否开启多模块
+                        menuChildOpen: false,       // 是否默认展开菜单
+                        loadingTime: 0,             // 初始化加载时间
+                        pageAnim: true,             // iframe窗口动画
+                        maxTabNum: 20,              // 最大的tab打开数量
+                    };
+                    miniAdmin.render(options);
+                }
+                //},
+                //error: function (jqXHR) {
+                //    return false;
+                //}
+
+            });
+
+
+
+            var createyear = createDate.getFullYear();//年
+            var createmonth = createDate.getMonth();//月
+            var createday = createDate.getDate();//日
+
+            var nowtime = getNowTime();
+            var nowdate = new Date(nowtime);
+            var nowyear = nowdate.getFullYear();//年
+            var nowmonth = nowdate.getMonth();//月
+            var nowday = nowdate.getDate();//日
+            if (createyear == nowyear && createmonth == nowmonth && createday == nowday) {
+                var tabId = "/client/Customer/NoviceGuide.html";
+                title = "On boarding";
+                var isexit = miniTab.check(tabId, true);
+                if (!isexit) {
+                    miniTab.create({
+                        tabId: tabId,
+                        href: tabId,
+                        title: title,
+                        isIframe: false,
+                        maxTabNum: 20,
+                    });
+                }
+                element.tabChange('layuiminiTab', tabId);
+            }
+
+
+            if (YDHConfig.email) {
+                console.log("UserName=" + YDHConfig.email);
+                var dto_obj = new Object();
+                dto_obj.email = YDHConfig.email;
+
+                GetShopify("#Shopify", BackgroundDomain + "/api/Customer/GetCustomerShopifyList", "post", "选择店铺", dto_obj);//获取店铺信息
+            }
+
+            // 获取店铺信息
+            function GetShopify(element, url, type, title, data) {
+                console.log("url=" + url);
+                console.log("json=" + data);
+                $.ajax({
+                    url: url,
+                    type: type,
+                    contentType: "application/json;",
+                    /*data: JSON.stringify({ "email": "1584129102@qq.com" }),*/
+                    data: JSON.stringify(data),
+                    success: function (msg) {
+                        /*layer.alert("msg=" + JSON.stringify(msg));*/
+                        console.log("msg=" + msg);
+                        if (msg != "" && msg.code == 200) {
+                            var html2 = '<option value="" >' + title + '</option>';
+                            for (var i = 0; i < msg.data.length; i++) {
+                                if (i == msg.data.length - 1) {
+                                    html2 += '<option  value="' + msg.data[i].id + '" selected>' + msg.data[i].shopifyShop + '</option>';
+                                }
+                                else {
+                                    html2 += '<option  value="' + msg.data[i].id + '">' + msg.data[i].shopifyShop + '</option>';
+                                }
+                            }
+                            //console.log("html=" + html2);
+                            $(element).html(html2);
+                            form.render();
+                        }
+                    }
+                })
+            }
+
+            form.on('select(Shopify)', function (data) {
+                $.ajax({
+                    url: BackgroundDomain +"/api/Customer/UpdateCustomerShopifyConnectTime",
+                    type: "post",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "id": data.value }),
+                    success: function (msg) {
+                        if (msg != "" && msg != null) {
+                            console.log(msg);
+                        }
+                    }
+                })
+            });
+
+            // 平台
+            GetPlatform(form);
+
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Product/QueryGrabProduct",
+                    contentType: "application/json;",
+                    data: result,
+                    dataType: "json",
+                    success: function (e) {
+                        if (e.code = 1) {
+                            var tabId = "/share/ImportCommodity.html";
+                            title = "Edit";
+                            var isexit = miniTab.check(tabId, true);
+                            if (!isexit) {
+                                miniTab.create({
+                                    tabId: tabId,
+                                    href: tabId,
+                                    title: title,
+                                    isIframe: false,
+                                    maxTabNum: 20,
+                                });
+                            }
+                            if (!isexit) {
+                                parent.layui.element.tabAdd('layuiminiTab', {
+                                    title: '<span class="layuimini-tab-active"></span><span>' + title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
+                                    , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + tabId + '"></iframe>'
+                                    , id: tabId
+                                });
+                            } else {
+                                var iframes = document.querySelectorAll("iframe");
+                                for (var i = 0; i < iframes.length; i++) {
+                                    if (iframes[i].getAttribute("src").includes("ImportCommodity.html")) {
+                                        var fn = iframes[i].contentWindow["btnSearch"];
+                                        if (fn) {
+                                            fn();
+                                        }
+                                    }
+                                }
+                            }
+                            parent.layui.element.tabChange('layuiminiTab', tabId);
+                            layer.msg('Success！');
+                            return false;
+                        }
+                    },
+                    error: function (jqXHR) {
+                        layer.msg('failed！');
+                        return false;
+                    }
+                });
+
+
+                return false;
+            });
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id = "en_us";
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+            dropdown.render({
+                elem: '.demo1'
+                , data: [{
+                    title: '中文简体'
+                    , id: 'zh_cn'
+                }, {
+                    title: 'English'
+                    , id: 'en_us'
+                }]
+                , click: function (obj) {
+
+                    layui.data('YDH', {
+                        key: 'Lang'
+                        , value: obj
+                    });
+                    location.reload();
+                }
+            });
+
+            var iniUrl = "/api/Clientinit.json";
+
+
+
+            // 获取登录的用户名
+            var YDHConfig = layui.data('YDH-Customer');
+            if (YDHConfig.email) {
+                $('.UserName').html(YDHConfig.email);
+            } else {
+                window.location = '/client/Customer/index.html';
+            }
+
+            // 退出登录
+            $('.login-out').on("click", function () {
+                app.SignOut();
+            });
+            //////跳转营销活动
+            //$("#Join").on("click", function () {
+            //    var url = window.location.origin + '/Marketing/MKIndex.html';
+            //    window.open(url);
+            //    $("#MarketingDetail").hide();
+            //})
+            //$("#MarketingDetail").on("click", function () {
+            //    //var url = "http://" + window.location.host + '/Marketing/MKIndex.html';
+            //    //window.open(url);
+            //    $("#MarketingDetail").hide();
+            //})
+
+            ////  鼠标移入移出
+            //var Marketing = document.getElementById("Marketing");
+            //Marketing.onmouseover = function () {
+            //    $("#MarketingDetail").show();
+            //};
+            //$("html").click(() => {
+            //    $("#MarketingDetail").hide();
+            //})
+            //Marketing.onmouseout = function () {
+            //    $("#MarketingDetail").hide();
+            //};
+            //var aa = document.getElementByAttr("target");
+            //var lis = document.getElementById("multi_module_0");
+            //var lis1 = document.getElementById("leftmenu");
+
+            //var divs = document.getElementByAttr('a', 'target', '_self1');
+
+
+            var Customer = layui.data('YDH-Customer');
+            var dto_obj = new Object();
+            dto_obj.email = Customer.email;
+            dto_obj.Platform = "Shopify";
+            // 获取店铺
+            Getshop(form);
+
+            function Getshop(form) {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Customer/GetCustomerShopifyList",
+                    contentType: "application/json;",
+                    data: JSON.stringify(dto_obj),
+                    dataType: "json",
+                    success: function (e) {
+
+                        let str = "";
+                        for (let i of e.data) {
+                            //组装数据
+                            str += `<li shopify-id="${i.id}"><img class="shoplogo" src="../../../images/shop.png"/>${i.shopifyShop}</li>`;
+                        }
+                        str += `<li shopify-id="BingShop"><img class="shoplogo" src="../../../images/button/add.png"/>Bind new shop</li>`;
+                        //jquery赋值方式
+                        $("#model-select-option").html(str);
+
+
+                    },
+                    error: function (jqXHR) {
+                        if (jqXHR.status != 401) {
+                            layer.msg('获取失败！');
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+
+        // 获取店铺信息
+        function GetShopifytest(element, url, type, title, data) {
+            console.log("url=" + url);
+            console.log("json=" + data);
+            $.ajax({
+                url: url,
+                type: type,
+                contentType: "application/json;",
+                data: JSON.stringify(data),
+                success: function (msg) {
+                    console.log("msg=" + msg);
+                    if (msg != "" && msg.code == 200) {
+                        var html2 = '<option value="" >' + title + '</option>';
+                        for (var i = 0; i < msg.data.length; i++) {
+                            if (i == msg.data.length - 1) {
+                                html2 += '<option  value="' + msg.data[i].id + '" selected>' + msg.data[i].shopifyShop + '</option>';
+                            }
+                            else {
+                                html2 += '<option  value="' + msg.data[i].id + '">' + msg.data[i].shopifyShop + '</option>';
+                            }
+                        }
+                        $(element).html(html2);
+                        layui.use(['i18n', 'form', 'app', 'jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
+                            var $ = layui.jquery,
+                                layer = layui.layer,
+                                form = layui.form;
+                            form.render();
+                        });
+
+                    }
+                }
+            })
+        }
+        //新手引导
+        function openboarding() {
+
+            var tabId = "/client/Customer/NoviceGuide.html";
+            title = "On boarding";
+            var isexit = miniTab.check(tabId, true);
+            if (!isexit) {
+                miniTab.create({
+                    tabId: tabId,
+                    href: tabId,
+                    title: title,
+                    isIframe: false,
+                    maxTabNum: 20,
+                });
+            }
+            element.tabChange('layuiminiTab', tabId);
+
+        }
+
+        // 获取当前时间
+        function getNowTime() {
+            let dateTime
+            let yy = new Date().getFullYear()
+            let mm = new Date().getMonth() + 1
+            let dd = new Date().getDate()
+            let hh = new Date().getHours()
+            let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes()
+                :
+                new Date().getMinutes()
+            let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds()
+                :
+                new Date().getSeconds()
+            dateTime = yy + '-' + mm + '-' + dd + ' ' + hh + ':' + mf + ':' + ss
+            return dateTime
+        }
+
+        function GetPlatform(form) {
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Product/QueryPlatformType",
+                contentType: "application/json;",
+                data: JSON.stringify("GetPlatformProduct"),
+                dataType: "json",
+                success: function (e) {
+
+                    var res = {};
+                    res.data = e;
+
+                    template.mount(res);
+                    setTimeout(function () {
+
+                        form.render('select'); //更新 lay-filter="test2" 所在容器内的全部 select 状态
+                    }, 1000);
+
+
+                },
+                error: function (jqXHR) {
+                    layer.msg('获取失败！');
+                    return false;
+                }
+            });
+        }
+
+
+
+        //点击选择框
+        $(document).on('click', 'div.model-select-box div.model-select-text', function () {
+            var $box = $('div.model-select-box');
+            var $option = $('ul.model-select-option', $box);
+            var $txt = $('div.model-select-text', $box);
+            var speed = 10;
+            var $bg = $('b.bg1', $box)
+            $('div.model-select-box ul.model-select-option').not($(this).siblings('ul.model-select-option')).slideUp(speed, function () {
+            });
+            var temp1 = $("div.model-select-box ul.model-select-option").is(":visible");
+            if (temp1) {
+
+                $(this).siblings('ul.model-select-option').slideUp(speed, function () {
+                    selectindex = 1;
+                });
+            }
+            else {
+                $(this).siblings('ul.model-select-option').slideToggle(speed, function () {
+                    selectindex = 1;
+                });
+            }
+
+
+            $option.find('li').each(function (index, element) {
+                var selectpriceid = $('#selectshop').attr("shopify-id");
+                var shopifyid = $(this).attr("shopify-id");
+                if (selectpriceid == shopifyid) {
+                    $(this).addClass('selected').siblings('li').removeClass('selected');
+                }
+
+                if ($(this).hasClass('selected')) {
+                    $(this).parent('.model-select-option').siblings('.model-select-text').html('<img class="shoplogo" src="../../../images/shop.png" />' + $(this).text())
+                }
+                //$("#cli").one("click", function () {
+                //    alert(count++);
+                //});
+
+                $(this).off("click").on("click", function () {
+                    if ($(this).attr('shopify-id') == "BingShop") {
+                        /*  window.open('https://apps.shopify.com/Anderdrop-dropshipping?source=Anderdrop').location;*/
+                        layer.open({
+                            title: "Connect to store",
+                            type: 2,
+                            shade: 0.2,
+                            shadeClose: true,
+                            area: ['520px', '410px'],
+                            content: '/client/Customer/BindShop.html',
+                        });
+                        $(this).parent().siblings('div.model-select-text').html('<img class="shoplogo" src="../../../images/button/add.png" />' + $(this).text());
+                    }
+                    else {
+                        $(this).parent().siblings('div.model-select-text').html('<img class="shoplogo" src="../../../images/shop.png" />' + $(this).text());
+                    }
+
+
+                    $(this).parent().siblings('div.model-select-text').attr('value', $(this).attr('shopify-id'));
+                    $option.slideUp(speed, function () {
+                    });
+                    $(this).addClass('selected').siblings('li').removeClass('selected');
+
+
+                    selectindex = 0;
+
+                    return false;
+                })
+
+                $(this).on('mouseover', function () {
+                    $(this).addClass('selected').siblings('li').removeClass('selected');
+                })
+
+            })
+        });
+
+
+        ////点击除下拉框外的文档，隐藏所有下拉
+        $(document).on('click', 'div.model-select-box ', function () {
+            var $box = $('div.model-select-box');
+            var $option = $('ul.model-select-option', $box);
+            var $txt = $('div.model-select-text', $box);
+            var speed = 10;
+            var $bg = $('b.bg1', $box)
+            ////点击文档，隐藏所有下拉
+            $('body').not($(this)).bind('click', function () {
+                $option.slideUp(speed, function () {
+                });
+            })
+        });
+    </script>
+
+
+    <script>
+        window.intercomSettings = {
+            api_base: "https://api-iam.intercom.io",
+            app_id: "iya5tu90"
+        };
+    </script>
+
+    <script>
+        // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/iya5tu90'
+        (function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/iya5tu90'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (document.readyState === 'complete') { l(); } else if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();
+    </script>
+    <!--<script>
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "109630251375369");
+        chatbox.setAttribute("attribution", "biz_inbox");
+    </script>-->
+    <!-- Your SDK code -->
+    <!--<script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                xfbml: true,
+                version: 'v14.0'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.dataType = 'jsonp'
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>-->
+
+</body>
+</html>

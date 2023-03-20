@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>shopify-auth</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            background: #1E9FFF;
+        }
+
+            body:after {
+                content: '';
+                background-repeat: no-repeat;
+                background-size: cover;
+                -webkit-filter: blur(3px);
+                -moz-filter: blur(3px);
+                -o-filter: blur(3px);
+                -ms-filter: blur(3px);
+                filter: blur(3px);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+            }
+
+        .layui-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        .admin-login-background {
+            width: 360px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            margin-left: -180px;
+            margin-top: -100px;
+        }
+
+        .logo-title {
+            text-align: center;
+            letter-spacing: 2px;
+            padding: 14px 0;
+        }
+
+            .logo-title h1 {
+                color: #1E9FFF;
+                font-size: 25px;
+                font-weight: bold;
+            }
+
+        .login-form {
+            background-color: #fff;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            padding: 14px 20px;
+            box-shadow: 0 0 8px #eeeeee;
+        }
+
+            .login-form .layui-form-item {
+                position: relative;
+            }
+
+                .login-form .layui-form-item label {
+                    position: absolute;
+                    left: 1px;
+                    top: 1px;
+                    width: 38px;
+                    line-height: 36px;
+                    text-align: center;
+                    color: #d2d2d2;
+                }
+
+                .login-form .layui-form-item input {
+                    padding-left: 36px;
+                }
+
+        .captcha {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .captcha-img {
+            display: inline-block;
+            width: 34%;
+            float: right;
+        }
+
+            .captcha-img img {
+                height: 34px;
+                border: 1px solid #e6e6e6;
+                height: 36px;
+                width: 100%;
+            }
+
+        .layui-btn-container {
+            position: absolute;
+            left: 90%;
+            top: 5%;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-container">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-primary demo1">
+                <span id="Lang">English</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+        </div>
+        <div class="admin-login-background">
+            <div class="layui-form login-form" id="define">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item logo-title">
+                        <h1 i18n_Text="shopify_auth.h1.Text">Connect to the shopify store</h1>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-username" for="email"></label>
+                        <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" name="email" lay-verify="required|account" placeholder="User name or email address" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-password" for="password"></label>
+                        <input type="password" name="pwd" lay-verify="required|password" placeholder="pwd" autocomplete="off" class="layui-input">
+                    </div>
+
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="determine">determine</button>
+                    </div>
+                </form>
+                There is no account number. Register.
+                <button class="layui-btn layui-btn-xs" id="Reg">Register</button>
+
+            </div>
+            <div class="layui-form login-form" id="register" style="display:none">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item logo-title">
+                        <h1 i18n_Text="shopify_auth.h1.Text">Registered account</h1>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-username" for="username"></label>
+                        <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" name="username" lay-verify="required|account" placeholder="User name or email address" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-password" for="password"></label>
+                        <input type="password" name="password" lay-verify="required|password" placeholder="password" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="register">register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+    <script src="/lib/md5.js"></script>
+    <script src="/lib/jquery-3.4.1/jquery.cookie.min.js"></script>
+    <script src="/js/lay-config.js"></script>
+    <script>
+
+
+        if (GetRequest('TokenKey')) {
+            Brand(GetRequest('TokenKey'), GetRequest('Email'));
+        }
+
+        layui.use(['form', 'i18n', 'dropdown'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                i18n = layui.i18n,
+                dropdown = layui.dropdown;
+
+            var YDHConfig = layui.data('YDH-Customer');
+            if (YDHConfig.Secret) {
+                // 判断是否登录
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Shopify/LoginPlus",
+                    contentType: "application/json;",
+                    data: JSON.stringify("ydh"),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            auth_shopify();
+                        }
+                    },
+                    beforeSend: function (req) {
+                        req.setRequestHeader("YDHAuthToken", YDHConfig.Secret);
+                    },
+                    complete: function (err) {
+                        if (err.status === 401) {
+                            layui.data('YDH-Customer', {
+                                key: 'Secret'
+                                , remove: true
+                            });
+                            layui.data('YDH', {
+                                key: 'email'
+                                , remove: true
+                            });
+                        }
+                    }
+                });
+            };
+
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id = null;
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+
+            i18n.loadProperties(id);
+
+            //初演示
+            dropdown.render({
+                elem: '.demo1'
+                , data: [{
+                    title: '中文简体'
+                    , id: 'zh_cn'
+                }, {
+                    title: 'English'
+                    , id: 'en_us'
+                }]
+                , click: function (obj) {
+
+                    layui.data('YDH', {
+                        key: 'Lang'
+                        , value: obj
+                    });
+
+                    i18n.loadProperties(obj.id);
+
+                    $("#Lang").text(obj.title);
+
+                }
+            });
+
+
+            // 登录过期的时候，跳出ifram框架
+            if (top.location != self.location) top.location = self.location;
+
+            // 粒子线条背景
+            $(document).ready(function () {
+                $('.layui-container').particleground({
+                    dotColor: '#7ec7fd',
+                    lineColor: '#7ec7fd'
+                });
+            });
+
+
+            // 跳转注册
+            $("#Reg").click(function () {
+                $("#define").hide();
+                $("#register").show();
+            });
+
+            // 确定
+            form.on('submit(determine)', function (data) {
+                data = data.field;
+                if (data.email == '') {
+                    layer.msg('Email address cannot be empty! ');
+                    return false;
+                }
+                var timestamp = new Date().getTime();
+                var Encrypt = $.md5(data.email + $.md5(data.pwd) + timestamp);
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Shopify/GetCusCustomer",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Email": data.email, "TimeStamp": timestamp, "Pw": Encrypt }),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (!sre) {
+                            layer.msg('This email is not registered！');
+                            $("#define").hide();
+                            $("#register").show();
+
+                        } else {
+                            Brand(sre.tokenKey, sre.email);
+                        }
+                        return false;
+                    },
+                    complete: function (err) {
+                        if (err.status === 400) {
+                            layui.data('YDH-Customer', {
+                                key: 'Secret'
+                                , remove: true
+                            });
+                            layui.data('YDH', {
+                                key: 'email'
+                                , remove: true
+                            });
+                        }
+                        layer.msg('This email is not registered！');
+                        $("#define").hide();
+                        $("#register").show();
+                        return false;
+                    }
+                });
+                return false;
+            });
+
+
+
+            // 进行注册
+            form.on('submit(register)', function (data) {
+                data = data.field;
+                if (data.username == '') {
+                    layer.msg('Email address cannot be empty！');
+                    return false;
+                }
+                if (data.password == '') {
+                    layer.msg('Password cannot be empty！');
+                    return false;
+                }
+
+                var Encrypt = $.md5(data.password);
+
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Shopify/InsertCustomer",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Email": data.username, "Pw": Encrypt }),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            Brand(sre.data, sre.username);
+                            return false;
+                        }
+                    },
+                    error: function (jqXHR) {
+                        layer.msg('Exception. Please contact the administrator！');
+                        return false;
+                    }
+                });
+                return false;
+            });
+        });
+
+        function auth_shopify() {
+            var url = location.search; //获取url中"?"符后的字串
+            var str = "";
+            if (url.indexOf("?") != -1) {
+                str = "&" + url.substr(1);
+            }
+            var url = BackgroundDomain +"/api/Shopify/index?" + str;
+
+            $.ajax({
+                type: "Get",
+                url: url,
+                success: function (sre) {
+                    if (sre) {
+                        window.location.href = sre.data;
+                    }
+                },
+                error: function (jqXHR) {
+
+                }
+            });
+            return false;
+        }
+
+        function Brand(Secret, email) {
+            layui.data('YDH-Customer', {
+                key: 'Secret'
+                , value: Secret
+            });
+            layui.data('YDH-Customer', {
+                key: 'email'
+                , value: email
+            });
+            auth_shopify();
+        }
+
+
+        function GetRequest(key) {
+            var url = location.search;
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+                }
+            }
+            var value = theRequest[key];
+            return value;
+        }
+    </script>
+</body>
+</html>

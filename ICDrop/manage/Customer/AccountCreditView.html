@@ -1,0 +1,314 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+
+            <fieldset class="table-search-fieldset">
+                <legend i18n_Text="searchInfo">搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px" id="btn">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">时间</label>
+                                <div class="layui-input-inline">
+                                    <select id="TimeType" name="TimeType" lay-search lay-verify="">
+                                        <option value="01">全部</option>
+                                        <option value="02">一月</option>
+                                        <option value="03">一周</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" i18n_Text="account">账号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="email" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-inline">
+                                    <button type="submit" i18n_Text="search" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+
+            <!--表格头部工具栏-->
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button i18n_Text="storeInformation" class="layui-btn layui-btn-normal layui-btn-sm data-edit-btn" lay-event="search_shopify"> 显示客户店铺 </button>
+                </div>
+            </script>
+            <!--表格-->
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="WriteOffCredit">销账</a>
+            </script>
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var app = null;
+        layui.use(['form', 'table', 'app', 'i18n'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                i18n = layui.i18n,
+                table = layui.table;
+            layer = layui.layer;
+            app = layui.app;
+            app.Load("manage");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id = null;
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id;
+            }
+            // 国际化
+            i18n.loadProperties(id);
+
+            table.render({
+                method: "post",
+                contentType: "application/json;",
+                height: 630,
+                elem: '#currentTableId', //指定原始表格元素选择器（推荐id选择器）
+                url: BackgroundDomain +'/api/Customer/GetCreditCustomerList',//数据接口
+                toolbar: '#toolbarDemo',//开启表格头部工具栏区域，该参数支持四种类型值：
+                defaultToolbar: ['filter', 'exports', 'print', { //该参数可自由配置头部工具栏右侧的图标按钮
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[  //表头
+                    { type: "checkbox", width: 50 },
+                    { type: "numbers", width: 50, title: '序号' },
+                    { field: 'id', width: 120, title: 'ID', hide: true },
+                    { field: 'email', width: 320, title: '店铺' },
+                    { field: 'registTime', width: 180, title: '注册时间' },
+                    { field: 'balance', width: 180, title: '余额' },
+                    { field: 'creditAmout', width: 180, title: '赊账总额度' },
+                    { field: 'creditBalance', width: 180, title: '可用赊账余额' },
+                    { field: 'usedcredit', width: 180, title: '已用赊账余额' },
+                    { field: 'currency', width: 250, title: '币种' },
+                    { title: '操作', minwidth: 120, toolbar: '#currentTableBar', align: "center", fixed: 'right' }
+
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],//每页条数的选择项
+                limit: 15,//每页显示的条数
+                page: true, //开启分页
+                done: function (res, curr, count)
+                {
+                    // 上面的表格执行完成出来在国际化
+                    i18n.loadProperties(id);
+                }
+            });
+
+
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+                var dto_obj = new Object();
+                if ($.isEmptyObject(obj.TimeType) != true) { dto_obj.TimeType = obj.TimeType; }
+                if ($.isEmptyObject(obj.email) != true) { dto_obj.email = obj.email; }
+
+                //执行搜索重载
+                table.reload('currentTableId', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+
+                        Dto: dto_obj
+                    }
+
+                }, 'data');
+
+                return false;
+            });
+
+            //监听工具条
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                var checkStatus = table.checkStatus('currentTableId');
+                var data = obj.data;
+                //查看店铺信息
+                if (obj.event === 'search_shopify') {
+                    if (checkStatus.data.length == 0) {
+                        layer.alert("请先选中要查看的数据");
+                        return false;
+                    }
+                    else if (checkStatus.data.length > 1) {
+                        layer.alert("每次只能查看一条订单的信息");
+                        return false;
+                    }
+                    var index = layer.open({
+                        title: '店铺信息',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['56%', '70%'],
+                        content: $("#customerShopify")//引用的弹出层的页面层的方式加载修改界面表单,
+                    });
+                    //动态向表传递赋值
+                    search_shopifyValue(obj, checkStatus);
+                }
+            
+            });
+            //监听工具条
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                // 销账
+                if (obj.event === 'WriteOffCredit') {
+                    var index = layer.open({
+                        title: '赊账账单销账',
+                        type: 2,
+                        shade: 0.2,
+                        shadeClose: true,
+                        area: ['900px', '600px'],
+                        content: '/manage/order/OrderBillRecordView.html?customerId=' + data.id,
+                    });
+                    return false;
+                }
+
+                if (obj.event === 'Modibalance') {
+                    var result = JSON.stringify(data);
+                    console.log("result=" + result);
+                    layer.open({
+                        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 1,
+                        title: "客户充值",
+                        area: ['450px', '430px'],
+                        content: $("#USModiBalance")//引用的弹出层的页面层的方式加载修改界面表单
+
+                    });
+
+                    //动态向表传递赋值
+                    USModiBalance(obj, data);
+                }
+            });
+
+            //查询店铺列表信息
+            function search_shopifyValue(obj, checkStatus) {
+                var chk = checkStatus.data[0];
+                var obj = JSON.stringify(chk);
+                obj = $.parseJSON(obj);
+                var dto_obj = new Object();
+                dto_obj.CustomerId = parseInt(obj.id);
+
+                //表格渲染
+                table.render({
+                    method: "post",
+                    contentType: "application/json;",
+                    height: 500,
+                    width: 900,
+                    elem: '#customerShopifyValue', //指定原始表格元素选择器（推荐id选择器）
+                    where: {
+
+                        Dto: dto_obj
+                    },
+                    initsort: {
+                        field: 'gnum',
+                        type: 'asc'
+                    },
+                    sort: true,
+                    url: BackgroundDomain +'/api/Customer/GetCustomerShopify',//数据接口
+                    cols: [[  //表头
+                        { field: 'gnum', width: 80, title: '序号12', type: 'numbers' },
+                        { field: 'id', width: 100, title: 'id', hide: true },
+                        { field: 'customerId', width: 100, title: 'customerId', hide: true, hide: true },
+                        { field: 'shopifyShop', width: 200, title: 'shopify' },
+                        { field: 'bindingTime', width: 250, title: '绑定时间' },
+                        { field: 'authorizationTime', width: 250, title: '授权时间' }
+                    ]],
+                    limits: [10, 15, 20, 25, 50, 100],//每页条数的选择项
+                    limit: 15,//每页显示的条数
+                    page: true, //开启分页
+                });
+
+            }
+
+            //修改余额
+            function USModiBalance(obj, data) {
+
+                form.on('submit(up_ers)', function (massage) {
+                    //console.log(JSON.stringify(data));
+                    //layer.alert("data=" + JSON.stringify(data));
+                    var dto_obj = new Object();
+                    dto_obj.Id = parseInt(data.id);
+                    dto_obj.Balance = massage.field.balance;
+                    dto_obj.Currency = "USD";
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json;",
+                        url: BackgroundDomain +'/api/Customer/ModiCusCustomerAccount',
+                        data: JSON.stringify(dto_obj),
+                        success: function (msg) {
+                            console.log(msg);
+                            if (msg != null || msg != "") {
+                                // 出库状态
+                                if (msg.code == "200") {
+                                    layer.alert(1);
+                                    layer.msg("修改成功", { icon: 6 });
+                                    var index = layer.load(3);
+                                    /*layer.close(index);*/
+                                }
+                                else {
+                                    layer.msg(msg.eessage, { icon: 6 });
+                                    /*layer.load(30);*/
+                                }
+                            }
+                        }
+
+                    })
+                })
+            }
+        })
+
+    </script>
+    <!--店铺信息列表-->
+    <div class="layui-row" id="customerShopify" style="display:none;margin: 0px 40px">
+        <div class="layui-col-md10">
+            <form class="layui-form layui-from-pane" lay-filter="userValue" action="" style="margin-top:20px">
+                <!--表格-->
+                <table class="layui-hide" id="customerShopifyValue" lay-filter="currentTableFilter"></table>
+            </form>
+        </div>
+    </div>
+
+    <!--店铺客户余额充值-->
+    <div class="layui-row" id="USModiBalance" style="display:none;">
+        <div class="layui-col-md10">
+            <form class="layui-form layui-from-pane" lay-filter="upModiBalance" action="" style="margin-top:20px">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">充值金额：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="balance" lay-verify="required" lay-reqtext="客户金额必须输入" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-top:40px">
+                    <div class="layui-input-block">
+                        <button class="layui-btn  layui-btn-submit " lay-submit="" lay-filter="up_ers">确认提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

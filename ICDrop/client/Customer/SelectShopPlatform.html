@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/BindShop.css" media="all">
+</head>
+<body>
+    <hr style="background: #029803; width: 440px; margin-left: 30px; " />
+    <div class="select" id="select">
+        <div class="selectText">Select the store type and install it.</div>
+        <div class="selectLine" onclick="SelectShopify()">
+            <img src="../../../images/BindShop/BindShopify.png" />
+        </div>
+        <div class="selectLine" onclick="SelectWoocommerce()">
+            <img src="../../../images/BindShop/BindWoocommerce.png" />
+        </div>
+    </div>
+    <div class="contant" id="shopify" style=" display:none">
+        <div style="float:none;height:22px;margin-bottom:14px;">Enter your store URL:</div>
+        <div class="paybody" id="paybody">
+            <div id="paypaldiv">
+                <div class="line">
+                    <div style="float:left;height:26px;line-height:26px; width:56px;font-size:14px;">https://</div>
+                    <input id="BindStoreShopName" type="text" placeholder="store-name" style="float:left;height:26px;line-height:26px;width:150px; text-indent:6px;margin-right:10px; font-size:14px;border:1px solid #ccc">
+                    <div style="float:left;height:26px;line-height:26px;width:126px; font-size:14px; text-indent:6px;border:1px solid #ccc">.myshopify.com</div>
+                </div>
+                <div class="text" style="margin-top: 20px; font-size: 14px; font-family: Arial 微软雅黑; font-weight: 400; color: #999999; ">You will be redirected to store to authorize</div>
+                <hr style="background: #029803; width: 440px; " />
+                <div style="text-align:center;height:32px;line-height:32px;margin-top:20px;">
+                    <button type="button" id="bindShopify_submit" class="submit" onclick="BindShopifyShop()" i18n_Text="submit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contant" id="Woocommerce" style=" display:none">
+        <div style="float:none;height:22px;margin-bottom:14px;">Enter your store URL:</div>
+        <div class="paybody" id="paybody">
+            <div id="paypaldiv">
+                <div class="line">
+                    <div style="float:left;height:26px;line-height:26px; font-size:14px;">https:// </div>
+                    <input id="WoocommerceShopName" type="text" placeholder="store-name" style="float:left;height:26px;line-height:26px;width:380px; text-indent:6px;margin-right:10px; font-size:14px;border:1px solid #ccc">
+                </div>
+                <div class="line">
+                    <div style="float:left;height:26px;line-height:26px; font-size:14px;">Consumer Key: </div>
+                    <input id="WoocommerceShopKey" type="text" placeholder="Consumer Key" style="float:left;height:26px;line-height:26px;width:326px; text-indent:6px;margin-right:10px; font-size:14px;border:1px solid #ccc">
+                </div>
+                <div class="line">
+                    <div style="float:left;height:26px;line-height:26px; font-size:14px;">Consumer Secret: </div>
+                    <input id="WoocommerceShopSecret" type="text" placeholder="Consumer Secret" style="float:left;height:26px;line-height:26px;width:310px; text-indent:6px;margin-right:10px; font-size:14px;border:1px solid #ccc">
+                </div>
+                <div class="text" style="margin-top: 20px; font-size: 14px; font-family: Arial 微软雅黑; font-weight: 400; color: #999999; ">You will be redirected to store to authorize</div>
+                <hr style="background: #029803; width: 440px; " />
+                <div style="text-align:center;height:32px;line-height:32px;margin-top:20px;">
+                    <button type="button" id="bindWoocommerce_submit" class="submit" onclick="BindWoocommerceShop()" i18n_Text="submit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var email;
+        var id = "en_us";
+        layui.use(['i18n', 'app', 'layer'], function () {
+            $ = layui.jquery;
+            app = layui.app;
+            var layer = layui.layer,
+                i18n = layui.i18n;
+
+            app.Load("client");
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+
+        });
+
+        //点击绑定Shopify店铺
+        function BindShopifyShop() {
+            if ($("#BindStoreShopName").val() == "") {
+                layer.msg("Shop Name cannot be empty!");
+                return false;
+            }
+            var ShopName = $("#BindStoreShopName").val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json;",
+                url: BackgroundDomain +'/api/Customer/BindShop',
+                data: JSON.stringify($("#BindStoreShopName").val()),
+                success: function (msg) {
+                    console.log(msg);
+                    if (msg != null || msg != "") {
+                        window.open(msg.data).location;
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                }
+
+            });
+
+        }
+        //点击绑定BindWoocommerceShop店铺
+        function BindWoocommerceShop() {
+            if ($("#WoocommerceShopName").val() == "") {
+                layer.msg("Shop Name cannot be empty!");
+                return false;
+            }
+            if ($("#WoocommerceShopKey").val() == "") {
+                layer.msg("Consumer Key cannot be empty!");
+                return false;
+            }
+            if ($("#WoocommerceShopSecret").val() == "") {
+                layer.msg("Consumer Secret cannot be empty!");
+                return false;
+            }
+         
+            var dto_obj = new Object();
+            dto_obj.ShopifyShop = $("#WoocommerceShopName").val();
+            dto_obj.WooConsumerKey = $("#WoocommerceShopKey").val();
+            dto_obj.WooConsumerSecret = $("#WoocommerceShopSecret").val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json;",
+                url: BackgroundDomain +"/api/Customer/BindWoocommerceShop",
+                data: JSON.stringify(dto_obj),
+                success: function (msg) {
+                    layer.msg("Bind success!");
+                    setTimeout(function () {
+                        parent.layer.closeAll();   // 关闭窗口
+                    }, 2000);
+                    
+                }
+
+            });
+
+        }
+
+
+        //选择绑定shopify平台店铺
+        function SelectShopify() {
+            $("#select").attr("style", "display:none");
+            $("#shopify").attr("style", "display:block");
+            $("#Woocommerce").attr("style", "display:none");
+        }
+        //选择绑定Woocommerce平台店铺
+        function SelectWoocommerce() {
+            $("#select").attr("style", "display:none");
+            $("#shopify").attr("style", "display:none");
+            $("#Woocommerce").attr("style", "display:block");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+﻿html {
+    height: 100%;
+}
+body {
+    width: 100%;
+    height: 100%;
+    max-width: 1080px;
+    margin: 0 auto !important;
+   
+}
+/*主体部分*/
+.container {
+    background: #ffffff;
+    height: 100%;
+    overflow: auto;
+}
+/*头部DIv*/
+.beijing {
+    background-image: url(../images/Marketing/MKIndel.png);
+    background-size: 100% 100%;
+    height :100%;
+    text-align:center;
+}
+
+/*标题样式*/
+.title {
+    padding-top: 30px;
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    font-size: 48px;
+    
+    font-weight: 800;
+    color: #333333;
+    line-height: 72px;
+}
+/*详情说明样式*/
+.detail {
+    margin-top: 13px;
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    font-size: 28px;
+    font-weight: 400;
+    color: #333333;
+}
+/*每一行提示的样式*/
+.line {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 400;
+    color: #000000;
+}
+    .line label {
+        float: left;
+        margin-right: 20px;
+        margin-top: 5px;
+    }
+/*矢量图标样式*/
+.layui-icon {
+    font-size: 36px;
+    color:#333333;
+}
+/*每一行提示的右边文字样式*/
+.tip {
+    width:calc(100% - 56px);
+    float:right;
+}
+.clear {
+    clear:both;
+}
+button {
+    margin-top: 35px;
+    height: 84px !important;
+    line-height: 84px !important;
+    background: #029803 !important;
+    border-radius: 10px 10px 10px 10px !important;
+    font-size: 32px !important;
+    font-family: PingFang SC-Heavy, PingFang SC;
+    font-weight: 800;
+    color: #333333 !important;
+}
+.layui-layer-dialog .layui-layer-content {
+    font-size: 28px !important;
+}

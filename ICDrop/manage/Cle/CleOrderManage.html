@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>申报订单维护</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">订单号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="OrderNo" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-inline">
+                                    <select id="Sign" name="Sign" lay-search lay-verify="">
+                                        <option value="">请选择</option>
+                                        <option value="success">成功</option>
+                                        <option value="failure">失败</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm " lay-event="order_response">错误信息</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm " lay-event="import_order">导入申报订单</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm " lay-event="modi_order">导入修改申报订单</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm " lay-event="down_order">导入模板下载</button>
+                </div>
+            </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+        </div>
+    </div>
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var app = null;
+        layui.use(['form', 'table', 'app'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+            app = layui.app;
+            app.Load("manage");
+
+            table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#currentTableId',
+                url: BackgroundDomain +'/api/CleOrder/QueryCleOrderList',
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    { type: "checkbox", width: 50 },
+                    { type: "numbers", width: 50, title: '序号' },
+                    { field: 'orderId', width: 80, title: 'ID', hide: true },
+                    { field: 'orderNo', width: 250, title: '订单号' },
+                    { field: 'logisticsSenderCode', width: 200, title: '物流申报平台代码' },
+                    { field: 'mainGName', width: 350, title: '主品名' },
+                    { field: 'packNo', width: 100, title: '件数' },
+                    { field: 'grossWeight', width: 130, title: '毛重' },
+                    { field: 'netWt', width: 130, title: '净重' },
+                    { field: 'totalPrice', width: 130, title: '申报价值' },
+                    { field: 'currency', width: 100, title: '币种' },
+                    { field: 'consigneeCountry', width: 100, title: '国家' },
+                    { field: 'sign', width: 150, title: '上传状态' }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                done: function (res, curr, count) {
+                    $("[data-field = 'sign']").children().each(function () {
+                        if ($(this).text() == '') {
+                            $(this).text("草稿");
+                        } else if ($(this).text() == 'success') {
+                            $(this).text("成功");
+                        } else if ($(this).text() == 'failure') {
+                            $(this).text("失败");
+                        }
+                    });
+                }
+            });
+
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+                var dto_obj = new Object();
+                if ($.isEmptyObject(obj.OrderNo) != true) { dto_obj.OrderNo = obj.OrderNo; }
+                //执行搜索重载
+                table.reload('currentTableId', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        dto: dto_obj
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            /**
+             * toolbar监听事件
+             */
+            //监听头部工具栏事件
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                var checkStatus = table.checkStatus('currentTableId');  
+                //导入申报订单
+                if (obj.event === 'import_order') {
+                    var index = layer.open({
+                        title: '导入申报订单数据',
+                        type: 2,
+                        shade: 0.2,
+                        shadeClose: true,
+                        area: ['1400px', '800px'],
+                        content: '/manage/Cle/ImportCleOrder.html',
+                    });
+                }
+                if (obj.event === 'modi_order') {
+                    var index = layer.open({
+                        title: '导入修改申报订单数据',
+                        type: 2,
+                        shade: 0.2,
+                        shadeClose: true,
+                        area: ['1400px', '800px'],
+                        content: '/manage/Cle/ModiCleOrder.html',
+                    });
+                }
+                //下载物流报价模板
+                else if (obj.event === 'down_order') {
+                    window.open("Template/订单申报模板.xls");
+                }
+                //申报错误响应信息
+                else if (obj.event === 'order_response') {
+                    if (checkStatus.data.length == 0) {
+                        layer.alert("请先选中要查看的数据");
+                        return false;
+                    }
+                    else if (checkStatus.data.length > 1) {
+                        layer.alert("每次只能查看一条订单的信息");
+                        return false;
+                    }
+                    var index = layer.open({
+                        title: '申报错误信息',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['62%', '80%'],
+                        content: '/manage/Cle/CleResponse.html?orderNo=' + checkStatus.data[0].orderNo,
+                    })
+                }
+            })
+
+
+        })
+
+    </script>
+</body>
+</html>

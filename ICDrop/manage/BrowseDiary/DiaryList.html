@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+
+        .FileTable .FileLine {
+            flex-direction: column;
+            border-bottom: 1px solid #d4dde4;
+            width: 100%;
+            height: 55px;
+            margin: 5px 0px 5px 0px;
+        }
+
+            .FileTable .FileLine div {
+                text-align: center;
+                float: left;
+            }
+
+        .Picture {
+            width: 100px;
+        }
+
+        .FileTitle {
+            width: 900px;
+            text-align: left;
+            /*  height: 100px;*/
+            line-height: 50px;
+        }
+
+        .FileType {
+            width: 100px;
+            line-height: 50px;
+        }
+
+        .UpdateTime {
+            width: 150px;
+            line-height: 50px;
+        }
+
+        .FileSize {
+            width: 150px;
+            line-height: 50px;
+        }
+
+        .Operation {
+            width: 150px;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <fieldset class="table-search-fieldset">
+
+                <div class="layui-card-header">
+                    <button type="button" class="layui-btn layui-btn-sm HomePage" exp-data="">首页</button>
+
+
+                    <button type="button" hidden="hidden" class="layui-btn layui-btn-sm Return" exp-data="">返回</button>
+                </div>
+                <div class="layui-card-body Consulting">
+                    <div class="FileTable" id="FileLinePosition">
+                    </div>
+                </div>
+
+            </fieldset>
+
+
+
+        </div>
+    </div>
+
+    <script type="text/html" id="orderModule">
+        <div class="FileLine">
+            <div class="Picture">图标</div>
+            <div class='FileTitle'>文件名</div>
+            <div class="FileType">类型</div>
+            <div class="UpdateTime">修改时间</div>
+            <div class="FileSize">大小</div>
+            <div class="Operation">操作</div>
+        </div>
+        {{each }}
+        <div class="FileLine">
+            <div class="Picture">
+                {{if $value.fileType==".txt" || $value.fileType==".log"}}
+
+                <img src="/images/Text.jpeg" style="height:50px;width:50px" />
+                {{else}}
+                <img src="/images/Folder.jpeg" style="height:50px;width:50px" />
+                {{/if}}
+
+            </div>
+            <div class='FileTitle'>
+                {{$value.fileName}}
+            </div>
+            <div class="FileType">
+                {{if $value.fileType==".txt" || $value.fileType==".log"}}
+                文本
+                {{else}}
+                文件夹
+                {{/if}}
+            </div>
+            <div class="UpdateTime">
+                {{$value.updateTime}}
+            </div>
+            <div class="FileSize">
+                {{$value.fileSize}}
+            </div>
+
+            <div class="Operation">
+                <div>
+                    {{if $value.fileType==".txt" || $value.fileType==".log"}}
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal Preview" exp-data="{{$value.address}}" exp-Name="{{$value.fileName}}">预览</button>
+                    <button type="button" class="layui-btn layui-btn-sm download" exp-data="{{$value.address}}">下载</button>
+                    {{else}}
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal open" exp-data="{{$value.address}}">打开</button>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/template-web.js"></script>
+    <script src="/js/js.cookie.min.js"></script>
+    <script>
+
+        var address = "";
+
+
+
+        layui.use(['form', 'table', 'app', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+            var layer = layui.layer;
+            GetDiaryList();
+
+            // 打开
+            $(document).on('click', '.open', function () {
+                address = $(this).attr("exp-data");
+                GetDiaryList(address, "open");
+                /*  $(".Return").Show();*/
+
+            });
+            // 首页
+            $(document).on('click', '.HomePage', function () {
+                GetDiaryList();
+            });
+            // 返回
+            $(document).on('click', '.Return', function () {
+                GetDiaryList(address, "Return");
+            });
+
+            // 预览
+            $(document).on('click', '.Preview', function () {
+                $.ajax({
+                    type: "post",
+                    url:BackgroundDomain + "/api/Diary/ReadDiary",
+                    contentType: "application/json;",
+                    data: JSON.stringify($(this).attr("exp-data")),
+                    dataType: "json",
+                    success: function (data) {
+
+                        layer.open({
+                            title: $(this).attr("exp-Name"),
+                            maxmin: true, //开启最大化最小化按钮
+                            type: 1,
+                            shade: 0.2,
+                            shadeClose: true,
+                            area: ['700px', '700px'],
+                            content: data.data,
+                        });
+                        return false;
+                    }
+                });
+            });
+
+
+            // 下载
+            $(document).on('click', '.download', function () {
+                var YDHConfig = layui.data("YDH");
+                Cookies.set('YDHAuthToken', YDHConfig.Secret);
+                var exportForm = $('<form action="/api/Diary/DownloadDiary" method="post" id = "exportForm">\
+                                            <input type="hidden" name="address" value="'+ $(this).attr("exp-data") + '"/>\
+                                            </form>');
+                $(document.body).append(exportForm);
+                exportForm.submit();
+                setTimeout(() => {
+                    $("#exportForm").remove();
+                    Cookies.remove('YDHAuthToken');
+                }, 1000);
+            });
+        });
+
+        // 获取日记列表
+        function GetDiaryList(Address, Operation) {
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Diary/QueryDiaryList",
+                contentType: "application/json;",
+                data: JSON.stringify({ "Address": Address, "Operation": Operation }),
+                dataType: "json",
+                success: function (data) {
+                    if (!data) {
+                        /* layer.msg(i18n.prop(sre.msg));*/
+
+                    } else {
+                        Binding(data);
+                        if (Operation == "Return") {
+                            address = data[0].currentAddress;
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+        // 绑定页面
+        function Binding(data) {
+            var html = template('orderModule', data)
+            document.querySelector('#FileLinePosition').innerHTML = html;
+
+        }
+    </script>
+
+</body>
+</html>

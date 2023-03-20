@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>产品详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/Automation/AutomationDetails.css?v=2" media="all">
+    <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
+</head>
+<body>
+    <hr />
+    <div class="data">
+    </div>
+
+    <script type="text/html" id="productModule">
+        <div i18n_Text="Variants" style="height:36px;line-height:36px;font-size: 16px;font-weight: bold;color: #333333;">变体</div>
+        <div class="product-head">
+            <div style="width:673px;float:left;padding-left:10px;" i18n_text="product">产品</div>
+            <div style="width:137px;float:left;" i18n_text="Listing.Cost">上市成本</div>
+        </div>
+        <div class="product-body">
+            <div style="width:683px;float:left;">
+                <img src="{{indexPicture}}" style="width:80px;height:80px;margin-right:20px;float:left;margin-left:10px; " referrerPolicy='no-referrer' />
+                <div class="product-title">{{productTitle}} </div>
+            </div>
+            <div class="listingcost" style="width:137px;float:left;">{{minPrice}}-{{maxPrice}}</div>
+        </div>
+        <div class="ware-head">
+            <div style="width:125px;float:left;padding-left:10px;" i18n_text="picture">图片</div>
+            <div style="width: calc(100% - 409px);float:left;">
+                {{each wareList[0].attributekey key}}
+                <div style="float: left; width: calc(100% / {{wareList[0].attributeCount}}) ">{{key}}</div>
+                {{/each}}
+            </div>
+            <div style="width:137px;float:left;" i18n_text="Weight.kg">重量</div>
+            <div style="width:137px;float:left;" i18n_text="Listing.Cost">价格</div>
+        </div>
+        <div class="ware-list">
+            {{each wareList}}
+            <div class="ware-body">
+                <div style="width: 125px; float: left;padding-left:10px;">
+                    <img style="width:40px;height:40px;" src="{{$value.pictuer}}" referrerPolicy='no-referrer'/>
+                </div>
+                <div style="width: calc(100% - 403px);float:left;">
+                    {{each $value.attributevalue key}}
+                    <div style="float: left; width: calc(100% / {{wareList[0].attributeCount}}) ">{{key}}</div>
+                    {{/each}}
+                </div>
+                <div style="width:137px;float:left;">
+                    {{ $value.wareExtend==null?"":$value.wareExtend.weight}}
+                </div>
+                <div style="width:131px;float:left;" class="listingcost">
+                    {{$value.unitPrice + $value.unitProfit}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="tips" i18n_text="Tips">Tips</div>
+        <div class="tip-text">
+            1.After synchronization, all orders placed on your account are
+            <label class="tip-label">Sourcing</label>
+            according to this
+            <label class="tip-label">SourSKU Price Automaticallycing</label>
+        </div>
+        <div class="tip-text">
+            2.Once each settlement, we will send your
+            <label class="tip-label">Bill</label>
+            to your
+            <label class="tip-label">Email</label>
+            , you can pay for the bil in monthly/weekly on the home page.
+        </div>
+        <!--如果是已授权自动化的产品则显示解绑按钮，否则显示绑定按钮-->
+        <div id="updateStatus{{id}}">
+            {{if isAutomation =="1"}}
+            <button type="button" class="outsync" exp-data="{{id}}" i18n_Text="Out.sync">取消同步</button>
+            {{/if}}
+            {{if isAutomation =="0"}}
+            <button type="button" class="sync" exp-data="{{id}}" i18n_Text="Sync.order.with.SKU">同步</button>
+            {{/if}}
+        </div>
+    </script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/template-web.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+    <script>
+        var app = null;
+        var $ = null;
+        var message = null;
+        var id = "en_us";
+        var i18n = null;
+        var laypage = null;
+        var AutomationId = window.GetRequest("AutomationId");
+        layui.use(['i18n', 'app', 'layer', 'form', 'laypage', 'message'], function () {
+            $ = layui.jquery;
+            app = layui.app;
+            var layer = layui.layer,
+                form = layui.form;
+            message = layui.message;
+            i18n = layui.i18n;
+            laypage = layui.laypage;
+            app.Load("client");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+            debugger
+            //获取产品sku列表
+            GetProductWareListById(AutomationId);
+
+            //授权自动化产品
+            $(document).on('click', '.sync', function () {
+                var productId = $(this).attr("exp-data");
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Automation/UpdateAutomationStatus",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "id": productId, "isAutomation": "1" }),
+                    dataType: "json",
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("授权自动化产品成功");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Authorization of automation product succeeded"/*, { time:20000000 }*/);
+                        }
+                        //授权后按钮变为取消授权
+                        var updateStatusdiv = document.getElementById("updateStatus" + productId);
+
+                        var html = '<button type="button" class="outsync" exp-data="' + productId + '" i18n_Text="Out.sync">Out sync</button>';
+                        updateStatusdiv.innerHTML = html;
+
+                    }
+                });
+                return false;;
+            });
+
+            //取消授权自动化产品
+            $(document).on('click', '.outsync', function () {
+                var productId = $(this).attr("exp-data");
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Automation/UpdateAutomationStatus",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "id": productId, "isAutomation": "0" }),
+                    dataType: "json",
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("已取消授权");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Cancelled authorization"/*, { time:20000000 }*/);
+                        }
+                        var updateStatusdiv = document.getElementById("updateStatus" + productId);
+                        //取消授权后按钮变为授权
+                        var html = '<button type="button" class="sync" exp-data="' + productId + '" i18n_Text="Sync.order.with.SKU">Sync order with SKU</button>';
+                        updateStatusdiv.innerHTML = html;
+                    }
+                })
+            });
+        });
+
+        //获取产品sku列表
+        function GetProductWareListById(AutomationId) {
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Automation/QueryAutomationWareListById",
+                contentType: "application/json;",
+                data: JSON.stringify({ "Id": AutomationId }),
+                dataType: "json",
+                success: function (data) {
+                    Binding(data);
+                }
+            });
+        }
+
+        // 绑定页面
+        function Binding(data) {
+            if (data != null) {
+                for (let i = 0; i < count(data.wareList); i++) {
+                    var attribute = JSON.parse(data.wareList[i].variantTitle);
+                    data.wareList[i].attributeCount = Object.keys(attribute).length
+                    var attributekey = [];
+                    var attributevalue = [];
+                    for (var key in attribute) {
+                        attributekey.push(key);
+                        attributevalue.push(attribute[key]);
+                    }
+                    data.wareList[i].attributekey = attributekey;
+                    data.wareList[i].attributevalue = attributevalue;
+                }
+
+
+                var html = template('productModule', data)
+                document.querySelector(".data").innerHTML = html;
+
+            }
+            i18n.loadProperties(id);
+        }
+
+        function count(obj) {
+            var objType = typeof obj;
+            if (objType == "string") {
+                return obj.length;
+            } else if (objType == "object") {
+                var objLen = 0;
+                for (var i in obj) {
+                    objLen++;
+                }
+                return objLen;
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>

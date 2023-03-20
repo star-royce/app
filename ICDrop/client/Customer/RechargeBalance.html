@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/RechargeBalance.css?v=2" media="all">
+</head>
+<body>
+    <hr style="background: #029803; width: 440px; margin-left: 30px; " />
+    <div class="contant">
+        <ul>
+            <li id="PayPal_li"  class="this"><div>PayPal</div></li>
+            <!--<li></li>-->
+        </ul>
+        <hr style="width: 440px; border-bottom: 1px solid #029803 !important; " />
+        <div class="paybody" id="paybody">
+            <div id="paypaldiv">
+                <div class="paylogo"><img id="paylogo" src="../../../images/paypal.png" /></div>
+                <div class="line" id="balancediv">
+                    <div class="left" i18n_Text="Your.Balance" style="font-size: 16px;  font-weight: 400; color: #333333;">余额</div>
+                    <div class="right"><span id="Balance" style="font-size: 20px;  font-weight: bold; color: #333333;">$300</span></div>
+                </div>
+
+                <div class="line">
+                    <div class="left" i18n_Text="Payment.amount" style="font-size: 16px;  font-weight: 400; color: #333333;width:440px;">支付金额</div>
+                </div>
+                <div class="line">
+                    <input type="text" name="RechargeAmount" autocomplete="off" id="RechargeAmount" class="RechargeAmount">
+                    <span style=" margin-left: 10px; font-size: 16px;  font-weight: 400; color: #999999;">($)</span>
+                  
+                </div>
+                <div style="text-align:center;height:32px;line-height:32px;margin-top:20px;">
+                    <button type="button" id="paypal_submit" class="submit" onclick="paypalpay()" i18n_Text="submit">提交</button>
+                </div>
+                <div style="margin-top:20px;"><label i18n_Text="Thanks.for.your.business" style=" font-size: 14px;  font-weight: 400; color: #999999;">谢谢您的惠顾</label></div>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var email;
+        var id = "en_us";
+        layui.use(['i18n', 'app', 'layer'], function () {
+            $ = layui.jquery;
+            app = layui.app;
+            var layer = layui.layer,
+                i18n = layui.i18n;
+
+            app.Load("client");
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+            // 获取登录的用户名
+            var YDHCustomer = layui.data('YDH-Customer');
+            if (YDHCustomer.email) {
+                email = YDHCustomer.email;
+
+            }
+            $.ajax({
+                url: BackgroundDomain +"/api/Customer/GetCusCustomerAccount",
+                type: "post",
+                contentType: "application/json;",
+                data: JSON.stringify({ 'email': email }),
+                success: function (msg) {
+                    if (msg != null) {
+                        $("#Balance").text("$" + msg.balance);
+                    }
+                }
+            })
+
+
+        });
+
+        //点击paypal去充值余额
+        function paypalpay() {
+            var dto_obj = new Object();
+            dto_obj.Email = email;
+            dto_obj.Balance = $("#RechargeAmount").val();
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Pay/PaypalPayView",
+                contentType: "application/json;",
+                data: JSON.stringify(dto_obj),
+                dataType: "json",
+                async: false,//同步
+                success: function (data) {
+                    if (!data) {
+                        layer.msg("支付异常！");
+                    } else {
+                   /*     window.open(data.data, '_blank').location;*/
+                        window.location.replace(data.data);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+        }
+
+    </script>
+</body >
+</html >

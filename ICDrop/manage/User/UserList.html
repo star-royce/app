@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">登录账号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userCode" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">用户名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userName" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete" style="display:none;"> 删除 </button>
+                </div>
+            </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+            </script>
+
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var app = null;
+        layui.use(['form', 'table', 'app'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+            app = layui.app;
+            app.Load("manage");
+
+            table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#currentTableId',
+                url: BackgroundDomain +'/api/User/QueryUserList',
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    { type: "checkbox", width: 50 },
+                    { type: "numbers", width: 50, title: '序号' },
+                    { field: 'userId', width: 80, title: 'ID', hide: true },
+                    { field: 'userName', width: 150, title: '用户名称' },
+                    { field: 'userCode', width: 150, title: '登录账号' },
+                    { field: 'tokenKey', width: 200, title: 'Token' },
+                    { field: 'userStatus', width: 80, title: '状态' },
+                    { field: 'createPerson', width: 150, title: '创建人' },
+                    { field: 'createTime', width: 200, title: '创建时间' },
+                    { field: 'updatePerson', width: 150, title: '修改人' },
+                    { field: 'updateTime', width: 200, title: '修改时间' },
+                    { title: '操作', minWidth: 130, toolbar: '#currentTableBar', fixed: 'right' }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                done: function (res, curr, count) {
+                    $("[data-field = 'userStatus']").children().each(function () {
+                        if ($(this).text() == '0') {
+                            $(this).text("正常");
+                        } else if ($(this).text() == '1') {
+                            $(this).text("失效");
+                        }
+                    });
+                }
+            });
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+
+                //执行搜索重载
+                table.reload('currentTableId', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        Dto: obj
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            /**
+             * toolbar监听事件
+             */
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                if (obj.event === 'add') {  // 监听添加操作
+                    var index = layer.open({
+                        title: '添加用户',
+                        type: 2,
+                        shade: 0.2,
+                        /* maxmin: true,*/
+                        shadeClose: true,
+                        /*area: ['100%', '100%'],*/
+                        area: ['700px', '400px'],
+                        content: 'UserAdd.html',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                } else if (obj.event === 'delete') {  // 监听删除操作
+                    var checkStatus = table.checkStatus('currentTableId')
+                        , data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                }
+            });
+
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
+
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    var result = JSON.stringify(data);
+                    console.log("result=" + result);
+                    layer.open({
+                        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 1,
+                        title: "修改用户用户信息",
+                        area: ['650px', '430px'],
+                        content: $("#divEditUser")//引用的弹出层的页面层的方式加载修改界面表单
+
+                    });
+
+                    //动态向表传递赋值
+                    EditUser(obj, data);
+
+                    return false;
+                } else if (obj.event === 'delete') {
+
+                    layer.confirm('确定失效吗？', function (index) {
+                        //console.log("checkStatus=" + JSON.stringify(checkStatus.data));
+                        //console.log("checkStatus=" + JSON.stringify(checkStatus.data[0]));
+                        var dto_obj = new Object();
+                        dto_obj.UserCode = data.userCode;
+
+                        $.ajax({
+                            type: "post",
+                            url: BackgroundDomain +"/api/User/DeleteUser",
+                            contentType: "application/json;",
+                            data: JSON.stringify(dto_obj),
+                            dataType: "json",
+                            success: function (sre) {
+                                console.log("sre" + JSON.stringify(sre));
+                                if (sre.data == "1") {
+                                    obj.del();
+                                    layer.msg("提交成功！");
+
+                                    //setTimeout(function () {
+
+                                    //    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                    //    parent.layer.close(iframeIndex);
+
+                                    //}, 3000);
+
+                                }
+                                layer.close(index);
+                                return false;
+                            }
+                        });
+                    });
+                }
+            });
+
+            //修改用户信息
+            function EditUser(obj, data) {
+                /*layer.alert("data=" + JSON.stringify(data));*/
+
+                var userStatus = false;
+                if (data.userStatus == 0) {
+                    userStatus = true;
+                }
+                form.val("formEditUser", {
+                    "UserName": data.userName,
+                    "TokenKey": data.tokenKey,
+                    "userStatus": userStatus ,
+                });
+
+                form.on('submit(saveBtn)', function (massage) {
+                    //console.log(JSON.stringify(data));
+                    //layer.alert("data=" + JSON.stringify(data));
+                    var dto_obj = new Object();
+                    dto_obj.UserCode = data.userCode;
+                    dto_obj.UserName = massage.field.UserName;
+                    dto_obj.TokenKey = massage.field.TokenKey;
+                    dto_obj.userStatus = 0;
+                    if (massage.field.userStatus == false) {
+                        dto_obj.userStatus = 1;
+                    }
+
+
+                    $.ajax({
+                        type: "post",
+                        contentType: "application/json;",
+                        url: BackgroundDomain +'/api/User/ModifyUser',
+                        data: JSON.stringify(dto_obj),
+                        async: false,//同步
+                        success: function (msg) {
+                            console.log(msg);
+                            /*layer.alert("msg=" + JSON.stringify(msg));*/
+                            if (msg.code == "1") {
+                                layer.msg("修改成功", { icon: 6 });
+                                /*parent.layer.closeAll();*/
+                                layer.closeAll('loading');
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+
+                    })
+                })
+            }
+        });
+    </script>
+    <!--修改计划和任务-->
+    <div class="layui-row" id="divEditUser" style="display:none;">
+        <form class="layui-form layui-from-pane" lay-filter="formEditUser" action="" style="margin-top:20px">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">用户名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名称不能为空" placeholder="请输入用户名称" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">tokenKey</label>
+                <div class="layui-input-block">
+                    <input type="text" name="TokenKey" value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户状态</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" checked="" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="正常|失效">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+﻿GetCusCustomer.Wrong = Wrong user or password! Login failed!
+GetCusCustomer.Parameters = Parameter cannot be empty!
+GetCusCustomer.VerificationCode = Verification code error!
+GetCusCustomer.ExistsCustomer = The account already exists!

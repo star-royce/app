@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link rel="stylesheet" href="../../css/MyShopProduct.css?v=2" media="all">
+</head>
+<body>
+    <div class="">
+        <div class="layuimini-main">
+            <form action="" lay-filter="formTest" class="layui-form">
+
+                <div>
+                    <div class="model-select-box">
+                        <div class="model-select-text" id="selectshop" value="" ><img class="shoplogo" src="../../../images/shop.png" />All Shop</div>
+                        <b class="bg1"></b>
+
+                        <ul class="model-select-option" id="model-select-option">
+                        </ul>
+                    </div>
+                    <div id="top-right" style="width: calc(100% - 315px); float: left; margin-left: 30px; ">
+                        <input type="text" i18n_Attr="placeholder:Enter.order.number" name="productTitle" placeholder="请输入订单号" autocomplete="off" class="productTitlePut">
+                        <button type="submit" lay-submit lay-filter="data-search-btn" class="searchOrder"><img src="../../../images/search.png" /></button>
+                    </div>
+                </div>
+
+</form>
+
+            <div id="productList" class="productList">
+            </div>
+
+            <!--分页-->
+            <div id="test1" style="float:right;margin-right:70px;"></div>
+        </div>
+    </div>
+    <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../js/lay-module/wangEditor/wangEditor.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script type="text/javascript">
+        var app = null;
+        var id = "en_us";
+        var selectindex = 0;
+        layui.use(['form', 'app', 'laypage', 'i18n'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                layer = layui.layer,
+                index = layui.index,
+                i18n = layui.i18n,
+                laypage = layui.laypage;
+            app = layui.app;
+            // 权限
+            app.Load("client");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+       
+            if (YDHConfig.Lang) {
+                id = YDHConfig.Lang.id
+            }
+
+            var Customer = layui.data('YDH-Customer');
+            var dto_obj = new Object();
+            dto_obj.email = Customer.email;
+            // 获取店铺
+            Getshop(form);
+
+            function Getshop(form) {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Customer/GetCustomerShopifyList",
+                    contentType: "application/json;",
+                    data: JSON.stringify(dto_obj),
+                    dataType: "json",
+                    success: function (e) {
+
+                        let str = "";
+                        for (let i of e.data) {
+                            //组装数据
+                            str += `<li shopify-id="${i.id}"><img class="shoplogo" src="../../../images/shop.png"/>${i.shopifyShop}</li>`;
+                        }
+                        //jquery赋值方式
+                        $("#model-select-option").html(str);
+
+
+                    },
+                    error: function (jqXHR) {
+                        layer.msg('获取失败！');
+                        return false;
+                    }
+                });
+            }
+            var count;
+            var SerchproductInfo = new Object();
+            SerchproductInfo.FromStore = "Y";
+            //查找出该客户（管理员）的进口商品信息
+            QueryImportProduct(count, SerchproductInfo);
+
+            var prev = "";
+            var next = "";
+            if (id == "zh_cn") {
+                prev = "上一页";
+                next = "下一页";
+            }
+            else if (id == "en_us") {
+                prev = "previous page";
+                next = "next page ";
+            }
+
+
+            function QueryImportProduct(count, SerchproductInfo) {
+                var dto_obj = new Object();
+                dto_obj.page = 1;
+                dto_obj.limit = 20;
+                dto_obj.dto = SerchproductInfo;
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                    data: JSON.stringify(dto_obj),
+                    success: function (msg) {
+                        if (msg && msg.data) {
+
+                            count = msg.count;
+                            //分页
+                            laypage.render({
+                                elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+                                , prev: prev
+                                , next: next
+                                , count: count //数据总数，从服务端得到
+                                , limit: 20
+                                , jump: function (obj, first) {
+                                    dto_obj.page = obj.curr;
+                                    dto_obj.limit = obj.limit;
+                                    dto_obj.dto = SerchproductInfo;
+                                    $.ajax({
+                                        type: "post",
+                                        contentType: "application/json",
+                                        url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                                        data: JSON.stringify(dto_obj),
+                                        success: function (msg) {
+                                          
+
+
+                                                $("#productList").empty();
+                                                var data = msg.data.length;
+                                                //获取div
+                                                var divf = document.getElementById("productList");
+
+
+                                                for (var i = 0; i < data; i++) {
+
+                                                    var div0 = document.createElement("div");
+                                                    div0.setAttribute('class', 'product-list');
+                                                    div0.setAttribute('id', 'product-list' + msg.data[i].id);
+                                                    divf.appendChild(div0);
+
+                                                    //图片
+                                                    var div = document.createElement("div");
+                                                    div.setAttribute('class', 'pictop_play');
+                                                    div.setAttribute('onclick', 'OpenDetailPage(' + msg.data[i].id + ')');
+                                                    div.setAttribute('lay-href', '');
+                                                    div0.appendChild(div);
+
+                                                    var img = document.createElement("img");
+                                                    img.setAttribute('src', msg.data[i].indexPicture);
+                                                    div.appendChild(img);
+
+                                                    var div1 = document.createElement("div");
+                                                    div1.setAttribute('class', 'font-box');
+                                                    div0.appendChild(div1);
+
+                                                    //标题
+                                                    var div2 = document.createElement("div");
+                                                    div2.setAttribute('class', 'title');
+                                                    div2.setAttribute('onclick', 'OpenDetailPage(' + msg.data[i].id + ')');
+                                                    div1.appendChild(div2);
+                                                    div2.innerHTML = msg.data[i].productTitle;
+
+
+                                                    //标题下面部分再加一个div，鼠标没有移动到每个产品的大DIV上，显示金额，鼠标移动到产品上显示在店铺查看按钮
+                                                    var changediv = document.createElement("div");
+                                                    changediv.setAttribute('class', 'change');
+                                                    div1.appendChild(changediv);
+
+                                                    //价格
+                                                    var div3 = document.createElement("div");
+                                                    div3.setAttribute('class', 'price');
+                                                    div3.setAttribute('onclick', 'OpenDetailPage(' + msg.data[i].id + ')');
+                                                    div3.setAttribute('id', 'price' + msg.data[i].id);
+                                                    changediv.appendChild(div3);
+
+
+                                                    //获取价格信息
+                                                    var productprice = new Object();
+                                                    productprice.productId = msg.data[i].id;
+                                                    $.ajax({
+                                                        type: "post",
+                                                        contentType: "application/json",
+                                                        url: BackgroundDomain +'/api/Product/QueryProductPriceInfo',
+                                                        data: JSON.stringify(productprice),
+                                                        success: function (data) {
+                                                            var price = "$" + data.data[0].price;
+                                                            var font4 = document.createElement("font");
+                                                            font4.setAttribute('style', 'vertical-align: inherit;');
+                                                            var fontadd = document.getElementById("price" + data.data[0].productId);
+                                                            fontadd.appendChild(font4);
+                                                            font4.innerHTML = price;
+                                                        }
+                                                    })
+
+                                                    //在商店查看
+                                                    var div4 = document.createElement("div");
+                                                    div4.setAttribute('class', 'viewproduct');
+                                                    changediv.appendChild(div4);
+
+
+                                                    var input = document.createElement("input");
+                                                    input.setAttribute('type', 'button');
+                                                    input.setAttribute('id', 'viewbtn' + msg.data[i].id);
+                                                    input.setAttribute('class', 'viewtbtn');
+                                                    input.setAttribute('value', $.i18n.prop('View.on.Store'));
+                                                    div4.appendChild(input);
+
+                                                    //鼠标移入移出事件
+                                                    $(function () {
+                                                        var id = msg.data[i].id;
+                                                        $('#product-list' + msg.data[i].id).mouseover(function () {
+                                                            $('#price' + id).css("display", "none")
+                                                            $('#viewbtn' + id).css("display", "block")
+                                                            $("#product-list" + id).addClass("shadow");
+                                                        })
+                                                        $('#product-list' + msg.data[i].id).mouseout(function () {
+                                                            $('#price' + id).css("display", "block")
+                                                            $('#viewbtn' + id).css("display", "none")
+                                                            $("#product-list" + id).removeClass("shadow");
+                                                        })
+                                                    })
+                                                
+                                            }
+                                         
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                        else {
+                            $("#productList").empty();
+                                //获取div
+                                var divf = document.getElementById("productList");
+                                //添加div ，
+                                var NoProduct = document.createElement("div");
+                                NoProduct.setAttribute('class', 'NoProduct');
+                                NoProduct.setAttribute('style', 'width:100%;');
+                                divf.appendChild(NoProduct);
+                                //放图片
+                                var img = document.createElement("img");
+                                img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:250px;');
+                                img.setAttribute('src', '../../../images/404.png');
+                                NoProduct.appendChild(img);
+
+                                var content = document.createElement("div");
+                                content.setAttribute('style', 'text-align:center;margin: 20px auto;');
+                                NoProduct.appendChild(content);
+                                content.html($.i18n.prop("No.content"));
+                     
+                                return null;
+                            
+
+                        }
+                    }, error: function () {
+                        //获取div
+                        var divf = document.getElementById("productList");
+                        divf.innerHTML = "";
+
+
+
+                    }
+                })
+            }
+
+            i18n.loadProperties(id);
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+                if ($.isEmptyObject(obj.productTitle) != true) {
+                    SerchproductInfo.productTitle = obj.productTitle;
+                    SerchproductInfo.ShopId = obj.ShopifyName;
+                    SerchproductInfo.FromStore = "Y";
+                    var ShopifyShop = $("#selectshop").text();
+                    if (ShopifyShop == "All Shop")
+                        ShopifyShop = "";
+                    SerchproductInfo.ShopifyShop = ShopifyShop;
+                }
+                QueryImportProduct(count, SerchproductInfo);
+                return false;
+            })
+        })
+        ////查看商品详情
+        function OpenDetailPage(id) {
+
+            window.open('productdetail.html?id=' + id +'&RoleName=Client');
+
+        }
+
+        //点击选择框
+        $(document).on('click', 'div.model-select-box div.model-select-text', function () {
+            var $box = $('div.model-select-box');
+            var $option = $('ul.model-select-option', $box);
+            var $txt = $('div.model-select-text', $box);
+            var speed = 10;
+            var $bg = $('b.bg1', $box)
+            $('div.model-select-box ul.model-select-option').not($(this).siblings('ul.model-select-option')).slideUp(speed, function () {
+            });
+            $(this).siblings('ul.model-select-option').slideToggle(speed, function () {
+                selectindex = 1;
+            });
+
+
+            $option.find('li').each(function (index, element) {
+                var selectpriceid = $('#selectshop').attr("shopify-id");
+                var shopifyid = $(this).attr("shopify-id");
+                if (selectpriceid == shopifyid) {
+                    $(this).addClass('selected').siblings('li').removeClass('selected');
+                }
+
+                if ($(this).hasClass('selected')) {
+                    $(this).parent('.model-select-option').siblings('.model-select-text').html('<img class="shoplogo" src="../../../images/shop.png" />' + $(this).text())
+                }
+
+                $(this).mousedown(function () {
+                    $(this).parent().siblings('div.model-select-text').html('<img class="shoplogo" src="../../../images/shop.png" />' + $(this).text());
+                    $(this).parent().siblings('div.model-select-text').attr('value', $(this).attr('shopify-id'));
+                    $option.slideUp(speed, function () {
+                    });
+                    $(this).addClass('selected').siblings('li').removeClass('selected');
+                    selectindex = 0;
+
+                    return false;
+                })
+
+                $(this).on('mouseover', function () {
+                    $(this).addClass('selected').siblings('li').removeClass('selected');
+                })
+
+            })
+        });
+
+
+        ////点击除下拉框外的文档，隐藏所有下拉
+        $(document).on('click', 'div.model-select-box ', function () {
+            var $box = $('div.model-select-box');
+            var $option = $('ul.model-select-option', $box);
+            var $txt = $('div.model-select-text', $box);
+            var speed = 10;
+            var $bg = $('b.bg1', $box)
+            ////点击文档，隐藏所有下拉
+            $('body').not($(this)).bind('click', function () {
+                $option.slideUp(speed, function () {
+                });
+            })
+            var temp1 = $("div.model-select-box ul.model-select-option").is(":visible");
+            if (temp1 && selectindex == 1) {
+                $option.slideUp(speed, function () {
+                    selectindex = 0;
+                });
+            }
+
+        });
+
+
+    </script>
+</body>
+</html>

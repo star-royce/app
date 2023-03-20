@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/OrderPay.css?v=2" media="all">
+    <style>
+        /*layui.msg的样式*/
+        .layui-layer-msg .layui-layer-content {
+            background-color: #FFD401;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+        .text {
+            height: 50px;
+           /* margin-left: 40px;*/
+            font-size: 20px;
+            
+            font-weight: 400;
+            line-height: 50px;
+            color: #333333;
+            opacity: 1;
+        }
+        .layui-input {
+            width: 400px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.39);
+            border: 1px solid #DDDDDD;
+            opacity: 1;
+            border-radius: 5px;
+            margin-top:10px;
+            margin-left:20px;
+            padding-left:40px;
+        }
+        #name {
+            background-image: url(../../../images/invoice/Name.png); /*设置小图标为背景*/
+            background-size: 20px 20px; /*设置小图标的 大小*/
+            background-position: 10px 10px; /*设置小图标的位置*/
+            background-repeat: no-repeat; /*设置小图标不重复*/
+        }
+        #email {
+            background-image: url(../../../images/invoice/Email.png); /*设置小图标为背景*/
+            background-size: 20px 20px; /*设置小图标的 大小*/
+            background-position: 10px 10px; /*设置小图标的位置*/
+            background-repeat: no-repeat; /*设置小图标不重复*/
+        }
+        #address {
+            background-image: url(../../../images/invoice/Address.png); /*设置小图标为背景*/
+            background-size: 20px 20px; /*设置小图标的 大小*/
+            background-position: 10px 10px; /*设置小图标的位置*/
+            background-repeat: no-repeat; /*设置小图标不重复*/
+            height:60px;
+            padding-top:10px;
+        }
+        .button {
+            width: 128px;
+            height: 32px;
+            opacity: 1;
+            border-radius: 24px;
+        }
+        #Connect {
+            background: #FFD401;
+            border: 1px solid #FFD401;
+            margin-left:60px;
+        }
+        #Cancel {
+            background: #DDDDDD;
+            border: 1px solid #DDDDDD;
+            margin-left: 60px;
+        }
+    </style>
+</head>
+<body>
+    <hr style="background: #029803; width: 440px; margin-left: 30px; " />
+    <div class="contant">
+        <div class="text" i18n_Text="Enter.your.Invoice.information">输入你的发票信息</div>
+        <div><input type="text" i18n_Attr="placeholder:Invoice.title" id="name" autocomplete="off" class="layui-input"></div>
+        <div><input type="text" i18n_Attr="placeholder:Email" id="email" autocomplete="off" class="layui-input"></div>
+        <div><textarea type="text" i18n_Attr="placeholder:Address" id="address" autocomplete="off" class="layui-input"></textarea></div>
+        <div style="margin-top:40px;">
+            <button type="submit" i18n_Text="Cancel" id="Cancel" lay-submit class="button" onclick="CancelInvoice()"> 取消</button>
+            <button type="submit" i18n_Text="Connect" lay-submit id="Connect" class="button" onclick="SendInvoice()"> 连接</button>
+
+        </div>
+    </div>
+    <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../js/lay-module/wangEditor/wangEditor.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script type="text/javascript">
+        var app = null;
+        var id = "en_us";
+        var orderId = window.GetRequest("orderId");
+        layui.use(['form', 'app', 'layer', 'i18n'], function () {
+            var $ = layui.jquery,
+                index = layui.index,
+                i18n = layui.i18n,
+                layer = layui.layer,
+                app = layui.app;
+            // 权限
+            app.Load("client");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+
+            // 获取订单发票信息
+            GetOrderInvoiceInfo();
+
+            function GetOrderInvoiceInfo() {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/GetOrderInvoiceInfo",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "OrderId": orderId}),
+                    dataType: "json",
+                    success: function (data) {
+                        if (data && data.dto) {
+                            $("#name").val(data.dto.consignee);
+                            $("#name").attr("readOnly", true);
+
+                            $("#email").val(data.dto.email);
+                            $("#email").attr("readOnly", true);
+
+                            $("#address").val(data.dto.address);
+                            $("#address").attr("readOnly", true);
+
+                        }
+                    }
+                });
+            }
+
+
+        });
+
+
+        function SendInvoice() {
+            var Consignee = $("#name").val();
+            var Email = $("#email").val();
+            var Address = $("#address").val();
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/CreateOrderInvoice",
+                contentType: "application/json;",
+                data: JSON.stringify({ "OrderId": orderId, "Consignee": Consignee, "Email": Email, "Address": Address }),
+                dataType: "json",
+                success: function (sre) {
+                    if (sre) {
+                        if (id = "en_us") {
+                            layer.msg("Invoice generated successfully！");
+                        }
+                        else {
+                            layer.msg("发票生成成功！");
+                        }
+           
+                        setTimeout(function () {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                        }, 3000);
+                    }
+                    return false;
+                }, Error: function () {
+                    return false;
+                }
+            });
+        }
+
+        function CancelInvoice() {
+            var iframeIndex = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(iframeIndex);
+        }
+
+
+    </script>
+</body>
+</html>

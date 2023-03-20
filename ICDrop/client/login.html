@@ -1,0 +1,847 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Anderdrop</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/Message.css?v=2" media="all">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            /* background: #1E9FFF;*/
+            background-image: url(../../images/background_image.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+            body:after {
+                content: '';
+                background-repeat: no-repeat;
+                background-size: cover;
+                -webkit-filter: blur(3px);
+                -moz-filter: blur(3px);
+                -o-filter: blur(3px);
+                -ms-filter: blur(3px);
+                filter: blur(3px);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+            }
+
+        .layui-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        .admin-login-background {
+            width: 360px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            margin-left: -180px;
+            margin-top: -100px;
+        }
+
+        .logo-title {
+           /* text-align: center;*/
+            letter-spacing: 2px;
+            padding: 14px 0;
+        }
+        .logo-title img{
+            /* text-align: center;*/
+            margin-left: 15%;
+        }
+
+            .logo-title h1 {
+                color: #1E9FFF;
+                font-size: 25px;
+                font-weight: bold;
+            }
+
+        .login-form {
+            background-color: #fff;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            /* padding: 14px 20px;*/
+            padding-left: 30px;
+            padding-bottom: 20px;
+            border-radius: 10px;
+            /* box-shadow: 0 0 8px #eeeeee;*/
+        }
+
+            .login-form .layui-form-item {
+                position: relative;
+            }
+
+                .login-form .layui-form-item label {
+                    position: absolute;
+                    left: 1px;
+                    top: 1px;
+                    width: 38px;
+                    line-height: 36px;
+                    text-align: center;
+                    color: #d2d2d2;
+                }
+
+                .login-form .layui-form-item input {
+                    padding-left: 36px;
+                }
+
+        .captcha {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .captcha-img {
+            display: inline-block;
+            width: 34%;
+            float: right;
+        }
+
+            .captcha-img img {
+                height: 34px;
+                border: 1px solid #e6e6e6;
+                height: 36px;
+                width: 100%;
+            }
+
+        .layui-btn-container {
+            position: absolute;
+            left: 90%;
+            top: 5%;
+            z-index: 1;
+        }
+
+        .Verification-Code {
+            height: 36px;
+            border-width: 1px;
+            border-style: solid;
+            background-color: #fff;
+            border-radius: 5px;
+            border-color: #eee;
+            width: 150px;
+            padding-left: 36px !important;
+        }
+
+        .code1 {
+            margin-left: 10px;
+            width: 95px;
+            height: 36px;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 5px;
+            border-color: #eee;
+            background-color: #029803;
+            color: #ffffff;
+            padding-left: 0px !important;
+        }
+
+        #canvas {
+            float: right;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        #bt {
+            color: #999999;
+            font-size: 14px;
+            letter-spacing: 0px;
+            margin-left:10%;
+            /*margin-top: 10px;*/
+        }
+
+        #re_bt {
+            color: #999999;
+            font-size: 14px;
+            letter-spacing: 0px;
+            margin-left: 10%;
+            /*         margin-top: 10px;*/
+        }
+
+        #up_bt {
+            font-size: 14px;
+            letter-spacing: 0px;
+            color: #999999;
+            margin-left: 2%;
+            /* margin-top: 10px;*/
+        }
+
+        .layui-input {
+            border-radius: 5px;
+        }
+
+        .layui-btn-normal {
+            width: 300px;
+            height: 40px;
+            background: #029803;
+            opacity: 1;
+            border-radius: 5px
+        }
+        .icon {
+            color: #333333 !important;
+        }
+        .input-border {
+            border: 1px solid #BBBBBB;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-container">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-primary demo1">
+                <span id="Lang">English</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+        </div>
+        <div class="admin-login-background">
+            <div class="layui-form login-form" id="define">
+                <div class="layui-form-item logo-title">
+                    <!--<h1 i18n_Text="login.h1.Text">anderdrop</h1>-->
+                    <img src="../../images/ander/Ander rop .svg" style="width:200px;height:80px;" />
+                    <div id="bt"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-username" for="email" id="icon-email"></label>
+                    <input i18n_Attr="placeholder:login.input.username.placeholder;" style="width:300px;" type="text" name="email" id="email" lay-verify="required|account" placeholder="User name or email address" autocomplete="off" class="layui-input" >
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-password" for="password" id="icon-pwd"></label>
+                    <input i18n_Attr="placeholder:login.input.password.placeholder;" style="width:300px;" type="password" name="pwd" id="pwd" lay-verify="required|password" placeholder="pwd" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-vercode" for="captcha" id="icon-captcha"></label>
+                    <input type="text" name="captcha" i18n_Attr="placeholder:login.input.captcha.placeholder;" lay-verify="required|captcha" autocomplete="off" class="layui-input verification captcha" id="captcha" value="">
+                    <div class="captcha-img">
+                        <img id="imgObj" style="width:70%;height:60%" alt="验证码" src="" onclick="changeImg()" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button i18n_Text="login.button.login.Text" style="color: #ffffff; font-size: 16px; " class="layui-btn layui-btn layui-btn-normal layui-btn-fluid determine">登录</button>
+                </div>
+                <label i18n_Text="login.Label.ForgetPwd.Text" style="color: #666666; cursor: pointer; " id="up_psd">忘记密码？</label>
+                <label i18n_Text="login.button.Reg.Text" style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; " id="Reg">注册</label>
+            </div>
+
+
+            <div class="layui-form login-form" id="register" style="display:none">
+                <div class="layui-form-item logo-title">
+                    <img src="../../images/anderdrop-LOGO.svg" />
+                    <div id="re_bt"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-username" for="username" id="icon-username"></label>
+                    <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" style="width:300px;" id="username" name="sentEmial" lay-verify="required|account" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-password" for="password" id="icon-password"></label>
+                    <input type="password" i18n_Attr="placeholder:login.input.password.placeholder;" style="width:300px;" name="password" id="password" lay-verify="required|password" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-vercode" for="captcha" id="icon-authcode"></label>
+                    <input type="text" name="authcode" i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off" lay-verify="required|captcha" class="Verification-Code authcode" id="authcode">
+                    <input type="button" style="color: #333333; font-size: 16px; " i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
+                </div>
+                <div class="layui-form-item">
+                    <button style="color: #333333; font-size: 16px; " class="layui-btn layui-btn layui-btn-normal layui-btn-fluid register" i18n_Text="login.button.Reg.Text">注册</button>
+                </div>
+                <label style="margin-left:210px;color:#029803;text-align:center" id="login" i18n_Text="login.button.backlogin.Text">登录</label>
+            </div>
+
+
+
+            <div class="layui-form login-form" id="updatePsd" style="display:none">
+                <div class="layui-form-item logo-title">
+                    <img src="../../images/anderdrop-LOGO.svg" />
+                    <div id="up_bt"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-username" for="email" id="icon-up_username"></label>
+                    <input i18n_Attr="placeholder:login.input.username.placeholder;" style="width:300px;" type="text" name="sentEmial" id="up_username" lay-verify="required|account" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-password" for="password" id="icon-up_password"></label>
+                    <input i18n_Attr="placeholder:login.input.newpassword.placeholder;" style="width:300px;" type="password" name="pwd" id="up_password" lay-verify="required|password" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-vercode" for="captcha"  id="icon-up_authcode"></label>
+                    <input type="text" name="up_authcode" i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off" lay-verify="required|captcha" class="Verification-Code up_authcode" id="up_authcode">
+                    <input type="button" style="color: #333333; font-size: 16px; " i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
+                </div>
+                <div class="layui-form-item">
+                    <button i18n_Text="login.button.confirm.Text" style="color: #333333; font-size: 16px; " class="layui-btn layui-btn layui-btn-normal layui-btn-fluid confirm">确定</button>
+                </div>
+                <label style="margin-left:210px;color:#029803;text-align:center" id="bk_login" i18n_Text="login.button.backlogin.Text">返回登录</label>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/lib/md5.js"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+
+    <script src="/js/lay-config.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+    <script>
+        var code;
+        var message;
+
+        //if (top.location != self.location)
+        //   /* top.location = self.location;*/
+        //else { }
+
+            layui.use(['form', 'i18n', 'dropdown','message'], function () {
+                var
+                    form = layui.form,
+                    layer = layui.layer,
+                    i18n = layui.i18n,
+                    dropdown = layui.dropdown;
+
+                message = layui.message;
+
+                // 国际化初始化
+                var YDHConfig = layui.data('YDH');
+                var id = "en_us";
+                if (YDHConfig.Lang) {
+                    $("#Lang").text(YDHConfig.Lang.title);
+                    id = YDHConfig.Lang.id
+                }
+
+                i18n.loadProperties(id);
+
+                // 拦截异常信息提醒
+                $.ajaxSetup({
+                    complete: function (err) {
+                        if (err.status == 400) {
+                            changeImg();
+                            message.run("exception!", err.responseJSON.i18nKey ? i18n.prop(err.responseJSON.i18nKey) : err.responseJSON.message,"error");
+                          /*  layui.layer.msg(err.responseJSON.i18nKey ? i18n.prop(err.responseJSON.i18nKey) : err.responseJSON.message);*/
+                        }
+                    }
+                });
+
+                //初演示
+                dropdown.render({
+                    elem: '.demo1'
+                    , data: [{
+                        title: '中文简体'
+                        , id: 'zh_cn'
+                    }, {
+                        title: 'English'
+                        , id: 'en_us'
+                    }]
+                    , click: function (obj) {
+
+                        layui.data('YDH', {
+                            key: 'Lang'
+                            , value: obj
+                        });
+
+                        i18n.loadProperties(obj.id);
+
+                        $("#Lang").text(obj.title);
+
+                    }
+                });
+                //计算分享链接点击数据
+                var GETInvitationCode = GetRequest('InvitationCode');
+                //邀请码不为空则要增加点击次数
+                if (GETInvitationCode && GETInvitationCode.length != 0) {
+                    $("#define").hide();
+                    $("#register").show();
+                    $("#updatePsd").hide();
+                    layui.data('YDH-Customer', {
+                        key: 'InvitationCode'
+                        , value: GETInvitationCode
+                    });
+                    //为管理员邀请增加管理员链接点击次数
+                    if (GETInvitationCode == "manage") {
+                        $.ajax({
+                            type: "post",
+                            url: BackgroundDomain +"/api/Customer/AddManageLinkClick",
+                            contentType: "application/json;",
+                            dataType: "json",
+                            success: function (sre) {
+
+                            }
+                        })
+                    }
+                    else {
+                        $.ajax({
+                            type: "post",
+                            url: BackgroundDomain +"/api/Customer/AddClientLinkClick",
+                            contentType: "application/json;",
+                            data: JSON.stringify(GETInvitationCode),
+                            dataType: "json",
+                            success: function (sre) {
+
+                            }
+                        })
+                    }
+                }
+                //如果登录时用户框有默认值则图标颜色变为相应的填入值的颜色
+                var emailvalue = $('#email').val()
+                if (emailvalue != "") {
+                    $("#icon-email").addClass("icon");
+                }
+                //如果登录时密码框有默认值则图标颜色变为相应的填入值的颜色
+                var pwdvalue = $('#pwd').val()
+                if (pwdvalue != "") {
+                    $("#icon-pwd").addClass("icon");
+                }
+
+
+                //获取动态验证码
+                changeImg();
+
+                var btdiv = document.getElementById("bt");
+                btdiv.innerHTML = "Open your free Anderdrop account";
+
+                var re_btdiv = document.getElementById("re_bt");
+                re_btdiv.innerHTML = "Sign up with your work email address";
+
+                var up_btdiv = document.getElementById("up_bt");
+                up_btdiv.innerHTML = "We will send you the verification code by email";
+
+                // 跳转注册
+                $("#Reg").click(function () {
+                    $("#define").hide();
+                    $("#register").show();
+                    $("#updatePsd").hide();
+
+                });
+
+                // 跳转登录
+                $("#login").click(function () {
+                    $("#define").show();
+                    $("#register").hide();
+                    $("#updatePsd").hide();
+                });
+
+                // 跳转修改密码
+                $("#up_psd").click(function () {
+                    $("#define").hide();
+                    $("#register").hide();
+                    $("#updatePsd").show();
+                });
+                //从修改密码界面跳转返回登录
+                $("#bk_login").click(function () {
+                    $("#define").show();
+                    $("#register").hide();
+                    $("#updatePsd").hide();
+                });
+
+
+
+                // 店铺登录
+                var YDHCustomer = layui.data('YDH-Customer');
+                /*       var shop = GetRequest('shop');*/
+                var shop = YDHCustomer.shop;
+                // 登录
+                $(document).on('click', '.determine', function () {
+
+                    var email = $("#email").val();
+                    if (!email) {
+                        layer.msg('Email address cannot be empty! ');
+                        return false;
+                    }
+                    //验证验证码
+                    var val = $(".captcha").val().toLowerCase();
+                    if (val == '') {
+                        layer.msg('请输入验证码！');
+                        return false;
+                    }
+                    var pwd = $("#pwd").val();
+
+                    var timestamp = new Date().getTime();
+                    var Encrypt = $.md5(email + $.md5(pwd) + timestamp);
+                    var code1 = code;
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Login/GetCusCustomer",
+                        contentType: "application/json;",
+                        data: JSON.stringify({ "Email": email, "TimeStamp": timestamp, "Pw": Encrypt, "VerificationCode": val, "Code": code1 }),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (!sre) {
+                                changeImg();
+                                layer.msg(i18n.prop(sre.msg));
+
+                            } else {
+                                layui.data('YDH-Customer', {
+                                    key: 'Secret'
+                                    , value: sre.tokenKey
+                                });
+                                layui.data('YDH-Customer', {
+                                    key: 'email'
+                                    , value: sre.email
+                                });
+                                layui.data('YDH-Customer', {
+                                    key: 'CreateTime'
+                                    , value: sre.registTime
+                                });
+                                if (!shop) {
+                                        top.location.href = "/client/index.html";
+                                    return false;
+                                } else {
+                                    top.location.href = "/shopify/shopify_Welcome.html?shop=" + shop;
+                                    return false;
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                    return false;
+                });
+              
+                (function ($) {
+                    $.getUrlParam = function (name) {
+                        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                        var r = window.location.search.substr(1).match(reg);
+                        if (r != null) return unescape(r[2]); return null;
+                    }
+                })(jQuery);
+
+                // 进行注册
+                $(document).on('click', '.register', function () {
+
+                    var username = $("#username").val();
+                    if (!username) {
+                        layer.msg('Email address cannot be empty！');
+                        return false;
+                    }
+                    var password = $("#password").val();
+                    if (!password) {
+                        layer.msg('Password cannot be empty！');
+                        return false;
+                    }
+
+                    var Encrypt = $.md5(password);
+                    var InvitationCode = GetRequest('InvitationCode');
+
+                    var authcode = $(".authcode").val();
+
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Login/InsertCustomer",
+                        contentType: "application/json;",
+                        data: JSON.stringify({ "Email": username, "Pw": Encrypt, "VerificationCode": authcode, "InvitationCode": InvitationCode, "IsUpdate": false }),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                layui.data('YDH-Customer', {
+                                    key: 'Secret'
+                                    , value: sre.data
+                                });
+                                layui.data('YDH-Customer', {
+                                    key: 'email'
+                                    , value: username
+                                });
+                                layui.data('YDH-Customer', {
+                                    key: 'InvitationCode'
+                                    , remove: true
+                                });
+                                if (!shop) {
+                                    if (top.location != self.location)
+                                       top.location = self.location;
+                                      else {
+                                    window.location.href = "/client/index.html";
+                                    }
+                                } else {
+                                    window.location.href = "/shopify/shopify_Welcome.html?shop=" + shop;
+                                }
+
+                                return false;
+                            }
+                        },
+                        error: function (jqXHR) {
+                            if (jqXHR.responseJSON.message == "验证码错误") {
+                                /*   layer.msg(jqXHR.responseJSON.message);*/
+                                message.run(jqXHR.responseJSON.message);
+                            }
+                            else {
+                                layer.msg('Exception Please contact the administrator！');
+                            }
+                            return false;
+                        }
+                    });
+                    return false;
+                });
+
+
+                //修改密码
+                // 登录
+                $(document).on('click', '.confirm', function () {
+                    var username = $("#up_username").val();
+                    if (!username) {
+                        layer.msg('Email address cannot be empty！');
+                        return false;
+                    }
+                    var password = $("#up_password").val();
+                    if (!password) {
+                        layer.msg('Password cannot be empty！');
+                        return false;
+                    }
+                 
+                    var Encrypt = $.md5(password);
+                  
+                    var authcode = $(".up_authcode").val();
+
+                    $.ajax({
+                        type: "post",
+                        url:BackgroundDomain + "/api/Login/UpdateCustomerPsdByEmail",
+                        contentType: "application/json;",
+                        data: JSON.stringify({ "Email": username, "Pw": Encrypt, "VerificationCode": authcode, "IsUpdate": true }),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                layui.data('YDH-Customer', {
+                                    key: 'Secret'
+                                    , value: sre.data
+                                });
+                                layui.data('YDH-Customer', {
+                                    key: 'email'
+                                    , value: username
+                                });
+                                if (!shop) {
+                                    window.location.href = "/client/index.html";
+                                } else {
+                                    window.location.href = "/shopify/shopify_Welcome.html?shop=" + shop;
+                                }
+
+                                return false;
+                            }
+                        },
+                        error: function (jqXHR) {
+                            if (jqXHR.responseJSON.message == "验证码错误") {
+                                layer.msg(jqXHR.responseJSON.message);
+                            }
+                            else {
+                                layer.msg('Exception. Please contact the administrator！');
+                            }
+                            return false;
+                        }
+                    });
+
+                })
+
+                //登录的用户框获得焦点事件 email
+                $("#email").focus(function () {
+                    $("#icon-email").addClass("icon");
+                    $("#email").addClass("input-border");
+
+                })
+                //登录的用户框失去焦点事件
+                $("#email").blur(function () {
+                    $("#email").removeClass("input-border");
+                    var value = $('#email').val()
+                    if (value == "") {
+                        $("#icon-email").removeClass("icon");
+                    }
+                })
+                //登录的密码框获取焦点事件 pwd
+                $("#pwd").focus(function () {
+                    $("#icon-pwd").addClass("icon");
+                    $("#pwd").addClass("input-border");
+
+                })
+                //登录的密码框失去焦点事件
+                $("#pwd").blur(function () {
+                    $("#pwd").removeClass("input-border");
+                    var value = $('#pwd').val()
+                    if (value == "") {
+                        $("#icon-pwd").removeClass("icon");
+                    }
+                })
+                //登录的验证码框获取焦点 captcha
+                $("#captcha").focus(function () {
+                    $("#icon-captcha").addClass("icon");
+                    $("#captcha").addClass("input-border");
+
+                })
+                //登录的验证码框失去焦点事件
+                $("#captcha").blur(function () {
+                    $("#captcha").removeClass("input-border");
+                    var value = $('#captcha').val()
+                    if (value == "") {
+                        $("#icon-captcha").removeClass("icon");
+                    }
+                })
+                //注册的用户框获得焦点事件
+                $("#username").focus(function () {
+                    $("#icon-username").addClass("icon");
+                    $("#username").addClass("input-border");
+
+                })
+               //注册的用户框失去焦点事件
+                $("#username").blur(function () {
+                    $("#username").removeClass("input-border");
+                    var value = $('#username').val()
+                    if (value == "") {
+                        $("#icon-username").removeClass("icon");
+                    }
+                })
+                //注册的密码框获取焦点事件 password
+                $("#password").focus(function () {
+                    $("#icon-password").addClass("icon");
+                    $("#password").addClass("input-border");
+
+                })
+                //注册的密码框失去焦点事件
+                $("#password").blur(function () {
+                    $("#password").removeClass("input-border");
+                    var value = $('#password').val()
+                    if (value == "") {
+                        $("#icon-password").removeClass("icon");
+                    }
+                })
+               //注册的验证码框获取焦点事件  authcode
+                $("#authcode").focus(function () {
+                    $("#icon-authcode").addClass("icon");
+                    $("#authcode").addClass("input-border");
+
+                })
+                //注册的验证码框失去焦点事件
+                $("#authcode").blur(function () {
+                    $("#authcode").removeClass("input-border");
+                    var value = $('#authcode').val()
+                    if (value == "") {
+                        $("#icon-authcode").removeClass("icon");
+                    }
+                })
+                //修改密码的用户框获取焦点事件 up_username
+                $("#up_username").focus(function () {
+                    $("#icon-up_username").addClass("icon");
+                    $("#up_username").addClass("input-border");
+
+                })
+                //修改密码的用户框失去焦点事件
+                $("#up_username").blur(function () {
+                    $("#up_username").removeClass("input-border");
+                    var value = $('#up_username').val()
+                    if (value == "") {
+                        $("#icon-up_username").removeClass("icon");
+                    }
+                })
+                //修改密码的密码框获取焦点事件 up_password
+                $("#up_password").focus(function () {
+                    $("#icon-up_password").addClass("icon");
+                    $("#up_password").addClass("input-border");
+
+                })
+                //修改密码的密码框失去焦点事件
+                $("#up_password").blur(function () {
+                    $("#up_password").removeClass("input-border");
+                    var value = $('#up_password').val()
+                    if (value == "") {
+                        $("#icon-up_password").removeClass("icon");
+                    }
+                })
+                //修改密码的验证码框获取焦点事件 up_authcode
+                $("#up_authcode").focus(function () {
+                    $("#icon-up_authcode").addClass("icon");
+                    $("#up_authcode").addClass("input-border");
+
+                })
+                //修改密码的验证码框失去焦点事件
+                $("#up_authcode").blur(function () {
+                    $("#up_authcode").removeClass("input-border");
+                    var value = $('#up_authcode').val()
+                    if (value == "") {
+                        $("#icon-up_authcode").removeClass("icon");
+                    }
+                })
+            });
+       
+
+        //注册获取邮箱验证码
+        var clock = '';
+        var nums = 60;
+
+        var btn;
+        function sendCode(thisBtn) {
+            btn = thisBtn;
+            btn.disabled = true; //将按钮置为不可点击
+            btn.style.backgroundColor = "#F2F3F5 ";
+            btn.value = nums + 'S';
+
+            var user = new Object();
+            user.Email = document.getElementById('username').value;
+            if (user.Email == "") {
+                user.Email = document.getElementById('up_username').value;
+            }
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Login/GetVerificationCode",
+                contentType: "application/json;",
+                data: JSON.stringify(user),
+                dataType: "json",
+                success: function (sre) {
+                    if (sre.code) {
+                        message.run("Send successfully!");
+                    }
+            
+                },
+                //error: function (sre) {
+                //        message.run("Failed to send!","","error");
+                //}
+            })
+
+            clock = setInterval(doLoop, 1000); //一秒执行一次
+        }
+
+        function doLoop() {
+            nums--;
+            if (nums > 0) {
+                btn.value = nums + 'S';
+            } else {
+                clearInterval(clock); //清除js定时器
+                btn.disabled = false;
+                btn.style.backgroundColor = "#029803";
+                btn.value = 'Send email';
+                nums = 60; //重置时间
+            }
+        }
+
+        //登录获取动态验证码
+        function changeImg() {
+            var imgSrc = $("#imgObj");
+            var src = imgSrc.attr("src");
+            imgSrc.attr("src", chgUrl(src));
+        }
+
+        //时间戳
+        //为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳
+        function chgUrl(url) {
+            code = (new Date()).valueOf();
+            url = BackgroundDomain +"/api/Login/GetLoginVerificationCode?TimeStamp=" + code
+            return url;
+        }
+     
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "27602806",
+      "name": "Import List",
+      "font_class": "a-ImportList",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "27602816",
+      "name": "My Account",
+      "font_class": "a-MyAccount",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "27602827",
+      "name": "Orders",
+      "font_class": "Orders",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "27602828",
+      "name": "Poducts",
+      "font_class": "Poducts",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "27602833",
+      "name": "Find Products",
+      "font_class": "a-FindProducts",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "27608828",
+      "name": "Account settings",
+      "font_class": "a-Accountsettings",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "27608831",
+      "name": "Account balance",
+      "font_class": "a-Accountbalance",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "27608835",
+      "name": "My shop",
+      "font_class": "a-Myshop",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "27608836",
+      "name": "Intelligent settings",
+      "font_class": "a-Intelligentsettings",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "27608838",
+      "name": "Change password",
+      "font_class": "a-Changepassword",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "27675589",
+      "name": "a-check",
+      "font_class": "a-check",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "27890702",
+      "name": "Home",
+      "font_class": "Home",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "28278421",
+      "name": "rexiao",
+      "font_class": "rexiao",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "29756478",
+      "name": "yingxiao-7-gou",
+      "font_class": "a-yingxiao-7-gou",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "29756479",
+      "name": "yingxiao-3",
+      "font_class": "yingxiao-3",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "29756480",
+      "name": "yingxiao-9-E-mail",
+      "font_class": "yingxiao-9-E-mail",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "29756482",
+      "name": "yingxiao-10-Code",
+      "font_class": "yingxiao-10-Code",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "29756484",
+      "name": "yingxiao-12-Your business",
+      "font_class": "a-yingxiao-12-Yourbusiness",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "29756485",
+      "name": "yingxiao-14-xiala",
+      "font_class": "yingxiao-14-xiala",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "29756486",
+      "name": "yingxiao-11-Set password",
+      "font_class": "a-yingxiao-11-Setpassword",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "29756487",
+      "name": "yingxiao-4",
+      "font_class": "yingxiao-4",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "29756488",
+      "name": "yingxiao-6-Copy Link",
+      "font_class": "a-yingxiao-6-CopyLink",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "29756489",
+      "name": "yingxiao-8-Name",
+      "font_class": "yingxiao-8-Name",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "29756490",
+      "name": "yingxiao-13-cuowutishi",
+      "font_class": "yingxiao-13-cuowutishi",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "29756880",
+      "name": "yingxiao-1",
+      "font_class": "yingxiao-1",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "29756881",
+      "name": "yingxiao-2",
+      "font_class": "yingxiao-2",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "29756934",
+      "name": "yingxiao-5",
+      "font_class": "yingxiao-5",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    }
+  ]
+}

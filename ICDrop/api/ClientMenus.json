@@ -1,0 +1,69 @@
+{
+  "homeInfo": {
+    "title": "Find Products",
+    "i18nKey": "menu.child.Find.Product",
+    "href": "/client/FindPlatFormProduct.html"
+  },
+  "logoInfo": {
+    "title": "LAYUI YDH",
+    "image": "/images/logo2x.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "i18nKey": "menu.Info.Routine",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": {
+        "top": [
+          {
+            "title": "首页",
+            "i18nKey": "menu.child.Home",
+            "href": "/client/Customer/NoviceGuide.html",
+            "icon": "icon-home-1",
+            "target": "_self"
+          },
+          {
+            "title": "查找产品",
+            "i18nKey": "menu.child.Find.Product",
+            "href": "/client/FindPlatFormProduct.html",
+            "icon": "icon-find-1",
+            "target": "_self"
+          },
+          {
+            "title": "进口商品",
+            "i18nKey": "menu.child.Enter.Product",
+            "href": "/share/ImportCommodity.html",
+            "icon": "icon-import-1",
+            "target": "_self"
+          },
+          {
+            "title": "订单列表",
+            "i18nKey": "menu.child.Order",
+            "href": "/client/order/OrderList.html",
+            "icon": "icon-order-1",
+            "target": "_self"
+          },
+          {
+            "title": "产品管理",
+            "i18nKey": "menu.child.My.Products",
+            "href": "/client/Automation/AutomationProduct.html",
+            "icon": "icon-product-1",
+            "target": "_self"
+          }
+        ],
+        "bottom": [
+          {
+            "title": "我的账户",
+            "i18nKey": "menu.child.My.account",
+            "href": "/client/Customer/AccountManager.html",
+            "icon": "icon-my-account-1",
+            "target": "_self"
+          }
+        ]
+      }
+    }
+  ]
+}

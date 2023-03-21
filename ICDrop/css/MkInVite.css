@@ -1,0 +1,214 @@
+﻿html {
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    max-width: 1080px;
+    margin: 0 auto !important;
+}
+/*主体部分*/
+.container {
+    background: #ffffff;
+    height: 100%;
+    overflow: auto;
+}
+/*头部DIv*/
+.beijing {
+    background-image: url(../images/Marketing/MkInvite.png);
+    background-size: 100% 100%;
+    height: 100%;
+    text-align: center;
+}
+/*标题样式*/
+.title {
+    padding-top: 30px;
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    font-size: 48px;
+    
+    font-weight: 800;
+    color: #333333;
+    line-height: 72px;
+}
+/*详情说明样式*/
+.detail {
+    margin-top: 13px;
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    font-size: 28px;
+    
+    font-weight: 400;
+    color: #333333;
+}
+/*人的那个大框框的样式*/
+.people {
+    z-index: 999;
+    height: 280px;
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    border-radius: 10px;
+    top:-40px;
+    position:relative;
+    background:#ffffff;
+
+}
+/*人数框的标题样式*/
+.people-title {
+    text-align: center;
+    width: 100%;
+    height: 50px;
+    padding-top: 40px;
+    font-size: 36px;
+    font-family: PingFang SC;
+    font-weight: bold;
+    line-height: 66px;
+    color: #333333;
+}
+.people-body {
+height:190px;
+width:100%;
+}
+/*头像框样式*/
+.picture-frame {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.39);
+    border: 1px solid #DDDDDD;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    float:left;
+    background:#ffffff;
+    margin-top:30px;
+    line-height:120px;
+    text-align:center;
+}
+/*距离结束的文字样式*/
+#ends{
+    font-size: 28px;
+    font-family: PingFang SC;
+    font-weight: 400;
+    line-height: 66px;
+    color: #333333;
+    height:40px;
+    line-height:40px;
+}
+/*倒计时文字样式*/
+#count-down {
+    font-size: 32px;
+    font-family: PingFang SC;
+    font-weight: bold;
+    line-height: 66px;
+    color: #FF5555;
+    opacity: 1;
+    height: 45px;
+    line-height: 45px;
+    margin-top:10px;
+}
+/*底部公共样式*/
+.bottom {
+    width: calc(100% - 60px);
+    margin-top:10px;
+    margin-left:30px;
+}
+/*buttom按钮样式*/
+button {
+    height: 84px;
+    width: calc(100% - 20px);
+    max-width: 1000px;
+    opacity: 1;
+    border-radius: 10px;
+    font-size: 32px;
+    font-family: PingFang SC;
+    font-weight: bold;
+    line-height: 45px;
+    color: #333333;
+    line-height: 84px;
+    border: 0px hidden;
+    margin-bottom: 30px;
+    margin-left:10px;
+}
+/*分享到facebook的图片样式*/
+.share img {
+    width:40px;
+    height:40px;
+    margin-right:20px;
+    margin-bottom:10px;
+}
+/*矢量图标样式*/
+.layui-icon {
+    font-size: 40px;
+    margin-right: 20px;
+}
+/*如何参与的文字样式*/
+.participate {
+    width: calc(100% - 60px);
+    max-width: 1020px;
+    text-align: center;
+    font-size: 24px;
+    font-family: PingFang SC;
+    font-weight: 400;
+    line-height: 33px;
+    color: #3399FF;
+    text-decoration: underline;
+    opacity: 1;
+    margin-left: 30px;
+}
+/*对话框样式*/
+.info {
+    position: absolute;
+    height: 68px;
+    line-height: 68px;
+    background: #E1E1FC;
+    border-radius: 4px;
+    text-align: center;
+    z-index: 99;
+    font-size: 28px;
+    font-family: PingFang SC-Bold, PingFang SC;
+    font-weight: bold;
+    color: #606DF1;
+}
+
+.nav {
+    position: absolute;
+    /*left: 30px;*/
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid dashed dashed dashed;
+    /* opacity: 0.8 !important;*/
+}
+
+.nav-background {
+    bottom: -20px;
+    border-color: #E1E1FC transparent transparent transparent;
+    /*opacity: 0.8;*/
+}
+/*底部的提示文字样式*/
+.line i {
+    float: left;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+.tips {
+    margin-bottom: 20px;
+    width: calc(100% - 56px);
+    float: right;
+}
+.clear {
+    clear: both;
+}
+/*奖励的文字样式*/
+.reward {
+    font-size: 32px;
+    font-family: PingFang SC-Bold, PingFang SC;
+    font-weight: bold;
+    color: #333333;
+}
+.layui-layer-dialog .layui-layer-content {
+font-size:28px !important;
+}

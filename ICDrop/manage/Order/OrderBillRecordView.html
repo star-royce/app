@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm " lay-event="WriteOffBillRecord">销账</button>
+                </div>
+            </script>
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var customerId = GetRequest("customerId");
+        layui.use(['form', 'table', 'app'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+            app = layui.app;
+            app.Load("manage");
+
+            var dto_obj = new Object();
+            dto_obj.CustomerId = parseInt(customerId);
+
+            table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#currentTableId',
+                url: BackgroundDomain +'/api/PayBill/GetCreditPayBillList',
+                toolbar: '#toolbarDemo',
+                where: {
+
+                    Dto: dto_obj
+                },
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    { type: "checkbox", width: 50 },
+                    { type: "numbers", width: 50, title: '序号' },
+                    { field: 'id', width: 80, title: 'ID', hide: true },
+                    { field: 'orderCode', width: 200, title: '订单编号' },
+                    { field: 'amount', width: 90, title: '金额' },
+                    { field: 'payTime', width: 130, title: '付款时间' },
+                    { field: 'remark', width: 200, title: '备注' }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: false
+            });
+
+            /**
+             * toolbar监听事件
+             */
+            //监听头部工具栏事件
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                var checkStatus = table.checkStatus('currentTableId');
+
+
+                if (obj.event === 'WriteOffBillRecord') {
+                    if (checkStatus.data.length == 0) {
+                        layer.alert("请先选中要推送的数据");
+                        return false;
+                    }
+
+                    var idsArray = [];
+                    for (var i = 0; i < checkStatus.data.length; i++) {
+                        idsArray.push(checkStatus.data[i].id);
+                    }
+                    var idstr = idsArray.join(',');//将数组元素连接起来以构建一个字符串
+                    var billRecordId = idstr;
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Order/WriteOffCreditOrder",
+                        contentType: "application/json;",
+                        data: JSON.stringify(billRecordId),
+                        dataType: "json",
+                        success: function (data) {
+                            if (data) {
+                                layer.msg("销账成功！");
+                            } else {
+                                layer.msg("销账失败！");
+                            }
+                            return false;
+                        }
+                    });
+
+                }
+
+            })
+        });
+    </script>
+
+</body>
+</html>

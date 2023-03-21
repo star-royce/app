@@ -1,0 +1,934 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Anderdrop</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+        .layui-card-body {
+            padding: 0px;
+        }
+
+        .layui-table-view .layui-table td {
+            height: 100px;
+        }
+
+        .laytable-cell-1-0-5 {
+            padding: 0px;
+        }
+
+        .laytable-cell-2-0-5 {
+            padding: 0px;
+        }
+
+        div[lay-id='Product_Platform'] .layui-table-cell,
+        div[lay-id='Product_Automation'] .layui-table-cell {
+            line-height: 17px !important;
+            height: auto;
+            overflow: visible;
+            text-overflow: inherit;
+            white-space: normal;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">产品标题</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="ProductTitle" name="ProductTitle" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">币种</label>
+                                <div class="layui-input-inline">
+                                    <select id="currency" name="currency" lay-search lay-verify="">
+                                        <option value="">请选择</option>
+                                        <option value="USD">美元</option>
+                                        <option value="RMB">人名币</option>
+                                        <option value="EURO">欧元</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">汇率：</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input exchangeRate" id="exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="" />
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+            <div class="layui-card-body">
+                <div class="layui-tab layui-tab-card">
+                    <ul class="layui-tab-title" style="padding-right: 30px;height: auto!important;white-space: normal!important;">
+                        <li class="layui-this">平台商品</li>
+                        <li>客户自动化商品</li>
+                        <li>商品分类</li>
+                        <li>导入商品</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-form layui-tab-item layui-show">
+                            <div class="demoVisitTable">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">上架状态</label>
+                                    <div class="layui-input-inline">
+                                        <select id="isPutAway" name="isPutAway" lay-search lay-verify="">
+                                            <option value="">全部</option>
+                                            <option value="0">上架</option>
+                                            <option value="1">下架</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">完成报价</label>
+                                    <div class="layui-input-inline">
+                                        <select id="isCompletePurchase" name="isCompletePurchase" lay-search lay-verify="">
+                                            <option value="">全部</option>
+                                            <option value="0">未完成</option>
+                                            <option value="1">已报价</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">属性扩展</label>
+                                    <div class="layui-input-inline">
+                                        <select id="isCompleteExtend" name="isCompleteExtend" lay-search lay-verify="">
+                                            <option value="">全部</option>
+                                            <option value="0">未完成</option>
+                                            <option value="1">已完成</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="layui-btn layui-btn-primary" data-type="PlatformReload" id="but_PlatformReload" lay-submit lay-filter="data-search-btn" style="width: 90px">搜索</button>
+
+                            </div>
+                            <script type="text/html" id="PlatformOperation">
+                                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="Operation-PutAway">上架</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="Operation-SoldOut">下架</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="Operation-ViewPlatform">修改详情</a>
+                            </script>
+
+                            <table class="layui-table" id="Product_Platform"
+                                   lay-filter="Product_Platform"></table>
+                        </div>
+
+
+                        <!--客户自动化产品列表-->
+                        <div class="layui-form layui-tab-item">
+                            <div class="demoVisitTable">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">客户邮箱</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="Email" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">授权自动化</label>
+                                    <div class="layui-input-inline">
+                                        <select id="isAutomation" name="isAutomation" lay-search lay-verify="">
+                                            <option value="">全部</option>
+                                            <option value="0">未授权</option>
+                                            <option value="1">已授权</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="layui-btn layui-btn-primary" data-type="AutomationReload" id="but_AutomationReload" lay-submit lay-filter="Automation-search-btn" style="width: 90px">搜索</button>
+                            </div>
+
+                            <script type="text/html" id="AutomationOperation">
+                                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="Operation-UpdayeAutomation">修改报价</a>
+                            </script>
+
+                            <table class="layui-table" id="Product_Automation"
+                                   lay-filter="Product_Automation"></table>
+                        </div>
+
+                        <!--商品分类-->
+                        <div class="layui-form layui-tab-item">
+
+                            <div class="demoVisitTable">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">分类名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="catalogueName" name="catalogueName" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <button class="layui-btn layui-btn-primary" data-type="catalogueReload" id="but_AutomationReload" lay-submit lay-filter="catalogue-search-btn" style="width: 90px">搜索</button>
+                            </div>
+
+                            <script type="text/html" id="catalogueOperation">
+                                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                            </script>
+                            <script type="text/html" id="toolbarDemo">
+                                <div class="layui-btn-container">
+                                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                                </div>
+                            </script>
+
+                            <table class="layui-table" id="Product_catalogue"
+                                   lay-filter="Product_catalogue"></table>
+                        </div>
+
+                        <!--导入商品-->
+                        <div class="layui-form layui-tab-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品导入</label>
+                                <div class="layui-input-inline">
+                                    <input type="file" id="import" name="import" autocomplete="off">
+                                </div>
+                            </div>
+                            <button class="layui-btn layui-btn-primary" data-type="import" id="but_define_import" lay-submit lay-filter="define_import-btn" style="width: 90px">确定导入</button>
+
+                            <script type="text/html" id="importOperation">
+                                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                            </script>
+
+                            <table class="layui-table" id="Product_import"
+                                   lay-filter="Product_import"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var app = null;
+        var table;
+        var miniTab;
+
+        layui.config({
+            base: '/js/lay-module/',   // 第三方模块所在目录
+            version: 'v1.6.4' // 插件版本号
+        }).extend({
+            soulTable: 'soulTable/soulTable',
+            tableChild: 'tableChild/tableChild',
+            tableMerge: 'tableMerge/tableMerge',
+            tableFilter: 'tableFilter/tableFilter',
+            excel: 'excel/excel',
+        });
+
+        layui.use(['form', 'table', 'app', 'miniTab', 'soulTable'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                soulTable = layui.soulTable,
+                table = layui.table;
+            miniTab = layui.miniTab;
+
+            app = layui.app;
+            app.Load("manage");
+
+            //加载表格数据完成时回调设置数据数目
+            function changeNum(name, count) {
+                var $li = $(".layui-tab ul li");
+                for (var i = 0; i < $li.length; i++) {
+                    var text = $li.eq(i).text();
+                    if (text.indexOf(name) > -1) {
+                        $li.eq(i).text(name + "(" + count + ")");
+                        return;
+                    }
+                }
+            }
+
+            //平台商品列表
+            var PalatformTable = table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#Product_Platform'
+                , url: BackgroundDomain +'/api/Product/QueryImportProductList'
+                , cols: [[ //标题栏
+                    { type: "checkbox", width: 50 },
+                    {
+                        title: '#', width: 50, children: [
+                            {
+                                title: 'sku'
+                                , method: "post"
+                                , contentType: "application/json;"
+                                , url: BackgroundDomain +'/api/Product/QueryProductPriceInfo'
+                                , height: 500
+                                , cellMinHeight: 80
+                                , where: function (row) {
+                                    console.log(row);
+                                    return { ProductId: row.id }
+                                }
+                                , page: false
+                                , cols: [[
+                                    { type: 'checkbox', fixed: 'left' },
+                                    {
+                                        title: '#', width: 50, children: [
+                                            {
+                                                title: '仓库库存'
+                                                , method: "post"
+                                                , contentType: "application/json;"
+                                                , url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku'
+                                                , height: 300
+                                                , cellMinHeight: 80
+                                                , where: function (row) {
+                                                    console.log(row);
+                                                    return { sku: row.sku }
+                                                }
+                                                , page: false
+                                                , cols: [[
+                                                    { type: 'checkbox', fixed: 'left' },
+                                                    { field: 'stockCode', title: '仓库编码', width: 200, sort: true, filter: true },
+                                                    { field: 'address', title: '地址', width: 200, sort: true, filter: true },
+                                                    { field: 'stock', title: '库存', width: 200, sort: true, filter: true },
+                                                    /* { title: '操作', width: 156, templet: '#childBar' }*/
+                                                ]]
+                                                , done: function () {
+                                                    soulTable.render(this);
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    { field: 'sku', title: 'sku', width: 200, sort: true, filter: true },
+                                    { templet: skuImagebox, width: 100, title: '图片' },
+                                    { field: 'cost', title: '成本', width: 200, sort: true, filter: true },
+                                    { field: 'price', title: '售卖价格', width: 200, sort: true, filter: true },
+                                    { field: 'attribute', title: '属性', width: 200, sort: true, filter: true },
+                                    { field: 'purchaseCost', title: '采购成本价', width: 200, sort: true, filter: true },
+                                    { field: 'purchaseProfit', title: '采购利润', width: 200, sort: true, filter: true },
+                                    { field: 'taxesProfit', width: 120, title: '税费利润' },
+                                    { field: 'freightProfit', width: 120, title: '运费利润' },
+                                    { field: 'quantity', title: '库存', width: 200, sort: true, filter: true },
+                                    /* { title: '操作', width: 156, templet: '#childBar' }*/
+                                ]]
+                                , done: function () {
+                                    soulTable.render(this);
+                                }
+                            }
+                        ]
+                    },
+                    { type: "numbers", width: 50, title: '序号' },
+                    { field: 'id', width: 0, title: '产品ID', hide: true },
+                    { field: 'itemId', width: 0, title: '速卖通产品ID', hide: true },
+                    { field: 'indexPicture', width: 0, title: 'Picture', hide: true },
+                    { field: 'productCode', width: 160, title: '产品编号' },
+                    { field: 'platformName', width: 160, title: '平台' },
+                    { field: 'platformProductCode', width: 160, title: '平台的产品编号' },
+                    { templet: imagebox, width: 120, title: '图片' },
+                    { field: 'productTitle', width: 350, title: '产品标题' },
+                    { field: 'isCompletePurchase', width: 80, title: '完成报价' },
+                    { field: 'isCompleteExtend', width: 80, title: '完成属性扩展' },
+                    { field: 'isPutAway', width: 120, title: '上架状态' },
+                    //{ field: 'purchaseCost', width: 120, title: '采购成本' },
+                    //{ field: 'purchaseProfit', width: 120, title: '采购利润' },
+                    //{ field: 'taxesProfit', width: 120, title: '税费利润' },
+                    //{ field: 'freightProfit', width: 120, title: '运费利润' },
+                    { field: 'score', title: '操作', minwidth: 120, align: 'center', toolbar: '#PlatformOperation', fixed: 'right' }
+
+                ]]
+                , page: true //是否显示分页
+                , limits: [8, 12, 15, 18]
+                , limit: 12 //每页默认显示的数量
+                /*  , id: "potential_industry_table"*/
+                , done: function (res, curr, count) {
+
+                    changeNum("平台商品", count);
+                    $("[data-field = 'isCompletePurchase']").children().each(function () {
+                        if ($(this).text() == '0') {
+                            $(this).text("否");
+                        } else if ($(this).text() == '1') {
+                            $(this).text("是");
+                        }
+                    });
+                    $("[data-field = 'isCompleteExtend']").children().each(function () {
+                        if ($(this).text() == '0') {
+                            $(this).text("否");
+                        } else if ($(this).text() == '1') {
+                            $(this).text("是");
+                        }
+                    });
+                    $("[data-field = 'isPutAway']").children().each(function () {
+                        if ($(this).text() == '0') {
+                            $(this).text("上架");
+                        } else if ($(this).text() == '1') {
+                            $(this).text("下架");
+                        }
+                    });
+                    soulTable.render(this);
+                }
+            })
+
+            //客户自动化商品列表
+            var AutomationTable = table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#Product_Automation'
+                , url: BackgroundDomain +'/api/Automation/QueryAutomationList'
+                , cols: [[ //标题栏
+                    { type: "checkbox", width: 50, hide: true },
+                    { type: "numbers", width: 50, title: '序号' },
+                    {
+                        title: '#', width: 50, children: [
+                            {
+                                title: 'sku'
+                                , method: "post"
+                                , contentType: "application/json;"
+                                , url: BackgroundDomain +'/api/Product/QueryProductPriceInfo'
+                                , height: 500
+                                , cellMinHeight: 80
+                                , where: function (row) {
+                                    console.log(row);
+                                    return { ProductId: row.id }
+                                }
+                                , page: false
+                                , cols: [[
+                                    { type: 'checkbox', fixed: 'left' },
+                                    {
+                                        title: '#', width: 50, children: [
+                                            {
+                                                title: '仓库库存'
+                                                , method: "post"
+                                                , contentType: "application/json;"
+                                                , url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku'
+                                                , height: 300
+                                                , cellMinHeight: 80
+                                                , where: function (row) {
+                                                    console.log(row);
+                                                    return { sku: row.sku }
+                                                }
+                                                , page: false
+                                                , cols: [[
+                                                    { type: 'checkbox', fixed: 'left' },
+                                                    { field: 'sku', title: 'sku', width: 200, sort: true, filter: true },
+                                                    { templet: skuImagebox, width: 100, title: '图片' },
+                                                    { field: 'cost', title: '成本', width: 200, sort: true, filter: true },
+                                                    { field: 'price', title: '售卖价格', width: 200, sort: true, filter: true },
+                                                    { field: 'attribute', title: '属性', width: 200, sort: true, filter: true },
+                                                    { field: 'purchaseCost', title: '采购成本价', width: 200, sort: true, filter: true },
+                                                    { field: 'purchaseProfit', title: '采购利润', width: 200, sort: true, filter: true },
+                                                    { field: 'taxesProfit', width: 120, title: '税费利润' },
+                                                    { field: 'freightProfit', width: 120, title: '运费利润' },
+                                                    { field: 'quantity', title: '库存', width: 200, sort: true, filter: true },
+                                                    /* { title: '操作', width: 156, templet: '#childBar' }*/
+                                                ]]
+                                                , done: function () {
+                                                    soulTable.render(this);
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    { field: 'sku', title: 'sku', width: 200, sort: true, filter: true },
+                                    { templet: skuImagebox, width: 100, title: '图片' },
+                                    { field: 'cost', title: '成本', width: 200, sort: true, filter: true },
+                                    { field: 'price', title: '售卖价格', width: 200, sort: true, filter: true },
+                                    { field: 'attribute', title: '属性', width: 200, sort: true, filter: true },
+                                    { field: 'purchaseCost', title: '采购成本价', width: 200, sort: true, filter: true },
+                                    { field: 'purchaseProfit', title: '采购利润', width: 200, sort: true, filter: true },
+                                    { field: 'taxesProfit', width: 120, title: '税费利润' },
+                                    { field: 'freightProfit', width: 120, title: '运费利润' },
+                                    { field: 'quantity', title: '库存', width: 200, sort: true, filter: true },
+                                    /* { title: '操作', width: 156, templet: '#childBar' }*/
+                                ]]
+                                , done: function () {
+                                    soulTable.render(this);
+                                }
+                            }
+                        ]
+                    },
+                    { field: 'id', width: 0, title: '自动化ID', hide: true },
+                    { field: 'itemId', width: 0, title: '速卖通产品ID', hide: true },
+                    { field: 'indexPicture', width: 0, title: 'Picture', hide: true },
+                    { field: 'productCode', width: 160, title: '产品编号' },
+                    { field: 'platformName', width: 160, title: '平台' },
+                    { field: 'platformProductCode', width: 160, title: '平台的产品编号' },
+                    { templet: imagebox, width: 100, title: '图片' },
+                    { field: 'productTitle', width: 350, title: '产品标题' },
+                    { field: 'email', width: 350, title: '客户邮箱' },
+                    { field: 'isAutomation', width: 120, title: '授权自动化' },
+                    //{ field: 'unitPrice', width: 120, title: '商品成本' },
+                    //{ field: 'unitProfit', width: 120, title: '商品利润' },
+                    //{ field: 'unitTaxesProfit', width: 120, title: '税费利润' },
+                    //{ field: 'unitFreightProfit', width: 120, title: '运费利润' },
+                    { field: 'score', title: '操作', minwidth: 120, align: 'center', toolbar: '#AutomationOperation', fixed: 'right' }
+                ]]
+                , even: true
+                , page: true //是否显示分页
+                , limits: [8, 12, 15, 18]
+                , limit: 12 //每页默认显示的数量
+                /*   , id: "potential_company_table"*/
+                , done: function (res, curr, count) {
+                    changeNum("客户自动化", count);
+                    $("[data-field = 'isAutomation']").children().each(function () {
+                        if ($(this).text() == '0') {
+                            $(this).text("否");
+                        } else if ($(this).text() == '1') {
+                            $(this).text("是");
+                        }
+                    });
+
+                    soulTable.render(this);
+                }
+            })
+
+            var OnelevelProCatalogue;
+            $.ajax({
+                type: "Get",
+                url: BackgroundDomain +"/api/Product/GetOnelevelProCatalogue",
+                async: false,
+                success: function (data) {
+                    OnelevelProCatalogue = data;
+                }
+            });
+
+
+            $("#import").change(function () {
+                var formData = new FormData();
+                if (!this.files[0]) {
+                    return;
+                }
+                formData.append('file', this.files[0]);
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Product/ImportProduct",
+                    data: formData,
+                    dataType: "json",
+                    height: 700,
+                    processData: false,   // jQuery不要去处理发送的数据
+                    contentType: false,   // jQuery不要去设置Content-Type请求头
+                    success: function (retData) {
+                        if (!retData || retData.length == 0) {
+                            alert("导入数据异常！请重试");
+                            return;
+                        }
+                        table.render({
+                            elem: '#Product_import'
+                            , data: retData
+                            , page: false
+                            , limit: 1000
+                            , cols: [[
+                                { field: 'productCode', title: '产品ID', width: 120, edit: 'text' }
+                                , { field: 'productTypeName', title: '品名', width: 120, edit: 'text' }
+                                , { field: 'productType', title: '品类', width: 120, edit: 'text' }
+                                , { field: 'productTitle', title: '标 题', width: 120, edit: 'text' }
+                                , { field: 'pictureUrl', title: '主图', width: 120, edit: 'text' }
+                                , { field: 'content', title: '描 述', width: 120, edit: 'text' }
+                                , { field: 'sku', title: 'SKU ID', width: 120, edit: 'text' }
+                                , { field: 'attributeName1', title: '属性名称1', width: 120, edit: 'text' }
+                                , { field: 'attributeValue1', title: '属性1', width: 120, edit: 'text' }
+                                , { field: 'attributeName2', title: '属性名称2', width: 120, edit: 'text' }
+                                , { field: 'attributeValue2', title: '属性2', width: 120, edit: 'text' }
+                                , { field: 'label', title: '标签', width: 120, edit: 'text' }
+                                , { field: 'quantity', title: '库存', width: 120, edit: 'text' }
+                                , { field: 'stockCode', title: '仓库编码', width: 120, edit: 'text' }
+                                , { field: 'stockAddress', title: '仓库所在地', width: 120, edit: 'text' }
+                                , { field: 'purchaseCost', title: '产品采购成本（CNY）', width: 120, edit: 'text' }
+                                , { field: 'purchaseProfit', title: '产品利润（CNY）', width: 120, edit: 'text' }
+                                //  , { field: 'freightCost', title: '运费成本（CNY）', width: 120, edit: 'text' }
+                                , { field: 'freightProfit', title: '运费利润（CNY）', width: 120, edit: 'text' }
+                                // , { field: 'taxesCost', title: '税费成本（CNY）', width: 120, edit: 'text' }
+                                , { field: 'taxesProfit', title: '税费利润（CNY）', width: 120, edit: 'text' }
+                                , { field: 'length', title: '长（CM）', width: 120, edit: 'text' }
+                                , { field: 'width', title: '宽（CM）', width: 120, edit: 'text' }
+                                , { field: 'height', title: '高（CM）', width: 120, edit: 'text' }
+                                , { field: 'weight', title: '重量（KG）', width: 120, edit: 'text' }
+                                , { field: 'attributeElectricity', title: '是否带电（Y/N）', width: 120, edit: 'text' }
+                                , { field: 'pictureJson', title: '场景图或其他图片', width: 120, edit: 'text' }
+                                , { title: '操作', toolbar: '#importOperation', width: 150 }
+                            ]]
+                        });
+                        return false;
+                    }
+                });
+            })
+
+            table.on('tool(Product_import)', function (obj) {
+                if (obj.event === 'delete') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del();
+                        layer.close(index);
+                    });
+                }
+            });
+
+
+
+
+
+            //商品分类
+            var catalogueTable = table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#Product_catalogue'
+                , toolbar: '#toolbarDemo'
+                , url: BackgroundDomain +'/api/Product/QueryCatalogueList'
+                , cols: [[ //标题栏
+                    { field: 'id', width: 0, title: '分类ID', hide: true },
+                    { field: 'catalogueName', minwidth: 280, title: '分类名称' },
+                    { templet: Catalogueimagebox, width: 150, title: '图片' },
+                    { field: 'superiorId', width: 200, title: '上级ID' },
+                    { field: 'rank', width: 100, title: '级别' },
+                    { field: 'score', title: '操作', width: 120, align: 'center', toolbar: '#catalogueOperation', fixed: 'right' }
+                ]]
+                // , even: true
+                , page: true //是否显示分页
+                , limits: [8, 12, 15, 18]
+                , limit: 12 //每页默认显示的数量
+                , done: function (res, curr, count) {
+                    $("[data-field = 'superiorId']").children().each(function () {
+                        if ($(this).text() == "0") {
+                            $(this).text("无上级");
+                        } else {
+                            var dr = OnelevelProCatalogue.filter(i => i.id == Number($(this).text()));
+                            if (dr && dr.length > 0) {
+                                $(this).text(dr[0].catalogueName);
+                            }
+                        }
+                    });
+                }
+            })
+
+            // 确认导入商品
+            form.on('submit(define_import-btn)', function (data) {
+                var importData = table.cache["Product_import"];
+                if (!importData || importData.length < 1) {
+                    alert("请选择文件！");
+                    return;
+                }
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Product/SubmitImportProduct",
+                    contentType: "application/json;",
+                    data: JSON.stringify(importData),
+                    dataType: "json",
+                    success: function (ret) {
+                        if (ret) {
+                            alert("导入成功！");
+                            table.cache["Product_import"] = null;
+                            table.reload('Product_import', { data: null });
+                            return;
+                        }
+                        return false;
+                    }
+                });
+                return false;
+            });
+
+            // 监听搜索操作 分类
+            form.on('submit(catalogue-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+
+                var dto_obj = new Object();
+                if ($.isEmptyObject($("#catalogueName").val()) != true) { dto_obj.catalogueName = $("#catalogueName").val(); }
+
+                //执行搜索重载
+                table.reload('Product_catalogue', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        dto: dto_obj
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            // 监听搜索操作  平台商品重载
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+                if ($("#currency").val() != "") {
+                    if ($("#exchangeRate").val() == "") {
+                        alert("请填写汇率");
+                        return false;
+                    }
+                }
+                var dto_obj = new Object();
+                if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
+                if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
+                if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
+                if ($.isEmptyObject(obj.isPutAway) != true) { dto_obj.isPutAway = obj.isPutAway; }
+                if ($.isEmptyObject(obj.isCompletePurchase) != true) { dto_obj.isCompletePurchase = obj.isCompletePurchase; }
+                if ($.isEmptyObject(obj.isCompleteExtend) != true) { dto_obj.isCompleteExtend = obj.isCompleteExtend; }
+
+                //执行搜索重载
+                table.reload('Product_Platform', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        dto: dto_obj
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            // 监听搜索操作  自动化商品重载
+            form.on('submit(Automation-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+                if ($("#currency").val() != "") {
+                    if ($("#exchangeRate").val() == "") {
+                        alert("请填写汇率");
+                        return false;
+                    }
+                }
+                var dto_obj = new Object();
+                if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
+                if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
+                if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
+                if ($.isEmptyObject(obj.Email) != true) { dto_obj.Email = obj.Email; }
+                if ($.isEmptyObject(obj.isAutomation) != true) { dto_obj.isAutomation = obj.isAutomation; }
+
+                //执行搜索重载
+                table.reload('Product_Automation', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        dto: dto_obj
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            //监听工具条（操作状态） 平台商品
+            table.on('tool(Product_Platform)', function (obj) {
+                var data = obj.data;
+                //上架
+                if (obj.event == 'Operation-PutAway') {
+                    if (data.isPutAway == "0") {
+                        layer.msg("该物品已是上架状态");
+                        return;
+                    }
+                    //请求的参数
+                    var Product = new Object();
+                    Product.Id = data.id;
+                    Product.IsPutAway = "0";
+
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Product/UpdateProductStatus",
+                        contentType: "application/json;",
+                        data: JSON.stringify(Product),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                layer.msg("上架成功！");
+                                overloadPlatform();
+                            }
+                            /*      return false;*/
+                        }
+                    });
+                    /*            return false;*/
+                }
+                //下架
+                else if (obj.event == "Operation-SoldOut") {
+                    if (data.isPutAway == "1") {
+                        layer.msg("该物品已是下架状态");
+                        return;
+                    }
+                    //请求的参数
+                    var Product = new Object();
+                    Product.Id = data.id;
+                    Product.IsPutAway = "1";
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Product/UpdateProductStatus",
+                        contentType: "application/json;",
+                        data: JSON.stringify(Product),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                layer.msg("下架成功！");
+                                overloadPlatform();
+                            }
+                            /*  return false;*/
+                        }
+                    });
+
+                    /*  return false;*/
+
+                }
+                //修改详情
+                else if (obj.event == 'Operation-ViewPlatform') {
+                    console.log("ProductId:" + data.id)
+                    var index = layer.open({
+                        title: '商品详情',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['95%', '80%'],
+                        content: '/manage/Product/ProductInfo.html?ProductId=' + data.id,
+                    })
+
+                }
+            });
+
+            //监听工具条（操作状态） 自动化商品
+            table.on('tool(Product_Automation)', function (obj) {
+                var data = obj.data;
+                //修改报价
+                if (obj.event == 'Operation-UpdayeAutomation') {
+                    console.log("AutomationId:" + data.id)
+                    var index = layer.open({
+                        title: '自动化详情',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['95%', '80%'],
+                        content: '/manage/Product/UpdateAutomationPrice.html?AutomationId=' + data.id,
+                    })
+
+                }
+            });
+
+            //监听工具条（操作状态） 商品分类
+            table.on('toolbar(Product_catalogue)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'add') {  // 监听添加操作
+                    var index = layer.open({
+                        title: '添加分类',
+                        type: 2,
+                        shade: 0.2,
+                        shadeClose: true,
+                        area: ['700px', '400px'],
+                        content: 'CatalogueAdd.html',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                }
+            });
+
+            //监听工具条（操作状态） 修改分类
+            table.on('tool(Product_catalogue)', function (obj) {
+                var data = obj.data;
+                //修改报价
+                if (obj.event == 'edit') {
+                    console.log("catalogueid:" + data.id)
+                    var index = layer.open({
+                        title: '修改分类',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['700px', '400px'],
+                        content: 'CatalogueAdd.html?catalogueid=' + data.id,
+                    })
+                } else if (obj.event == 'delete') {
+                    console.log("catalogueid:" + data.id)
+
+                    $.ajax({
+                        type: "Get",
+                        url: BackgroundDomain +"/api/Product/DeleteCatalogue?id=" + data.id,
+                        async: false,
+                        success: function (str) {
+                            if (str.data == 1) {
+                                layer.msg("删除成功！");
+
+                                var dto_obj = new Object();
+                                if ($.isEmptyObject($("#catalogueName").val()) != true) { dto_obj.catalogueName = $("#catalogueName").val(); }
+                                //执行搜索重载
+                                table.reload('Product_catalogue', {
+                                    page: {
+                                        curr: 1
+                                    }
+                                    , where: {
+                                        dto: dto_obj
+                                    }
+                                }, 'data');
+                            }
+                        }
+                    });
+                }
+            });
+
+
+        });
+
+        // 分类重新加载
+        function overloadCatalogue() {
+            var dto_obj = new Object();
+            if ($.isEmptyObject($("#catalogueName").val()) != true) { dto_obj.catalogueName = $("#catalogueName").val(); }
+            //执行搜索重载
+            table.reload('Product_catalogue', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    dto: dto_obj
+                }
+            }, 'data');
+        }
+        //平台商品重载
+        function overloadPlatform() {
+
+            if ($("#currency").val() != "") {
+                if ($("#exchangeRate").val() == "") {
+                    alert("请填写汇率");
+                    return false;
+                }
+            }
+            var dto_obj = new Object();
+            if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
+            if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
+            if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
+            if ($.isEmptyObject($("#isPutAway").val()) != true) { dto_obj.isPutAway = $.isEmptyObject($("#isPutAway").val()); }
+            if ($.isEmptyObject($("#isCompletePurchase").val()) != true) { dto_obj.isCompletePurchase = $.isEmptyObject($("#isCompletePurchase").val()); }
+            if ($.isEmptyObject($("#isCompleteExtend").val()) != true) { dto_obj.isCompleteExtend = $.isEmptyObject($("#isCompleteExtend").val()); }
+
+            //执行搜索重载
+            table.reload('Product_Platform', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    dto: dto_obj
+                }
+            }, 'data');
+        }
+
+        //图片赋值
+        function imagebox(data) {
+            var PaymentID = data.indexPicture;
+
+            var img = "<img src='" + PaymentID + "'  style='width:60px;height:60px;margin-left:20px;' referrerPolicy='no-referrer'/>";
+
+            return img;
+        }
+        function skuImagebox(data) {
+            var pictureUrl = data.pictureUrl;
+
+            var img = "<img src='" + pictureUrl + "'  style='width:60px;height:60px;margin-left:20px;' referrerPolicy='no-referrer'/>";
+
+            return img;
+        }
+        //图片赋值
+        function Catalogueimagebox(data) {
+            console.log(data);
+            var PaymentID = data.imgurl;
+            if (!PaymentID) return "";
+            var img = "<img src='" + PaymentID + "'  style='width:60px;height:60px;margin-left:20px;' referrerPolicy='no-referrer'/>";
+            return img;
+        }
+    </script>
+</body>
+</html>

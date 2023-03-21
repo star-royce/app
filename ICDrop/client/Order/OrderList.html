@@ -1,0 +1,1142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/OrderList.css?v=2" media="all">
+    <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
+</head>
+<body>
+    <div class="" style=" width: 100%;">
+        <div class="layuimini-main">
+            <form action="" lay-filter="formTest" class="layui-form" style=" margin-top: 20px;width:100%;">
+
+                <div style="width: 36%; float: right; max-width: calc(100% - 875px);">
+                    <input type="text" i18n_Attr="placeholder:Enter.order.number" name="OrderNumber" placeholder="请输入订单号" autocomplete="off" class="OrderNumPut">
+                    <button type="submit" lay-submit lay-filter="data-search-btn" class="searchOrder"><img src="../../../images/search.png" /></button>
+                </div>
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin-top:20px;">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" id="all" i18n_Text="all" style="width:108px;">全部订单</li>
+
+                        <li  id="inquiry" i18n_Text="Wating.for.sourcing" style="width: 146px; ">待询价</li>
+                        <!--<li id="pending" i18n_Text="pending">待处理</li>-->
+                        <li id="unpaid" i18n_Text="unpaid" style=" width: 146px;">待支付</li>
+                        <li id="Processing" i18n_Text="In.Processing" style="width:144px;">加工中</li>
+                        <li id="transit" i18n_Text="transit" style="width:106px;">运输中</li>
+                        <li id="sign" i18n_Text="sign" style="width:120px;">已签收</li>
+                        <!--<li id="applyRefund" i18n_Text="applyRefund">申请退款</li>-->
+                        <li id="Cancelled" i18n_Text="Cancelled" style="width:120px;">取消</li>
+
+                    </ul>
+                    <!--多选框和自动化管理说明-->
+                    <div style="width:100%;margin-top:20px;height:32px;line-height:32px;">
+                        <div class="checkallleft" id="checkallleft" style=" float:left;">
+                            <div class="allcheck" style="border-radius: 5px; width: 20px; height: 20px;margin-top:10px; background-color:#ffffff; float:left;">
+                                <input class='TotalChk' style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;cursor:pointer;' type='checkbox' onclick="checkAllChange(this)">
+                            </div>
+                            <div style="width: 56px; height: 32px;line-height:32px; background: #FFFFFF; border-radius: 16px 16px 16px 16px; opacity: 1;margin-left:40px;text-align:center; ">All</div>
+                        </div>
+                        <div style="float:right;">Don't want to pay in advance for each order? <a onclick="LinkAutomationProduct()" style="color: #3399FF;">Set on Automatic Bulk  DropShipping</a></div>
+                    </div>
+
+                    <div class="layui-tab-content">
+
+                        <div class="layui-tab-item layui-show all"></div>
+                        <div class="layui-tab-item  inquiry">
+                        </div>
+                        <!--<div class="layui-tab-item pending"></div>-->
+                        <div class="layui-tab-item unpaid"></div>
+                        <div class="layui-tab-item Processing"></div>
+                        <div class="layui-tab-item transit"></div>
+                        <div class="layui-tab-item sign"></div>
+                        <!--<div class="layui-tab-item applyRefund"></div>-->
+                        <div class="layui-tab-item Cancelled"></div>
+
+                    </div>
+                </div>
+
+            </form>
+
+
+
+            <div id="pagination" style="float: right;margin-bottom:50px; "></div>
+
+
+            <script type="text/html" id="orderModule">
+                {{each data}}
+                <div class="layui-card" data-key="{{$value.orderId}}">
+                    <div class="layui-card-header">
+                        <div><input class="orderchk" orderStatus="{{$value.orderStatus}}" name="box" style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:15px;' type='checkbox' data-key='{{$value.orderId}}' onchange="UpdatecheckOrder(this)"></div>
+                        <div style="margin-left:10px;">
+                            <img src="../../../images/shop.png" /> <span style="margin-left:10px;">
+                                {{ $value.customerShopify==null ? "": $value.customerShopify.shopifyShop}}
+                            </span>
+                        </div>
+                        <div class="Right">
+                            <button type="button" style="cursor: pointer;" class="xiangqing" exp-data="{{$value.orderId}}" i18n_Text="OrderList.orderModule.button.OrderDetails">订单详情</button>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div style="width: 100%; height: 48px; line-height:48px;margin:0 auto; ">
+                            <div style="width: 90%;float:left;">
+                                <div class="codediv" style="width: 40%;">
+                                    <div i18n_Text="OrderList.orderModule.div.orderCode">订单编号:</div><label>{{$value.orderCode}}</label>
+                                </div>
+                                <div class="codediv">
+                                    <div i18n_Text="OrderList.orderModule.div.shopifyOrderCode">店铺编号:</div><label>{{$value.shopifyOrderCode}}</label>
+                                </div>
+                                <div class="codediv">
+                                    <div i18n_Text="OrderList.orderModule.div.OrderTime">订单时间:</div><label>{{$value.orderTime}}</label>
+                                </div>
+                            </div>
+                            <div style="width:10%;float:right;">
+                                <div class="OrderStatus"><div style=" float: right; width: 120px;"> {{if $value.LangId=="zh_cn" }}{{$value.statusName}}{{else}}{{$value.statusNameEn}}{{/if}}</div></div>
+
+                            </div>
+
+                        </div>
+                        <!--<hr>-->
+                        <div style="width:100%;">
+                            {{each  $value.ordWaresList  wares }}
+                            <div class="OrderProduct">
+                                <div class="Picture" style="float:left;">
+                                    <img src="{{wares.picture}}" />
+                                </div>
+                                <div style="width:calc(100% - 140px);">
+                                    <div class="procenter">
+                                        <div class="title">
+                                            <nobr> {{wares.title}}</nobr>
+                                        </div>
+                                        <div style="margin-top: 4px; width: 100%;">
+                                            {{if wares.variantTitle!=null }}
+                                            <div class="variant">{{wares.variantTitle}}</div>
+                                            {{/if}}
+                                            <div class="quantity">×{{wares.quantity}}</div>
+                                            {{if wares.isAutomation == "1"}}
+                                            <div style="margin-left:14px;">
+                                                <div class="info" id="info{{wares.id}}" style="display:none;">
+                                                    <span i18n_Text="The.SKU.Order.Syncing.has.been.connected">订单sku已同步</span>
+                                                    <div class="nav nav-background"></div>
+                                                </div>
+                                                <img class="skusync" data-wareId="{{wares.id}}" src="../../../images/order/hint.png" style="margin-right:5px;" />
+                                                <img src="../../../images/order/link.png" />
+                                                <label i18n_Text="SKU.Syncing">SKU同步</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                        <div style="margin-top: 4px; width: 1292px;">
+                                            SKU:{{wares.sku}}
+                                        </div>
+                                    </div>
+                                    {{ if $value.orderStatus!="A"&& $value.orderStatus!="C"&& $value.orderStatus!="Z"&& $value.orderStatus!="S" }}
+                                    <div class="unitprice">
+                                        Price: <span class="pricespan">{{(wares.proAllPrice).toFixed(2)}} </span>USD
+                                    </div>
+                                    {{ /if }}
+                                </div>
+                            </div>
+                            <!--<hr>-->
+                            {{/each}}
+                            {{ if $value.orderStatus!="A"&& $value.orderStatus!="C" && $value.orderStatus!="Z"&& $value.orderStatus!="S"}}
+                            <div class="logistics " style="width: 100%; height: 32px;line-height:32px;">
+                                <div class="VAT">
+                                    <span i18n_Text="OrderList.orderModule.div.VAT">
+                                        税费:
+                                    </span>:
+                                    <span class="ShippingPrice" selectmoney="{{$value.orderAllTaxes!=0?$value.orderAllTaxes:0}}">{{$value.orderAllTaxes!=0?($value.orderAllTaxes).toFixed(2):"0.00"}} </span>
+                                    USD
+                                </div>
+
+                                <div class="Shiping">
+                                    <span i18n_Text="OrderList.orderModule.div.Shipping">
+                                        运费:
+                                    </span>:
+                                    <span class="ShippingPrice" id="selectprice{{$value.orderId}}" selectmoney="{{$value.selectOrderFreightofferList!=null?$value.selectOrderFreightofferList.orderAllFreight:0}}">{{$value.selectOrderFreightofferList!=null?($value.selectOrderFreightofferList.orderAllFreight).toFixed(2):"0.00"}} </span>
+                                    USD
+                                </div>
+
+                                {{ if $value.orderStatus=="D"}}
+                                <div class="model-select-box">
+                                    <div class="model-select-text" id="selectshipfee{{$value.orderId}}" aging="{{$value.selectOrderFreightofferList!=null?$value.selectOrderFreightofferList.aging:""}}" value="">{{$value.selectOrderFreightofferList!=null?$value.selectOrderFreightofferList.aging:"Please Select"}}</div>
+                                    <b class="bg1"></b>
+
+                                    <ul class="model-select-option">
+                                        {{each  $value.orderFreightofferList  orderFreightofferList }}
+                                        <li order-id="{{$value.orderId}}" data-option="{{orderFreightofferList.aging}}">{{orderFreightofferList.aging}}</li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                                {{ /if }}
+
+                                {{ if $value.orderStatus!="D"}}
+                                <div class="aging"><img src="../../../images/freight.png" style="margin-right:8px;" />{{$value.selectOrderFreightofferList!=null?$value.selectOrderFreightofferList.aging:"undefined"}}</div>
+
+                                {{ /if }}
+
+
+
+                            </div>
+                            {{ if $value.orderStatus=="Q" || $value.orderStatus=="W"}}
+                            <div class="Waybill" style="float:left;margin-top:10px;height:32px;line-height:32px;">
+                                <span i18n_Text="OrderList.orderModule.div.Waybill">
+                                    Waybill:
+                                </span>
+                                <span class="">{{$value.waybillCode}} </span>
+                                <img src="../../../images/button/copy.png" class="copyWaybill" style="margin-left:10px;cursor:pointer;" data-waybill="{{$value.waybillCode}}" data-key="{{$value.orderId}}" />
+                                <input id="copyInput{{$value.orderId}}" value="{{$value.waybillCode}}" style="position: absolute; top:0; left:0; opacity:0; z-index: -10;" />
+
+                            </div>
+                            {{ /if }}
+                            <div class="total" style="float:right;margin-top:10px;height:32px;line-height:32px;">
+                                <span i18n_Text="OrderList.orderModule.div.Total">
+                                    总计:
+                                </span>:
+                                <span class="ShippingPrice" id="selectTotalprice{{$value.orderId}}" orderCode="{{$value.orderCode}}" productmoney="{{$value.goodsTotal}}" TaxesMoney="{{$value.orderAllTaxes}}" amountPaid="{{$value.amountPaid}}" selectmoney="{{$value.selectOrderFreightofferList!=null?($value.selectOrderFreightofferList.orderAllFreight+$value.goodsTotal+$value.orderAllTaxes):($value.goodsTotal+$value.orderAllTaxes)}}">{{$value.selectOrderFreightofferList!=null?($value.selectOrderFreightofferList.orderAllFreight+$value.goodsTotal+$value.orderAllTaxes).toFixed(2):($value.goodsTotal+$value.orderAllTaxes).toFixed(2)}} </span>
+                                USD
+
+                            </div>
+                            {{ if $value.orderStatus=="B" }}
+                            <div style="float:right;margin-top:10px;height:32px;line-height:32px;margin-right:20px;">
+                                <span i18n_Text="OrderList.orderModule.div.Paid">
+                                    已付:
+                                </span>:
+                                <span class="ShippingPrice">{{$value.amountPaid}} </span>
+                                USD
+                            </div>
+                            {{ /if }}
+                            {{ /if }}
+                        </div>
+                    </div>
+                    {{ if $value.orderStatus!="Z" && $value.orderStatus!="G"  && $value.orderStatus!="Q" }}
+
+                    <div class="buttom">
+                        <div class="Operation" style="float: Right;">
+                            {{ if $value.orderStatus=="A"  }}
+                            <button type="button" style="cursor: pointer;" class="zixun" exp-data="{{$value.orderId}}" i18n_Text="OrderList.orderModule.button.enquiry">咨询价格</button>
+                            {{ /if }}
+                            {{ if $value.orderStatus=="D" ||  $value.orderStatus=="B" }}
+                            <button type="button" style="cursor: pointer;" class="zhifu" exp-data="{{$value.orderId}}" i18n_Text="OrderList.orderModule.button.PayOrder">支付订单</button>
+                            {{ /if }}
+                            {{ if $value.orderStatus=="A" || $value.orderStatus=="D" || $value.orderStatus=="C" }}
+                            <button type="button" style="cursor: pointer;" class="zuofie" exp-data="{{$value.orderId}}" i18n_Text="OrderList.orderModule.button.cancellation">作废订单</button>
+
+                            {{ /if }}
+                            <!--{{ if $value.orderStatus=="F" || $value.orderStatus=="G" || $value.orderStatus=="Q" }}
+                            <button type="button" class="refund" exp-data="{{$value.orderId}}" i18n_Text="OrderList.orderModule.button.Refund">申请退款</button>
+                            {{ /if }}-->
+                            {{ if $value.orderStatus=="W"  }}
+                            <button type="button" style="cursor: pointer;" class="invoice" exp-data="{{$value.orderId}}" i18n_Text="OrderList.orderModule.button.invoice">发票</button>
+                            {{ /if }}
+                        </div>
+
+                    </div>
+
+                    <hr class="buttom_rule" />
+                    {{ /if }}
+                </div>
+
+                {{/each}}
+
+            </script>
+            <!--批量操作栏-->
+            <div id="total">
+                <input class='TotalChk' style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;cursor:pointer;' type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
+                <span id="tatalSelect"></span>
+                <button type="submit" id="enquiryAll" i18n_Text="OrderList.orderModule.button.enquiry" class="PayAllProduct" onclick="EnquiryAllProduct()" style="float: right; margin-right: 40px !important; margin-top: 14px; color: #FFFFFF; cursor: pointer; ">咨询价格</button>
+                <button type="submit" id="PayAllProduct" i18n_Text="OrderList.orderModule.button.PayAll" lay-submit lay-filter="data-search-btn" class="PayAllProduct" style="float: right; margin-right: 40px !important; margin-top: 14px; color: #FFFFFF; cursor: pointer;" onclick="PayAllProduct()">合并支付</button>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/template-web.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+    <script>
+        var app = null;
+        var $ = null;
+        var message = null;
+        var orderType = "";
+        var orderCount = 0;
+        var id = "en_us";
+        var selectindex = 0;
+        var i18n = null;
+        var laypage = null;
+        var miniTab;
+        var element;
+        layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage', 'message', 'miniTab'], function () {
+            $ = layui.jquery;
+            app = layui.app;
+            var layer = layui.layer,
+                form = layui.form;
+            message = layui.message;
+            element = layui.element;
+            miniTab = layui.miniTab;
+            i18n = layui.i18n;
+            laypage = layui.laypage;
+            app.Load("client");
+
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+
+            var Customer = layui.data('YDH-Customer');
+            var dto_obj = new Object();
+            dto_obj.email = Customer.email;
+
+
+
+            // 获取店铺
+            /* Getshop(form);*/
+            function Getshop(form) {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Customer/GetCustomerShopifyList",
+                    contentType: "application/json;",
+                    data: JSON.stringify(dto_obj),
+                    dataType: "json",
+                    success: function (e) {
+                        let str = "<option value=''>" + $.i18n.prop('All.shop') + "</option>";
+                        for (let i of e.data) {
+                            //组装数据
+                            str += `<option value='${i.id}'>${i.shopifyShop}</option>`;
+                        }
+                        //jquery赋值方式
+                        $("#select").html(str);
+
+                        layui.form.render('select')
+                    },
+                    error: function (jqXHR) {
+                        layer.msg('获取失败！');
+                        return false;
+                    }
+                });
+            }
+
+            // 监听搜索操作（按要求查询订单）
+            form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
+                var TabId = $("li[class=layui-this]").attr("id");
+                var ShopId = result.ShopifyName;
+                var OrderNum = result.OrderNumber
+                // 获取订单
+                GetOrderList(TabId, laypage, ShopId, OrderNum);
+
+                return false;
+            });
+            // 获取订单
+            GetOrderList("all", laypage);
+
+            // 咨询价格
+            $(document).on('click', '.zixun', function () {
+                var orderId = $(this).attr("exp-data");
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/ConsultingPrice",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    success: function (data) {
+                        var TabId = $("li[class=layui-this]").attr("id");
+                        if (id == "zh_cn") {
+                            layer.msg("咨询操作成功，请耐性等待后台处理！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Consultation operation succeeded, please wait patiently for background processing!"/*, { time:20000000 }*/);
+                        }
+
+                        GetOrderList(TabId, laypage);
+
+                        return false;
+                    }, error: function () {
+                        if (id == "zh_cn") {
+                            layer.msg("咨询操作失败，请联系管理员！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("The consultation operation failed. Contact the administrator!");
+                        }
+
+                        GetOrderList(TabId, laypage);
+                    }
+                });
+            });
+            // 支付
+            $(document).on('click', '.zhifu', function () {
+                var orderId = $(this).attr("exp-data");
+                var shipprice = $("#selectprice" + orderId).attr("selectmoney");
+                //如果没有选择运费则不让继续操作付款
+                if (shipprice == 0) {
+                    message.run("Abnormal Payment!", "Please select freight first", "error");
+                    return false;
+                }
+                var productprice = $("#selectTotalprice" + orderId).attr("productmoney");
+                var TaxesMoney = $("#selectTotalprice" + orderId).attr("TaxesMoney");
+                var amountPaid = $("#selectTotalprice" + orderId).attr("amountPaid");
+                var Payment = "";
+                if (id == "zh_cn") {
+                    Payment = "支付...";
+                }
+                else if (id == "en_us") {
+                    Payment = "Payment...";
+                }
+                layer.open({
+                    title: Payment,
+                    type: 2,
+                    shade: 0.2,
+                    shadeClose: true,
+                    area: ['520px', '446px'],
+                    content: '/client/Order/OrderPay.html?orderId=' + orderId + '&ProductCost=' + productprice + '&FreightCost=' + shipprice + '&TaxesMoney=' + TaxesMoney + '&AmountPaid=' + amountPaid,
+                    success: function (layero, index) {
+                        ////对加载后的iframe进行宽高度自适应
+                        //layer.iframeAuto(index);
+                    },
+
+                });
+                return true;
+            });
+
+            //发票
+            $(document).on('click', '.invoice', function () {
+                var orderId = $(this).attr("exp-data");
+                var invoice = "";
+                if (id == "zh_cn") {
+                    invoice = "电子发票";
+                }
+                else if (id == "en_us") {
+                    invoice = "Electronic invoice";
+                }
+                layer.open({
+                    title: invoice,
+                    type: 2,
+                    shade: 0.2,
+                    shadeClose: true,
+                    area: ['520px', '419px'],
+                    content: '/client/Order/ElectronicInvoice.html?orderId=' + orderId,
+                    success: function (layero, index) {
+                        ////对加载后的iframe进行宽高度自适应
+                        //layer.iframeAuto(index);
+                    }
+                });
+            });
+
+
+            // 作废订单
+            $(document).on('click', '.zuofie', function () {
+                var orderId = $(this).attr("exp-data");
+                $.ajax({
+                    type: "post",
+                    url:BackgroundDomain + "/api/Order/InvalidateOrder",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    async: false,//同步
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("作废成功！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Success!");
+                        }
+                        GetOrderList("inquiry", laypage);
+                    },
+                    error: function (jqXHR) {
+                        if (jqXHR.responseJSON.message) {
+                            layer.msg(jqXHR.responseJSON.message);
+                        }
+                        else {
+                            if (id == "zh_cn") {
+                                layer.msg("作废异常！");
+                            }
+                            else if (id == "en_us") {
+                                layer.msg("Failed. Contact the administrator!");
+                            }
+                        }
+                    }
+                });
+                return true;
+            });
+
+            // 申请退款
+            $(document).on('click', '.tuikuan', function () {
+                var orderId = $(this).attr("exp-data");
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/OrderApplyRefund",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    async: false,//同步
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("成功提交申请退款！请耐心等待后台工作人员处理！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Successfully submit application for refund!  Please wait patiently for the background staff to deal with!");
+                        }
+                        return false;
+                    }, error: function () {
+                        if (id == "zh_cn") {
+                            layer.msg("提交申请失败！请联系管理员！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Application submission failed! Please contact the administrator!");
+                        }
+                    }
+                });
+                return true;
+            });
+            //复制运单号
+            $(document).on('click', '.copyWaybill', function () {
+                var Waybill = $(this).attr("data-key");
+                /*        console.log($("#copyInput").val());*/
+                var inp = document.getElementById("copyInput" + Waybill);
+                inp.select(); // 选中
+                document.execCommand('copy', false); // copy已经选中的内容
+                layer.msg("Copy success!");
+            });
+            //鼠标移入移出显示/隐藏订单sku同步提示框
+            $(document).on('mouseover', '.skusync', function () {
+                var wareId = $(this).attr("data-wareId");
+                $("#info" + wareId).css("display", "block");
+            });
+            $(document).on('mouseout', '.skusync', function () {
+                var wareId = $(this).attr("data-wareId");
+                $("#info" + wareId).css("display", "none");
+            });
+
+
+            var orderDetail = "";
+            if (id == "zh_cn") {
+                orderDetail = "订单详情";
+            }
+            else if (id == "en_us") {
+                orderDetail = "Order details";
+            }
+            // 订单详情
+            $(document).on('click', '.xiangqing', function () {
+                var orderId = $(this).attr("exp-data");
+
+                parent.layer.open({
+                    title: orderDetail,
+                    type: 2,
+                    shade: 0.2,
+                    shadeClose: true,
+                    area: ['900px', '800px'],
+                    content: '/share/OrderDetails.html?orderId=' + orderId,
+                });
+                return false;
+            });
+
+            var SelectLogistics = "";
+            if (id == "zh_cn") {
+                SelectLogistics = "选择物流";
+            }
+            else if (id == "en_us") {
+                SelectLogistics = "Select Logistics";
+            }
+            // 选项卡切换
+            element.on('tab(docDemoTabBrief)', function (data) {
+
+                GetOrderList(this.id, laypage);
+                i18n.loadProperties(id);
+
+
+            });
+
+            //点击选择框
+            $(document).on('click', 'div.model-select-box b.bg1', function () {
+                var $box = $('div.model-select-box');
+                var $option = $('ul.model-select-option', $box);
+                var $txt = $('div.model-select-text', $box);
+                var speed = 10;
+                var $bg = $('b.bg1', $box)
+                $('div.model-select-box ul.model-select-option').not($(this).siblings('ul.model-select-option')).slideUp(speed, function () {
+                });
+                //如果下拉框是打开的则点击关闭  如果是关闭的则点击打开
+                var temp1 = $("div.model-select-box ul.model-select-option").is(":visible");
+                if (temp1) {
+
+                    $(this).siblings('ul.model-select-option').slideUp(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+                else {
+                    $(this).siblings('ul.model-select-option').slideToggle(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+
+                $option.find('li').each(function (index, element) {
+                    var orderid = $(this).attr("order-id");
+                    if ($(this).attr("data-option") == $('div.model-select-text').attr("aging")) {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    }
+
+                    if ($(this).hasClass('selected')) {
+                        $(this).parent('.model-select-option').siblings('.model-select-text').text($(this).text())
+                    }
+
+                    $(this).off("click").on("click", function () {
+                        $(this).parent().siblings('div.model-select-text').text($(this).text())
+                            .attr('value', $(this).attr('data-option'));
+                        $option.slideUp(speed, function () {
+                        });
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                        //更新选择的物流
+                        var aging = $(this).attr("data-option");
+                        $.ajax({
+                            type: "post",
+                            contentType: "application/json;",
+                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
+                            success: function (msg) {
+                                /*       location.reload();*/
+                                var TabId = $("li[class=layui-this]").attr("id");
+                                // 获取订单
+                                GetOrderList(TabId, laypage);
+                                selectindex = 0;
+                            }
+
+                        })
+                        return false;
+                    })
+
+                    $(this).on('mouseover', function () {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    })
+                })
+            });
+
+            //点击选择框
+            $(document).on('click', 'div.model-select-box div.model-select-text', function () {
+                var $box = $('div.model-select-box');
+                var $option = $('ul.model-select-option', $box);
+                var $txt = $('div.model-select-text', $box);
+                var speed = 10;
+                var $bg = $('b.bg1', $box)
+                $('div.model-select-box ul.model-select-option').not($(this).siblings('ul.model-select-option')).slideUp(speed, function () {
+                });
+                //如果下拉框是打开的则点击关闭  如果是关闭的则点击打开
+                var temp1 = $("div.model-select-box ul.model-select-option").is(":visible");
+                if (temp1) {
+
+                    $(this).siblings('ul.model-select-option').slideUp(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+                else {
+                    $(this).siblings('ul.model-select-option').slideToggle(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+
+
+
+                $option.find('li').each(function (index, element) {
+                    /*     if($(this))*/
+                    var orderid = $(this).attr("order-id");
+
+                    if ($(this).attr("data-option") == $('#selectshipfee' + orderid).attr("aging")) {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    }
+
+                    if ($(this).hasClass('selected')) {
+                        $(this).parent('.model-select-option').siblings('.model-select-text').text($(this).text())
+                    }
+
+
+                    $(this).off("click").on("click", function () {
+                        $(this).parent().siblings('div.model-select-text').text($(this).text())
+                            .attr('value', $(this).attr('data-option'));
+                        $option.slideUp(speed, function () {
+                        });
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                        //更新选择的物流
+                        var aging = $(this).attr("data-option");
+                        $.ajax({
+                            type: "post",
+                            contentType: "application/json;",
+                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
+                            success: function (msg) {
+                                /*       location.reload();*/
+                                var TabId = $("li[class=layui-this]").attr("id");
+                                // 获取订单
+                                GetOrderList(TabId, laypage);
+                                selectindex = 0;
+                            }
+
+                        })
+                        return false;
+                    })
+
+
+
+                    $(this).on('mouseover', function () {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    })
+
+                })
+            });
+
+
+            ////点击除下拉框外的文档，隐藏所有下拉
+            $(document).on('click', 'div.model-select-box ', function () {
+                var $box = $('div.model-select-box');
+                var $option = $('ul.model-select-option', $box);
+                var $txt = $('div.model-select-text', $box);
+                var speed = 10;
+                var $bg = $('b.bg1', $box)
+                ////点击文档，隐藏所有下拉
+                $('body').not($(this)).bind('click', function () {
+                    $option.slideUp(speed, function () {
+                    });
+                })
+            });
+
+
+
+        });
+        //跳转到自动化产品管理界面
+        function LinkAutomationProduct() {
+            var tabId = "/client/Automation/AutomationProduct.html";
+            title = "Find Products";
+            var isexit = miniTab.check(tabId, true);
+            if (!isexit) {
+                parent.layui.element.tabAdd('layuiminiTab', {
+                    title: '<span class="layuimini-tab-active"></span><span>' + title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
+                    , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + tabId + '"></iframe>'
+                    , id: tabId
+                });
+            }
+            parent.layui.element.tabChange('layuiminiTab', tabId);
+
+            tabId = "/client/Order/OrderList.html";
+            miniTab.delete(tabId, true);
+        }
+
+        // 获取订单
+        function GetOrderList(TabId, laypage, ShopId, OrderNum, Page, limit) {
+            if (!Page) {
+                Page = 1;
+            }
+            if (!limit) {
+                limit = 10;
+            }
+            if (!ShopId) {
+                ShopId = 0;
+            }
+            var OrderStatus = "";
+            switch (TabId) {
+                case "inquiry":
+                    OrderStatus = "A,C,S";
+                    break;
+                case "unpaid":
+                    OrderStatus = "B,D";
+                    break;
+                case "Processing":
+                    OrderStatus = "F,G";
+                    break;
+                case "transit":
+                    OrderStatus = "Q";
+                    break;
+                case "sign":
+                    OrderStatus = "W";
+                    break;
+                case "Cancelled":
+                    OrderStatus = "I,T,Z,X";
+                    break;
+                case "all":
+                    OrderStatus = "";
+                    break;
+            }
+
+            var prev = "";
+            var next = "";
+            if (id == "zh_cn") {
+                prev = "上一页";
+                next = "下一页";
+            }
+            else if (id == "en_us") {
+                prev = "previous page";
+                next = "next page ";
+            }
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/QueryCustomerOrderList",
+                contentType: "application/json;",
+                data: JSON.stringify({ "Dto": { "OrderStatus": OrderStatus, "ShopifyId": ShopId, "OrderNum": OrderNum }, "Page": Page, "limit": limit }),
+                dataType: "json",
+                success: function (data) {
+                    if (!data) {
+                        /* layer.msg(i18n.prop(sre.msg));*/
+                        Binding(TabId, null);
+
+                    } else {
+                        laypage.render({
+                            elem: 'pagination' //注意，这里的 pagination 是 ID，不用加 # 号
+                            , prev: prev
+                            , next: next
+                            , limit: 10
+                            , count: data.count //数据总数，从服务端得到
+                            , pages: Page
+                            , jump: function (obj, first) {
+                                $.ajax({
+                                    type: "post",
+                                    url: BackgroundDomain +"/api/Order/QueryCustomerOrderList",
+                                    contentType: "application/json;",
+                                    data: JSON.stringify({ "Dto": { "OrderStatus": OrderStatus, "ShopifyId": ShopId, "OrderNum": OrderNum }, "Page": obj.curr, "limit": obj.limit }),
+                                    dataType: "json",
+                                    success: function (data) {
+                                        Binding(TabId, data);
+                                    }
+                                });
+                            }
+                        });
+
+                        return false;
+                    }
+
+                }
+            });
+
+        }
+        // 绑定页面
+        function Binding(TabId, data) {
+
+            //批量操作勾选框恢复为未选中
+            $("input[class='TotalChk']").prop('checked', false);
+            //将其他tab的内容置空，不然会影响批量操作获取选中的checkbox框
+            $('.layui-tab-item').each(function () {
+                var obj = $(this);
+                var classname = $(obj).attr('class');
+                if (classname.indexOf(TabId) == -1) {
+                    $(this).empty();
+                    /*console.log(classname);*/
+                }
+            })
+            if (data != null) {
+                var pagination = document.getElementById("pagination");
+                pagination.setAttribute('style', 'display:block;float: right;margin-bottom:50px; ');
+                for (let i = 0; i < count(data.data); i++) {
+                    // 店铺处理
+                    /*        data.data[i].customerShopify.shopifyShop = data.data[i].customerShopify.shopifyShop.replace(".myshopify.com", "");*/
+                    //计算商品总价格
+                    var total = 0;
+                    for (var j = 0; j < count(data.data[i].ordWaresList); j++) {
+                        total = total + (data.data[i].ordWaresList[j].proAllPrice * data.data[i].ordWaresList[j].quantity)
+                    }
+                    data.data[i].goodsTotal = total;
+                    data.data[i].LangId = id;
+                }
+                var html = template('orderModule', data)
+
+                document.querySelector("." + TabId).innerHTML = html;
+                var totalDiv = document.getElementById("total");
+                totalDiv.style.display = "none"
+            }
+            else {
+                //先清空之前的内容
+                document.querySelector("." + TabId).innerHTML = "";
+                var pagination = document.getElementById("pagination");
+                pagination.setAttribute('style', 'display:none;');
+                //添加div ，
+                var NoProduct = document.createElement("div");
+                NoProduct.setAttribute('class', 'NoProduct');
+                NoProduct.setAttribute('style', 'width:100%;');
+                //放图片
+                var img = document.createElement("img");
+                img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:250px;');
+                img.setAttribute('src', '../../../images/404.png');
+                NoProduct.appendChild(img);
+
+                var content = document.createElement("div");
+                content.setAttribute('style', 'text-align:center;margin: 20px auto;');
+                content.setAttribute('class', '404content');
+                /*content.setAttribute('value', $.i18n.prop("No.content"));*/
+                content.innerHTML = $.i18n.prop("No.content");
+                NoProduct.appendChild(content);
+                /*document.querySelector(".404content").innerHTML($.i18n.prop("No.content"));*/
+
+
+                document.querySelector("." + TabId).appendChild(NoProduct);
+            }
+
+            //只有咨询和待支付状态栏下才显示批量勾选
+            //咨询状态
+            var TabId = $("li[class=layui-this]").attr("id");
+            if (TabId == "inquiry") {
+                //默认全选状态
+                $("input[class='TotalChk']").prop('checked', true);
+                var chkallDiv = document.getElementById("checkallleft");
+                chkallDiv.style.display = "block"
+                $("input[class='orderchk'][orderStatus!='C']").prop('checked', true);
+
+                var id_array = new Array();
+                $('input[class="orderchk"]:checked').each(function () {
+                    id_array.push($(this).attr("data-key"));//向数组中添加元素
+                });
+                var num = count(id_array);
+                var totalDiv = document.getElementById("total");
+                if (Number(num) > 0) {
+                    totalDiv.style.display = "inline";
+                }
+                else {
+                    totalDiv.style.display = "none";
+                }
+
+                var TotalSelect = document.getElementById("tatalSelect");
+                TotalSelect.innerHTML = num + " All";
+
+                //控制批量操作按钮显示状态
+                var enquiryAllDiv = document.getElementById("enquiryAll");
+                enquiryAllDiv.style.display = "inline";
+
+                var PayAllDiv = document.getElementById("PayAllProduct");
+                PayAllDiv.style.display = "none";
+            }
+            //待支付状态
+            else if (TabId == "unpaid") {
+                //默认全选状态
+                $("input[class='TotalChk']").prop('checked', true);
+                var chkallDiv = document.getElementById("checkallleft");
+                chkallDiv.style.display = "block"
+                $("input[class='orderchk']").prop('checked', true);
+
+                var id_array = new Array();
+                $('input[class="orderchk"]:checked').each(function () {
+                    id_array.push($(this).attr("data-key"));//向数组中添加元素
+                });
+                var num = count(id_array);
+                var totalDiv = document.getElementById("total");
+                if (Number(num) > 0) {
+                    totalDiv.style.display = "inline";
+                }
+                else {
+                    totalDiv.style.display = "none";
+                }
+                var TotalSelect = document.getElementById("tatalSelect");
+                TotalSelect.innerHTML = num + " All";
+
+                //控制批量操作按钮显示状态
+                var enquiryAllDiv = document.getElementById("enquiryAll");
+                enquiryAllDiv.style.display = "none";
+
+                var PayAllDiv = document.getElementById("PayAllProduct");
+                PayAllDiv.style.display = "inline";
+            }
+            else {
+                var chkallDiv = document.getElementById("checkallleft");
+                chkallDiv.style.display = "none";
+
+                var totalDiv = document.getElementById("total");
+                totalDiv.style.display = "none";
+            }
+
+
+
+            i18n.loadProperties(id);
+        }
+
+
+        function RechargeBalance() {
+            var title = "";
+            if (id == "zh_cn") {
+                title = "余额充值...";
+            }
+            else if (id == "en_us") {
+                title = "Balance recharge...";
+            }
+            layer.open({
+                title: title,
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['520px', '410px'],
+                content: '/client/Customer/RechargeBalance.html?orderId=',
+            });
+        };
+
+        //当大订单上面的选中框发生改变时事件
+        function UpdatecheckOrder(check) {
+            var TabId = $("li[class=layui-this]").attr("id");
+            if (TabId == "unpaid" || TabId == "inquiry") {
+                var id_array = new Array();
+                $('input[class="orderchk"]:checked').each(function () {
+                    id_array.push($(this).attr("data-key"));//向数组中添加元素
+                });
+                var idstr = id_array.join(',');//将数组元素连接起来以构建一个字符串
+                var num = count(id_array);
+                if (Number(num) > 0) {
+                    var totalDiv = document.getElementById("total");
+                    totalDiv.style.display = "inline"
+                }
+                else {
+                    //批量操作勾选框恢复为未选中
+                    $("input[class='TotalChk']").prop('checked', false);
+
+                    var totalDiv = document.getElementById("total");
+                    totalDiv.style.display = "none"
+                }
+
+                var TotalSelect = document.getElementById("tatalSelect");
+
+                TotalSelect.innerHTML = num + " All";
+            }
+            else {
+                //隐藏底部批量操作框
+                var totalDiv = document.getElementById("total");
+                totalDiv.style.display = "none"
+
+            }
+
+
+        }
+        //勾选批量操作的checkbox控制全选或全不选
+        function checkAllChange(input) {
+            if (input.checked) {
+                $("input[class='TotalChk']").prop('checked', true);
+                $("input[class='orderchk'][orderStatus!='C']").prop('checked', true);
+
+                var id_array = new Array();
+                $('input[class="orderchk"]:checked').each(function () {
+                    id_array.push($(this).attr("data-key"));//向数组中添加元素
+                });
+                var num = count(id_array);
+                if (Number(num) > 0) {
+                    var totalDiv = document.getElementById("total");
+                    totalDiv.style.display = "inline"
+                }
+
+                var TotalSelect = document.getElementById("tatalSelect");
+                TotalSelect.innerHTML = num + " All";
+
+            } else {
+                $("input[class='TotalChk']").prop('checked', false);
+                $("input[class='orderchk']").prop('checked', false);
+                var TotalSelect = document.getElementById("tatalSelect");
+                TotalSelect.innerHTML = 0 + " All";
+                var totalDiv = document.getElementById("total");
+                totalDiv.style.display = "none"
+            }
+        };
+
+        //支付所有选中订单
+        function PayAllProduct() {
+            var id_array = new Array();
+            $('input[class="orderchk"]:checked').each(function () {
+                id_array.push($(this).attr("data-key"));//向数组中添加元素
+            });
+
+            var shipprice = 0;
+            var productprice = 0;
+            var taxesprice = 0;
+            var amountPaid = 0;
+            var idstr = id_array.join(',');//将数组元素连接起来以构建一个字符串
+            var orderId = idstr;
+            id_array.forEach(function (value) {
+                shipprice = (parseFloat(shipprice) + parseFloat($("#selectprice" + value).attr("selectmoney"))).toFixed(2);
+                productprice = (parseFloat(productprice) + parseFloat($("#selectTotalprice" + value).attr("productmoney"))).toFixed(2);
+                taxesprice = (parseFloat(taxesprice) + parseFloat($("#selectTotalprice" + value).attr("TaxesMoney"))).toFixed(2);
+                amountPaid = (parseFloat(amountPaid) + parseFloat($("#selectTotalprice" + value).attr("amountPaid"))).toFixed(2);
+            });
+            var Payment = "";
+            if (id == "zh_cn") {
+                Payment = "支付...";
+            }
+            else if (id == "en_us") {
+                Payment = "Payment...";
+            }
+            layer.open({
+                title: Payment,
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['520px', '446px'],
+                content: '/client/Order/OrderPay.html?orderId=' + orderId + '&ProductCost=' + productprice + '&FreightCost=' + shipprice + '&TaxesMoney=' + taxesprice + '&AmountPaid=' + amountPaid,
+                success: function (layero, index) {
+                    ////对加载后的iframe进行宽高度自适应
+                    //layer.iframeAuto(index);
+                }
+            });
+            return true;
+
+
+        }
+
+        //批量咨询
+        function EnquiryAllProduct() {
+            var id_array = new Array();
+            $('input[class="orderchk"]:checked').each(function () {
+                /*  console.log("循环选中的input框");*/
+                if ($(this).attr("orderstatus") == "C") {
+                    layer.msg("The selected order has been inquired, please check");
+                    return false;
+                }
+                id_array.push($(this).attr("data-key"));//向数组中添加元素
+            });
+            var idstr = id_array.join(',');//将数组元素连接起来以构建一个字符串
+            var orderId = idstr;
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/ConsultingAllPrice",
+                contentType: "application/json;",
+                data: JSON.stringify(orderId),
+                dataType: "json",
+                success: function (data) {
+                    var TabId = $("li[class=layui-this]").attr("id");
+                    if (id == "zh_cn") {
+                        layer.msg("咨询操作成功，请耐性等待后台处理！");
+                    }
+                    else if (id == "en_us") {
+                        layer.msg("Consultation operation succeeded, please wait patiently for background processing!"/*, { time:20000000 }*/);
+                    }
+
+                    GetOrderList(TabId, laypage);
+
+                    return false;
+                }, error: function () {
+                    if (id == "zh_cn") {
+                        layer.msg("咨询操作失败，请联系管理员！");
+                    }
+                    else if (id == "en_us") {
+                        layer.msg("The consultation operation failed. Contact the administrator!");
+                    }
+
+                    GetOrderList(TabId, laypage);
+                }
+            });
+        }
+
+        function count(obj) {
+            var objType = typeof obj;
+            if (objType == "string") {
+                return obj.length;
+            } else if (objType == "object") {
+                var objLen = 0;
+                for (var i in obj) {
+                    objLen++;
+                }
+                return objLen;
+            }
+            return false;
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Anderdrop</title>
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link rel="stylesheet" href="../../css/MKIndex.css?v=20220525" media="all">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css?v=20220525" media="all">
+</head>
+<body>
+    <div class="container">
+        <div class="top" style="height:40%;">
+            <div class="beijing">
+                <div class="title">
+                    Invite friends get maximum of
+                    <span style="color: #00AE00;">$1000 Rewards！</span>
+                </div>
+                <div class="detail">
+                    What's more? you can also get
+                    <span style="color: #000000; font-weight: Bold;">1.5% of the transaction fee</span>
+                    of the order from invited friends forever！！
+                </div>
+            </div>
+        </div>
+        <div style="width:calc(100% - 60px);margin-left:30px;">
+            <div style="margin-top: 50px; margin-bottom: 30px; height: 45px; font-size: 32px; font-family: PingFang SC-Bold, PingFang SC; font-weight: bold; color: #333333; line-height: 45px;">How to participate: </div>
+            <div class="line">
+                <label class="layui-icon icon-a-yingxiao-6-CopyLink"></label>
+                <div class="tip">
+                    Send a link to sellers to register successfully, you can get a random prize (1-$1000)
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="line">
+                <label class="layui-icon icon-yingxiao-2"></label>
+                <div class="tip">
+                    Join the Anderdrop group on Facebook and send screenshots to the Group manager
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="line">
+                <label class="layui-icon icon-yingxiao-3"></label>
+                <div class="tip">
+                    Leave a paypal account and transfer money within 24 hours: name, email address and shopify store link
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="line">
+                <label class="layui-icon icon-yingxiao-4"></label>
+                <div class="tip">
+                    Participate in the object: Shop technical services, entrepreneurs, independent station oil owners
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="line">
+                <label class="layui-icon icon-yingxiao-5"></label>
+                <div class="tip">
+                    Anderdrop reserves the right to interpret the event.
+                </div>
+                <div class="clear"></div>
+            </div>
+            <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid Join">Join Now</button>
+        </div>
+    </div>
+
+  
+    <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../js/lay-module/Marketing/MarketingApp.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        var id = "en_us";
+        var MarketingConfiguration = null;
+        layui.config({
+            base: '/js/lay-module/Marketing/'
+        });
+        layui.use(['form','MarketingApp'], function () {
+            var
+                form = layui.form,
+                i18n = layui.i18n,
+                MarketingApp = layui.MarketingApp,
+                message = layui.message;
+            layer = layui.layer;
+            MarketingApp.Load("Marketing");
+            var YDHMarketing = layui.data('YDH-Marketing');
+
+            //查询营销活动的活动状态
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Marketing/QueryMarketingConfiguration",
+                contentType: "application/json;",
+                data: JSON.stringify({ "Code": "Marketing" }),
+                dataType: "json",
+                success: function (sre) {
+                    if (sre) {
+                        MarketingConfiguration = sre;
+                        return false;
+                    }
+                }
+            });
+
+            //点击开团
+            $(document).on('click', '.Join', function () {
+                if (!YDHMarketing.email || !YDHMarketing.Secret) {
+                    window.location.href = "/Marketing/MKLogin.html";
+                    return false;
+                }
+                //var startTime = new Date(MarketingConfiguration.startTime);
+                //var EndTime = new Date(MarketingConfiguration.endTime);
+                var NowTime = new Date(getNowTime());
+                ////判断活动是否在进行中
+                //if (Number(MarketingConfiguration.usedAmount) >= Number(MarketingConfiguration.Budget)
+                //    || MarketingConfiguration.activityStauts == '0'
+                //    || startTime > NowTime
+                //    || EndTime < NowTime) {
+                //    layui.layer.msg("Activity not open!", { icon: 2, time: 3000, shade: 0.4 });
+                //    return false;
+                //}
+
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Marketing/StarMarketingGroup",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Email": YDHMarketing.email }),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            MarketingConfiguration = sre;
+                            layui.data('YDH-Marketing', {
+                                key: 'MarketingCode'
+                                , value: MarketingConfiguration.code
+                            });
+                            layui.data('YDH-Marketing', {
+                                key: 'CreateTime'
+                                , value: NowTime
+                            });
+                            window.location.href = "/Marketing/MKInVite.html";
+                            return false;
+
+                        }
+                    }
+                });
+
+
+            });
+
+        });
+
+        //获取当前时间
+        function getNowTime(tempminit) {
+            if (!tempminit) {
+                tempminit = 0;
+            }
+            var date = new Date();
+            date.setMinutes(date.getMinutes() - tempminit);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1,
+                day = date.getDate(),
+                hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+                minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+                second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            month >= 1 && month <= 9 ? (month = "0" + month) : "";
+            day >= 0 && day <= 9 ? (day = "0" + day) : "";
+            var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+            /* console.log(timer); */
+            return timer;
+        }
+        // 比较两个日期的大小
+        // startStr较大时为false, 否则为true
+        function dateCompare(startStr, endStr) {
+            var d1, d2, s, arr, arr1, arr2;
+            if (startStr.length > 10) {
+                arr = startStr.split(" ");
+                arr1 = arr[0].split("-");
+                arr2 = arr[1].split(":");
+                d1 = new Date(arr1[0], arr1[1] - 1, arr1[2], arr2[0], arr2[1], arr2[2]);
+            } else {
+                arr = startStr.split("-");
+                d1 = new Date(arr[0], arr[1], arr[2]);
+            }
+            if (endStr.length > 10) {
+                arr = endStr.split(" ");
+                arr1 = arr[0].split("-");
+                arr2 = arr[1].split(":");
+                d2 = new Date(arr1[0], arr1[1] - 1, arr1[2], arr2[0], arr2[1], arr2[2]);
+            } else {
+                arr = endStr.split("-");
+                d2 = new Date(arr[0], arr[1], arr[2]);
+            }
+
+            s = d2 - d1;
+            if (s < 0) {
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+</body>
+</html >

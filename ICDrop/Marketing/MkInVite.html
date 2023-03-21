@@ -1,0 +1,602 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Anderdrop</title>
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link rel="stylesheet" href="../../css/MKInVite.css?v=20220525" media="all">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css?v=20220525" media="all">
+</head>
+<body>
+    <div class="container">
+        <div class="top" style="height:40%;">
+            <div class="beijing">
+                <!--团长身份-开团进行中-->
+                <div class="colonel-underway" style="width:100%;height:100%;display:none;">
+                    <div class="title">
+                        <span style="color: #00AE00;">0 Cost</span>
+                        to start up your business
+                    </div>
+                    <div class="detail">
+                        Invite friends get maximum of $1000  Rewards！
+                    </div>
+                </div>
+                <!--团员身份-未加入时-->
+                <div class="member-no-join" style="width:100%;height:100%;display:none;">
+                    <div class="title">
+                        <span style="color: #00AE00;">0 Cost</span>
+                        to start up your business
+                    </div>
+                    <div style=" position:relative;">
+                        <div class="info" style=" width: 218px; margin-left: 136px;">
+                            <span>Drop shipping</span>
+                            <div class="nav nav-background" style=" left:30px;"></div>
+                        </div>
+                        <div class="info" style=" width: 226px; margin-left: 388px;">
+                            <span>Faster delivery</span>
+                            <div class="nav nav-background" style=" left:180px;"></div>
+                        </div>
+                        <div class="info" style=" width: 352px; margin-left: 199px;margin-top:85px;">
+                            <span>Cheaper Product supply</span>
+                            <div class="nav nav-background" style=" left:100px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--团员身份--已经加入-->
+                <div class="member-join" style="display:flex;text-align:center;display:none;">
+                    <div style="width: 100px; height: 100px; position: relative; left: calc((100% - 120px)/2); ">
+                        <div style="width: 100px; height: 100px; background: #E1E1FC; border-radius: 50%; border: 10px solid #FFFFFF; position: absolute; margin-top:50px;">
+                            <div class="check-style-unequal-width" style=" width: 24px; height: 48px; border-color: #009933; border-style: solid; border-width: 0 10px 10px 0; transform: rotate(45deg); margin-top:15px;margin-left:35px;"></div>
+                        </div>
+                    </div>
+                    <div class="title" style=" margin-top:167px;">
+                        Join Successfully !
+                    </div>
+                </div>
+                <!--团长身份-开团成功-->
+                <div class="colonel-succeed" style="width:100%;height:100%;display:none;">
+                    <div class="title" style=" padding-top:50px;">
+                        Congratulations🎉
+                    </div>
+                    <div class="reward">
+                        <div style=" margin-top :18px;margin-bottom:10px;height:110px;line-height:110px;">
+                            <span id="RewardAmount" style="color: #00AE00;font-size:64px;margin-right:20px;"></span>Rewards
+                        </div>
+                        Please check it on [ Anderdrop ] account
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--参团人数显示-->
+        <div class="people">
+            <div class="people-title">
+                <div class="need" style="width:100%;height:100%;">Need 2 more friend</div>
+                <div class="people-body">
+                    <div class="picture-frame" id="colonel-frame" style="margin-left:40px;z-index:1;">
+
+                    </div>
+                    <div class="picture-frame" id="tuxedoId1-frame" style="margin-left:-20px;z-index:10;position:relative;">
+
+                    </div>
+                    <div class="picture-frame" id="tuxedoId2-frame" style="margin-left: -20px; z-index: 20; position: relative; ">
+
+                    </div>
+                    <div style=" float:right;margin-top:43px;margin-right:70px;">
+                        <div id="ends">distance ends</div>
+                        <div id="count-down"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--底部显示-->
+        <div class="bottom">
+            <!--团长身份--开团进行中-->
+            <div class="colonel-bottom-underway" style="display:none; font-size: 28px; font-family: PingFang SC; font-weight: 400; line-height: 42px; color: #333333;">
+                What's more? you can also get
+                <label style="font-weight: Bold;">
+                    1.5% of the transaction fee
+                </label>
+                of the order from invited friends forever！！
+                <button class="share" style="background: #029803;margin-top:194px;"><img src="../../images/Marketing/facebook.png"  title="Share on Facebook" target="_blank"  />Share Now!</button>
+                <button class="copy" style="background: #FFFFFF;  border: 1px solid #DDDDDD; "><i class="layui-icon icon-a-yingxiao-6-CopyLink"></i>Copy Link</button>
+                <input id="copyInput"  style="position: absolute; top:0; left:0; opacity:0; z-index: -10;" />
+            </div>
+            <!--团员身份--未加入时显示-->
+            <div class="member-bottom-no-join" style="display:none; font-size: 28px; font-family: PingFang SC-Bold, PingFang SC; font-weight: bold; color: #333333;">
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        Ship within 3 days
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        The best data recommended selection of hot selling products
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        The lower price and shipping logistics supply
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        Best product quality and strict packaging for delivery
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <button class="Join" style="background: #029803;margin-top:110px;">Join Now</button>
+            </div>
+            <!--团员身份--成功加入时显示-->
+            <div class="member-bottom-join" style="display: none; font-size: 28px; font-family: PingFang SC-Bold, PingFang SC; font-weight: bold; color: #333333;">
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        Ship within 3 days
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        The best data recommended selection of hot selling products
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        The lower price and shipping logistics supply
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="line">
+                    <i class="layui-icon icon-a-yingxiao-7-gou" style="font-size: 30px; color: #00AE00;"></i>
+                    <div class="tips">
+                        Best product quality and strict packaging for delivery
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div style="margin-top:20px; font-size: 28px; font-family: PingFang SC; font-weight: 400; line-height: 48px; color: #333333;">
+                    Invite friends get maximum of $1000 Rewards！
+                </div>
+                <button class="StarOwm" style="background: #029803;margin-top:10px;">Start one by Own</button>
+                <button class="GoAnderdrop" style="background: #FFFFFF; border: 1px solid #999999;">Go Anderdrop</button>
+            </div>
+            <!--团长身份--开团成功-->
+            <div class="colonel-bottom-succeed" style="display:none; font-size: 28px; font-family: PingFang SC; font-weight: 400; line-height: 42px; color: #333333;">
+                <div style=" font-size: 32px; font-family: PingFang SC-Bold, PingFang SC; font-weight: bold; color: #333333;">
+                    How to Exchange:
+                </div>
+                <div style=" font-size: 28px; font-family: PingFang SC-Bold, PingFang SC; font-weight: bold; color: #333333;margin-top:20px;">
+                    Leave a screenshot and paypal or your bank card account on facebook [Ander drop group], we will exchange it for you immediately.
+                </div>
+                <button class="JoinAgain" style="background: #029803;margin-top:243px;">Join Again</button>
+            </div>
+        </div>
+        <div class="participate">How to participate？</div>
+    </div>
+
+    <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../js/lay-module/Marketing/MarketingApp.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        var id = "en_us";
+        var MarketingCode = window.GetRequest("MarketingCode");
+        layui.config({
+            base: '/js/lay-module/Marketing/'
+        });
+        var countdownDiv = document.getElementById("count-down");
+        var NowTime = new Date(getNowTime());
+        var StarGroupTime;
+        layui.use(['form', 'MarketingApp'], function () {
+            var
+                form = layui.form,
+                MarketingApp = layui.MarketingApp,
+                message = layui.message;
+                layer = layui.layer;
+            if (MarketingCode) {
+                layui.data('YDH-Marketing', {
+                    key: 'MarketingCode'
+                    , value: MarketingCode
+                });
+                layui.data('YDH-Marketing', {
+                    key: 'CreateTime'
+                    , value: NowTime
+                });
+            }
+
+            MarketingApp.Load("Marketing");
+            var YDHMarketing = layui.data('YDH-Marketing');
+            //根据团号查询团信息
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Marketing/QueryMarketingInfoByCode",
+                contentType: "application/json;",
+                data: JSON.stringify({ "Code": YDHMarketing.MarketingCode }),
+                dataType: "json",
+                success: function (sre) {
+                    StarGroupTime = new Date(sre.createTime);
+                    //如果是团长，且并未成团
+                    if (sre.email == YDHMarketing.email && sre.groupStatus == '0') {
+                        //头部按需显示
+                        $(".colonel-underway").show();
+                        $(".member-no-join").hide();
+                        $(".member-join").hide();
+                        $(".colonel-succeed").hide();
+                        //邀请人数和倒计时按需显示
+                        var colonelFramediv = document.getElementById("colonel-frame");
+                        var colonelFrameImg = document.createElement("img");
+                        colonelFrameImg.setAttribute("src", "../../images/Marketing/colonel.png");
+                        colonelFramediv.appendChild(colonelFrameImg);
+                        var tuxedoId1div = document.getElementById("tuxedoId1-frame");
+                        var tuxedoId2div = document.getElementById("tuxedoId2-frame");
+                        if (sre.tuxedoId1 != '0') {
+                            var tuxedoId1Img = document.createElement("img");
+                            tuxedoId1Img.setAttribute("src", "../../images/Marketing/tuxedoId1.png");
+                            tuxedoId1div.appendChild(tuxedoId1Img);
+                        }
+                        else {
+                            tuxedoId1div.innerHTML = "<div>?</div>";
+                        }
+                        if (sre.tuxedoId2 != '0') {
+                            var tuxedoId2Img = document.createElement("img");
+                            tuxedoId2Img.setAttribute("src", "../../images/Marketing/tuxedoId2.png");
+                            tuxedoId2div.appendChild(tuxedoId2Img);
+                        }
+                        else {
+                            tuxedoId2div.innerHTML = "<div>?</div>";
+                        }
+                        //倒计时
+                        if (StarGroupTime.getDate() > NowTime.getDate() + 1 && StarGroupTime.getMonth() >= NowTime.getMonth()) {
+                            countdownDiv.innerHTML = "00:00:00";
+                            countdownDiv.setAttribute("style", "color: #999999;");
+                        }
+                        else {
+                            clock = window.setInterval(countdown, 1000); //一秒执行一次
+                        }
+                        //底部按需显示
+                        $(".colonel-bottom-underway").show();
+                        $(".member-bottom-no-join").hide();
+                        $(".member-bottom-join").hide();
+                        $(".colonel-bottom-succeed").hide();
+
+                    }
+                    //如果是团长且已成团
+                    else if (sre.email == YDHMarketing.email && sre.groupStatus == '1') {
+                        //头部按需显示
+                        $(".colonel-underway").hide();
+                        $(".member-no-join").hide();
+                        $(".member-join").hide();
+                        $(".colonel-succeed").show();
+                        //邀请人数和倒计时按需显示
+                        var colonelFramediv = document.getElementById("colonel-frame");
+                        var colonelFrameImg = document.createElement("img");
+                        colonelFrameImg.setAttribute("src", "../../images/Marketing/colonel.png");
+                        colonelFramediv.appendChild(colonelFrameImg);
+                        var tuxedoId1div = document.getElementById("tuxedoId1-frame");
+                        var tuxedoId2div = document.getElementById("tuxedoId2-frame");
+                        var tuxedoId1Img = document.createElement("img");
+                        tuxedoId1Img.setAttribute("src", "../../images/Marketing/tuxedoId1.png");
+                        tuxedoId1div.appendChild(tuxedoId1Img);
+                        var tuxedoId2Img = document.createElement("img");
+                        tuxedoId2Img.setAttribute("src", "../../images/Marketing/tuxedoId2.png");
+                        tuxedoId2div.appendChild(tuxedoId2Img);
+                        countdownDiv.innerHTML = "00:00:00";
+                        countdownDiv.setAttribute("style", "color: #999999;");
+                        //底部按需显示
+                        $(".colonel-bottom-underway").hide();
+                        $(".member-bottom-no-join").hide();
+                        $(".member-bottom-join").hide();
+                        $(".colonel-bottom-succeed").show();
+                        //奖励金额
+                        var RewardAmountDiv = document.getElementById("RewardAmount");
+                        RewardAmountDiv.innerHTML = sre.amountReward + "$";
+                    }
+                    //如果不是团长且已成功加入组队
+                    else if ((YDHMarketing.email == sre.tuxedoEmail1 || YDHMarketing.email == sre.tuxedoEmail2) && YDHMarketing.email ) {
+                        //头部按需显示
+                        $(".colonel-underway").hide();
+                        $(".member-no-join").hide();
+                        $(".member-join").show();
+                        $(".colonel-succeed").hide();
+                        //邀请人数和倒计时按需显示
+                        var colonelFramediv = document.getElementById("colonel-frame");
+                        var colonelFrameImg = document.createElement("img");
+                        colonelFrameImg.setAttribute("src", "../../images/Marketing/colonel.png");
+                        colonelFramediv.appendChild(colonelFrameImg);
+                        var tuxedoId1div = document.getElementById("tuxedoId1-frame");
+                        var tuxedoId2div = document.getElementById("tuxedoId2-frame");
+                        if (sre.tuxedoId1 != '0') {
+                            var tuxedoId1Img = document.createElement("img");
+                            tuxedoId1Img.setAttribute("src", "../../images/Marketing/tuxedoId1.png");
+                            tuxedoId1div.appendChild(tuxedoId1Img);
+                        }
+                        else {
+                            tuxedoId1div.innerHTML = "<div>?</div>";
+                        }
+                        if (sre.tuxedoId2 != '0') {
+                            var tuxedoId2Img = document.createElement("img");
+                            tuxedoId2Img.setAttribute("src", "../../images/Marketing/tuxedoId2.png");
+                            tuxedoId2div.appendChild(tuxedoId2Img);
+                        }
+                        else {
+                            tuxedoId2div.innerHTML = "<div>?</div>";
+                        }
+                        //倒计时
+                        if ((StarGroupTime.getDate() > NowTime.getDate() + 1 && StarGroupTime.getMonth() >= NowTime.getMonth()) || sre.groupStatus == '1') {
+                            countdownDiv.innerHTML = "00:00:00";
+                            countdownDiv.setAttribute("style", "color: #999999;");
+                        }
+                        else {
+                            clock = window.setInterval(countdown, 1000); //一秒执行一次
+                        }
+                        //底部按需显示
+                        $(".colonel-bottom-underway").hide();
+                        $(".member-bottom-no-join").hide();
+                        $(".member-bottom-join").show();
+                        $(".colonel-bottom-succeed").hide();
+                    }
+                    //非团员，未加入组队
+                    else {
+                        //头部按需显示
+                        $(".colonel-underway").hide();
+                        $(".member-no-join").show();
+                        $(".member-join").hide();
+                        $(".colonel-succeed").hide();
+                        //邀请人数和倒计时按需显示
+                        var colonelFramediv = document.getElementById("colonel-frame");
+                        var colonelFrameImg = document.createElement("img");
+                        colonelFrameImg.setAttribute("src", "../../images/Marketing/colonel.png");
+                        colonelFramediv.appendChild(colonelFrameImg);
+                        var tuxedoId1div = document.getElementById("tuxedoId1-frame");
+                        var tuxedoId2div = document.getElementById("tuxedoId2-frame");
+                        if (sre.tuxedoId1 != '0') {
+                            var tuxedoId1Img = document.createElement("img");
+                            tuxedoId1Img.setAttribute("src", "../../images/Marketing/tuxedoId1.png");
+                            tuxedoId1div.appendChild(tuxedoId1Img);
+                        }
+                        else {
+                            tuxedoId1div.innerHTML = "<div>?</div>";
+                        }
+                        if (sre.tuxedoId2 != '0') {
+                            var tuxedoId2Img = document.createElement("img");
+                            tuxedoId2Img.setAttribute("src", "../../images/Marketing/tuxedoId2.png");
+                            tuxedoId2div.appendChild(tuxedoId2Img);
+                        }
+                        else {
+                            tuxedoId2div.innerHTML = "<div>?</div>";
+                        }
+                        //倒计时
+                        if ((StarGroupTime.getDate() > NowTime.getDate() + 1 && StarGroupTime.getMonth() >= NowTime.getMonth()) || sre.groupStatus == '1') {
+                            countdownDiv.innerHTML = "00:00:00";
+                            countdownDiv.setAttribute("style", "color: #999999;");
+                        }
+                        else {
+                            clock = window.setInterval(countdown, 1000); //一秒执行一次
+                        }
+                        //底部按需显示
+                        $(".colonel-bottom-underway").hide();
+                        $(".member-bottom-no-join").show();
+                        $(".member-bottom-join").hide();
+                        $(".colonel-bottom-succeed").hide();
+                    }
+                }
+            });
+            //团长复制团号
+            $(document).on('click', '.copy', function () {
+                var inp = document.getElementById("copyInput");
+                inp.value = window.location.href +"?MarketingCode="+ YDHMarketing.MarketingCode;
+                inp.select(); // 选中
+                document.execCommand('copy', false); // copy已经选中的内容
+                layer.msg("Copy success!");
+            });
+            //团员助力加入团
+            $(document).on('click', '.Join', function () {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Marketing/JoinMarketingGroup",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Code": YDHMarketing.MarketingCode, "HelpEmail": YDHMarketing.email}),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre.code == "1") {
+                            layer.msg(sre.message);
+                            location.reload();
+                        }
+                    }
+                })
+            });
+            //团员身份开一个自己的团
+            $(document).on('click', '.StarOwm', function () {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Marketing/QueryMarketingConfiguration",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Code": "Marketing" }),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            MarketingConfiguration = sre;
+                            if (!YDHMarketing.email || !YDHMarketing.Secret) {
+                                window.location.href = "/Marketing/MKLogin.html";
+                                return false;
+                            }
+                            var startTime = new Date(MarketingConfiguration.startTime);
+                            var EndTime = new Date(MarketingConfiguration.endTime);
+                            var NowTime = new Date(getNowTime());
+                            //判断活动是否在进行中
+                            if (Number(MarketingConfiguration.usedAmount) >= Number(MarketingConfiguration.Budget)
+                                || MarketingConfiguration.activityStauts == '0'
+                                || startTime > NowTime
+                                || EndTime < NowTime) {
+                                layui.layer.msg("Activity not open!", { icon: 2, time: 3000, shade: 0.4 });
+                                return false;
+                            }
+                            $.ajax({
+                                type: "post",
+                                url: BackgroundDomain +"/api/Marketing/StarMarketingGroup",
+                                contentType: "application/json;",
+                                data: JSON.stringify({ "Email": YDHMarketing.email }),
+                                dataType: "json",
+                                success: function (sre) {
+                                    if (sre) {
+                                        MarketingConfiguration = sre;
+                                        layui.data('YDH-Marketing', {
+                                            key: 'MarketingCode'
+                                            , value: MarketingConfiguration.code
+                                        });
+                                        window.location.href = "/Marketing/MKInVite.html";
+                                        return false;
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            //跳转到平台
+            $(document).on('click', '.GoAnderdrop', function () {
+                var inp = document.getElementById("copyInput");
+                inp.value = "https://app.Anderdrop.com/client/Customer/index.html";
+                inp.select(); // 选中
+                document.execCommand('copy', false); // copy已经选中的内容
+                window.open("https://app.Anderdrop.com/client/Customer/index.html");
+            });
+            //团长再次开团
+            $(document).on('click', '.JoinAgain', function () {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Marketing/QueryMarketingConfiguration",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Code": "Marketing" }),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            MarketingConfiguration = sre;
+                            if (!YDHMarketing.email || !YDHMarketing.Secret) {
+                                window.location.href = "/Marketing/MKLogin.html";
+                                return false;
+                            }
+                            var startTime = new Date(MarketingConfiguration.startTime);
+                            var EndTime = new Date(MarketingConfiguration.endTime);
+                            var NowTime = new Date(getNowTime());
+                            //判断活动是否在进行中
+                            if (Number(MarketingConfiguration.usedAmount) >= Number(MarketingConfiguration.Budget)
+                                || MarketingConfiguration.activityStauts == '0'
+                                || startTime > NowTime
+                                || EndTime < NowTime) {
+                                layui.layer.msg("Activity not open!", { icon: 2, time: 3000, shade: 0.4 });
+                                return false;
+                            }
+                            $.ajax({
+                                type: "post",
+                                url: BackgroundDomain +"/api/Marketing/StarMarketingGroup",
+                                contentType: "application/json;",
+                                data: JSON.stringify({ "Email": YDHMarketing.email }),
+                                dataType: "json",
+                                success: function (sre) {
+                                    if (sre) {
+                                        MarketingConfiguration = sre;
+                                        layui.data('YDH-Marketing', {
+                                            key: 'MarketingCode'
+                                            , value: MarketingConfiguration.code
+                                        });
+                                        window.location.href = "/Marketing/MKInVite.html";
+                                        return false;
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            //分享到FaceBook
+            $(document).on('click', '.share', function () {
+                var url = window.location.href + '?MarketingCode=' + YDHMarketing.MarketingCode;
+                /*var url =  'https://app.Anderdrop.com/Marketing/MKInVite.html?MarketingCode=' + YDHMarketing.MarketingCode;*/
+                window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(url), 'newWindow', 'width=800, height=400', 'center'); void (0);
+            });
+        });
+
+        function size(number) {
+            return number < 10 ? '0' + number : number;
+        }
+        //获取当前时间
+        function getNowTime(tempminit) {
+            if (!tempminit) {
+                tempminit = 0;
+            }
+            var date = new Date();
+            date.setMinutes(date.getMinutes() - tempminit);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1,
+                day = date.getDate(),
+                hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+                minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+                second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            month >= 1 && month <= 9 ? (month = "0" + month) : "";
+            day >= 0 && day <= 9 ? (day = "0" + day) : "";
+            var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+            /* console.log(timer); */
+            return timer;
+        }
+        //倒计时
+        function countdown() {
+            // 3. 获取当前时间
+            nowDate = new Date();
+            // 4. 获取结束日期毫秒数
+            nowTimes = nowDate.getTime();
+
+            Time = addDate(StarGroupTime);
+            endTime = new Date(Time);
+            endTimes = endTime.getTime();
+            // 5. 获取剩余毫秒数
+            lastTimes = endTimes - nowTimes  ;
+            // 6. 毫秒转换
+            // ① 毫秒转换为秒
+            lastSeconds = parseInt(lastTimes / 1000);
+            // ② 通过秒转天、时、分、秒
+            lastD = size(parseInt(lastSeconds / 3600 / 24));
+            lastH = size(parseInt(lastSeconds / 3600 % 24));
+            lastM = size(parseInt(lastSeconds / 60 % 60));
+            lastS = size(parseInt(lastSeconds % 60));
+            // 7. 将结果放入div
+            if (lastSeconds > 0) {
+                countdownDiv.innerHTML = lastH + "：" + lastM + "：" + lastS;
+                countdownDiv.setAttribute("style", "color: #FF5555;");
+            }
+            else {
+                countdownDiv.innerHTML = "00:00:00";
+                countdownDiv.setAttribute("style", "color: #999999;");
+                window.clearInterval(clock); //清除js定时器
+            }
+           
+        };
+
+        //日期加一
+        function addDate(curDate) {
+        
+            var dateTime = new Date((curDate / 1000 + 86400) * 1000);  //86400一天   
+          /*  console.log(dateTime);*/
+            var mon = (dateTime.getMonth() + 1);
+        /*    console.log(mon);*/
+            var day = (dateTime.getDate());
+
+            return dateTime.getFullYear() + '-' + (mon < 10 ? "0" + mon : mon) + '-' + (day < 10 ? "0" + day : day) +" 00:00:00";
+
+        }
+    </script>
+</body>
+</html>

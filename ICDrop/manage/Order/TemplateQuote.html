@@ -1,0 +1,376 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Anderdrop</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        legend {
+            color: red;
+        }
+
+        .BasicInfo {
+            float: left;
+            margin-bottom: 20px;
+        }
+
+            .BasicInfo .layui-input-block {
+                width: 200px
+            }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <fieldset class="layui-elem-field">
+            <div class="layui-field-box">
+                <div class="BasicInfo">
+                    <label class="layui-form-label ">币种</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input currency" type="text" name="currency" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="BasicInfo">
+                    <label class="layui-form-label">汇率(美元)：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input exchangeRate" type="text" name="exchangeRate" readonly="readonly" />
+                    </div>
+
+                </div>
+                <div class="BasicInfo">
+                    <label class="layui-form-label">产品单价：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input unitPrice" type="text" name="unitPrice" value="" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="BasicInfo">
+                    <label class="layui-form-label">产品利润：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input unitProfit" type="text" name="unitProfit" value="" lay-reqtext="产品利润不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="BasicInfo">
+                    <label class="layui-form-label">税费利润单价：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input unitTaxesProfit" type="text" name="unitTaxesProfit" value=""  lay-reqtext="税费利润不能为空" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="BasicInfo">
+                    <label class="layui-form-label">运费利润单价：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input unitFreightProfit" type="text" name="unitFreightProfit" value="" lay-reqtext="运费利润不能为空" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>平台商品匹配</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">sku</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sku" id="sku" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">币种</label>
+                            <div class="layui-input-inline">
+                                <select id="TemplateCurrency" name="TemplateCurrency" lay-search lay-verify="">
+                                    <option value="">请选择</option>
+                                    <option value="USD">美元</option>
+                                    <option value="RMB">人名币</option>
+                                    <option value="EURO">欧元</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">汇率：</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input TemplateExchangeRate" id="TemplateExchangeRate" type="text" name="TemplateExchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="" />
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button  class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="goods"></div>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">一键报价</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="productModule">
+
+        <table class="layui-table">
+            <colgroup>
+                <col width="50">
+                <col width="120">
+                <col width="200">
+                <col width="200">
+                <col width="100">
+                <col width="120">
+                <col width="120">
+                <col width="120">
+                <col width="100">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input class="AllCheck" type='checkbox' id='TotalChk' onclick="checkAllChange(this)" style="width:16px;height:16px;display:block;" /></th>
+                    <th>sku</th>
+                    <th>图片</th>
+                    <th>属性</th>
+                    <th>单价</th>
+                    <th>利润</th>
+                    <th>税费利润</th>
+                    <th>运费利润</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each}}
+                <tr>
+                    <td><input class="ChekcWare" type='checkbox' id='Ware{{$value.id}}' data-key="{{$value.id}}" style="width: 16px; height: 16px; display: block;" /></td>
+                    <td>{{$value.sku}}</td>
+                    <td><img src="{{$value.pictureUrl}}" style="width:50px;height:50px;" /></td>
+                    <td>{{$value.mergeAttributes}}</td>
+                    <td>{{$value.purchaseCost}}</td>
+                    <td>{{$value.purchaseProfit}}</td>
+                    <td>{{$value.taxesProfit}}</td>
+                    <td>{{$value.freightProfit}}</td>
+                    <td> <button type="button" class="layui-btn layui-btn-normal SelectPrice" lay-submit lay-filter="SelectPrice"  data-ware="{{$value.id}}" purchaseCost="{{$value.purchaseCost}}" purchaseProfit="{{$value.purchaseProfit}}" taxesProfit="{{$value.taxesProfit}}" freightProfit="{{$value.freightProfit}}">应用价格</button></td>
+               
+                    
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/template-web.js"></script>
+    <script>
+        var order_id = GetRequest("orderId");
+        var wareId = GetRequest("wareId");
+        var TemplateWareId;
+
+        layui.use(['form', 'app', 'table'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                table = layui.table,
+                $ = layui.$;
+
+            var app = layui.app;
+
+            app.Load("manage");
+
+            // 拦截异常信息提醒
+            $.ajaxSetup({
+                complete: function (err) {
+                    if (err.status == 400) {
+                        layui.layer.msg(err.responseJSON.message, { time: 3000 });
+                    }
+                }
+            });
+
+            //匹配平台同一sku商品信息
+            mappingWareInfo();
+            function mappingWareInfo() { 
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/QueryPlatformWareByOrderSKU",
+                contentType: "application/json;",
+                data: JSON.stringify({ "orderId": order_id, "Id": wareId }),
+                dataType: "json",
+                success: function (sre) {
+                    if (sre) {
+                        var MergeAttributes = "";
+                        for (var i = 0; i < sre.length; i++) {
+                            var att1 = JSON.parse(sre[i].attribute);
+                            for (var key in att1) {
+                                MergeAttributes += att1[key] + " /";
+                            }
+                            MergeAttributes = MergeAttributes.substring(0, MergeAttributes.length - 1);
+                            sre[i].mergeAttributes = MergeAttributes;
+                        }
+                        var html = template('productModule', sre)
+                        document.querySelector(".goods").innerHTML = html;
+                    }
+                    /*    return false;*/
+                }
+            });
+            }
+            //监听提交 (搜索指定sku)
+            form.on('submit(data-search-btn)', function (data) {
+                //请求的参数
+                var ware = new Object();
+                ware.sku = $("#sku").val();
+                ware.currency = $("#TemplateCurrency").val();
+                if ($("#TemplateExchangeRate").val()) { 
+                    ware.exchangeRate = $("#TemplateExchangeRate").val();
+                }
+            
+                if ($.isEmptyObject($("#sku").val()) != true) {
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Order/QueryPlatformWareBySKU",
+                        contentType: "application/json;",
+                        data: JSON.stringify(ware),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                var MergeAttributes = "";
+                                for (var i = 0; i < sre.length; i++) {
+                                    var att1 = JSON.parse(sre[i].attribute);
+                                    for (var key in att1) {
+                                        MergeAttributes += att1[key] + " /";
+                                    }
+                                    MergeAttributes = MergeAttributes.substring(0, MergeAttributes.length - 1);
+                                    sre[i].mergeAttributes = MergeAttributes;
+                                }
+
+                                var html = template('productModule', sre)
+
+                                document.querySelector(".goods").innerHTML = html;
+                                
+                            }
+                        }
+                    });
+                    return false;
+                }
+                else {
+                    var ware = new Object();
+                    ware.orderId = order_id;
+                    ware.Id = wareId;
+                    ware.currency = $("#TemplateCurrency").val();
+                    ware.exchangeRate = $("#TemplateExchangeRate").val();
+                    $.ajax({
+                        type: "post",
+                        url:BackgroundDomain + "/api/Order/QueryPlatformWareByOrderSKU",
+                        contentType: "application/json;",
+                        data: JSON.stringify(ware),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                var MergeAttributes = "";
+                                for (var i = 0; i < sre.length; i++) {
+                                    var att1 = JSON.parse(sre[i].attribute);
+                                    for (var key in att1) {
+                                        MergeAttributes += att1[key] + " /";
+                                    }
+                                    MergeAttributes = MergeAttributes.substring(0, MergeAttributes.length - 1);
+                                    sre[i].mergeAttributes = MergeAttributes;
+                                }
+
+                                var html = template('productModule', sre)
+
+                                document.querySelector(".goods").innerHTML = html;
+                                return false;
+
+                            }
+                          
+                        }
+                    });
+                    return false;
+                }
+                return false;
+            })
+            //点击应用价格则将选择的价格赋值到输入框内，可二次修改
+            $(document).on('click', '.SelectPrice', function () {
+                TemplateWareId = $(this).attr("data-ware");
+                var TemplatePurchaseCost = $(this).attr("purchaseCost");
+                var TemplatePurchaseProfit = $(this).attr("purchaseProfit");
+                var TemplateTaxesProfit = $(this).attr("taxesProfit");
+                var TemplateFreightProfit = $(this).attr("freightProfit");
+
+                $(".currency").val($("#TemplateCurrency").val());
+                $(".exchangeRate").val($("#TemplateExchangeRate").val());
+                $(".unitPrice").val(TemplatePurchaseCost);
+                $(".unitProfit").val(TemplatePurchaseProfit);
+                $(".unitTaxesProfit").val(TemplateTaxesProfit);
+                $(".unitFreightProfit").val(TemplateFreightProfit);
+                
+            })
+
+            //监听提交(点击一键报价)
+            form.on('submit(saveBtn)', function (data) {
+                if ($.isEmptyObject(TemplateWareId) == true) {
+                    layer.msg("模板ID不能为空，请先选择要应用的价格模板", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+                if ($.isEmptyObject($(".unitPrice").val()) == true) {
+                    layer.msg("产品单价不能为空", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+                if ($.isEmptyObject($(".unitProfit").val()) == true) {
+                    layer.msg("产品利润不能为空", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+                if ($.isEmptyObject($(".unitTaxesProfit").val()) == true) {
+                    layer.msg("税费利润不能为空", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+                if ($.isEmptyObject($(".unitFreightProfit").val()) == true) {
+                    layer.msg("运费利润不能为空", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+
+                var ware = new Object();
+                ware.orderId = order_id;
+                ware.WareId = wareId;
+                ware.Id = TemplateWareId;
+                ware.PurchaseCost = $(".unitPrice").val();
+                ware.PurchaseProfit = $(".unitProfit").val();
+                ware.TaxesProfit = $(".unitTaxesProfit").val();
+                ware.FreightProfit = $(".unitFreightProfit").val();
+                ware.Currency = $(".currency").val();
+                var ExchangeRate;
+                if ($.isEmptyObject($(".exchangeRate").val()) == true) {
+                    ExchangeRate = 1;
+                }
+                else {
+                    ExchangeRate = $(".exchangeRate").val();
+                }
+                ware.ExchangeRate = ExchangeRate;
+                
+
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/QuoteByTemplateWare",
+                    contentType: "application/json;",
+                    data: JSON.stringify(ware),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            layer.msg("报价成功！");
+                            setTimeout(function () {
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            }, 3000);
+                        }
+                        return false;
+                    }
+                });
+                return false;
+            })
+        })
+
+    </script>
+</body>
+</html>

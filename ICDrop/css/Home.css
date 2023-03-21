@@ -1,0 +1,483 @@
+﻿html {
+    width: 100%;
+    height: 100%;
+    background: #F2F2F2;
+}
+
+body {
+    width: calc(100% - 100px);
+    height: calc(100% - 60px);
+    opacity: 1;
+    margin: 30px 50px 30px 50px;
+    background: #FFFFFF;
+    overflow: auto;
+}
+/*弹窗头部标题样式*/
+.layui-layer-title {
+    height: 46px !important;
+    line-height: 46px !important;
+    padding: 0px 0px !important;
+    margin-left: 30px;
+    border-bottom: 1px hidden #DDDDDD !important;
+}
+
+#content {
+    width: 600px;
+    height: 100%;
+   margin-left:calc((100% - 600px) / 2);
+    opacity: 1;
+   
+}
+/*头部样式*/
+#head {
+    width: 100%;
+   /* margin-top: 30px;*/
+}
+
+
+#left {
+    float: left;
+    width: 50%;
+    height: 36px;
+    line-height:36px;
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    
+}
+
+#right {
+    float: left;
+    width: 50%;
+    height: 36px;
+    line-height: 36px;
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    
+}
+
+#Usedcredit {
+    float: left;
+    width: 50%;
+    line-height:78px;
+    height: 78px;
+    font-weight: bold;
+    font-size: 52px;
+    color: #FF5555;
+    
+}
+
+#CreditAmout {
+    float: left;
+    width: 50%;
+    height: 78px;
+    line-height: 78px;
+    font-weight: bold;
+    font-size: 52px;
+    color: #333333;
+    
+}
+/*欢迎的文字标题*/
+#title {
+    font-size: 52px;
+    
+    font-weight: bold;
+    line-height: 100%;
+    color: #333333;
+    opacity: 1;
+    /*margin-top: 4%;*/
+}
+/*欢迎的文字内容*/
+#welcometext {
+    font-size: 18px;
+    
+    font-weight: 400;
+    line-height: 100%;
+    color: #333333;
+    opacity: 1;
+    margin-top: 4%;
+}
+
+/*头部没有申请，申请内容*/
+#headApply {
+    width: 70%;
+    height: 90px;
+    margin-left: 15%;
+    margin-top: 30px;
+}
+/*所有赊账额度的范围*/
+.AllAmoutRange {
+    width: 100%;
+    height: 24px;
+    line-height:24px;
+    border-radius: 12px 12px 12px 12px;
+    opacity: 1;
+    border: 1px solid #FFD818;
+    margin-top:20px;
+}
+
+.UsedRange {
+    min-width: 24px;
+    height: 24px;
+    background: #029803;
+    border-radius: 12px 12px 12px 12px;
+    opacity: 1;
+}
+/*显示额度进度的对话框*/
+.dialog {
+    width: fit-content;
+    height: 22px;
+    background: #FFFFFF;
+    border-radius: 6px;
+    position: relative;
+    padding: 1px 6px;
+    z-index: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    filter: drop-shadow(0 0 5px #ccc);
+    border: 1px solid #DDDDDD;
+    top: 10px;
+    line-height:22px;
+}
+
+    .dialog:after {
+        content: "";
+        position: absolute;
+        bottom: 16px;
+        left: 0px;
+        width: 0;
+        height: 0;
+        border-bottom: 15px solid #ffffff;
+        border-right: 20px solid transparent;
+        transform: rotate(236deg);
+        /*     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);*/
+       /* box-shadow: 2px -2px 2px #ccc;*/
+        z-index: -1;
+    }
+#title {
+    float: left;
+    width: 100%;
+    height: 30%;
+    margin-top: 1%;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    
+}
+
+#CreditAmoutContent {
+    float: left;
+    width: 90%;
+    height: 40%;
+    margin-left: 2%;
+    margin-top: 1%;
+    font-weight: 400;
+    font-size: 14px;
+    color: #333333;
+    
+}
+.href {
+    font-size: 14px;
+    
+    font-weight: bold;
+    color: #3399FF;
+    text-decoration: underline;
+    opacity: 1;
+}
+#body {
+    width: 100%;
+    height: 106px;
+    margin-top:20px;
+}
+/*let's star 样式*/
+#list {
+    font-size: 16px;
+    
+    font-weight: bold;
+    color: #333333;
+    opacity: 1;
+}
+#imagesLeft {
+    position: relative;
+    float: left;
+    width: 300px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    
+    margin-top:20px;
+}
+
+#imagesRight {
+    position: relative;
+    float: left;
+    width: 300px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    
+    margin-top: 20px;
+}
+/*订单数量样式*/
+.OrderNum {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    background: #FF5555;
+    position: absolute;
+    left: 92px;
+    z-index: 10;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 12px;
+    
+    text-align: center;
+    color: #FFFFFF;
+}
+/*订单说明文字样式*/
+.orderText {
+    margin-top:10px;
+    margin-left:35px;
+
+}
+/*销账和金额不足*/
+.xiaozhang {
+    width: 140px;
+    height: 32px;
+    background:  #029803;
+    opacity: 1;
+    border-radius: 14px;
+    border: 1px hidden rgba(255, 212, 0);
+    line-height:32px;
+    font-size: 14px;
+    
+    font-weight: bold;
+    color: #333333;
+}
+.NotUsed {
+    width: 140px;
+    height: 32px;
+    background: #F2F3F5;
+    opacity: 1;
+    border-radius: 14px;
+    border: 1px hidden rgba(255, 212, 0);
+    
+    font-weight: bold;
+    color: #333333;
+    line-height: 32px;
+    opacity: 1;
+}
+#bottom {
+    width: 100%;
+    height: 360px;
+    margin-top: 20px;
+}
+/*layui.msg的样式*/
+.layui-layer-msg .layui-layer-content {
+    font-size: 16px;
+}
+/*layui.msg的样式改为圆角为5px透明度为0.8*/
+.layui-layer-hui {
+    background-color: rgba(0,0,0,.8) !important;
+    border-radius: 5px !important;
+}
+/* 首页聊天信息-新排版样式-clz */
+.overview_right_new {
+    position: relative;
+    width: 100%;
+    margin-top:10px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #dedede;
+    height:360px;
+}
+    .overview_right_new .smiling_face {
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        width: 60px;
+        height: 50px;
+        z-index: 888;
+        cursor: pointer;
+    }
+    .overview_right_new .popover {
+        position: absolute;
+        top: -95px;
+        right: -114px;
+        padding-bottom: 10px;
+        display: none;
+    }
+
+        .overview_right_new .popover .popover-arrow {
+            position: absolute;
+            display: block;
+            width: 5px;
+            height: 5px;
+            background: transparent;
+            border-style: solid;
+            border-width: 4.24264069px;
+            box-shadow: 3px 3px 7px rgba(0, 0, 0, .07);
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            bottom: 7px;
+            border-color: transparent #fff #fff transparent;
+            box-shadow: 3px 3px 7px rgba(0, 0, 0, .07);
+        }
+        .overview_right_new .popover .msg_close {
+            position: absolute;
+            top: -3px;
+            right: 5px;
+            font-size: 32px;
+            color: #999;
+            cursor: pointer;
+        }
+
+            .overview_right_new .popover .msg_close:hover {
+                color: #666;
+            }
+
+        .overview_right_new .popover .msg {
+            width: 240px;
+            height: 51px;
+            background: #fff;
+            padding: 20px 20px 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+        }
+
+.overview_right_new_top {
+   height:56px;
+   line-height:56px;
+   width:100%;
+}
+
+.overview_right_new_top strong {
+    margin-right: 20px;
+}
+
+.overview_right_new_top b {
+    margin-right: 20px;
+}
+.tel {
+    float: right;
+    margin-right: 20px;
+}
+
+.overview_right_new_bottom {
+    width:calc(100% - 40px); 
+    margin: 0px 20px;
+    border-radius: 2px;
+    border: 1px solid #DEDEDE;
+    height:288px;
+}
+
+    .overview_right_new_bottom .new_bottom_top {
+        height: 109px;
+        border-bottom: 1px solid #DEDEDE;
+    }
+
+        .overview_right_new_bottom .new_bottom_top .msg-box {
+            display: flex;
+            align-items: center;
+            margin-left:20px;
+            margin-top:20px;
+        }
+
+            .overview_right_new_bottom .new_bottom_top .msg-box .img img {
+                width: 60px;
+                height: 60px;
+                border: 1px solid #eee;
+                border-radius: 50%;
+            }
+
+            .overview_right_new_bottom .new_bottom_top .msg-box .msg {
+                width: 352px;
+                height:60px;
+               padding-top:12px;
+               padding-left:20px;
+                background-color: #F2F3F5;
+                margin-left: 10px;
+                border-radius: 5px;
+                text-align: left;
+            }
+
+        .overview_right_new_bottom .new_bottom_top .newMsg-box {
+            float: none;
+            display: flex;
+            align-items: center;
+            padding-left: 65px;
+        }
+
+            .overview_right_new_bottom .new_bottom_top .newMsg-box .newMsg {
+                background-color: #32ca49;
+                padding: 6px 50px 6px 20px;
+                border-radius: 15px;
+                position: relative;
+                color: #fff;
+            }
+
+                .overview_right_new_bottom .new_bottom_top .newMsg-box .newMsg .num {
+                    width: 20px;
+                    height: 20px;
+                    text-align: center;
+                    line-height: 20px;
+                    border-radius: 50%;
+                    color: #32ca49;
+                    background-color: #fff;
+                    position: absolute;
+                    top: 4px;
+                    right: 20px;
+                }
+
+            .overview_right_new_bottom .new_bottom_top .newMsg-box .title {
+                color: #32ca49;
+                margin-left: 10px;
+            }
+
+    .overview_right_new_bottom .new_bottom_bottom {
+        height: 130px;
+    }
+
+        .overview_right_new_bottom .new_bottom_bottom .message {
+            width: calc(100% - 40px);
+            height: 100px;
+            resize: none;
+            margin: 10px 20px;
+            border: 0px solid #dedede;
+            font-size: 14px;
+            
+            font-weight: 400;
+            color: #999999;
+        }
+
+        .overview_right_new_bottom .new_bottom_bottom .btn-box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+            .overview_right_new_bottom .new_bottom_bottom .btn-box .showBtn {
+                float: none;
+                padding: 0;
+                color: #32ca49;
+            }
+
+
+.send-btn {
+    width: 74px;
+    height: 24px;
+    margin-right: 20px;
+    background: #029803;
+    opacity: 1;
+    border-radius: 12px;
+    border: 1px hidden rgba(255, 212, 0);
+    line-height: 24px;
+    font-size: 14px;
+    
+    font-weight: bold;
+    color: #333333;
+}

@@ -1,0 +1,651 @@
+﻿body {
+    margin: 30px 50px 0px 50px;
+}
+
+.layuimini-main {
+    margin: 0px;
+}
+/*鼠标移入增加阴影样式*/
+.shadow {
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+}
+/*分页的当前页的字体颜色*/
+.layui-laypage .layui-laypage-curr em {
+    color: #333334;
+}
+/*产品大列表*/
+.productList {
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    padding-top: 30px;
+}
+
+.layui-box {
+    margin: 20px auto !important;
+}
+/*输入速卖通地址进行下载那一列*/
+.top-contain {
+    margin-top: 20px;
+}
+/*平台选择框*/
+.select {
+    margin-left: 20px;
+    padding-left: 20px;
+    width: 200px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 20px;
+}
+
+.layui-input, .layui-select, .layui-textarea {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    height: 40px;
+    background: #F2F3F5;
+    border: 1px hidden #DDDDDD;
+    padding-left: 20px;
+}
+
+.layui-form-select dl {
+    border-radius: 5px;
+}
+
+    .layui-form-select dl dd.layui-this {
+        background-color: #F5F5F5;
+    }
+
+    .layui-form-select dl dd.layui-this {
+        color: #333333;
+    }
+/*输入速卖通地址的input框*/
+.prourl {
+    width: calc(100% - 180px);
+    height: 40px;
+    background: #F2F3F5;
+    border: 1px hidden #DDDDDD;
+    opacity: 1;
+    /*border-radius: 5px;*/
+    float: left;
+    padding-left: 10px;
+    /* z-index: 1;*/
+    /*border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;*/
+    border-left: 1px solid #FFFFFF;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+/*下载速卖通产品的Button按钮*/
+.importpro {
+    width: 166px;
+    height: 40px;
+    background: #029803;
+    opacity: 1;
+    border-color: #029803;
+    border-style: inherit;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    cursor: pointer;
+}
+/*上部分下载速卖通产品的整个DIV*/
+.getmaterial {
+    width: 100%;
+    background: #FFFFFF;
+    min-height: 150px;
+    margin-bottom: 30px;
+    opacity: 1;
+    border-radius: 10px;
+}
+/*获取素材的字体样式*/
+.getMaterialText {
+    font-size: 40px;
+    font-weight: bold;
+    /* width: 109px;
+    height: 22px;*/
+
+    font-weight: 400;
+    line-height: 23px;
+    color: #333333;
+    opacity: 1;
+    /* padding-top: 80px;*/
+    margin-top: 30px;
+    /* margin-left: 40px;*/
+}
+/*热门产品的字体样式*/
+.hotproText {
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    color: #333333;
+    opacity: 1;
+    float: left;
+    /*   margin-top:5px;*/
+    margin-right: 50px;
+}
+/*输入产品标题进行搜索的input框*/
+.inputprotitle {
+    width: calc(100% - 342px);
+    height: 40px;
+    background: #FFFFFF;
+    border: initial;
+    opacity: 1;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    float: left;
+    padding-left: 20px;
+}
+
+/**
+ PC版样式
+ */
+
+@media screen and (max-width: 1140px) {
+    /*每个小产品的div,不同分辨率样式不一 小于等于1140px 一排显示三个 */
+    .product-list {
+        width: calc((100% - 60px) / 3) !important;
+        height: calc(((100% - 60px) / 3) + 106px ) !important;
+    }
+
+        .product-list:nth-child(3n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 160px) / 3) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 1141px) and (max-width: 1432px) {
+    /*每个小产品的div,不同分辨率样式不一 1141px-1432px   一排显示4个 */
+    .product-list {
+        width: calc((100% - 90px) / 4) !important;
+        height: calc(((100% - 90px) / 4) + 106px ) !important;
+    }
+
+        .product-list:nth-child(4n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 190px) / 4) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 1433px) and (max-width: 1725px) {
+    /*每个小产品的div,不同分辨率样式不一 1433px-1725px   一排显示5个 */
+    .product-list {
+        width: calc((100% - 120px) / 5) !important;
+        height: calc(((100% - 120px) / 5) + 106px ) !important;
+    }
+
+        .product-list:nth-child(5n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 220px) / 5) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 1726px) and (max-width: 2017px) {
+    /*每个小产品的div,不同分辨率样式不一 1726px-2017px   一排显示6个 */
+    .product-list {
+        width: calc((100% - 150px) / 6) !important;
+        height: calc(((100% - 150px) / 6) + 106px ) !important;
+    }
+
+        .product-list:nth-child(6n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 250px) / 6) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 2018px) and (max-width: 2310px) {
+    /*每个小产品的div,不同分辨率样式不一 2018px-2310px   一排显示7个 */
+    .product-list {
+        width: calc((100% - 180px) / 7) !important;
+        height: calc(((100% -180px) / 7) + 106px ) !important;
+    }
+
+        .product-list:nth-child(7n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 280px) / 7) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 2311px) and (max-width: 2602px) {
+    /*每个小产品的div,不同分辨率样式不一 2311px-2602px   一排显示8个 */
+    .product-list {
+        width: calc((100% - 210px) / 8) !important;
+        height: calc(((100% -210px) / 8) + 106px ) !important;
+    }
+
+        .product-list:nth-child(8n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 310px) / 8) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 2603px) and (max-width: 2895px) {
+    /*每个小产品的div,不同分辨率样式不一 2603px-2895px   一排显示9个 */
+    .product-list {
+        width: calc((100% - 240px) / 9) !important;
+        height: calc(((100% -240px) / 9) + 106px ) !important;
+    }
+
+        .product-list:nth-child(9n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 340px) / 9) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 2896px) and (max-width: 3187px) {
+    /*每个小产品的div,不同分辨率样式不一 2896px-3187px   一排显示10个 */
+    .product-list {
+        width: calc((100% - 270px) / 10) !important;
+        height: calc(((100% -270px) / 10) + 106px ) !important;
+    }
+
+        .product-list:nth-child(10n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 370px) / 10) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 3188px) and (max-width: 2480px) {
+    /*每个小产品的div,不同分辨率样式不一 3188px-3480px   一排显示11个 */
+    .product-list {
+        width: calc((100% - 300px) / 11) !important;
+        height: calc(((100% -300px) / 11) + 106px ) !important;
+    }
+
+        .product-list:nth-child(11n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 400px) / 11) + 40px) !important;
+    }
+}
+
+@media screen and (min-width: 3481px) {
+    /*每个小产品的div,不同分辨率样式不一 3481px-3772px   一排显示12个 */
+    .product-list {
+        width: calc((100% - 330px) / 12) !important;
+        height: calc(((100% -330px) / 12) + 106px ) !important;
+    }
+
+        .product-list:nth-child(12n+1) {
+            margin-left: 0px !important;
+        }
+    /* 物流时效列表样式*/
+    .FreightList {
+        width: calc(((100% - 430px) / 12) + 40px) !important;
+    }
+}
+/*每个小产品的div,公共样式*/
+.product-list {
+    float: left;
+    border-width: 1px;
+    border-style: hidden;
+    border-color: #FFFFFF;
+    margin-left: 30px !important;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
+/*每个产品的图片部位*/
+.pictop_play {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
+    /*  height: calc(100% - 106px);*/
+    border-radius: 10px 10px 0px 0px;
+}
+
+    .pictop_play img {
+        border-radius: 10px 10px 0px 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .pictop_play i {
+        width: 24px;
+        height: 22px;
+        background: #FFFFFF;
+        color: #029803;
+        /*  border: 1px solid #029803;*/
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        border-bottom-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+.layui-icon:before {
+    /*color: #029803;*/
+    font-size: 20px;
+    vertical-align: middle;
+}
+/*每个小产品除图片部位的div*/
+.font-box {
+    width: 100%;
+    height: 178px;
+    background: #FFFFFF;
+    border-radius: 0px 0px 10px 10px;
+}
+/*每个小产品的标题显示部分div*/
+.title {
+    overflow: hidden;
+    width: calc(100% - 40px);
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 24px;
+    color: #333333;
+    padding-top: 16px;
+    margin-left: 20px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /*  word-break: break-all;*/
+    opacity: 1;
+    text-align: left;
+}
+/*每个产品标题下部分的div*/
+.change {
+    width: 100%;
+    height: 48px;
+}
+/*每个产品的价格样式*/
+.price {
+    width: 100%;
+    height: 48px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #333333;
+    opacity: 1;
+    padding-top: 10px;
+    margin-left: 20px;
+    text-align: left;
+}
+/*分页栏选中样式*/
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    padding: 1px;
+    width: 100%;
+    height: 100%;
+    background-color: #029803;
+    color: #333334 !important;
+}
+/*导入平台产品到商品列表的按钮*/
+.importbtn {
+    width: calc(100% - 40px);
+    height: 28px;
+    background: #029803;
+    opacity: 1;
+    border-radius: 24px;
+    /* margin-top: 10px;*/
+    display: none;
+    margin-left: 20px;
+    border-style: solid;
+    border-color: #029803;
+    cursor: pointer;
+    float: left;
+    color: #ffffff;
+}
+/*提示框*/
+.hint {
+    width: 300px;
+    height: 60px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    border-radius: 5px;
+    margin: 0 auto;
+    visibility: hidden;
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    text-align: center;
+    margin-left: 600px;
+}
+/*提示框里面内容DIV样式*/
+.hintContain {
+    margin-top: 20px;
+}
+/*提示框文字样式*/
+.hinttext {
+    height: 16px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #333333;
+    opacity: 1;
+}
+/*错误提示描述部分*/
+.hintdescribe {
+    width: 396px;
+    height: 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #999999;
+    opacity: 1;
+}
+/*layui.msg的样式*/
+.layui-layer-msg .layui-layer-content {
+    font-size: 16px;
+}
+/*layui.msg的样式改为圆角为5px透明度为0.8*/
+.layui-layer-hui {
+    background-color: rgba(0,0,0,.8) !important;
+    border-radius: 5px !important;
+}
+/*物流时效列表样式*/
+.FreightList {
+    height: 217px;
+    background: #ffffff;
+    position: absolute;
+    z-index: 9999;
+    margin-left: -20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: none;
+    margin-top: -38px;
+}
+
+.FreightListLine {
+    width: calc(100% - 40px );
+    margin-left: 20px;
+    height: 28px;
+    line-height: 28px;
+}
+
+.FreightListLeft {
+    float: left;
+}
+
+.FreightListRight {
+    float: right;
+}
+
+.FreightListLeft img {
+    margin-right: 10px;
+}
+/*操作费样式*/
+.ProcessingFeeLine {
+    margin-left: 20px;
+    float: left;
+}
+/*添加成功提示样式*/
+.AddSuccessMessage {
+    width: 292px;
+    height: 280px;
+    background: rgba(255, 255, 255, 0.39);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 999;
+    top: 10px;
+    left: 10px;
+    background: #ffffff;
+    text-align: center;
+    display: none;
+}
+
+.nav {
+    position: absolute;
+    left: 40px;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid dashed dashed dashed;
+    /* opacity: 0.8 !important;*/
+}
+
+.nav-background {
+    top: 110px;
+    border-color: transparent #FFFFFF transparent transparent;
+    /*opacity: 0.8;*/
+    left: -20px;
+}
+/*下载说明样式*/
+.DownloadInstructions {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #333333;
+    opacity: 1;
+    text-align: left;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 16px;
+}
+/*查看下载产品按钮样式*/
+.ViewImpro {
+    width: 96px !important;
+    height: 32px;
+    background: #FFD101;
+    opacity: 1;
+    border-radius: 5px;
+    margin-left: 40px;
+    border: 0px;
+    margin-top: 16px;
+}
+/*稍后的按钮样式*/
+.LaterBtn {
+    width: 96px !important;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 5px;
+    margin-top: 16px;
+    margin-left: 20px;
+}
+/*进度栏收缩状态样式*/
+.schedule-shrink {
+    width: 348px;
+    height: 56px;
+    line-height: 56px;
+    background: #ffffff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    border-radius: 10px 10px 0px 0px;
+    position: fixed;
+    z-index: 999;
+    left: 5px;
+    bottom: 0px;
+    display: none;
+}
+/*进度栏收缩查看样式*/
+.schedule-view {
+    width: 348px;
+    height: 56px;
+    height: 393px;
+    overflow-y: auto;
+    background: #ffffff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    border-radius: 10px 10px 0px 0px;
+    position: fixed;
+    z-index: 999;
+    left: 5px;
+    bottom: 0px;
+    display: none;
+}
+/*进度栏头部样式*/
+.schedule-top {
+    height: 46px;
+    line-height: 46px;
+    margin: 0px 20px;
+    border-bottom: 1px solid #DDDDDD;
+}
+/*进度栏身体样式*/
+.schedule-body {
+    margin: 0px 20px;
+}
+/*进度栏添加的每个产品样式*/
+.AddProduct {
+    margin: 0px 20px;
+    height: 84px;
+    line-height: 84px;
+}
+/*进度栏添加的每个产品标题样式*/
+.AddProductTitle {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #333333;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    width: 150px;
+    height: 64px;
+    overflow: hidden;
+    float: right;
+    margin-top: 10px;
+}
+
+.label ul {
+    margin-bottom:30px;
+}
+
+.label li {
+    margin-right: 30px;
+}
+
+    .label li img {
+        max-width: 260px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }

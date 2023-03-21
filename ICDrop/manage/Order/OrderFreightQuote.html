@@ -1,0 +1,370 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>运费报价</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+
+        .BasicInfo {
+            float: left;
+            margin-bottom: 20px;
+        }
+
+      .BasicInfo .layui-input-block {
+                width: 200px
+            }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <fieldset class="layui-elem-field">
+            <legend>运费报价选择</legend>
+            <div class="BasicInfo">
+                <label class="layui-form-label required">币种</label>
+                <div class="layui-input-block">
+                    <select id="currency" name="currency" lay-search lay-verify="required">
+                        <option value="">请选择</option>
+                        <option value="USD">美元</option>
+                        <option value="RMB">人名币</option>
+                        <option value="EURO">欧元</option>
+                    </select>
+                </div>
+            </div>
+            <div class="BasicInfo">
+                <label class="layui-form-label">汇率（一美元等于）：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" lay-reqtext="汇率不能为空"  onchange="ChangeRate()" />
+                </div>
+            </div>
+            <div class="BasicInfo">
+                <label class="layui-form-label">实重：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input TrueWeight" type="text" name="TrueWeight" value="" readonly="readonly" />
+                </div>
+            </div>
+            <div class="BasicInfo">
+                <label class="layui-form-label">材积重：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input VolumeWeight" type="text" name="VolumeWeight" value="" readonly="readonly" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style=" width:250PX;">所属订单其他已报价sku选择的时效：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input SelectAging" style="width:calc(80% - 250px);" type="text" name="SelectAging" value="" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="freight"></div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <script type="text/html" id="orderModule">
+
+        <table class="layui-table">
+            <colgroup>
+                <col width="50" >
+                <col width="120">
+                <col width="120">
+                <col width="120">
+                <col width="100">
+                <col width="120">
+                <col width="120">
+                <col width="120">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input class="AllCheck" type='checkbox' id='TotalChk' onclick="checkAllChange(this)" style="width:16px;height:16px;display:block;" /></th>
+                    <th>国家</th>
+                    <th>国家二字码</th>
+                    <th>渠道</th>
+                    <th>最小重量</th>
+                    <th>最大重量</th>
+                    <th>产品时效</th>
+                    <th>属性</th>
+                    <th>运费成本</th>
+                    <th>利润范围</th>
+                    <th>运费利润</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each}}
+                <tr>
+                    <td><input class="ChekcFreight" type='checkbox' id='Freight{{$value.id}}'  data-key="{{$value.id}}" style="width: 16px; height: 16px; display: block;"/></td>
+                    <td>{{$value.country}}</td>
+                    <td>{{$value.countryCode}}</td>
+                    <td>{{$value.channel}}</td>
+                    <td>{{$value.minWeight}}</td>
+                    <td>{{$value.maxWeight}}</td>
+                    <td>{{$value.aging}}</td>
+                    <td>{{$value.attribute}}</td>
+                    <td><input class="layui-input"  id="freightCost{{$value.id}}" type="text" name="freightCost" value="{{$value.freightCost}}" readonly></td>
+                    <td>
+                            <select id="FreightProfit{{$value.id}}" name="FreightProfit" data-key="{{$value.id}}" style="display:block;border:1px solid #DDD;height:36px;width:100%;" onchange="changeProfit(this)">
+                                <option value="">请选择</option>
+                                <option value="0.1">10%</option>
+                                <option value="0.15">15%</option>
+                                <option value="0.2">20%</option>
+                                <option value="0.3">30%</option>
+                            </select>
+                    </td>
+                    <td><input class="layui-input profit" id="profit{{$value.id}}" type="text" name="profit" lay-verify="required"  value="{{$value.freightProfit !=0 ?$value.freightProfit:""}}" freightCost="{{$value.freightCost}}"  data-id="{{$value.id}}" aging ="{{$value.aging}} " lay-reqtext="运费利润不能为空" placeholder="请输入运费利润" autocomplete="off" /></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/template-web.js"></script>
+    <!-- 采购数量输入 -->
+    <script type="text/html" id="purchaseTotal">
+        <input type="number" min="0" class="layui-input" lay-vertype="tips" name="purchase_total" value="" lay-event="purchaseTotal" lay-filter="purchaseTotal">
+    </script>
+
+    <script>
+        var order_id = GetRequest("orderId");
+        var wareId = GetRequest("wareId");
+        var SelectAging = null;
+        var freightList = [];
+
+        layui.use(['form', 'app', 'table'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                table = layui.table,
+                $ = layui.$;
+
+            var app = layui.app;
+
+            app.Load("manage");
+
+
+            // 拦截异常信息提醒
+            $.ajaxSetup({
+                complete: function (err) {
+                    if (err.status == 400) {
+                        layui.layer.msg(err.responseJSON.message, { time: 3000 });
+                    }
+                }
+            });
+            //匹配运费
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/QueryPriceRuleByWare",
+                contentType: "application/json;",
+                data: JSON.stringify({ orderId: order_id, WareId: wareId}),
+                dataType: "json",
+                success: function (sre) {
+                    if (count(sre.data) > 0) {
+                        $(".TrueWeight").val(sre.data[0].trueWeight);
+                        $(".VolumeWeight").val(sre.data[0].volumeWeight);
+
+                        SelectAging = sre.data[0].selectAging;
+                        console.log("SelectAging:" + SelectAging);
+                        var str = ' ';
+                        var t = ', ';
+                        for (var i = 0; i < SelectAging.length; i++) {
+                            str += SelectAging[i] + t;
+                        }
+                        $(".SelectAging").val(str);
+
+
+                        var html = template('orderModule', sre.data)
+                        console.log(sre.data[0]);
+                        for (var i = 0; i < sre.data.length; i++) {
+                            var freight = new Object();
+                            freight.id = sre.data[i].id;
+                            freight.freightCost = sre.data[i].freightCost;
+                            freight.freightProfit = sre.data[i].freightProfit;
+                            freightList.push(freight);
+                        }
+
+
+                        document.querySelector(".freight").innerHTML = html;
+                    }
+                 
+                }
+            })
+
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                data.field.orderId = order_id;
+                //请求的参数
+                var order = new Object();
+                order.orderId = order_id;
+                //商品报价
+                var profitlist = document.getElementsByClassName("profit");
+                var products = [];
+                var product = {};
+                var profit = profitlist[0];
+                if ($(profit).val() == 0) {
+                    layer.msg("运费利润不能为空", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+                 // 选择的运单报价
+                var id_array = new Array();
+                $('input[class="ChekcFreight"]:checked').each(function () {
+                    id_array.push($(this).attr("data-key"));//向数组中添加元素
+                });
+                if (count(id_array) == 0) {
+                    layer.msg("至少选择一种运费报价", { icon: 5, time: 2000, shift: 6 });
+                    return false;
+                }
+
+                var freights = [];
+                var all_freight_array=[];
+                for (var i = 0; i < id_array.length; i++) {
+                    var Aging = $("#profit" + id_array[i]).attr("aging");
+                    Aging = Aging.replace(/ /g, '');
+                    console.log(Aging);
+                    console.log("SelectAging" + SelectAging);
+                    if (SelectAging.length != 0) {
+                    if (SelectAging.indexOf(Aging) == -1) {
+                        layer.msg("该订单已报价的SKU不包含此物流时效:" + Aging+"，请确认", { icon: 5, time: 2000, shift: 6 });
+                        return false;
+                    }
+                    }
+                    if (!all_freight_array.includes(Aging)) {
+                        all_freight_array.push(Aging);
+                    }
+                    else {
+                        layer.msg("同一时效的物流报价只能给出一个，请确认", { icon: 5, time: 2000, shift: 6 });
+                        return false;
+                    }
+
+                    var freight = {};
+                    freight.Money = $("#profit" + id_array[i]).attr("freightCost")
+                    freight.PriceId = $("#profit" + id_array[i]).attr("data-id")
+                    freight.Aging = $("#profit" + id_array[i]).attr("aging")
+                    freight.OrderId = order_id
+                    freight.WareId = wareId
+                    freight.currency = $("#currency").val();
+                    freight.exchangeRate = $(".exchangeRate").val();
+                    freight.FreightProfits = $("#profit" + id_array[i]).val();
+                    freights.push(freight);
+
+
+
+                    }
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/UpdateFreightQuote",
+                    contentType: "application/json;",
+                    data: JSON.stringify(freights),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            layer.msg("报价成功！");
+                            setTimeout(function () {
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            }, 3000);
+                        }
+                        return false;
+                    }
+                });
+
+                return false;
+            });
+
+            //监听下拉框选中触发事件
+            $(document).ready(function () {
+                // select下拉框选中触发事件
+                form.on("select", function (data) {
+                    var exchangeRate = $(".exchangeRate").val();
+                    if ($("[name='currency']").val() == "RMB" || $("[name='currency']").val() == "EURO") {
+                        if (exchangeRate != "") {
+                            if (freightList.length != 0) {
+                                for (var i = 0; i < freightList.length; i++) {
+                                    $("#freightCost" + freightList[i].id).val((freightList[i].freightCost * $(".exchangeRate").val()).toFixed(2));
+                                    $("#profit" + freightList[i].id).val((freightList[i].freightProfit * $(".exchangeRate").val()).toFixed(2));
+                                }
+                            }
+                            
+                        }
+                    }
+                    else if ($("[name='currency']").val() == "USD") {
+                        if (freightList.length != 0) {
+                            for (var i = 0; i < freightList.length; i++) {
+                                $("#freightCost" + freightList[i].id).val(freightList[i].freightCost);
+                                $("#profit" + freightList[i].id).val(freightList[i].freightProfit);
+                            }
+                        }
+                    }
+                    return false;
+                });
+            });
+
+
+
+            function count(obj) {
+                var objType = typeof obj;
+                if (objType == "string") {
+                    return obj.length;
+                } else if (objType == "object") {
+                    var objLen = 0;
+                    for (var i in obj) {
+                        objLen++;
+                    }
+                    return objLen;
+                }
+                return false;
+            }
+        })
+        //勾选批量操作的checkbox控制全选或全不选
+        function checkAllChange(input) {
+            if (input.checked) {
+                $("input[class='ChekcFreight']").prop('checked', true);
+            } else {
+                $("input[class='ChekcFreight']").prop('checked', false);
+               
+            };
+        }
+        //利润范围选择事件
+        function changeProfit(chk) {
+/*            console.log("checkid:" + $().attr("id"));*/
+
+            var priceid = $(chk).attr("data-key");
+            var FreightProfitid = $(chk).val()
+            var freightCost = $("#profit" + priceid).attr("freightCost")
+            var FreightProfit = Math.ceil(FreightProfitid * freightCost * 100) / 100 ;
+            $("#profit" + priceid).val(FreightProfit)
+
+        }
+
+        //汇率发生改变时，如果是已经进行过报价的用户，显示的价格按汇率换算成所选币种
+        function ChangeRate() {
+
+            if ($("[name='currency']").val() == "RMB" || $("[name='currency']").val() == "EURO") {
+                if (freightList.length != 0) {
+                    for (var i = 0; i < freightList.length; i++) {
+                        $("#freightCost" + freightList[i].id).val((freightList[i].freightCost * $(".exchangeRate").val()).toFixed(2));
+                        $("#profit" + freightList[i].id).val((freightList[i].freightProfit * $(".exchangeRate").val()).toFixed(2));
+                    }
+                }
+            }
+            else if ($("[name='currency']").val() == "USD") {
+                if (freightList.length != 0) {
+                    for (var i = 0; i < freightList.length; i++) {
+                        $("#freightCost" + freightList[i].id).val(freightList[i].freightCost);
+                        $("#profit" + freightList[i].id).val(freightList[i].freightProfit);
+                    }
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>

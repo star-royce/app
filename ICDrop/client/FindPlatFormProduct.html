@@ -1,0 +1,638 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>查找产品</title>
+    <meta name="renderer" content="webkit">
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--<link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">-->
+    <link rel="stylesheet" href="/lib/layui-v2.7.6/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link rel="stylesheet" href="../../css/FindPlatFormProduct.css?v=2" media="all">
+    <link rel="stylesheet" href="../../css/Message.css?v=2" media="all">
+    <!--<link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">-->
+</head>
+
+<body>
+
+    <!--下载产品-->
+    <div class="getmaterial">
+        <div style="width: 100%; text-align: center; margin-bottom: 38px;">
+            <div class="getMaterialText"><img src="../../images/ander/Ander rop .svg" style="height:62px;width:372px;" /></div>
+        </div>
+        <form action="" lay-filter="formTest" class="layui-form layui-form-pane">
+            <div style="margin-left: 8%; margin-bottom: 3px;">
+                <button class="layui-btn layui-btn-primary" id="demo4" style="float: left; margin-right: 10px" onclick="return false;">
+                    <i class="layui-icon layui-icon-spread-left layui-font-12"></i>
+                </button>
+                <input type="text" i18n_Attr="placeholder:Input.commodity.title;"
+                       style="width: 80%; background-color: #F5F5F5 !important;"
+                       name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle" />
+                <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn" style="float: left; width: 68px; background-color: #F5F5F5 !important;"><img src="../../../images/find1.png" /></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="label" style="margin-bottom: 20px;">
+        <div class="label" style="margin: auto;">
+            <ul class="layui-row">
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Hot-Trend')" src="/images/CategoryPictures/Hot-Trend.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Winning products')" src="/images/CategoryPictures/Winning products.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Discount Sale')" src="/images/CategoryPictures/Discount Sale.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Women\'s clothing')" src="/images/CategoryPictures/Women's clothing.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Men\'s clothing')" src="/images/CategoryPictures/Men's clothing.svg" /></a></li>
+            </ul>
+            <ul class="layui-row">
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Beauty')" src="/images/CategoryPictures/Beauty.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Electronics')" src="/images/CategoryPictures/Electronics.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Jewelry Watches and glasses')" src="/images/CategoryPictures/Jewelry Watches and glasses.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Bags')" src="/images/CategoryPictures/Bags.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Shoes')" src="/images/CategoryPictures/Shoes.svg" /></a></li>
+            </ul>
+            <ul class="layui-row">
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Home & Garden')" src="/images/CategoryPictures/Home Garden.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Pet & Aminals')" src="/images/CategoryPictures/Pet Aminals.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Toys & Baby')" src="/images/CategoryPictures/Toys Baby.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Exercise & Outdoor')" src="/images/CategoryPictures/Exercise Outdoor.svg" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Car & Motorcycle')" src="/images/CategoryPictures/Car Motorcycle.svg" /></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="layuimini-main">
+            <div class="" style="width: 100%;margin-top:40px;">
+                <label i18n_Text="hotpro" class="hotproText"></label>
+
+                <!--  <form class="layui-form layui-form-pane" action="" method="get">
+
+                 <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle" />
+                  <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;"><img src="../../../images/searchold.png" /></button>
+                </form>-->
+            </div>
+
+            <div id="productList" class="productList">
+            </div>
+            <!--添加成功查看下载产品提示对话框-->
+            <div class="AddSuccessMessage">
+                <img src="../../images/clickhere.png" style="margin-top:20px;" />
+                <div class="DownloadInstructions" i18n_Text="DownloadInstructions"></div>
+                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">View</button>
+                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">Later</button>
+                <div class="nav nav-background"></div>
+            </div>
+            <!--添加进度栏收缩状态-->
+            <div class="schedule-shrink">
+                <i class="layui-icon icon-a-ImportList" style=" margin-left:23px;margin-right:10px;"></i>
+                <label i18n_Text="ImportList" style="font-size: 16px;  font-weight: bold; line-height: 20px; color: #333333;"></label>
+                <label i18n_Text="ViewProduct" style="margin-left:150px;font-size: 14px;  font-weight: 400; line-height: 16px; color: #3399FF;margin-right:20px;" onclick="ViewImportList()"></label>
+            </div>
+            <!--添加进度栏查看状态-->
+            <div class="schedule-view">
+                <div class="schedule-top">
+                    <i class="layui-icon icon-a-ImportList" style="margin-right:10px;"></i>
+                    <label i18n_Text="ImportList" style="font-size: 16px;  font-weight: bold; line-height: 20px; color: #333333;"></label>
+                    <label i18n_Text="PutAway" style="margin-left:125px;font-size: 14px;  font-weight: 400; line-height: 16px; color: #3399FF;" onclick="PutAwayImportList()"></label>
+                </div>
+                <div class="schedule-body" id="schedule-body">
+                    <span onchange=""></span>
+                </div>
+            </div>
+            <!--分页-->
+            <div id="test1" style="float:right;margin-right:70px;"></div>
+            <!--<div id="test1" style="display:flex;align-items:center;"></div>-->
+        </div>
+    </div>
+
+    <!--<script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>-->
+    <script src="/lib/layui-v2.7.6/layui/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+    <script type="text/javascript">
+        var app = null;
+        var message = null;
+        var miniTab;
+        var YDHCustomer;
+        var laypage;
+        var count;
+        var prev = "";
+        var next = "";
+
+        layui.use(['form', 'app', 'laypage', 'i18n', 'message', 'miniTab', 'dropdown'], function () {
+            var dropdown = layui.dropdown
+            var $ = layui.jquery,
+                form = layui.form,
+                layer = layui.layer,
+                index = layui.index,
+                i18n = layui.i18n;
+            laypage = layui.laypage;
+            app = layui.app;
+            miniTab = layui.miniTab;
+            message = layui.message;
+            //// 权限
+            //app.Load("client");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id = "en_us";
+            if (YDHConfig.Lang) {
+                id = YDHConfig.Lang.id
+            }
+            // 获取登录的用户信息
+            YDHCustomer = layui.data('YDH-Customer');
+            // 平台
+            GetPlatform(form);
+
+            function GetPlatform(form) {
+                $.ajax({
+                    type: "post",
+                    url:BackgroundDomain + "/api/Product/QueryPlatformType",
+                    contentType: "application/json;",
+                    data: JSON.stringify("GetPlatformProduct"),
+                    dataType: "json",
+                    success: function (e) {
+                        /*     let str = "<option value=''>" + $.i18n.prop('Plese.Select') + "</option>";*/
+                        let str = "";
+                        for (let i of e) {
+                            //组装数据
+                            str += `<option value='${i.platformCode}'>${i.platformNameEn}</option>`;
+                        }
+                        //jquery赋值方式
+                        $("#select").html(str);
+
+                        layui.form.render('select')
+                    },
+                    error: function (jqXHR) {
+                        layer.msg('获取失败！');
+                        return false;
+                    }
+                });
+            }
+            var CatalogueMenu;
+            $.ajax({
+                type: "Get",
+                url:BackgroundDomain + "/api/Product/GetCatalogueMenu",
+                async: false,
+                success: function (data) {
+                    CatalogueMenu = data;
+                }
+            });
+
+
+
+            dropdown.render({
+                elem: '#demo4'
+                , trigger: 'hover'
+                , data: CatalogueMenu
+                , click: function (obj) {
+                    $(".hotproText").text(obj.title);
+                    QueryImportProduct(count, { "CatalogueId": obj.id });
+                }
+            });
+
+            // 监听搜索操作（抓取平台产品）
+            form.on('submit(data-import-btn)', function (data) {
+                debugger
+                var result = JSON.stringify(data.field);
+                obj = $.parseJSON(result);
+
+                if (obj.Url == "") {
+                    message.run($.i18n.prop('Import.Failed'), $.i18n.prop('IsEmpty'), "error");
+                    return false;
+                }
+
+                $.ajax({
+                    type: "post",
+                    url:BackgroundDomain +"/api/Product/QueryGrabProduct",
+                    contentType: "application/json;",
+                    data: result,
+                    dataType: "json",
+                    success: function (e) {
+                        if (e.code = 1) {
+                            message.run($.i18n.prop('Import.Complete'));
+                            //如果是第一次添加商品，则显示下载产品提示
+                            var NowTime = new Date(getNowTime());
+                            var CustomerTime = new Date(YDHCustomer.CreateTime);
+                            if (CustomerTime.getFullYear() == NowTime.getFullYear()
+                                && CustomerTime.getMonth() == NowTime.getMonth()
+                                && CustomerTime.getDate() == NowTime.getDate()) {
+                                if (!YDHCustomer.ImportHint || YDHCustomer.ImportHint != "1") {
+                                    $(".AddSuccessMessage").show();
+                                    layui.data('YDH-Customer', {
+                                        key: 'ImportHint'
+                                        , value: "1"
+                                    });
+                                    YDHCustomer = layui.data('YDH-Customer');
+                                }
+                            }
+                            $(".schedule-view").show();
+                            var addProductList = document.getElementById("schedule-body");
+                            var addProduct = document.createElement("div");
+                            addProduct.setAttribute("class", "AddProduct");
+                            addProductList.appendChild(addProduct);
+                            var sussessimg = document.createElement("img");
+                            sussessimg.setAttribute("src", "../../images/hint/success.png");
+                            sussessimg.setAttribute("style", "margin-right:14px;float:left;margin-top:30px;");
+                            addProduct.appendChild(sussessimg);
+                            var addproductimg = document.createElement("img");
+                            addproductimg.setAttribute("src", e.dto.indexPicture);
+                            addproductimg.setAttribute("style", "margin-right:10px;width:64px;height:64px;float:left;margin-top:10px;");
+                            addProduct.appendChild(addproductimg);
+                            var addproducttitle = document.createElement("div");
+                            addproducttitle.innerHTML = e.dto.productTitle;
+                            addproducttitle.setAttribute("class", "AddProductTitle");
+                            addProduct.appendChild(addproducttitle);
+                            return false;
+                        } else {
+                            message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
+                            return false;
+                        }
+                    },
+                    error: function (jqXHR) {
+                        message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
+                        return false;
+                    }
+                });
+
+
+                return false;
+            });
+
+
+            var SerchproductInfo = new Object();
+            //查找出该客户（管理员）的进口商品信息
+            QueryImportProduct(count, SerchproductInfo);
+            if (id == "zh_cn") {
+                prev = "上一页";
+                next = "下一页";
+            }
+            else if (id == "en_us") {
+                prev = "previous page";
+                next = "next page ";
+            }
+
+
+
+
+
+            i18n.loadProperties(id);
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                debugger
+                var result = JSON.stringify(data.field);
+                obj = JSON.parse(result);
+                if ($.isEmptyObject(obj.productTitle) != true) {
+                    SerchproductInfo.productTitle = obj.productTitle;
+                }
+                QueryImportProduct(count, SerchproductInfo);
+                return false;
+            })
+
+            //点击查看下载商品按钮跳转到下载产品界面
+            $(document).on('click', '.ViewImpro', function () {
+                var tabId = "/share/ImportCommodity.html";
+                title = "ImportCommodity";
+                var isexit = miniTab.check(tabId, true);
+                if (!isexit) {
+                    parent.layui.element.tabAdd('layuiminiTab', {
+                        title: '<span class="layuimini-tab-active"></span><span>' + title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
+                        , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + tabId + '"></iframe>'
+                        , id: tabId
+                    });
+                }
+                parent.layui.element.tabChange('layuiminiTab', tabId);
+
+
+            });
+            //点击稍后按钮则提示界面隐藏
+            $(document).on('click', '.LaterBtn', function () {
+                $(".AddSuccessMessage").hide();
+            });
+
+        })
+        ////导入产品
+        function ImportProduct(id) {
+            var productInfo = new Object();
+            productInfo.id = id;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/ImportProductInfo',
+                data: JSON.stringify(productInfo),
+                success: function (data) {
+                    if (data.code == 1) {
+                        message.run($.i18n.prop('Import.Complete'));
+                        //如果是第一次添加商品，则显示下载产品提示
+                        var NowTime = new Date(getNowTime());
+                        var CustomerTime = new Date(YDHCustomer.CreateTime);
+                        if (CustomerTime.getFullYear() == NowTime.getFullYear()
+                            && CustomerTime.getMonth() == NowTime.getMonth()
+                            && CustomerTime.getDate() == NowTime.getDate()) {
+                            if (!YDHCustomer.ImportHint || YDHCustomer.ImportHint != "1") {
+                                $(".AddSuccessMessage").show();
+                                layui.data('YDH-Customer', {
+                                    key: 'ImportHint'
+                                    , value: "1"
+                                });
+                                YDHCustomer = layui.data('YDH-Customer');
+                            }
+                        }
+                        $(".schedule-view").show();
+                        var addProductList = document.getElementById("schedule-body");
+                        var addp = document.createElement("p");
+                        addp.setAttribute("class", "Copywriting");
+                        addp.setAttribute("style", "margin-right:14px;margin-top:30px;margin-bottom:30px;");
+                        addp.innerHTML = "You need to edit the product information on the <a  class='ViewImpro href' style='    color: #3399FF;background: #fff;' >Import List</a> before the import is complete";
+                        addProductList.appendChild(addp);
+                        var addProduct = document.createElement("div");
+                        addProduct.setAttribute("class", "AddProduct");
+                        addProductList.appendChild(addProduct);
+                        var sussessimg = document.createElement("img");
+                        sussessimg.setAttribute("src", "../../images/hint/success.png");
+                        sussessimg.setAttribute("style", "margin-right:14px;float:left;margin-top:30px;");
+                        addProduct.appendChild(sussessimg);
+                        var addproductimg = document.createElement("img");
+                        addproductimg.setAttribute("src", data.dto.indexPicture);
+                        addproductimg.setAttribute("style", "margin-right:10px;width:64px;height:64px;float:left;margin-top:10px;");
+                        addProduct.appendChild(addproductimg);
+                        var addproducttitle = document.createElement("div");
+                        addproducttitle.innerHTML = data.dto.productTitle;
+                        addproducttitle.setAttribute("class", "AddProductTitle");
+                        addProduct.appendChild(addproducttitle);
+                    } else {
+                        message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
+                    }
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 401) {
+                        var index = layer.open({
+                            title: 'Login',
+                            type: 2,
+                            shade: 0.2,
+                            maxmin: true,
+                            shadeClose: true,
+                            area: ['920px', '580px'],
+                            content: '/client/WindowsLogin.html',
+                        })
+                    } else {
+                        message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
+                    }
+                }
+            })
+        }
+
+        ////查看商品详情
+        function OpenDetailPage(id) {
+
+            window.open('productdetail.html?id=' + id + '&RoleName=Manage');
+
+        }
+        //查看物流时效列表
+        function ViewFreightList(FreightLine) {
+
+            //
+            /*    console.log(id);*/
+            $("#FreightList" + FreightLine).css("display", "block");
+
+            var id = FreightLine;
+            $('#product-list' + id).mouseover(function () {
+                /* $('#price' + id).css("display", "none")*/
+                $('#importbtn' + id).css("display", "block");
+                $("#product-list" + id).addClass("shadow");
+                $("#ProcessingFee" + id).css("display", "none");
+            })
+            $('#product-list' + id).mouseout(function () {
+                /*     $('#price' + id).css("display", "block")*/
+                $('#importbtn' + id).css("display", "none")
+                $("#product-list" + id).removeClass("shadow");
+                $("#ProcessingFee" + id).css("display", "block");
+                $("#FreightList" + id).css("display", "none");
+            })
+
+        }
+        //获取当前时间
+        function getNowTime(tempminit) {
+            if (!tempminit) {
+                tempminit = 0;
+            }
+            var date = new Date();
+            date.setMinutes(date.getMinutes() - tempminit);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1,
+                day = date.getDate(),
+                hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+                minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+                second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            month >= 1 && month <= 9 ? (month = "0" + month) : "";
+            day >= 0 && day <= 9 ? (day = "0" + day) : "";
+            var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+            /* console.log(timer); */
+            return timer;
+        }
+        //展开进度栏框
+        function ViewImportList() {
+            $(".schedule-shrink").hide();
+            $(".schedule-view").show();
+        }
+        //折叠进度栏框
+        function PutAwayImportList() {
+            $(".schedule-shrink").show();
+            $(".schedule-view").hide();
+        }
+
+
+        function QueryImportProduct(count, SerchproductInfo) {
+            var dto_obj = new Object();
+            dto_obj.page = 1;
+            dto_obj.limit = 20;
+            dto_obj.dto = SerchproductInfo;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/QueryPlatformProductList',
+                data: JSON.stringify(dto_obj),
+                success: function (msg) {
+                    count = msg.count;
+                    //分页
+                    laypage.render({
+                        elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+                        , prev: prev
+                        , next: next
+                        , count: count //数据总数，从服务端得到
+                        , limit: 20
+                        , jump: function (obj, first) {
+                            dto_obj.page = obj.curr;
+                            dto_obj.limit = obj.limit;
+                            dto_obj.dto = SerchproductInfo;
+                            $.ajax({
+                                type: "post",
+                                contentType: "application/json",
+                                url: BackgroundDomain +'/api/Product/QueryPlatformProductList',
+                                data: JSON.stringify(dto_obj),
+                                success: function (msg) {
+                                    $("#productList").empty();
+                                    var data = msg.data.length;
+                                    //获取div
+                                    var divf = document.getElementById("productList");
+
+                                    for (var i = 0; i < data; i++) {
+
+                                        var div0 = document.createElement("div");
+                                        div0.setAttribute('class', 'product-list');
+                                        div0.setAttribute('id', 'product-list' + msg.data[i].id);
+                                        divf.appendChild(div0);
+
+                                        //图片
+                                        var div = document.createElement("div");
+                                        div.setAttribute('class', 'pictop_play');
+                                        div.setAttribute('onclick', 'OpenDetailPage(' + msg.data[i].id + ')');
+                                        div.setAttribute('lay-href', '');
+                                        div0.appendChild(div);
+
+                                        /*  div.innerHTML = '<i class="layui-icon icon-a-check"></i><img src="' + msg.data[i].indexPicture+'"/>';*/
+                                        var icon = document.createElement("i");
+                                        icon.setAttribute('class', 'layui-icon icon-rexiao')
+                                        div.appendChild(icon);
+
+
+                                        var img = document.createElement("img");
+                                        img.setAttribute('src', msg.data[i].indexPicture);
+                                        img.setAttribute('referrerPolicy', 'no-referrer');
+                                        /*     img.setAttribute('style', 'width:100%;height:100%;');*/
+                                        div.appendChild(img);
+
+                                        var div1 = document.createElement("div");
+                                        div1.setAttribute('class', 'font-box');
+                                        div0.appendChild(div1);
+
+                                        //标题
+                                        var div2 = document.createElement("div");
+                                        div2.setAttribute('class', 'title');
+                                        div2.setAttribute('onclick', 'OpenDetailPage(' + msg.data[i].id + ')');
+                                        div1.appendChild(div2);
+                                        div2.innerHTML = msg.data[i].productTitle;
+
+
+                                        //标题下面部分再加一个div，鼠标移动到产品上显示添加到商店的按钮
+                                        var changediv = document.createElement("div");
+                                        changediv.setAttribute('class', 'change');
+                                        div1.appendChild(changediv);
+
+                                        //价格
+                                        var div3 = document.createElement("div");
+                                        div3.setAttribute('class', 'price');
+                                        div3.setAttribute('onclick', 'OpenDetailPage(' + msg.data[i].id + ')');
+                                        div3.setAttribute('id', 'price' + msg.data[i].id);
+                                        changediv.appendChild(div3);
+
+
+                                        //获取价格信息
+                                        var productprice = new Object();
+                                        productprice.productId = msg.data[i].id;
+                                        $.ajax({
+                                            type: "post",
+                                            contentType: "application/json",
+                                            url: BackgroundDomain +'/api/Product/QueryProductPriceInfo',
+                                            data: JSON.stringify(productprice),
+                                            success: function (data) {
+                                                var fontadd = document.getElementById("price" + data.data[0].productId);
+
+                                                //采购价
+                                                var listCostLine = document.createElement("div");
+                                                listCostLine.setAttribute("class", "ListingCost");
+                                                fontadd.appendChild(listCostLine);
+                                                listCostLine.html($.i18n.prop("ListingCost"));
+
+                                                var listcostLabel = document.createElement("label");
+                                                listcostLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #FF5555;");
+                                                listCostLine.appendChild(listcostLabel);
+                                                listcostLabel.innerHTML = "$" + data.data[0].price;
+
+                                                //零售价
+                                                var RetailPriceLine = document.createElement("div");
+                                                RetailPriceLine.setAttribute("class", "RetailPrice");
+                                                fontadd.appendChild(RetailPriceLine);
+                                                RetailPriceLine.html($.i18n.prop("RetailPrice"));
+
+                                                var RetailPriceLabel = document.createElement("label");
+                                                RetailPriceLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #333333;");
+                                                RetailPriceLine.appendChild(RetailPriceLabel);
+                                                RetailPriceLabel.innerHTML = "$" + data.data[0].cost;
+                                            }
+                                        })
+                                        //物流时效
+                                        var FreightLine = document.createElement("div");
+                                        FreightLine.setAttribute("style", "height:24px;");
+                                        FreightLine.setAttribute("id", "FreightLine" + msg.data[i].id);
+                                        FreightLine.setAttribute("onclick", "ViewFreightList(" + msg.data[i].id + ")");
+                                        changediv.appendChild(FreightLine);
+                                        FreightLine.innerHTML = "<img src='../../../images/country/US.png' style='float:left;margin-left:20px;'/><lable style='float:left;margin-left:10px;'>5-12days</lable><img src='../../../images/button/upbtn.png'style='float:left;margin-left:10px;margin-top:5px;' id='viewFreight" + msg.data[i].id + "' />";
+
+                                        //物流时效列表
+                                        var FreightList = document.createElement("div");
+                                        FreightList.setAttribute("class", "FreightList");
+                                        FreightList.setAttribute('id', 'FreightList' + msg.data[i].id);
+                                        div0.appendChild(FreightList);
+
+                                        var FreightListHtml = "<li class='FreightListLine' style='font-size: 14px;font-weight: bold;margin-top:10px;'><label class='FreightListLeft'>Country</label><label class='FreightListRight'>Delivery Time <label></li>";
+                                        FreightListHtml += "<hr style='margin:0px 20px;'/>";
+                                        FreightListHtml += "<li class='FreightListLine'><label class='FreightListLeft'><img src='../../../images/country/US.png'/>America</label><label class='FreightListRight'>5-12 business days</label></li>";
+                                        FreightListHtml += "<li class='FreightListLine'><label class='FreightListLeft'><img src='../../../images/country/GB.png'/>England</label><label class='FreightListRight'>4-7 business days</label></li>";
+                                        FreightListHtml += "<li class='FreightListLine'><label class='FreightListLeft'><img src='../../../images/country/DE.png'/>Germany</label><label class='FreightListRight'>5-10 business days</label></li>";
+                                        FreightListHtml += "<li class='FreightListLine'><label class='FreightListLeft'><img src='../../../images/country/IT.png'/>Italy</label><label class='FreightListRight'>5-10 business days</label></li>";
+                                        FreightListHtml += "<li class='FreightListLine'><label class='FreightListLeft'><img src='../../../images/country/CL.png'/>Chile</label><label class='FreightListRight'>5-10 business days</label></li>";
+                                        FreightListHtml += "<li class='FreightListLine'><label class='FreightListLeft'><img src='../../../images/country/SE.png'/>Sweden</label><label class='FreightListRight'>5-10 business days</label></li>";
+
+                                        FreightList.innerHTML = FreightListHtml;
+
+                                        //操作费
+                                        var ProcessingFeeLine = document.createElement("div");
+                                        ProcessingFeeLine.setAttribute("class", "ProcessingFeeLine");
+                                        ProcessingFeeLine.setAttribute("id", "ProcessingFee" + msg.data[i].id)
+                                        changediv.appendChild(ProcessingFeeLine);
+                                        ProcessingFeeLine.html($.i18n.prop("ProcessingFee"));
+
+                                        var ProcessingFeeLabel = document.createElement("label");
+                                        ProcessingFeeLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #333333;");
+                                        ProcessingFeeLine.appendChild(ProcessingFeeLabel);
+                                        ProcessingFeeLabel.innerHTML = $.i18n.prop("Free");
+
+                                        //导入商品
+                                        var div4 = document.createElement("div");
+                                        div4.setAttribute('class', 'importproduct');
+                                        changediv.appendChild(div4);
+
+
+                                        var input = document.createElement("input");
+                                        input.setAttribute('type', 'button');
+                                        input.setAttribute('id', 'importbtn' + msg.data[i].id);
+                                        input.setAttribute('class', 'importbtn');
+                                        input.setAttribute('value', $.i18n.prop('Import.goods'));
+                                        input.setAttribute('onclick', 'ImportProduct(' + msg.data[i].id + ')');
+                                        div4.appendChild(input);
+
+                                        //鼠标移入移出事件
+
+
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+
+        function GetLabelProduct(Labelname) {
+            $(".hotproText").text(Labelname);
+            QueryImportProduct(count, { "Label": Labelname });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        legend {
+            color: red;
+        }
+
+        .BasicInfo {
+            float: left;
+            margin-bottom: 20px;
+        }
+
+            .BasicInfo .layui-input-block {
+                width: 200px
+            }
+    </style>
+</head>
+<body>
+        <div class="layui-form layuimini-form">
+            <fieldset class="layui-elem-field">
+                <legend>订单基础信息</legend>
+                <h2 style="color:red;margin-left:30px;">长，宽，高单位为厘米，最多保留一位小数，材积重计算公式：（长*高*宽）/材积系数，重量最多保留5位小数</h2>
+                <h2 style="color: red; margin-left: 30px;">是否带电框中，如果带电请填Y否则填N</h2>
+                <div class="layui-field-box">
+                    <div class="BasicInfo">
+                        <label class="layui-form-label required">币种</label>
+                        <div class="layui-input-block">
+                            <select id="currency" name="currency" lay-search lay-verify="required">
+                                <option value="">请选择</option>
+                                <option value="USD">美元</option>
+                                <option value="RMB">人名币</option>
+                                <option value="EURO">欧元</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">汇率（一美元等于）：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" lay-reqtext="汇率不能为空" onchange="ChangeRate()" />
+                        </div>
+                        
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">订单号：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input orderCode" type="text" name="orderCode" value="" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">长：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input length" type="text" name="length" value="" lay-verify="required" lay-reqtext="长度不能为空" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">宽：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input width" type="text" name="width" value="" lay-verify="required" lay-reqtext="商品宽不能为空" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">高：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input height" type="text" name="height" value="" lay-verify="required" lay-reqtext="商品高不能为空" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">材积系数：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input volumeCoefficient" type="text" name="volumeCoefficient" value="" lay-verify="required" lay-reqtext="材积系数不能为空" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">是否带电：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input attribute" type="text" name="attribute" value="" lay-verify="required" lay-reqtext="属性不能为空" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="BasicInfo">
+                        <label class="layui-form-label">重量：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input weight" type="text" name="weight" value="" lay-verify="required" lay-reqtext="重量不能为空" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>商品价设置</legend>
+                <div class="goods"></div>
+            </fieldset>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <!--<button class="layui-btn layui-btn-normal" lay-submit lay-filter="Preview">预览价格</button>-->
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveAllBtn">同店铺同sku批量报价</button>
+                </div>
+            </div>
+        </div>
+        <script type="text/html" id="orderModule">
+
+            <table class="layui-table">
+                <colgroup>
+                    <col width="50" style="display:none">
+                    <col width="120">
+                    <col width="60">
+                    <col width="150">
+                    <col width="150">
+                    <col width="500">
+                    <col width="200">
+                    <col width="300">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th style="display:none">ID</th>
+                        <th>图片</th>
+                        <th>数量</th>
+                        <th>采购单价(USD)</th>
+                        <th>利润单价(USD)</th>
+                        <th>名称</th>
+                        <th>属性</th>
+                        <th>导入链接</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each}}
+                    <tr>
+                        <td style="display:none"><a class="layui-input proid" name="proid">{{$value.id}}</a></td>
+                        <td><img src="{{$value.picture}}" style="width:50px;height:50px;" /></td>
+                        <td>{{$value.quantity}}</td>
+                        <td><input class="layui-input price" type="text" name="price" lay-verify="required" value="{{$value.unitPrice>0?$value.unitPrice : null}}" data-id="{{$value.id}}" data-quantity="{{$value.quantity}}" lay-reqtext="采购单价不能为空" placeholder="请输入采购单价" autocomplete="off" /></td>
+                        <td><input class="layui-input profit" type="text" name="profit" lay-verify="required" value="{{$value.unitProfit>0?$value.unitProfit : null}}"  data-id="{{$value.id}}" data-quantity="{{$value.quantity}}" lay-reqtext="利润单价不能为空" placeholder="请输入利润单价" autocomplete="off" /></td>
+                        <td>{{$value.productName}}</td>
+                        <td>{{$value.variantTitle}}</td>
+                        <td>{{$value.itemUrl}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </script>
+
+       
+        <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+        <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+        <script src="/js/template-web.js"></script>
+        <script>
+
+            var order_id = GetRequest("orderId");
+            var wareId = GetRequest("wareId");
+            var ReterPrice=0;
+            var ReterProfit=0;
+
+            layui.use(['form', 'app', 'table'], function () {
+                var form = layui.form,
+                    layer = layui.layer,
+                    table = layui.table,
+                    $ = layui.$;
+
+                var app = layui.app;
+
+                app.Load("manage");
+
+
+                // 拦截异常信息提醒
+                $.ajaxSetup({
+                    complete: function (err) {
+                        if (err.status == 400) {
+                            layui.layer.msg(err.responseJSON.message, { time: 3000});
+                        }
+                    }
+                });
+
+
+                //搜索报价
+                form.on('submit(data-search-btn)', function (data) {
+
+                    data.field.orderId = order_id;
+
+                    //执行搜索重载
+                    table.reload('currentTableId', {
+                        page: {
+                            curr: 1
+                        }
+                        , where: {
+                            dto: data.field
+                        }
+                    }, 'data');
+
+                    return false;
+                });
+                //获取订单基础信息
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/QueryOrdeWarerByWareId",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "orderId": order_id, "Id": wareId }),
+                    dataType: "json",
+                    success: function (sre) {
+                        if (sre) {
+                            $(".orderCode").val(sre.orderCode);
+
+                            if (count(sre.orderExtend) != 0) {
+                                $(".length").val(sre.orderExtend[0].length);
+                                $(".width").val(sre.orderExtend[0].width);
+                                $(".height").val(sre.orderExtend[0].height);
+                                $(".volumeCoefficient").val(sre.orderExtend[0].volumeCoefficient);
+                                $(".attribute").val(sre.orderExtend[0].attribute);
+                                $(".weight").val(sre.orderExtend[0].weight);
+                            }
+                            ReterPrice = sre.ordWaresList[0].unitPrice;
+                            ReterProfit = sre.ordWaresList[0].unitProfit;
+                            var html = template('orderModule', sre.ordWaresList)
+
+                            document.querySelector(".goods").innerHTML = html;
+
+                        }
+                    /*    return false;*/
+                    }
+                });
+
+                //监听提交
+                form.on('submit(saveBtn)', function (data) {
+                    data.field.orderId = order_id;
+                    //请求的参数
+                    var order = new Object();
+                    order.orderId = order_id;
+                    order.currency = $("#currency").val();
+                    order.exchangeRate = $(".exchangeRate").val();
+            
+                    //商品报价
+                    var pricelist = document.getElementsByClassName("price");
+                    var profitlist = document.getElementsByClassName("profit");
+                    var products = [];
+                    var product = {};
+                    var price = pricelist[0];
+                    if ($(price).val() == 0) {
+                        layer.msg("采购单价不能为空", { icon: 5, time: 2000, shift: 6 });
+                        return false;
+                    }
+                    var profit = profitlist[0];
+                    if ($(profit).val() == 0) {
+                        layer.msg("利润单价不能为空", { icon: 5, time: 2000, shift: 6 });
+                        return false;
+                    }
+                    product.id = $(price).attr("data-id");
+                   product.UnitPrice = $(price).val();
+                   product.UnitProfit = $(profit).val();
+                   products.push(product);
+                    order.OrdWaresList = products;
+
+                    var orderExtends = [];
+                    var orderExtend = {};
+                    orderExtend.OrderId = order_id;
+                    orderExtend.WareId = $(price).attr("data-id");
+                    orderExtend.Length = $(".length").val();
+                    orderExtend.Width = $(".width").val();
+                    orderExtend.Height = $(".height").val();
+                    orderExtend.VolumeCoefficient = $(".volumeCoefficient").val();
+                    orderExtend.Attribute = $(".attribute").val();
+                    orderExtend.Weight = $(".weight").val();
+                    orderExtends.push(orderExtend);
+                    order.orderExtend = orderExtends;
+
+                    $.ajax({
+                        type: "post",
+                        url:BackgroundDomain + "/api/Order/UpdateQuotation",
+                        contentType: "application/json;",
+                        data: JSON.stringify(order),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                layer.msg("报价成功！");
+                                setTimeout(function () {
+                                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(iframeIndex);
+                                }, 3000);
+                            }
+                            return false;
+                        }
+                    });
+
+                    return false;
+                });
+                //同店铺同sku批量报价
+                form.on('submit(saveAllBtn)', function (data) {
+                  /*  alert("同店铺同sku批量报价");*/
+                    data.field.orderId = order_id;
+                    //请求的参数
+                    var order = new Object();
+                    order.orderId = order_id;
+                    order.currency = $("#currency").val();
+                    order.exchangeRate = $(".exchangeRate").val();
+                    //商品报价
+                    var pricelist = document.getElementsByClassName("price");
+                    var profitlist = document.getElementsByClassName("profit");
+                    var products = [];
+                    var product = {};
+                    var price = pricelist[0];
+                    if ($(price).val() == 0) {
+                        layer.msg("采购单价不能为空", { icon: 5, time: 2000, shift: 6 });
+                        return false;
+                    }
+                    var profit = profitlist[0];
+                    if ($(profit).val() == 0) {
+                        layer.msg("利润单价不能为空", { icon: 5, time: 2000, shift: 6 });
+                        return false;
+                    }
+                    product.id = $(price).attr("data-id");
+                    product.UnitPrice = $(price).val();
+                    product.UnitProfit = $(profit).val();
+                    products.push(product);
+                    order.OrdWaresList = products;
+
+                    var orderExtends = [];
+                    var orderExtend = {};
+                    orderExtend.OrderId = order_id;
+                    orderExtend.WareId = $(price).attr("data-id");
+                    orderExtend.Length = $(".length").val();
+                    orderExtend.Width = $(".width").val();
+                    orderExtend.Height = $(".height").val();
+                    orderExtend.VolumeCoefficient = $(".volumeCoefficient").val();
+                    orderExtend.Attribute = $(".attribute").val();
+                    orderExtend.Weight = $(".weight").val();
+                    orderExtends.push(orderExtend);
+                    order.orderExtend = orderExtends;
+
+
+                    $.ajax({
+                        type: "post",
+                        url: BackgroundDomain +"/api/Order/UpdateALLShopBySkuQuotation",
+                        contentType: "application/json;",
+                        data: JSON.stringify(order),
+                        dataType: "json",
+                        success: function (sre) {
+                            if (sre) {
+                                layer.msg("批量报价成功！");
+                                setTimeout(function () {
+                                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(iframeIndex);
+                                }, 3000);
+                            }
+                            return false;
+                        }
+                    });
+
+                    return false;
+
+                });
+                //监听下拉框选中触发事件
+                $(document).ready(function () {
+                    // select下拉框选中触发事件
+                    form.on("select", function (data) {
+                        var exchangeRate = $(".exchangeRate").val();
+                        if ($("[name='currency']").val() == "RMB" || $("[name='currency']").val() == "EURO") {
+                            if (exchangeRate != "") {
+                          
+                             if (ReterPrice != 0) {
+                                var price = (ReterPrice * $(".exchangeRate").val()).toFixed(2);
+                                $(".price").val(price)
+                            }
+                            if (ReterProfit != 0) {
+                                var profit = (ReterProfit * $(".exchangeRate").val()).toFixed(2);
+                                $(".profit").val(profit)
+                                }
+                            }
+                        }
+                        else if ($("[name='currency']").val() == "USD") {
+                            if (ReterPrice != 0) {
+                                $(".price").val(ReterPrice)
+                            }
+                            if (ReterProfit != 0) {
+                                $(".profit").val(ReterProfit)
+                            }
+                        }
+                        return false;
+                    });
+                });
+              
+
+                function count(obj) {
+                    var objType = typeof obj;
+                    if (objType == "string") {
+                        return obj.length;
+                    } else if (objType == "object") {
+                        var objLen = 0;
+                        for (var i in obj) {
+                            objLen++;
+                        }
+                        return objLen;
+                    }
+                    return false;
+                }
+
+            });
+
+            //汇率发生改变时，如果是已经进行过报价的用户，显示的价格按汇率换算成所选币种  美元*汇率
+            function ChangeRate() {
+
+                if ($("[name='currency']").val() == "RMB" || $("[name='currency']").val() == "EURO") {
+                    if (ReterPrice != 0) {
+                        var price = (ReterPrice * $(".exchangeRate").val()).toFixed(2);
+                        $(".price").val(price)
+                    }
+                    if (ReterProfit != 0) {
+                        var profit = (ReterProfit * $(".exchangeRate").val()).toFixed(2);
+                        $(".profit").val(profit)
+                    }
+                }
+                else if ($("[name='currency']").val() == "USD") {
+                    if (ReterPrice != 0) {
+                        $(".price").val(ReterPrice)
+                    }
+                    if (ReterProfit != 0) {
+                        $(".profit").val(ReterProfit)
+                    }
+                }
+            }
+        </script>
+</body>
+</html>

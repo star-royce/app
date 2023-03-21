@@ -1,0 +1,1222 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/AccountManager.css?v=20220505" media="all">
+    <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">
+</head>
+<body>
+    <div class="big">
+        <div class="left">
+            <div style="" id="nav3">
+                <ul class="nav-ul">
+                    <li class="nav-this" id="AccountBalance">
+                        <i class="layui-icon icon-a-Accountbalance"></i>
+                        <cite class="nav-font" i18n_Text="AccountBalance">账户余额</cite>
+                    </li>
+                    <li id="AccountSettings">
+                        <i class="layui-icon icon-a-Accountsettings"></i>
+                        <cite class="nav-font" i18n_Text="AccountSettings">账户设置</cite>
+                    </li>
+                    <li id="MyShop">
+                        <i class="layui-icon icon-a-Myshop"></i>
+                        <cite class="nav-font" i18n_Text="MyShop">我的店铺</cite>
+                    </li>
+                    <!--<li id="IntelligentSettings">
+                        <i class="layui-icon icon-a-Intelligentsettings"></i>
+                        <cite class="nav-font" i18n_Text="IntelligentSettings">智能设置</cite>
+                    </li>
+                    <li id="ChangePassword">
+                        <i class="layui-icon icon-a-Changepassword"></i>
+                        <cite class="nav-font" i18n_Text="ChangePassword">修改密码</cite>
+                    </li>-->
+                </ul>
+            </div>
+        </div>
+        <!--<img class="bigimg" src="../../../images/b.png" />-->
+        <div id="right" class="right">
+        </div>
+    </div>
+
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../../js/lay-module/wangEditor/wangEditor.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script src="../../../js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+   
+    <script type="text/javascript">
+        var app = null;
+        var $ = null;
+        var Balance;
+        var UserEmail;
+        var id = "en_us";
+        var CustomerId;
+        layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
+            $ = layui.jquery;
+            app = layui.app;
+            var layer = layui.layer,
+                element = layui.element,
+                laypage = layui.laypage,
+                i18n = layui.i18n,
+                form = layui.form;
+            app.Load("client");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            // 获取登录的用户名
+            var YDHCustomer = layui.data('YDH-Customer');
+            if (YDHCustomer.email) {
+                UserEmail = YDHCustomer.email;
+                var dto_obj = new Object();
+                dto_obj.email = YDHCustomer.email;
+                GetShopify(dto_obj);
+            }
+
+            i18n.loadProperties(id);
+
+
+            // 获取用户信息
+            function GetShopify(data) {
+                $.ajax({
+                    url: BackgroundDomain +"/api/Customer/GetCusCustomerAccount",
+                    type: "post",
+                    contentType: "application/json;",
+                    data: JSON.stringify(data),
+                    success: function (msg) {
+                        if (msg != null) {
+                            Balance = msg.balance;
+                            CustomerId = msg.id;
+                        }
+                    }
+                })
+            }
+
+            var skip = GetRequest('skip');
+            if (skip == "myshop") {
+                $("#MyShop").addClass('nav-this');
+                $("#nav3 li").not("#MyShop").removeClass('nav-this');
+                GetMyShop();
+            } else {
+                GetAccountBalance();
+            }
+        
+
+           
+
+            /*点击账户余额*/
+            $("#AccountBalance").click(function () {
+                $(this).addClass('nav-this');
+                $("#nav3 li").not($(this)).removeClass('nav-this');
+                GetAccountBalance();
+            })
+
+            /*点击账户设置*/
+            $("#AccountSettings").click(function () {
+                $(this).addClass('nav-this');
+                $("#nav3 li").not($(this)).removeClass('nav-this');
+                settings();
+            })
+
+            /*点击我的店铺*/
+            $("#MyShop").click(function () {
+                $(this).addClass('nav-this');
+                $("#nav3 li").not($(this)).removeClass('nav-this');
+                GetMyShop();
+
+            })
+
+            /*点击智能设置*/
+            $("#IntelligentSettings").click(function () {
+                $(this).addClass('nav-this');
+                $("#nav3 li").not($(this)).removeClass('nav-this');
+                IntelligentSettings();
+            })
+
+            /*点击修改密码*/
+            $("#ChangePassword").click(function () {
+                $(this).addClass('nav-this');
+                $("#nav3 li").not($(this)).removeClass('nav-this');
+                ChangePassword();
+            })
+
+            //获取余额
+            function GetAccountBalance() {
+                /* 获取右边的大div,并清空里面内容后，再按要求填充内容*/
+                var rightdiv = document.getElementById("right");
+                rightdiv.innerHTML = "";
+
+                var BalanceContent = document.createElement("div");
+                BalanceContent.setAttribute('class', 'BalanceContent');
+                rightdiv.appendChild(BalanceContent);
+
+                /* 我的余额文本*/
+                var topdivl = document.createElement("div");
+                topdivl.setAttribute('class', 'MineBalance');
+                topdivl.innerHTML = $.i18n.prop('MineBalance');
+                BalanceContent.appendChild(topdivl);
+                GetShopify(dto_obj);//获取店铺信息
+                $.ajax({
+                    url: BackgroundDomain +"/api/Customer/GetCusCustomerAccount",
+                    type: "post",
+                    contentType: "application/json;",
+                    data: JSON.stringify({ "Email": UserEmail }),
+                    success: function (msg) {
+                        //余额
+                        var BalanceDiv = document.createElement("div");
+                        BalanceDiv.innerHTML = "$" + msg.balance;;
+                        BalanceDiv.setAttribute('class', 'BalanceDiv');
+                        BalanceContent.appendChild(BalanceDiv);
+
+                        //充值按钮
+                        var rechargeDiv = document.createElement("div");
+                        BalanceContent.appendChild(rechargeDiv);
+
+                        var rechargeButton = document.createElement("input");
+                        rechargeButton.setAttribute('type', 'button');
+                        rechargeButton.setAttribute('class', 'recharge');
+                        rechargeButton.setAttribute('onclick', 'RechargeMoney()');
+                        rechargeDiv.appendChild(rechargeButton);
+                        $(".recharge").val($.i18n.prop('Add.Money'));
+
+                        //整个奖励栏目
+                        var AllRewardsDiv = document.createElement("div");
+                        AllRewardsDiv.setAttribute("class", "AllRewards");
+                        BalanceContent.appendChild(AllRewardsDiv);
+                        //可用奖励显示
+                        var rewardsDiv = document.createElement("div");
+                        rewardsDiv.innerHTML = $.i18n.prop('Available.rewards') + "$" + msg.availableBonus;
+                        rewardsDiv.setAttribute('class', 'AvailableRewards');
+                        AllRewardsDiv.appendChild(rewardsDiv);
+
+                        //总奖励显示
+                        var TotalRewardsLabel = document.createElement("label");
+                        TotalRewardsLabel.setAttribute('class', 'TotalRewardsLabel');
+                        TotalRewardsLabel.innerHTML = "(" + $.i18n.prop('Total.rewards') + "$" + msg.totalBonus + ")";
+                        AllRewardsDiv.appendChild(TotalRewardsLabel);
+
+                        //感叹号，点击感叹号出现分销说明
+                        //var exclamationdiv = document.createElement("img");
+                        //exclamationdiv.setAttribute("class", "exclamation");
+                        //exclamationdiv.setAttribute("id", "exclamation");
+                        //exclamationdiv.setAttribute("src", "../../../images/exclamation.png");
+                        //rewardsDiv.appendChild(exclamationdiv);
+                       //分销说明大的div
+                        var DistributionShows = document.createElement("div");
+                        DistributionShows.setAttribute("class","DistributionShows");
+                        BalanceContent.appendChild(DistributionShows);
+
+                        var arrowsdiv = document.createElement("div");
+                        arrowsdiv.setAttribute("class", "nav nav-background");
+                        DistributionShows.appendChild(arrowsdiv);
+                        //分销图片
+                        var distributionImg = document.createElement("img");
+                        distributionImg.setAttribute("style","margin-top:30px;margin-bottom:30px;");
+                        distributionImg.setAttribute("src","../../../images/distribution.png");
+                        DistributionShows.appendChild(distributionImg);
+                        //分销说明标题
+                        var explainTitleDiv = document.createElement("div");
+                        explainTitleDiv.setAttribute("class", "explainTitle");
+                        explainTitleDiv.innerHTML = $.i18n.prop("Get.profit.forever");
+                        DistributionShows.appendChild(explainTitleDiv);
+                        //分销说明详情
+                        var explainDetailDiv = document.createElement("div");
+                        explainDetailDiv.setAttribute("class", "explainDetail");
+                        explainDetailDiv.innerHTML = $.i18n.prop("explainDetail");
+                        DistributionShows.appendChild(explainDetailDiv);
+                        //分销解释权
+                        var InterpretationDiv = document.createElement("div");
+                        InterpretationDiv.setAttribute("class", "Interpretation");
+                        InterpretationDiv.innerHTML = $.i18n.prop("Interpretation");
+                        DistributionShows.appendChild(InterpretationDiv);
+
+
+              
+                        //分销链接
+                        var DistributionText = document.createElement("div");
+                        DistributionText.innerHTML = $.i18n.prop('Refer.a.Friend');
+                        DistributionText.setAttribute('class', 'DistributionText');
+                        BalanceContent.appendChild(DistributionText);
+
+                        var InvitationDiv = document.createElement("div");
+                        InvitationDiv.setAttribute('class', 'InvitationDiv');
+                        BalanceContent.appendChild(InvitationDiv);
+
+                        var InvitationUrl = document.createElement("input");
+                        InvitationUrl.setAttribute('class', 'InvitationUrl');
+                        InvitationUrl.setAttribute('id', 'InvitationUrl');
+                        InvitationDiv.appendChild(InvitationUrl);
+                        InvitationUrl.setAttribute('value', "https://" + window.location.host + "/client/Customer/index.html?InvitationCode=" + msg.invitationCode);;
+
+                        $('#InvitationUrl').attr("readonly", true);
+
+                        var Invitationbutton = document.createElement("input");
+                        Invitationbutton.setAttribute('type', 'button');
+                        Invitationbutton.setAttribute('class', 'Invitationbutton');
+                        Invitationbutton.setAttribute('onclick', 'ShareInvitationUrl()');
+                        InvitationDiv.appendChild(Invitationbutton);
+                        $(".Invitationbutton").val($.i18n.prop('Share.with.friends'));
+
+                        var Invitationlable = document.createElement("lable");
+                        Invitationlable.setAttribute("id", "Invitationlable");
+                        Invitationlable.setAttribute("class", "Invitationlable");
+                        InvitationDiv.appendChild(Invitationlable);
+                        Invitationlable.html("https://" + window.location.host + "/client/login.html?InvitationCode=" + msg.invitationCode);
+
+                        console.log("邀请链接的长度：" + $("#Invitationlable").width());
+                        console.log($("#InvitationUrl").val().length);
+                        var width = $("#Invitationlable").width()+20;
+                        $("#InvitationUrl").css("width", width + "px");
+
+                        //充值记录和邀请记录按钮
+                        var RecordsTextDiv = document.createElement("div");
+                        RecordsTextDiv.setAttribute('class', 'CutButton');
+                        RecordsTextDiv.setAttribute('id', 'CutButton');
+                        BalanceContent.appendChild(RecordsTextDiv);
+
+                        var Invitation = document.createElement("div");
+                        Invitation.setAttribute('style', 'float:left;height:30px;');
+                        Invitation.setAttribute('onclick', 'QueryInvitationList()');
+                        Invitation.setAttribute('id', 'Invitation');
+                        Invitation.innerHTML = $.i18n.prop('Invitation')
+                        RecordsTextDiv.appendChild(Invitation);
+                       
+
+                        var Record = document.createElement("div");
+                        Record.setAttribute('style', 'margin-left:50px;width: 55px;height:30px;float:left;');
+                        Record.setAttribute('onclick', 'QueryRecordList()');
+                        Record.setAttribute("class","thisCut");
+                        Record.setAttribute('id', 'Record');
+                        Record.innerHTML = $.i18n.prop('Record')
+                        RecordsTextDiv.appendChild(Record);
+
+                        //营销记录按钮
+                        var Marketing = document.createElement("div");
+                        Marketing.setAttribute('style', 'margin-left:50px;float:left;height:30px;');
+                        Marketing.setAttribute('onclick', 'QueryMarketingList()');
+                        Marketing.setAttribute('id', 'Marketing');
+                        Marketing.innerHTML = $.i18n.prop('Marketing')
+                        RecordsTextDiv.appendChild(Marketing);
+                      
+                        //充值记录列表
+                        var RecordsDiv = document.createElement("div");
+                        RecordsDiv.setAttribute('class', 'Records');
+                        RecordsDiv.setAttribute('id', 'Records');
+                        BalanceContent.appendChild(RecordsDiv);
+
+                        var Recordsul = document.createElement("ul");
+                        Recordsul.setAttribute('style', 'height:48px;line-height:48px;');
+                        Recordsul.setAttribute('class', 'table-header');
+                        RecordsDiv.appendChild(Recordsul);
+                        var herderhtml = "";
+                 
+                        herderhtml += "<li id='type' class='head_font'>类型<br></li>";
+                        herderhtml += "<li id='paytime' class='head_font'>支付时间<br></li>";
+                        herderhtml += "<li id='money' class='head_font'>金额<br></li>";
+                
+                        Recordsul.innerHTML = herderhtml;
+                        $("#type").html($.i18n.prop('type'));
+                        $("#money").html($.i18n.prop('OrderDetails.orderModule.div.money'));
+                        $("#paytime").html($.i18n.prop('paytime'));
+
+                        var RecordsBody = document.createElement("div");
+                        RecordsBody.setAttribute('class', 'table-body');
+                        RecordsDiv.appendChild(RecordsBody);
+
+                        $.ajax({
+                            type: "post",
+                            contentType: "application/json",
+                            url: BackgroundDomain +'/api/Customer/QueryRechargeRecords',
+                            data: JSON.stringify({ "Email": UserEmail }),
+                            success: function (data) {
+                                if (data.data && data.data.length!=0) {
+                                    //循环数据添加主体部分
+                                    for (var i = 0; i < data.data.length; i++) {
+
+                                        var RecordsBodyul = document.createElement("ul");
+                                        RecordsBody.appendChild(RecordsBodyul);
+                                        var RecordsBodyhtml = "";
+
+                                        RecordsBodyhtml += "<li class='body_font'>" + data.data[i].typeMean + "<br></li>";
+                                        RecordsBodyhtml += "<li class='body_font'>" + data.data[i].payTime + "<br></li>";
+                                        if (data.data[i].payType == "E") {
+                                            RecordsBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>-$" + data.data[i].amount + "<br></li>";
+                                        } else if (data.data[i].payType == "O") {
+                                            RecordsBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>+$" + data.data[i].amount + "<br></li>";
+                                        }
+
+                                        RecordsBodyul.innerHTML = RecordsBodyhtml;
+                                    }
+                                }
+                                else {
+
+                                    //添加div ，
+                                    var NoProduct = document.createElement("div");
+                                    NoProduct.setAttribute('class', 'NoProduct');
+                                    NoProduct.setAttribute('style', 'width:100%;');
+                                    RecordsBody.appendChild(NoProduct);
+                                    //放图片
+                                    var img = document.createElement("img");
+                                    img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:50px;');
+                                    img.setAttribute('src', '../../../images/404.png');
+                                    NoProduct.appendChild(img);
+
+                                    var content = document.createElement("div");
+                                    content.setAttribute('style', 'text-align:center;margin: 20px auto;line-height:10px;');
+                                    NoProduct.appendChild(content);
+                                    content.html($.i18n.prop("No.content"));
+
+                                    return null;
+                                }
+                            }
+                        })
+
+                        //鼠标移入移出感叹号
+                      
+                            var exclamation = document.getElementById("exclamation");
+
+                            exclamation.onmouseover = function () {
+                                $(".DistributionShows").show();
+                            };
+                            exclamation.onmouseout = function () {
+                                $(".DistributionShows").hide();
+                            };
+                      
+
+                    }
+                })
+
+
+           
+            
+            }
+
+            function settings()
+            {
+                var rightdiv = document.getElementById("right");
+                rightdiv.innerHTML = "";
+                
+                  //智能设置
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url: BackgroundDomain +'/api/Customer/GetCustomerInfoByEmail',
+                    data: JSON.stringify({ "Email": UserEmail }),
+                    async: false,
+                    success: function (data) {
+                        /* 获取右边的大div,并清空里面内容后，再按要求填充内容*/
+                        //var rightdiv = document.getElementById("right");
+                        //rightdiv.innerHTML = "";
+
+                        var content = document.createElement("div");
+                        content.setAttribute("class", "AccountSetting");
+                        rightdiv.appendChild(content);
+
+                        //价格开关设置大DIV
+                        var priceSwitchDiv = document.createElement("div");
+                        priceSwitchDiv.setAttribute('class', ' priceSwitch');
+                        content.appendChild(priceSwitchDiv);
+                        //文本
+                        var priceSwitchText = document.createElement("div");
+                        priceSwitchText.setAttribute('class', ' priceSettingText');
+                        priceSwitchDiv.appendChild(priceSwitchText);
+                        priceSwitchText.html($.i18n.prop('Default.pricing.rules'));
+                        //设置
+                        var PriceSettingDiv = document.createElement("div");
+                        PriceSettingDiv.setAttribute('class', ' PriceSetting');
+                        priceSwitchDiv.appendChild(PriceSettingDiv);
+
+                        var productcost = document.createElement("label");
+                        productcost.html($.i18n.prop('Product.cost'));
+                        PriceSettingDiv.appendChild(productcost);
+
+                        var multipleInput = document.createElement("input");
+                        multipleInput.setAttribute('class', ' multiple');
+                        multipleInput.setAttribute('type', ' text');
+                        multipleInput.setAttribute('onchange', 'UpdatePriceMultiple(this)');
+                        PriceSettingDiv.appendChild(multipleInput);
+                        multipleInput.value = data.priceMultiples;
+                        //开关
+                        var switchInput = document.createElement("input");
+                        switchInput.setAttribute('class', 'switch');
+                        switchInput.setAttribute('id', 'switch');
+                        switchInput.setAttribute('type', 'checkbox');
+                        switchInput.setAttribute('onchange', 'UpdatePriceSwitchStatus(this)');
+                        switchInput.setAttribute('value', 'on');
+                        priceSwitchDiv.appendChild(switchInput);
+
+                        var buttonlabel = document.createElement("label");
+                        buttonlabel.setAttribute('for', 'switch');
+                        buttonlabel.setAttribute('class', 'button-label');
+                        priceSwitchDiv.appendChild(buttonlabel);
+
+                        buttonlabel.innerHTML = "<span class='circle'></span><span class='text on'> ON</span ><span class='text off'>OFF</span>";
+
+                        if (data.priceSwitch == "0") {
+                            document.getElementById("switch").checked = true;
+                        }
+                        //其他设置大DIV
+                        //var otherDiv = document.createElement("div");
+                        //otherDiv.setAttribute('class', 'priceSwitch');
+                        //otherDiv.setAttribute('style', 'height: 134px;margin-top:20px;');
+                        //content.appendChild(otherDiv);
+                        //文本
+                        //var otherText = document.createElement("div");
+                        //otherText.setAttribute('class', ' priceSettingText');
+                        //otherDiv.appendChild(otherText);
+                        //otherText.html($.i18n.prop('Other.functions'));
+
+                        //var otherlabel = document.createElement("label");
+                        //otherlabel.setAttribute('style','margin-left:40px;margin-top:10px;');
+                        //otherlabel.html($.i18n.prop('Under.development.and.improvement'));
+                        //otherDiv.appendChild(otherlabel);
+                    }
+                })
+              //用户设置
+                //$.ajax({
+                //    type: "post",
+                //    contentType: "application/json",
+                //    url: BackgroundDomain +'/api/Customer/GetCustomerInfoByEmail',
+                //    data: JSON.stringify({ "Email": UserEmail }),
+                //    async: false,
+                //    success: function (data) {
+                //        /* 获取右边的大div,并清空里面内容后，再按要求填充内容*/
+
+                //        //用户设置列表
+                //        var AccountSettingDiv = document.createElement("div");
+                //        AccountSettingDiv.setAttribute('class', 'AccountSetting');
+                //        rightdiv.appendChild(AccountSettingDiv);
+
+                //        var AccountSettingContent = document.createElement("div");
+                //        AccountSettingContent.setAttribute('class', 'AccountSettingContent');
+                //        AccountSettingDiv.appendChild(AccountSettingContent);
+
+                //        //文本
+                //        var priceSwitchText = document.createElement("div");
+                //        priceSwitchText.setAttribute('class', ' priceSettingText');
+                //        AccountSettingContent.appendChild(priceSwitchText);
+                //        priceSwitchText.html($.i18n.prop('Default.pricing.BasicInfo'));
+                //        //email
+                //        var Emailtext = document.createElement("div");
+                //        Emailtext.setAttribute('class', 'PriceSetting');
+                //        Emailtext.setAttribute('disabled', 'disabled');
+                //        AccountSettingContent.appendChild(Emailtext);
+
+
+                //        //var productcost = document.createElement("label");
+                //        //productcost.html($.i18n.prop('Email'));
+                //        //Emailtext.appendChild(productcost);
+
+                //        //var EmailInput = document.createElement("input");
+                //        //EmailInput.setAttribute('class', 'AccountSettingInput');
+                //        //Emailtext.setAttribute('hidden', 'hidden');
+                //        //EmailInput.setAttribute('value', data.email);
+                //        //Emailtext.appendChild(EmailInput);
+
+                //        //UserName
+                //        var UserNametext = document.createElement("div");
+                //        UserNametext.setAttribute('class', 'PriceSetting');
+                //        AccountSettingContent.appendChild(UserNametext);
+                //        // UserNametext.html($.i18n.prop('UserName'));
+
+                //        var productcost = document.createElement("label");
+                //        productcost.html($.i18n.prop('UserName'));
+                //        UserNametext.appendChild(productcost);
+
+                //        var UserNameInput = document.createElement("input");
+                //        UserNameInput.setAttribute('class', 'AccountSettingInput');
+                 //       UserNameInput.setAttribute('autocomplete', 'off');
+                //        UserNameInput.setAttribute('id', 'UserName');
+                //        UserNameInput.setAttribute('value', data.userName);
+                //        UserNametext.appendChild(UserNameInput);
+                //        //phone
+                //        var phonetext = document.createElement("div");
+                //        phonetext.setAttribute('class', 'PriceSetting');
+                //        AccountSettingContent.appendChild(phonetext);
+                //        // phonetext.html($.i18n.prop('OrderDetails.orderModule.div.phone'));
+
+                //        var productcost = document.createElement("label");
+                //        productcost.html($.i18n.prop('OrderDetails.orderModule.div.phone'));
+                //        phonetext.appendChild(productcost);
+
+                //        var phoneInput = document.createElement("input");
+                //        phoneInput.setAttribute('class', 'AccountSettingInput');
+                //        phoneInput.setAttribute('id', 'phone');
+                //        phoneInput.setAttribute('autocomplete', 'off');
+                //        phoneInput.setAttribute('value', data.phone);
+                //        phonetext.appendChild(phoneInput);
+
+                //        //修改按钮
+                //        var ModifyAccountSettingDiv = document.createElement("div");
+                //        AccountSettingContent.appendChild(ModifyAccountSettingDiv);
+
+                //        var ModifyAccountSettingButton = document.createElement("input");
+                //        ModifyAccountSettingButton.setAttribute('type', 'button');
+                //        ModifyAccountSettingButton.setAttribute('class', 'ModifyAccountSetting');
+                //        ModifyAccountSettingButton.setAttribute('onclick', 'ModifyAccountSetting()');
+                //        ModifyAccountSettingDiv.appendChild(ModifyAccountSettingButton);
+                //        $(".ModifyAccountSetting").val($.i18n.prop('Submit.modification'));
+                //    }
+                //})
+
+
+                //修改密码列表
+                var UpdatePasswordDiv = document.createElement("div");
+                UpdatePasswordDiv.setAttribute('class', 'AccountSetting');
+                rightdiv.appendChild(UpdatePasswordDiv);
+
+                var AccountSettingContent = document.createElement("div");
+                AccountSettingContent.setAttribute('class', 'AccountSettingContent');
+                UpdatePasswordDiv.appendChild(AccountSettingContent);
+                //文本
+                var priceSwitchText = document.createElement("div");
+                priceSwitchText.setAttribute('class', ' priceSettingText');
+                AccountSettingContent.appendChild(priceSwitchText);
+                priceSwitchText.html($.i18n.prop('Default.pricing.ChangePassword'));
+
+                //Ord Password
+                var OrdPsdtext = document.createElement("div");
+                OrdPsdtext.setAttribute('class', 'PriceSetting');
+                OrdPsdtext.setAttribute('disabled', 'disabled');
+                AccountSettingContent.appendChild(OrdPsdtext);
+
+                var productcost = document.createElement("label");
+                productcost.html($.i18n.prop('Old.Password'));
+                OrdPsdtext.appendChild(productcost);
+
+                var OrdPsdInput = document.createElement("input");
+                OrdPsdInput.setAttribute('class', 'AccountSettingInput');
+                OrdPsdInput.setAttribute('Id', 'OldPsd');
+                OrdPsdInput.setAttribute('placeholder', $.i18n.prop('Please.enter.your.old.password'));
+                OrdPsdInput.setAttribute('type', 'password');
+                OrdPsdtext.appendChild(OrdPsdInput);
+
+                var ordpsdHint = document.createElement("label");
+                ordpsdHint.setAttribute('style', 'color:#FF5555;margin-left:10px;');
+                ordpsdHint.setAttribute('class', 'UpdatePsdhint');
+                ordpsdHint.setAttribute('id', 'OrdpsdHint');
+                AccountSettingContent.appendChild(ordpsdHint);
+                ordpsdHint.html($.i18n.prop('Old.password.error'));
+                //NEW Password
+                var Newpsdtext = document.createElement("div");
+                Newpsdtext.setAttribute('class', 'PriceSetting');
+                AccountSettingContent.appendChild(Newpsdtext);
+
+
+                var productcost = document.createElement("label");
+                productcost.html($.i18n.prop('New.Password'));
+                Newpsdtext.appendChild(productcost);
+
+                var NewpsdInput = document.createElement("input");
+                NewpsdInput.setAttribute('class', 'AccountSettingInput');
+                NewpsdInput.setAttribute('id', 'NewPsd');
+                NewpsdInput.setAttribute('placeholder', $.i18n.prop('Please.enter.your.new.password'));
+                NewpsdInput.setAttribute('type', 'password');
+                Newpsdtext.appendChild(NewpsdInput);
+                //Re-enter Password: 
+                var ReEnterPsdtext = document.createElement("div");
+                ReEnterPsdtext.setAttribute('class', 'PriceSetting');
+                AccountSettingContent.appendChild(ReEnterPsdtext);
+
+                var productcost = document.createElement("label");
+                productcost.html($.i18n.prop('ReEnter.Password'));
+                ReEnterPsdtext.appendChild(productcost);
+
+                var ReEnterPsdInput = document.createElement("input");
+                ReEnterPsdInput.setAttribute('class', 'AccountSettingInput');
+                ReEnterPsdInput.setAttribute('id', 'ReEnterPsd');
+                ReEnterPsdInput.setAttribute('placeholder', $.i18n.prop('Please.reenter.your.new.password'));
+                ReEnterPsdInput.setAttribute('type', 'password');
+                ReEnterPsdtext.appendChild(ReEnterPsdInput);
+
+                var ReEnterPsdHint = document.createElement("label");
+                ReEnterPsdHint.setAttribute('style', 'color:#FF5555;margin-left:10px;');
+                ReEnterPsdHint.setAttribute('class', 'UpdatePsdhint');
+                ReEnterPsdHint.setAttribute('id', 'ReEnterPsdHint');
+                AccountSettingContent.appendChild(ReEnterPsdHint);
+                ReEnterPsdHint.html($.i18n.prop('The.two.passwords.are.inconsistent'));
+                //修改按钮
+                var ModifyPasswordDiv = document.createElement("div");
+                AccountSettingContent.appendChild(ModifyPasswordDiv);
+
+                var ModifyPasswordButton = document.createElement("input");
+                ModifyPasswordButton.setAttribute('type', 'button');
+                ModifyPasswordButton.setAttribute('class', 'ModifyAccountSetting');
+                ModifyPasswordButton.setAttribute('onclick', 'ModifyPassword()');
+                AccountSettingContent.appendChild(ModifyPasswordButton);
+                $(".ModifyAccountSetting").val($.i18n.prop('Submit.modification'));
+            }
+            
+            function AccountSettings() {
+               
+            }
+            
+            function IntelligentSettings() {
+               
+            }
+
+            //修改密码
+            function ChangePassword() {
+                /* 获取右边的大div,并清空里面内容后，再按要求填充内容*/
+                var rightdiv = document.getElementById("right");
+               // rightdiv.innerHTML = "";
+
+               
+            }
+            
+       
+       
+        })
+        //获取店铺
+        function GetMyShop() {
+            /* 获取右边的大div,并清空里面内容后，再按要求填充内容*/
+            var rightdiv = document.getElementById("right");
+            rightdiv.innerHTML = "";
+            //我的店铺列表
+            var MyShopDiv = document.createElement("div");
+            MyShopDiv.setAttribute('class', 'MyShop');
+            rightdiv.appendChild(MyShopDiv);
+
+            var MyShopul = document.createElement("ul");
+            MyShopul.setAttribute('style', 'height:48px;line-height:48px;');
+            MyShopul.setAttribute('class', 'table-header');
+            MyShopDiv.appendChild(MyShopul);
+            var herderhtml = "";
+            herderhtml += "<li id='StoreName' class='head_font' style='width:20%;'>店铺名<br></li>";
+            herderhtml += "<li id='Platform' class='head_font' style='width:15%;'>平台<br></li>";
+            herderhtml += "<li id='StoreLink' class='head_font' style='width:30%;' >店铺连接<br></li>";
+            herderhtml += "<li id='BindingTime' class='head_font' style='width:20%;'>绑定时间<br></li>";
+            herderhtml += "<li id='Operation' class='head_font' style='width:15%;'>操作<br></li>";
+            MyShopul.innerHTML = herderhtml;
+            $("#StoreName").html($.i18n.prop('StoreName'));
+            $("#Platform").html($.i18n.prop('Platform'));
+            $("#StoreLink").html($.i18n.prop('StoreLink'));
+            $("#BindingTime").html($.i18n.prop('BindingTime'));
+            $("#Operation").html($.i18n.prop('Operation'));
+
+            var MyShopBody = document.createElement("div");
+            MyShopBody.setAttribute('class', 'table-body');
+            MyShopBody.setAttribute('style', 'height:calc(100% - 118px) !important;');
+            MyShopDiv.appendChild(MyShopBody);
+
+            var data = Object();
+            data.Page = 1;
+            data.limit = 100;
+
+            var dto = Object();
+            dto.CustomerId = CustomerId;
+            console.log("CustomerId" + CustomerId);
+            data.Dto = dto;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/GetCustomerShopify',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    if (data.data) {
+                        //循环数据添加主体部分
+                        for (var i = 0; i < data.data.length; i++) {
+
+                            var MyShopBodyul = document.createElement("ul");
+                            MyShopBody.appendChild(MyShopBodyul);
+                            var MyShopBodyhtml = "";
+                            var num = i + 1;
+                            var shopname = data.data[i].shopifyShop.indexOf(".");
+
+
+                            var shopifyShop = String(data.data[i].shopifyShop).substring(0, shopname);
+                            MyShopBodyhtml += "<li class='body_font' style='width:20%;'>" + shopifyShop + "<br></li>";
+                            MyShopBodyhtml += "<li class='body_font' style='width:15%;'>" + data.data[i].platform + "<br></li>";
+                            MyShopBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #3399FF;width:30%;'>https://" + data.data[i].shopifyShop + "<br></li>";
+                            MyShopBodyhtml += "<li class='body_font'style='width:20%;'>" + data.data[i].bindingTime + "<br></li>";
+                            if (data.data[i].isShow == "0") {
+                                MyShopBodyhtml += "<li class='body_font'style='width:15%;'><button class='operationButton' id='hide" + data.data[i].id + "' onclick = 'Updateshopstatus(this)' shopId='" + data.data[i].id + "' shopstatus='show'></button><br></li>";
+                            }
+                            else {
+                                MyShopBodyhtml += "<li class='body_font'style='width:15%;'><button class='operationButton' id='show" + data.data[i].id + "' onclick = 'Updateshopstatus(this)' shopId='" + data.data[i].id + "'  shopstatus='hide'></button><br></li>";
+                            }
+                            MyShopBodyul.innerHTML = MyShopBodyhtml;
+                            $("#hide" + data.data[i].id).html($.i18n.prop('hide'));
+                            $("#show" + data.data[i].id).html($.i18n.prop('show'));
+                        }
+                    }
+                    else {
+
+                        //添加div ，
+                        var NoProduct = document.createElement("div");
+                        NoProduct.setAttribute('class', 'NoProduct');
+                        NoProduct.setAttribute('style', 'width:100%;');
+                        MyShopBody.appendChild(NoProduct);
+                        //放图片
+                        var img = document.createElement("img");
+                        img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:50px;');
+                        img.setAttribute('src', '../../../images/404.png');
+                        NoProduct.appendChild(img);
+
+                        var content = document.createElement("div");
+                        content.setAttribute('style', 'text-align:center;margin: 20px auto;line-height:10px;');
+                        NoProduct.appendChild(content);
+                        content.html($.i18n.prop("No.content"));
+
+                        return null;
+                    }
+                }
+            })
+
+            var BindShopDiv = document.createElement("div");
+            BindShopDiv.setAttribute("style", "text-align:center");
+            MyShopDiv.appendChild(BindShopDiv);
+
+            var BindShopButton = document.createElement("input");
+            BindShopButton.setAttribute('type', 'button');
+            BindShopButton.setAttribute('class', 'BindShop');
+            BindShopButton.setAttribute("style", "DISPLAY:none");
+            BindShopButton.setAttribute('onclick', 'BindShop()');
+            BindShopDiv.appendChild(BindShopButton);
+            $(".BindShop").val($.i18n.prop('Bind.new.shop'));
+
+            var BindShopDiv = document.createElement("div");
+            BindShopDiv.setAttribute("style", "text-align:center");
+            MyShopDiv.appendChild(BindShopDiv);
+
+            var BindShopButton = document.createElement("input");
+            BindShopButton.setAttribute('type', 'button');
+            BindShopButton.setAttribute('class', 'BindShop');
+            BindShopButton.setAttribute('onclick', 'BindShop1()');
+            BindShopDiv.appendChild(BindShopButton);
+            $(".BindShop").val($.i18n.prop('Bind.new.shop'));
+
+
+        }
+
+        /*        充值余额*/
+        function RechargeMoney() {
+            var title = "";
+            if (id == "zh_cn") {
+                title = "余额充值...";
+            }
+            else if (id == "en_us") {
+                title = "Balance recharge...";
+            }
+            layer.open({
+                title: title,
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['520px', '410px'],
+                content: '/client/Customer/RechargeBalance.html?orderId=',
+            });
+        }
+        //修改店铺状态（现在是隐藏就变为展示，现在是展示就变为隐藏）
+        function Updateshopstatus(button) {
+            var shopId = $(button).attr('shopId');
+            var shopStatus = $(button).attr('shopstatus');
+            var newshopStatus = "";
+            if (shopStatus == "show") {
+                newshopStatus = "hide";
+            }
+            else if (shopStatus == "hide") {
+                newshopStatus = "show";
+            }
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/Updateshopstatus',
+                data: JSON.stringify({ "Id": shopId }),
+                success: function (data) {
+
+                    $(button).attr('shopstatus', newshopStatus);
+                    $(button).attr('id', shopStatus + shopId);
+                    if (shopStatus == "show") {
+                        $(button).html($.i18n.prop('show'))
+                    }
+                    else if (shopStatus == "hide") {
+                        $(button).html($.i18n.prop('hide'))
+                    }
+                    var dto_obj = new Object();
+                    dto_obj.email = UserEmail;
+                    window.parent.GetShopifytest("#Shopify", BackgroundDomain +"/api/Customer/GetCustomerShopifyList", "post", "选择店铺", dto_obj);
+                }
+            })
+        }
+        //修改用户信息
+        function ModifyAccountSetting() {
+            var UserName = $("#UserName").val();
+            var phone = $("#phone").val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/UpdateAccountSettingByEmail',
+                data: JSON.stringify({ "Email": UserEmail, "UserName": UserName, "phone": phone }),
+                success: function (data) {
+                    layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
+                        $ = layui.jquery;
+                        app = layui.app;
+                        var layer = layui.layer,
+                            message = layui.message;
+                            message.run("修改成功");
+                });
+                }
+            })
+        }
+        //修改价格倍数
+        function UpdatePriceMultiple(input) {
+            var PriceMultiple = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/UpdatePriceMultipleByEmail',
+                data: JSON.stringify({ "Email": UserEmail, "PriceMultiples": PriceMultiple }),
+                success: function (data) {
+                    layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
+                        $ = layui.jquery;
+                        app = layui.app;
+                        var layer = layui.layer,
+                            message = layui.message;
+                        message.run("修改成功");
+                    });
+                }
+            })
+        }
+
+        //修改价格开关状态
+        function UpdatePriceSwitchStatus(check) {
+            var checked = check.checked ? 0 : 1;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/UpdatePriceSwitchStatusByEmail',
+                data: JSON.stringify({ "Email": UserEmail, "PriceSwitch": checked }),
+                success: function (data) {
+                    layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
+                        $ = layui.jquery;
+                        app = layui.app;
+                        var layer = layui.layer,
+                            message = layui.message;
+                        message.run("修改成功");
+                    });
+                }
+            })
+        }
+        //修改密码
+        function ModifyPassword() {
+            layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
+                $ = layui.jquery;
+                app = layui.app;
+                var layer = layui.layer,
+                message = layui.message;
+
+            var OldPsd = $("#OldPsd").val();
+            var NewPsd = $("#NewPsd").val();
+            var ReEnterPsd = $("#ReEnterPsd").val();
+            if (NewPsd != ReEnterPsd) {
+                var ReEnterHint = document.getElementById("ReEnterPsdHint");
+                ReEnterHint.style.display = "inline";
+                return false;
+            }
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/UpdatePasswordByOrdPsa',
+                data: JSON.stringify({ "Email": UserEmail, "OrdPassword": OldPsd, "Pw": NewPsd }),
+                success: function (data) {
+                    if (data.code == 200) {
+                        var OldPsdHint = document.getElementById("OrdpsdHint");
+                        OldPsdHint.style.display = "none";
+
+                        var ReEnterHint = document.getElementById("ReEnterPsdHint");
+                        ReEnterHint.style.display = "none";
+
+                        message.run("modify successfully!");
+                 
+                    } if (data.code == -1) {
+                        var OldPsdHint = document.getElementById("OrdpsdHint");
+                        OldPsdHint.style.display = "inline";
+                        return false;
+                    }
+
+                }
+            })
+            })
+
+        }
+        //绑定新店铺
+        function BindShop() {
+            window.open('https://apps.shopify.com/Anderdrop-dropshipping?source=Anderdrop').location;
+        }
+        function BindShop1() {
+            layer.open({
+                title: "Connect to store",
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['520px', '410px'],
+                content: '/client/Customer/SelectShopPlatform.html',
+            });
+            GetMyShop();
+        }
+        //复制分销链接
+        function ShareInvitationUrl() {
+            var inp = document.getElementById("InvitationUrl");
+            inp.select(); // 选中
+            document.execCommand('copy', false); // copy已经选中的内容
+            layer.msg("Copy success!");
+        }
+        //查询邀请记录列表
+        function QueryInvitationList() {
+            var Invitation = document.getElementById("Invitation");
+            $("#Invitation").addClass("thisCut");
+            var Record = document.getElementById("Record");
+            $("#Record").removeClass("thisCut");
+            var Marketing = document.getElementById("Marketing");
+            $("#Marketing").removeClass("thisCut");
+            //获取列表div并清空内容
+            var RecordsDiv = document.getElementById("Records");
+            RecordsDiv.innerHTML = "";
+
+            var Recordsul = document.createElement("ul");
+            Recordsul.setAttribute('style', 'height:48px;line-height:48px;');
+            Recordsul.setAttribute('class', 'table-header');
+            RecordsDiv.appendChild(Recordsul);
+            var herderhtml = "";
+
+            //herderhtml += "<li id='Email' class='head_font' style='width:25%'>Email<br></li>";
+            herderhtml += "<li id='Registration_Date' class='head_font'  style='width:25%'>注册时间<br></li>";
+            herderhtml += "<li id='orders' class='head_font' style='width:25%'>订单数<br></li>";
+            herderhtml += "<li id='Order_Amount' class='head_font' style='width:25%'>订单金额<br></li>";
+
+            Recordsul.innerHTML = herderhtml;
+            //$("#Email").html($.i18n.prop('Email'));
+            $("#Registration_Date").html($.i18n.prop('Registration.Date'));
+            $("#orders").html($.i18n.prop('Orders'));
+            $("#Order_Amount").html($.i18n.prop('Order.Amount'));
+
+            var RecordsBody = document.createElement("div");
+            RecordsBody.setAttribute('class', 'table-body');
+            RecordsDiv.appendChild(RecordsBody);
+
+            var dto_obj = new Object();
+            dto_obj.Id = parseInt(CustomerId);
+
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/GetCustomerInvitation',
+                data: JSON.stringify(dto_obj),
+                success: function (data) {
+                    if (data.data && data.data.length !=0) {
+                        //循环数据添加主体部分
+                        for (var i = 0; i < data.data.length; i++) {
+
+                            var RecordsBodyul = document.createElement("ul");
+                            RecordsBody.appendChild(RecordsBodyul);
+                            var RecordsBodyhtml = "";
+
+                            //RecordsBodyhtml += "<li class='body_font' style='width:25%'>" + data.data[i].email + "<br></li>";
+                            RecordsBodyhtml += "<li class='body_font' style='width:25%'>" + data.data[i].registTime + "<br></li>";
+                            RecordsBodyhtml += "<li class='body_font' style='width:25%'>" + data.data[i].orderNum + "<br></li>";
+                            RecordsBodyhtml += "<li class='body_font' style='width:25%;font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>$ " + data.data[i].orderAmount + "<br></li>";
+                            RecordsBodyul.innerHTML = RecordsBodyhtml;
+                        }
+                    }
+                    else {
+                        //添加div ，
+                        var NoProduct = document.createElement("div");
+                        NoProduct.setAttribute('class', 'NoProduct');
+                        NoProduct.setAttribute('style', 'width:100%;');
+                        RecordsBody.appendChild(NoProduct);
+                        //放图片
+                        var img = document.createElement("img");
+                        img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:50px;');
+                        img.setAttribute('src', '../../../images/404.png');
+                        NoProduct.appendChild(img);
+
+                        var content = document.createElement("div");
+                        content.setAttribute('style', 'text-align:center;margin: 20px auto;line-height:10px;');
+                        NoProduct.appendChild(content);
+                        content.html($.i18n.prop("No.content"));
+
+                        return null;
+                    }
+                }
+            })
+         
+        }
+        //查询充值记录列表
+        function QueryRecordList() {
+            var Invitation = document.getElementById("Invitation");
+            $("#Invitation").removeClass("thisCut");
+            var Record = document.getElementById("Record");
+            $("#Record").addClass("thisCut");
+            var Marketing = document.getElementById("Marketing");
+            $("#Marketing").removeClass("thisCut");
+            //获取列表div并清空内容
+            var RecordsDiv = document.getElementById("Records");
+            RecordsDiv.innerHTML = "";
+
+            var Recordsul = document.createElement("ul");
+            Recordsul.setAttribute('style', 'height:48px;line-height:48px;');
+            Recordsul.setAttribute('class', 'table-header');
+            RecordsDiv.appendChild(Recordsul);
+            var herderhtml = "";
+
+            herderhtml += "<li id='type' class='head_font'>类型<br></li>";
+            herderhtml += "<li id='paytime' class='head_font'>支付时间<br></li>";
+            herderhtml += "<li id='money' class='head_font'>金额<br></li>";
+
+            Recordsul.innerHTML = herderhtml;
+            $("#type").html($.i18n.prop('type'));
+            $("#money").html($.i18n.prop('OrderDetails.orderModule.div.money'));
+            $("#paytime").html($.i18n.prop('paytime'));
+
+            var RecordsBody = document.createElement("div");
+            RecordsBody.setAttribute('class', 'table-body');
+            RecordsDiv.appendChild(RecordsBody);
+
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/QueryRechargeRecords',
+                data: JSON.stringify({ "Email": UserEmail }),
+                success: function (data) {
+                    if (data.data && data.data.length!=0) {
+                        //循环数据添加主体部分
+                        for (var i = 0; i < data.data.length; i++) {
+
+                            var RecordsBodyul = document.createElement("ul");
+                            RecordsBody.appendChild(RecordsBodyul);
+                            var RecordsBodyhtml = "";
+
+
+                            RecordsBodyhtml += "<li class='body_font'>" + data.data[i].typeMean + "<br></li>";
+                            RecordsBodyhtml += "<li class='body_font'>" + data.data[i].payTime + "<br></li>";
+                            if (data.data[i].payType == "E") {
+                                RecordsBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>-$" + data.data[i].amount + "<br></li>";
+                            } else if (data.data[i].payType == "O") {
+                                RecordsBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>+$" + data.data[i].amount + "<br></li>";
+                            }
+
+                            RecordsBodyul.innerHTML = RecordsBodyhtml;
+                        }
+                    }
+                    else {
+
+                        //添加div ，
+                        var NoProduct = document.createElement("div");
+                        NoProduct.setAttribute('class', 'NoProduct');
+                        NoProduct.setAttribute('style', 'width:100%;');
+                        RecordsBody.appendChild(NoProduct);
+                        //放图片
+                        var img = document.createElement("img");
+                        img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:50px;');
+                        img.setAttribute('src', '../../../images/404.png');
+                        NoProduct.appendChild(img);
+
+                        var content = document.createElement("div");
+                        content.setAttribute('style', 'text-align:center;margin: 20px auto;line-height:10px;');
+                        NoProduct.appendChild(content);
+                        content.html($.i18n.prop("No.content"));
+
+                        return null;
+                    }
+                }
+            })
+
+
+        }
+        //查询营销拼团成功列表
+        function QueryMarketingList() {
+            var Invitation = document.getElementById("Invitation");
+            $("#Invitation").removeClass("thisCut");
+            var Record = document.getElementById("Record");
+            $("#Record").removeClass("thisCut");
+            var Marketing = document.getElementById("Marketing");
+            $("#Marketing").addClass("thisCut");
+
+            //获取列表div并清空内容
+            var RecordsDiv = document.getElementById("Records");
+            RecordsDiv.innerHTML = "";
+
+            var Recordsul = document.createElement("ul");
+            Recordsul.setAttribute('style', 'height:48px;line-height:48px;');
+            Recordsul.setAttribute('class', 'table-header');
+            RecordsDiv.appendChild(Recordsul);
+            var herderhtml = "";
+
+            herderhtml += "<li id='code' class='head_font'>编码<br></li>";
+            herderhtml += "<li id='createTime' class='head_font'>创建事件<br></li>";
+            herderhtml += "<li id='money' class='head_font'>金额<br></li>";
+            Recordsul.innerHTML = herderhtml;
+            $("#code").html($.i18n.prop('code'));
+            $("#money").html($.i18n.prop('OrderDetails.orderModule.div.money'));
+            $("#createTime").html($.i18n.prop('createTime'));
+
+            var RecordsBody = document.createElement("div");
+            RecordsBody.setAttribute('class', 'table-body');
+            RecordsDiv.appendChild(RecordsBody);
+
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Marketing/QueryMarketingSucceedGroupList',
+                data: JSON.stringify({ "Email": UserEmail }),
+                success: function (data) {
+                    if (data.data && data.data.length != 0) {
+                        //循环数据添加主体部分
+                        for (var i = 0; i < data.data.length; i++) {
+
+                            var RecordsBodyul = document.createElement("ul");
+                            RecordsBody.appendChild(RecordsBodyul);
+                            var RecordsBodyhtml = "";
+
+
+                            RecordsBodyhtml += "<li class='body_font'>" + data.data[i].code + "<br></li>";
+                            RecordsBodyhtml += "<li class='body_font'>" + data.data[i].createTime + "<br></li>";
+                            RecordsBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>+$" + data.data[i].amountReward + "<br></li>";
+                           
+                            RecordsBodyul.innerHTML = RecordsBodyhtml;
+                        }
+                    }
+                    else {
+
+                        //添加div ，
+                        var NoProduct = document.createElement("div");
+                        NoProduct.setAttribute('class', 'NoProduct');
+                        NoProduct.setAttribute('style', 'width:100%;');
+                        RecordsBody.appendChild(NoProduct);
+                        //放图片
+                        var img = document.createElement("img");
+                        img.setAttribute('style', 'display:block;text-align:center;margin:0px auto;margin-top:50px;');
+                        img.setAttribute('src', '../../../images/404.png');
+                        NoProduct.appendChild(img);
+
+                        var content = document.createElement("div");
+                        content.setAttribute('style', 'text-align:center;margin: 20px auto;line-height:10px;');
+                        NoProduct.appendChild(content);
+                        content.html($.i18n.prop("No.content"));
+
+                        return null;
+                    }
+                }
+            })
+
+        }
+      
+       
+    </script>
+
+</body>
+</html>

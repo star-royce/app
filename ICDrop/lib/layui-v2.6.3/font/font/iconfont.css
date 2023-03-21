@@ -1,0 +1,121 @@
+@font-face {
+  font-family: "layui-icon"; /* Project id  */
+  src: url('iconfont.ttf?t=1654588075256') format('truetype');
+}
+
+.iconfont {
+  font-family: "layui-icon" !important;
+  font-size: 24px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-a-ImportList:before {
+  content: "\e601";
+}
+
+.icon-a-MyAccount:before {
+  content: "\e602";
+}
+
+.icon-Orders:before {
+  content: "\e603";
+}
+
+.icon-Poducts:before {
+  content: "\e604";
+}
+
+.icon-a-FindProducts:before {
+  content: "\e605";
+}
+
+.icon-a-Accountsettings:before {
+  content: "\e606";
+}
+
+.icon-a-Accountbalance:before {
+  content: "\e607";
+}
+
+.icon-a-Myshop:before {
+  content: "\e608";
+}
+
+.icon-a-Intelligentsettings:before {
+  content: "\e609";
+}
+
+.icon-a-Changepassword:before {
+  content: "\e60a";
+}
+
+.icon-a-check:before {
+  content: "\e60b";
+}
+
+.icon-Home:before {
+  content: "\e60c";
+}
+
+.icon-rexiao:before {
+  content: "\e60d";
+}
+
+.icon-a-yingxiao-7-gou:before {
+  content: "\e610";
+}
+
+.icon-yingxiao-3:before {
+  content: "\e611";
+}
+
+.icon-yingxiao-9-E-mail:before {
+  content: "\e612";
+}
+
+.icon-yingxiao-10-Code:before {
+  content: "\e613";
+}
+
+.icon-a-yingxiao-12-Yourbusiness:before {
+  content: "\e614";
+}
+
+.icon-yingxiao-14-xiala:before {
+  content: "\e615";
+}
+
+.icon-a-yingxiao-11-Setpassword:before {
+  content: "\e616";
+}
+
+.icon-yingxiao-4:before {
+  content: "\e617";
+}
+
+.icon-a-yingxiao-6-CopyLink:before {
+  content: "\e618";
+}
+
+.icon-yingxiao-8-Name:before {
+  content: "\e619";
+}
+
+.icon-yingxiao-13-cuowutishi:before {
+  content: "\e61a";
+}
+
+.icon-yingxiao-1:before {
+  content: "\e61b";
+}
+
+.icon-yingxiao-2:before {
+  content: "\e61c";
+}
+
+.icon-yingxiao-5:before {
+  content: "\e61d";
+}
+

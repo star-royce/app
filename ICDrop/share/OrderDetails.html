@@ -1,0 +1,599 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../css/OrderDetails.css" media="all">
+    <link rel="stylesheet" href="../../css/Message.css?v=2" media="all">
+</head>
+<body>
+    <hr />
+    <div class="">
+        <div class="">
+            <fieldset class="data">
+            </fieldset>
+        </div>
+    </div>
+    <script type="text/html" id="orderModule">
+        <div class="header">
+            <div i18n_Text="The.order.situation" style="float:left;font-weight:bold;">订单详情</div>
+            <div class="orderStatus"> {{if LangId=="zh_cn" }}{{statusName}}{{else  LangId=="en_us" }}{{statusNameEn}}{{/if}} </div>
+        </div>
+        <div class="">
+            <div class="top-one">
+                <div class="Column">
+                    <div> <span i18n_Text="OrderDetails.orderModule.div.shop">订单店铺</span>: </div>
+                    <div style="font-size: 14px; color: #333333; font-family: Arial; font-weight: bold;">  {{customerShopify.shopifyShop}}</div>
+                </div>
+                <div class="Column">
+                    <div> <span i18n_Text="OrderDetails.orderModule.div.CreationTime">创建时间</span>: </div>
+                    <div> {{orderTime}} </div>
+                </div>
+            </div>
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.shopCode">订单店铺编号</span>: </div>
+                    <div style="font-size: 14px;">  {{shopifyOrderCode}}</div>
+                </div>
+                {{ if orderStatus!="A"&& orderStatus!="C" && orderStatus!="Z" && orderStatus!="D"  && paymentTime!=null }}
+                <div class="Column">
+                    <div> <span i18n_Text="OrderDetails.orderModule.div.PaymentTime">支付时间</span>: </div>
+                    <div> {{paymentTime}} </div>
+                </div>
+                {{/if}}
+            </div>
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.OrderCode">订单编号</span> :</div>
+                    <div style="font-size:14px;">
+                        {{orderCode}}
+                    </div>
+                </div>
+            </div>
+            {{ if orderStatus=="Q" || orderStatus=="W"}}
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.Waybill">运单号</span> :</div>
+                    <div style="font-size:14px;">
+                        {{waybillCode}}
+                        <img src="../../../images/button/copy.png" class="copyWaybill" style="margin-left:10px;cursor:pointer;" data-waybill="{{waybillCode}}" data-key="{{orderId}}" />
+                        <input id="copyInput{{orderId}}" value="{{waybillCode}}" style="position: absolute; top:0; left:0; opacity:0; z-index: -10;" />
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+        <div class="prodect-body">
+            <table class="" lay-skin="line">
+                <thead>
+                    <tr style="height: 36px; background: #F2F3F5; text-align: center; font-size: 14px; font-family: Arial; font-weight: 400; color: #333333; ">
+                        <th style="width:90px;"></th>
+                        <th style="width:340px;" i18n_Text="OrderDetails.orderModule.div.ProductName">商品名称</th>
+                        <th style="width:160px;" i18n_Text="OrderDetails.orderModule.div.ProductAttribute">属性</th>
+                        <th style="width:105px;" i18n_Text="OrderDetails.orderModule.div.ProductQuantity">数量</th>
+                        <th style="width:105px;" i18n_Text="OrderDetails.orderModule.div.Price">价格</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each ordWaresList}}
+                    <tr style="height: 92px; border-bottom: 1px solid #DDDDDD; text-align: center; font-size: 14px; font-family: Arial; font-weight: 400; color: #666666; ">
+                        <td style="width:90px;text-align:center;"><img src="{{ $value.picture }}" style="width:60px;height:60px;" /></td>
+
+                        <td style="width:340px;">{{ $value.productName }}</td>
+                        <td style="width:160px;">{{ $value.variantTitle }}</td>
+                        <td style="width:105px;">{{ $value.quantity }}</td>
+                        <td style="width:105px;"><span style=" color: #FF5555 !important;">{{ $value.proAllPrice.toFixed(2) }}</span> USD</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{ if orderStatus!="A"&& orderStatus!="C" && orderStatus!="Z"}}
+        <div class="logistics " style="width: 800px; height: 32px; line-height: 32px; margin-top: 10px;">
+            <div class="VAT">
+                <span i18n_Text="OrderList.orderModule.div.VAT">
+                    税费:
+                </span>:
+                <span class="ShippingPrice" selectmoney="{{orderAllTaxes!=0?orderAllTaxes:0}}">{{orderAllTaxes!=0?(orderAllTaxes).toFixed(2):"0.00"}} </span>
+                USD
+            </div>
+            <div class="Shiping">
+                <span i18n_Text="OrderList.orderModule.div.Shipping">
+                    运费:
+                </span>:
+                <span class="ShippingPrice" id="selectprice{{orderId}}" selectmoney="{{selectOrderFreightofferList!=null?selectOrderFreightofferList.orderAllFreight:0}}">{{selectOrderFreightofferList!=null?selectOrderFreightofferList.orderAllFreight.toFixed(2):"0.00"}} </span>
+                USD
+            </div>
+
+            {{ if orderStatus=="D"}}
+            <div class="model-select-box">
+                <div class="model-select-text" id="selectshipfee{{orderId}}" aging="{{selectOrderFreightofferList!=null?selectOrderFreightofferList.aging:""}}" value="">{{selectOrderFreightofferList!=null?selectOrderFreightofferList.aging:"Please Select"}}</div>
+                <b class="bg1"></b>
+
+                <ul class="model-select-option">
+                    {{each  orderFreightofferList orderFreightofferList}}
+                    <li order-id="{{orderId}}" data-option="{{orderFreightofferList.aging}}">{{orderFreightofferList.aging}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            {{ /if }}
+
+
+            {{ if orderStatus!="D"}}
+            <div class="aging"><img src="../../../images/freight.png" style="margin-right:8px;" />{{selectOrderFreightofferList!=null?selectOrderFreightofferList.aging:"undefined"}}</div>
+
+            {{ /if }}
+        </div>
+        <div style="margin-top:10px;height:32px;">
+
+            <div class="total" style="float:right;height:32px;line-height:32px;">
+                <span i18n_Text="OrderList.orderModule.div.Total">
+                    总计:
+                </span>:
+
+                <span class="ShippingPrice" id="selectTotalprice{{orderId}}" orderCode="{{orderCode}}" TaxesMoney="{{orderAllTaxes}}" amountPaid="{{amountPaid}}" productmoney="{{goodsTotal}}" selectmoney="{{selectOrderFreightofferList!=null?(selectOrderFreightofferList.orderAllFreight+goodsTotal+orderAllTaxes):(goodsTotal+orderAllTaxes)}}">{{selectOrderFreightofferList!=null?(selectOrderFreightofferList.orderAllFreight+goodsTotal+orderAllTaxes).toFixed(2):(goodsTotal+orderAllTaxes).toFixed(2)}}</span>
+                USD
+            </div>
+            {{ if orderStatus=="B" }}
+            <div style="float:right;height:32px;line-height:32px;margin-right:20px;">
+                <span i18n_Text="OrderList.orderModule.div.Paid">
+                    已付:
+                </span>:
+                <span class="ShippingPrice">{{amountPaid}} </span>
+                USD
+            </div>
+            {{ /if }}
+        </div>
+        {{ /if  }}
+        {{ if orderStatus!="Z" && orderStatus!="G" && orderStatus!="Q"}}
+        <div class="buttom">
+            <div class="Operation" style="float: Right;">
+                {{ if orderStatus=="A" }}
+                <button type="button" class="zixun" exp-data="{{orderId}}" i18n_Text="OrderList.orderModule.button.enquiry">咨询价格</button>
+                {{ /if }}
+                {{ if orderStatus=="D" ||  orderStatus=="B"}}
+                <button type="button" class="zhifu" exp-data="{{orderId}}" i18n_Text="OrderList.orderModule.button.PayOrder">支付订单</button>
+                {{ /if }}
+                {{ if orderStatus=="A" || orderStatus=="D" || orderStatus=="C" }}
+                <button type="button" class="zuofie" exp-data="{{orderId}}" i18n_Text="OrderList.orderModule.button.cancellation">作废订单</button>
+                {{ /if }}
+                {{ if orderStatus=="F" || orderStatus=="G" || orderStatus=="Q" }}
+                <!--<button type="button" class="refund" exp-data="{{orderId}}" i18n_Text="OrderList.orderModule.button.Refund">申请退款</button>-->
+                {{ /if }}
+                {{ if orderStatus=="W" }}
+                <button type="button" class="invoice" exp-data="{{orderId}}" i18n_Text="OrderList.orderModule.button.invoice">发票</button>
+                {{ /if }}
+            </div>
+
+        </div>
+        {{ /if }}
+
+
+        {{ if ordConsignee!=null }}
+        <div class="" style="margin-top: 20px; width: 150px; color: #333333; font-weight: bold;" i18n_Text="OrderDetails.orderModule.div.Recipients">收件人信息</div>
+        <hr style=" margin:0px !important;margin-top:10px !important;display:block;" />
+        <div class="">
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.consignee">收件人</span>: </div>
+                    <div>  {{ ordConsignee.consignee }}</div>
+                </div>
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.country">国家</span>: </div>
+                    <div>  {{ ordConsignee.country }}</div>
+                </div>
+            </div>
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.email">邮箱</span>: </div>
+                    <div> {{ ordConsignee.email }}</div>
+                </div>
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.city">地区</span>: </div>
+                    <div>  {{ ordConsignee.city }} </div>
+                </div>
+            </div>
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.phone">电话</span>: </div>
+                    <div>  {{ ordConsignee.phone }}</div>
+                </div>
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.street">街道</span>: </div>
+                    <div>  {{ ordConsignee.street }} </div>
+                </div>
+            </div>
+            <div class="top-one">
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.postCode">邮编</span>: </div>
+                    <div>  {{ ordConsignee.postCode }}</div>
+                </div>
+                <div class="Column">
+                    <div><span i18n_Text="OrderDetails.orderModule.div.address">地址</span>: </div>
+                    <div>  {{ ordConsignee.address }}</div>
+                </div>
+            </div>
+        </div>
+        {{ /if  }}
+
+
+    </script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/js/template-web.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+    <script>
+
+        var $ = null;
+        var message = null;
+        var orderId = window.GetRequest("orderId");
+        var selectindex = 0;
+        layui.use(['i18n', 'app', 'message'], function () {
+            $ = layui.jquery;
+            message = layui.message;
+            var i18n = layui.i18n;
+
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+            var id = "en_us";
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Order/QueryOrderByOrderId",
+                contentType: "application/json;",
+                data: JSON.stringify(orderId),
+                dataType: "json",
+                success: function (data) {
+                    if (!data) {
+                        layer.msg("获取数据失败！");
+                    } else {
+
+                        Binding(data);
+                    }
+                    return false;
+                }
+            });
+
+            // 绑定页面
+            function Binding(data) {
+              /*  console.log(data);*/
+                data.LangId = id;
+                //计算商品总价格
+                var total = 0;
+                for (var j = 0; j < count(data.ordWaresList); j++) {
+                    total = total + (data.ordWaresList[j].proAllPrice * data.ordWaresList[j].quantity)
+                }
+                data.goodsTotal = total;
+                data.LangId = id;
+                var html = template('orderModule', data)
+
+                document.querySelector(".data").innerHTML = html;
+
+                i18n.loadProperties(id);
+            }
+
+            // 咨询价格
+            $(document).on('click', '.zixun', function () {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/ConsultingPrice",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("咨询操作成功，请耐性等待后台处理！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Consultation operation succeeded, please wait patiently for background processing!");
+                        }
+                        GetOrderList("inquiry", laypage);
+
+                    }, error: function () {
+                        if (id == "zh_cn") {
+                            layer.msg("咨询操作失败，请联系管理员！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("The consultation operation failed. Contact the administrator!");
+                        }
+                        GetOrderList("inquiry", laypage);
+                    }
+                });
+                location.reload();
+            });
+            // 支付
+            $(document).on('click', '.zhifu', function () {
+                var price = $("#selectprice" + orderId).attr("selectmoney");
+                //如果没有选择运费则不让继续操作付款
+                if (price == 0) {
+                    if (id == "zh_cn") {
+                        message.run("请选择物流报价", "","error");
+                    }
+                    else if (id == "en_us") {
+                        message.run("Abnormal Payment!", "Please select freight first", "error");
+                    }
+                    return false;
+                }
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/PaypalPayView",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    async: false,//同步
+                    success: function (data) {
+                        if (!data) {
+                            layer.msg("支付异常！");
+                        } else {
+                            window.open(data.data, '_blank').location;
+                            $(".zhifu[exp-data='" + orderId + "']").attr("href", data.data);
+                            $(".zhifu[exp-data='" + orderId + "']").attr("target", "_blank");
+                            return true;
+                        }
+                        return false;
+
+                    }
+                });
+                return true;
+
+            });
+
+            // 作废订单
+            $(document).on('click', '.zuofie', function () {
+                $.ajax({
+                    type: "post",
+                    url:BackgroundDomain + "/api/Order/InvalidateOrder",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    async: false,//同步
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("作废成功！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Success!");
+                        }
+                        GetOrderList("inquiry", laypage);
+                    },
+                    error: function (jqXHR) {
+                        if (jqXHR.responseJSON.message) {
+                            layer.msg(jqXHR.responseJSON.message);
+                        }
+                        else {
+                            if (id == "zh_cn") {
+                                layer.msg("作废异常！");
+                            }
+                            else if (id == "en_us") {
+                                layer.msg("Failed. Contact the administrator!");
+                            }
+                        }
+                    }
+                });
+                location.reload();
+            });
+
+            // 申请退款
+            $(document).on('click', '.tuikuan', function () {
+                $.ajax({
+                    type: "post",
+                    url: BackgroundDomain +"/api/Order/OrderApplyRefund",
+                    contentType: "application/json;",
+                    data: JSON.stringify(orderId),
+                    dataType: "json",
+                    async: false,//同步
+                    success: function (data) {
+                        if (id == "zh_cn") {
+                            layer.msg("成功提交申请退款！请耐心等待后台工作人员处理！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Successfully submit application for refund!  Please wait patiently for the background staff to deal with!");
+                        }
+                    }, error: function () {
+                        if (id == "zh_cn") {
+                            layer.msg("提交申请失败！请联系管理员！");
+                        }
+                        else if (id == "en_us") {
+                            layer.msg("Application submission failed! Please contact the administrator!");
+                        }
+                    }
+                });
+                location.reload();
+            });
+            //复制运单号
+            $(document).on('click', '.copyWaybill', function () {
+                var Waybill = $(this).attr("data-key");
+                /*        console.log($("#copyInput").val());*/
+                var inp = document.getElementById("copyInput" + Waybill);
+                inp.select(); // 选中
+                document.execCommand('copy', false); // copy已经选中的内容
+                layer.msg("Copy success!");
+            });
+
+
+
+            //点击选择框
+            $(document).on('click', 'div.model-select-box b.bg1', function () {
+                var $box = $('div.model-select-box');
+                var $option = $('ul.model-select-option', $box);
+                var $txt = $('div.model-select-text', $box);
+                var speed = 10;
+                var $bg = $('b.bg1', $box)
+                $('div.model-select-box ul.model-select-option').not($(this).siblings('ul.model-select-option')).slideUp(speed, function () {
+                });
+                //如果下拉框是打开的则点击关闭  如果是关闭的则点击打开
+                var temp1 = $("div.model-select-box ul.model-select-option").is(":visible");
+                if (temp1) {
+
+                    $(this).siblings('ul.model-select-option').slideUp(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+                else {
+                    $(this).siblings('ul.model-select-option').slideToggle(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+
+                $option.find('li').each(function (index, element) {
+                    var orderid = $(this).attr("order-id");
+                    if ($(this).attr("data-option") == $('div.model-select-text').attr("aging")) {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    }
+
+                    if ($(this).hasClass('selected')) {
+                        $(this).parent('.model-select-option').siblings('.model-select-text').text($(this).text())
+                    }
+
+                    $(this).off("click").on("click", function () {
+                        $(this).parent().siblings('div.model-select-text').text($(this).text())
+                            .attr('value', $(this).attr('data-option'));
+                        $option.slideUp(speed, function () {
+                        });
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                        //更新选择的物流
+                        var aging = $(this).attr("data-option");
+                        $.ajax({
+                            type: "post",
+                            contentType: "application/json;",
+                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
+                            success: function (msg) {
+                                /*       location.reload();*/
+                                var TabId = $("li[class=layui-this]").attr("id");
+                                // 获取订单
+                                GetOrderList(TabId, laypage);
+                                selectindex = 0;
+                            }
+
+                        })
+                        return false;
+                    })
+
+                    $(this).on('mouseover', function () {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    })
+                })
+            });
+
+            //点击选择框
+            $(document).on('click', 'div.model-select-box div.model-select-text', function () {
+                var $box = $('div.model-select-box');
+                var $option = $('ul.model-select-option', $box);
+                var $txt = $('div.model-select-text', $box);
+                var speed = 10;
+                var $bg = $('b.bg1', $box)
+                $('div.model-select-box ul.model-select-option').not($(this).siblings('ul.model-select-option')).slideUp(speed, function () {
+                });
+                //如果下拉框是打开的则点击关闭  如果是关闭的则点击打开
+                var temp1 = $("div.model-select-box ul.model-select-option").is(":visible");
+                if (temp1) {
+
+                    $(this).siblings('ul.model-select-option').slideUp(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+                else {
+                    $(this).siblings('ul.model-select-option').slideToggle(speed, function () {
+                        selectindex = 1;
+                    });
+                }
+
+
+
+                $option.find('li').each(function (index, element) {
+                    /*     if($(this))*/
+                    var orderid = $(this).attr("order-id");
+
+                    if ($(this).attr("data-option") == $('#selectshipfee' + orderid).attr("aging")) {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    }
+
+                    if ($(this).hasClass('selected')) {
+                        $(this).parent('.model-select-option').siblings('.model-select-text').text($(this).text())
+                    }
+
+
+                    $(this).off("click").on("click", function () {
+                        $(this).parent().siblings('div.model-select-text').text($(this).text())
+                            .attr('value', $(this).attr('data-option'));
+                        $option.slideUp(speed, function () {
+                        });
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                        //更新选择的物流
+                        var aging = $(this).attr("data-option");
+                        $.ajax({
+                            type: "post",
+                            contentType: "application/json;",
+                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
+                            success: function (msg) {
+                                /*       location.reload();*/
+                                var TabId = $("li[class=layui-this]").attr("id");
+                                // 获取订单
+                                GetOrderList(TabId, laypage);
+                                selectindex = 0;
+                            }
+
+                        })
+                        return false;
+                    })
+
+
+
+                    $(this).on('mouseover', function () {
+                        $(this).addClass('selected').siblings('li').removeClass('selected');
+                    })
+
+                })
+            });
+
+
+            ////点击除下拉框外的文档，隐藏所有下拉
+            $(document).on('click', 'div.model-select-box ', function () {
+                var $box = $('div.model-select-box');
+                var $option = $('ul.model-select-option', $box);
+                var $txt = $('div.model-select-text', $box);
+                var speed = 10;
+                var $bg = $('b.bg1', $box)
+                ////点击文档，隐藏所有下拉
+                $('body').not($(this)).bind('click', function () {
+                    $option.slideUp(speed, function () {
+                    });
+                })
+            });
+
+
+
+        });
+
+        function count(obj) {
+            var objType = typeof obj;
+            if (objType == "string") {
+                return obj.length;
+            } else if (objType == "object") {
+                var objLen = 0;
+                for (var i in obj) {
+                    objLen++;
+                }
+                return objLen;
+            }
+            return false;
+        }
+
+
+    </script>
+
+</body>
+</html>

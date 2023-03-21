@@ -1,0 +1,374 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="../../../css/Message.css?v=20220505" media="all">
+    <link rel="stylesheet" href="../../../css/Home.css?v=4" media="all">
+</head>
+<body>
+    <div style="overflow:auto;height:100%;width:100%;">
+        <div id="content">
+            <div id="head">
+                <div id="left">
+                    Used credit line
+                </div>
+                <div id="right">
+                    Credit Amout
+                </div>
+                <div id="Usedcredit">
+                    $0
+                </div><input type="text" id="UsedcreditTemp" name="UsedcreditTemp" style="display:none;" />
+                <div id="CreditAmout">
+                    $0
+                </div>
+                <div id="btnRepay">
+                    <input id="Used" type="button" value="Repayment" class="xiaozhang" />
+                    <input id="NotUsed" type="button" value="Repayment" class="NotUsed" style="display:none;" />
+                </div>
+                <!--制作已使用额度占总额度百分比的进度条-->
+                <div class="AllAmoutRange">
+                    <label style="float:right;margin-right:10px;" id="allAmout"></label>
+                    <div class="UsedRange" id="UsedRange"></div>
+                </div>
+                <div class="dialog" id="usedAmout"></div>
+            </div>
+            <div id="headApply" style="display:none;">
+                <div id="title">
+                    Credit Amout
+                </div>
+                <div id="CreditAmoutContent">
+                    No credit amount? If you want to have a credit amount click
+                    <a class="href" onclick="UpdateCreditApplyStatus()">
+                        apply.
+                    </a>
+                </div>
+            </div>
+            <div id="body">
+                <div id="list">Dropshipping list</div>
+                <div id="imagesLeft">
+                    <div style="display:block;height:40px;">
+                        <span id="spnInquiry" class="OrderNum" style="left:85px;">0</span>
+                        <img src="../../../images/Inquiry.png" id="imgLeft" style="margin-left:35px;" />
+                    </div>
+                    <div id="Inquiry" class="orderText">
+                        Inquiry
+                    </div>
+                </div>
+                <div id="imagesRight">
+                    <div style="display:block;">
+                        <span id="spnShipped" class="OrderNum">0</span>
+                        <img src="../../../images/1844.png" id="imgRight" style="margin-left:35px;" />
+                    </div>
+                    <div id="Shipped" class="orderText">
+                        Shipped
+                    </div>
+                </div>
+
+
+            </div>
+            <div id="bottom">
+                <div id="list">Soucring Partner</div>
+                <div class="overview_right_new">
+
+                    <div class="overview_right_new_top">
+                        <strong style="margin-left:20px;">
+                            Bella
+
+                        </strong>
+                        <b>
+                            <img src="../../../images/mail.png" style="margin-right:6px;">
+                        </b>
+                        <strong style=""></strong>
+                        <div class="tel" onclick="OpenWhatsApp()">
+                            <img src="../../../images/tel.png" style="margin-right:6px;">
+                            <strong>
+                                +86 136 0240 0458
+                            </strong>
+                        </div>
+                    </div>
+
+
+                    <div class="overview_right_new_bottom">
+                        <div class="new_bottom_top">
+                            <div class="msg-box">
+                                <div class="img">
+
+                                    <img src="../../../images/person.png">
+
+                                </div>
+                                <div class="msg">I can help you with product sourcing, dropshipping needs,App using guidance.</div>
+                            </div>
+
+                        </div>
+                        <div class="new_bottom_bottom">
+                            <textarea id="message" class="message" rows="4" placeholder="Click here to send a message,I will get back to you in 24 hours..."></textarea>
+                            <div class="btn-box">
+                                <input class="send-btn" type="button" onclick="updateService()" value="Send">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
+    <script type="text/javascript">
+        var miniTab;
+        var element;
+        var dto_obj = new Object();
+        var id = "en_us";
+        var UserEmail;
+        layui.config({
+            version:'1.0.1'
+        }).use(['i18n', 'app', 'jquery', 'layer', 'miniTab', 'element', 'miniTongji', 'message'], function () {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                i18n = layui.i18n,
+                form = layui.form;
+            message = layui.message;
+            element = layui.element;
+            miniTab = layui.miniTab;
+
+            app = layui.app;
+
+            // 权限
+            app.Load("client");
+
+            // 国际化初始化
+            var YDHConfig = layui.data('YDH');
+
+            if (YDHConfig.Lang) {
+                $("#Lang").text(YDHConfig.Lang.title);
+                id = YDHConfig.Lang.id
+            }
+            i18n.loadProperties(id);
+
+            // 获取登录的用户名
+            var YDHCustomer = layui.data('YDH-Customer');
+            var dto_obj = new Object();
+            if (YDHCustomer.email) {
+                UserEmail = YDHCustomer.email;
+            }
+            var Dto = new Object();
+            Dto.Email = UserEmail;
+            dto_obj.Dto = Dto;
+
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Customer/GetCusCustomerList",
+                contentType: "application/json;",
+                data: JSON.stringify(dto_obj),
+                dataType: "json",
+                success: function (e) {
+                    if (e) {
+                        var json = JSON.stringify(e);
+                        var date_obj = JSON.parse(json);
+                        var arrValue = date_obj.data;
+                        var creditApply = arrValue[0].creditApply
+                        if (arrValue[0].orderTotal == "0") {
+                            openNoviceGuide();
+                        }
+                        if (arrValue[0].usedcredit == "0" && arrValue[0].creditBalance == "0") {
+                            var head = document.getElementById("head");
+                            head.style.display = "none";
+
+                            var headApply = document.getElementById("headApply");
+                            headApply.style.display = "block";
+                        }
+                        else {
+                            $("#UsedcreditTemp").val(arrValue[0].usedcredit);
+                            $("#spnInquiry").text(arrValue[0].inquiryOrder);
+                            $("#spnShipped").text(arrValue[0].shippedOrder);
+
+                            if (arrValue[0].usedcredit == "0") {
+                                var Used = document.getElementById("Used");
+                                Used.style.display = "none";
+
+                                var NotUsed = document.getElementById("NotUsed");
+                                NotUsed.style.display = "inline";
+                            }
+                            else {
+                                var Used = document.getElementById("Used");
+                                Used.style.display = "inline";
+
+                                var NotUsed = document.getElementById("NotUsed");
+                                NotUsed.style.display = "none";
+                            }
+                            var UsedRange = (arrValue[0].usedcredit / arrValue[0].creditAmout).toFixed(2) * 100;
+                            var UsedRangeDiv = document.getElementById("UsedRange");
+                            UsedRangeDiv.setAttribute('style', "width:" + UsedRange +"%!important;");
+
+                        }
+                        $("#allAmout").html("$" + arrValue[0].creditAmout);
+                        $("#usedAmout").html("$" + arrValue[0].usedcredit);
+                        var usedAmoutDiv = document.getElementById("usedAmout");
+                        usedAmoutDiv.setAttribute('style', "left:calc(" + UsedRange + "% - 10px)!important;");
+
+                        $("#Usedcredit").html("$" + arrValue[0].usedcredit);
+                        $("#CreditAmout").html("$" + arrValue[0].creditAmout);
+                    }
+                },
+                error: function (jqXHR) {
+                    layer.msg('获取失败！');
+                    return false;
+                }
+            });
+
+            //新手引导
+            function openNoviceGuide() {
+                var tabId = "/client/Customer/NoviceGuide.html";
+                title = "On boarding";
+                var isexit = miniTab.check(tabId, true);
+                if (!isexit) {
+                    parent.layui.element.tabAdd('layuiminiTab', {
+                        title: '<span class="layuimini-tab-active"></span><span>' + title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
+                        , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + tabId + '"></iframe>'
+                        , id: tabId
+                    });
+                }
+                parent.layui.element.tabChange('layuiminiTab', tabId);
+
+                tabId = "/client/Customer/Home.html";
+                miniTab.delete(tabId, true);
+            }
+
+        });
+        //提交消息
+        function updateService() {
+            if ($('#message').val() == '' || $('#message').val().trim() == '') {
+                /* alert("必填项不能为空");*/
+                message.run($.i18n.prop('Import.Failed'), $.i18n.prop('IsEmpty'), "error");
+                return;
+            }
+            var dto_obj = new Object();
+            dto_obj.message = $('#message').val();
+            $.ajax({
+                type: "post",
+                url: BackgroundDomain +"/api/Customer/InsertCustomerMessage",
+                contentType: "application/json;",
+                data: JSON.stringify(dto_obj),
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg)
+                    if (msg && msg.code == 200) {
+                        if (id == "zh_cn") {
+                            layer.msg('保存成功！');
+                        }
+                        else if (id == "en_us") {
+                            layer.msg('We have received your massage, we will get back to you as soon as possible!');
+                        }
+                    }
+                },
+                error: function (jqXHR) {
+                    if (id == "zh_cn") {
+                        layer.msg('保存失败！');
+                    }
+                    else if (id == "en_us") {
+                        layer.msg('Save failed！');;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        // 支付
+        $(document).on('click', '.xiaozhang', function () {
+
+            var UsedcreditCost = $("#UsedcreditTemp").val();
+            if (UsedcreditCost == 0) {
+                message.run("Abnormal Payment!", "Please select freight first", "error");
+                return false;
+            }
+
+            var Payment = "";
+            if (id == "zh_cn") {
+                Payment = "支付...";
+            }
+            else if (id == "en_us") {
+                Payment = "Payment...";
+            }
+            layer.open({
+                title: Payment,
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['520px', '446px'],
+                content: '/client/Customer/UsedcreditPay.html?UsedcreditCost=' + UsedcreditCost,
+                success: function (layero, index) {
+                    ////对加载后的iframe进行宽高度自适应
+                    //layer.iframeAuto(index);
+                }
+            });
+            return true;
+        });
+
+        //跳转到绑定店铺
+        function LinkStore() {
+            layer.open({
+                title: "Connect to store",
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['520px', '410px'],
+                content: '/client/Customer/BindShop.html',
+            });
+
+
+        }
+
+        //修改赊账状态
+        function UpdateCreditApplyStatus() {
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/UpdateCreditApplyStatusByEmail',
+                data: JSON.stringify({ "Email": UserEmail, "creditApply": "1" }),
+                success: function (data) {
+                    layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
+                        $ = layui.jquery;
+                        app = layui.app;
+                        var layer = layui.layer,
+                            message = layui.message;
+                        message.run("修改成功");
+                    });
+                }
+            })
+        }
+
+        //新手引导
+        function openboarding() {
+            var tabId = "/client/Customer/NoviceGuide.html";
+            title = "On boarding";
+            var isexit = miniTab.check(tabId, true);
+            if (!isexit) {
+                parent.layui.element.tabAdd('layuiminiTab', {
+                    title: '<span class="layuimini-tab-active"></span><span>' + title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
+                    , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + tabId + '"></iframe>'
+                    , id: tabId
+                });
+            }
+            parent.layui.element.tabChange('layuiminiTab', tabId);
+
+            tabId = "/client/Customer/Home.html";
+            miniTab.delete(tabId, true);
+        }
+
+        function OpenWhatsApp() {
+            window.open("https://wa.link/pk5zyr");
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <div style="margin: 10px 10px 10px 10px">
+                <div class="layui-form-item" style="font-size:21px;color:#ff0000">
+                    管理员生成链接点击量:<span id="managelinkclick"></span>
+                </div>
+                <div class="layui-form-item" style="font-size:21px;color:#ff0000">
+                    通过管理员生成链接注册用户数:<span id="managelinkregister"></span>
+                </div>
+            </div>
+
+
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm " lay-event="Generating_Links">生成链接</button>
+                </div>
+            </script>
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="realization">奖励变现</a>
+            </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        </div>
+    </div>
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script>
+        var app = null;
+        layui.use(['form', 'table', 'app'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table,
+                layer = layui.layer;
+            app = layui.app;
+            app.Load("manage");
+
+            //获取管理员链接点击次数和注册人数
+            GetManageLinkInfo();
+            function GetManageLinkInfo() {
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json;",
+                    url:BackgroundDomain + '/api/Customer/GetManageLinkInfo',
+                    data: JSON.stringify(),
+                    success: function (data) {
+                        var managelinkclick = document.getElementById("managelinkclick");
+                        managelinkclick.innerText = data.invitelinkClick;
+
+                        var managelinkregister = document.getElementById("managelinkregister");
+                        managelinkregister.innerText = data.invitelinkRegister;
+                    }
+                });
+
+            }
+
+
+            //表格渲染
+            table.render({
+                method: "post",
+                contentType: "application/json;",
+                elem: '#currentTableId',
+                url: BackgroundDomain +'/api/Customer/QueryManageDistributionDetails',
+                toolbar: '#toolbarDemo',
+                cols: [[
+                    { type: "numbers", width: 50, title: '序号' },
+                    { field: 'customerLevel', width: 200, title: '用户等级' },
+                    { field: 'email', width: 300, title: '客户邮箱' },
+                    { field: 'availableBonus', width: 180, title: '可用奖励' },
+                    { field: 'freezeBonus', width: 150, title: '冻结奖励' },
+                    { field: 'invitationEmail', width: 300, title: '上级邀请人' },
+                    { field: 'invitelinkClick', width: 150, title: '链接点击量' },
+                    { field: 'invitelinkRegister', width: 200, title: '链接注册量' },
+                    { title: '操作', minWidth: 120, toolbar: '#currentTableBar', fixed: 'right' }
+                ]],
+                page: true,
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+            });
+
+
+            //监听头部工具栏事件
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                //生成分享链接
+                if (obj.event === 'Generating_Links') {
+                    var inp = document.createElement('input'); // create input标签
+                    document.body.appendChild(inp) // 添加到body中
+                    inp.value = "https://" + window.location.host + '/client/Customer/index.html?InvitationCode=manage';// 给input设置value属性为需要copy的内容
+                    inp.select(); // 选中
+                    document.execCommand('copy', false); // copy已经选中的内容
+                    inp.remove(); // 删除掉这个dom
+                    layer.msg("生成链接成功");
+                }
+
+            })
+
+            //监听表格操作框事件
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'realization') {
+                    var result = JSON.stringify(data);
+                    console.log("result=" + result);
+                    layer.open({
+                        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 1,
+                        title: "修改用户用户信息",
+                        area: ['650px', '430px'],
+                        content: $("#divRealization")//引用的弹出层的页面层的方式加载修改界面表单
+
+                    });
+
+                    //动态向表传递赋值
+                    Realization(obj, data);
+                }
+            });
+
+            function Realization(obj, data) {
+
+                form.on('submit(saveBtn)', function (massage) {
+                    if (massage.field.AvailableBonus > data.availableBonus) {
+                        layer.msg("提现金额不能大于可用金额");
+                        return false;
+                    }
+
+                var dto_obj = new Object();
+                dto_obj.CustomerId = data.customerId;
+                dto_obj.AvailableBonus = massage.field.AvailableBonus;
+         
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json;",
+                    url: BackgroundDomain +'/api/Customer/WithdrawUsableAward',
+                    data: JSON.stringify(dto_obj),
+                    async: false,//同步
+                    success: function (msg) {
+                        if (msg.code == "200") {
+                            layer.msg("变现成功", { icon: 6 });
+                            layer.closeAll('loading');
+                        }
+                        else {
+                            layer.msg("变现失败，请检查");
+                            layer.closeAll('loading');
+                            return false;
+                        }
+                    },
+                    error:function(msg)
+                    {
+                            layer.msg("变现失败，请检查");
+                            layer.closeAll('loading');
+                            return false;
+                     
+                    }
+
+                })
+            })
+            }
+        })
+    </script>
+    <!--提现-->
+    <div class="layui-row" id="divRealization" style="display:none;">
+        <form class="layui-form layui-from-pane" lay-filter="formEditUser" action="" style="margin-top:20px">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">变现金额</label>
+                <div class="layui-input-block">
+                    <input type="text" name="AvailableBonus" lay-verify="required" lay-reqtext="金额不能为空" placeholder="请输入金额" value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

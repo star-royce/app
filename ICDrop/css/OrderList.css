@@ -1,0 +1,653 @@
+﻿body {
+    margin: 0px 50px;
+}
+.disabled {
+background:#666666;
+}
+/*分页的当前页的字体颜色*/
+.layui-laypage .layui-laypage-curr em {
+    color: #333334;
+}
+/*tab界面当前选中模块的字体颜色*/
+.layui-tab-brief > .layui-tab-title .layui-this {
+    color:#333333 !important;
+}
+.layui-tab-content {
+padding-top:0px !important;
+}
+/*复选框样式*/
+.layui-form-checkbox {
+    display: none;
+}
+
+input[type=checkbox] {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    color: #FFD401 !important;
+    border: 1px solid #DDDDDD;
+    position: relative;
+    border-radius: 5px;
+    display:inline-block !important;
+}
+    input[type=checkbox]:checked {
+        background: #029803;
+    }
+
+    input[type=checkbox]:before,
+    input[type=checkbox]:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #333333;
+        transform-origin: 0 0;
+        transition: transform 0ms linear 0ms;
+    }
+
+    /*构成勾勾 的前半部分；控制角度和粗细*/
+    input[type=checkbox]:before {
+        transform: rotate(-45deg) translateY(45%) translateX(-30%) scaleX(0.1) scaleY(0);
+    }
+    /*这 一段 构成勾勾的后半部分。控制角度和粗细*/
+    input[type=checkbox]:after {
+        transform: rotate(225deg) translateY(-30%) translateX(-95%) scaleX(0.1) scaleY(0);
+        transition-delay: 0ms;
+    }
+
+    input[type=checkbox]:indeterminate:before {
+        transform: rotate(0) translateY(37.5%) translateX(10%) scaleX(0.8) scaleY(0.25);
+        transition-duration: 0ms;
+    }
+
+    input[type=checkbox]:checked:before {
+        transform: rotate(312deg) translateY(45%) translateX(-30%) scaleX(0.1) scaleY(0.4);
+        transition-duration: 0ms;
+    }
+
+    input[type=checkbox]:checked:after {
+        transform: rotate(216deg) translateY(-40%) translateX(-90%) scaleX(0.1) scaleY(0.7);
+        transition-duration: 0ms;
+        transition-delay: 0ms;
+    }
+/*分页栏选中样式*/
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    padding: 1px;
+    width: 100%;
+    height: 100%;
+    background-color: #029803;
+}
+
+/*下拉框*/
+.selectshop {
+    margin-left: 20px;
+    padding-left: 10px;
+    width: 200px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 5px;
+}
+.layui-input, .layui-select, .layui-textarea {
+    border-radius: 5px;
+}
+
+.layui-form-select dl {
+    border-radius: 5px;
+}
+
+.layui-form-select dl dd.layui-this {
+        background-color: #029803;
+        width: 180px !important;
+        color:#FFFFFF;
+}
+/*输入订单号的Input框*/
+.OrderNumPut {
+    width: calc(100% - 91px);
+    height: 38px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 6px;
+    float: left;
+    padding-left: 50px;
+      margin-left:40px;
+}
+/*搜索框*/
+.searchOrder {
+    padding-left:20px;
+    width: 40px;
+    height: 20px;
+    background: #FFFFFF;
+    opacity: 1;
+    /* border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;*/
+    border-radius: 6px;
+    border: 0px solid #029803;
+    cursor: pointer;
+    margin-left: calc(-1 * (100% - 41px));
+    margin-top:10px;
+
+}
+/*头部tab的ul的样式*/
+.layui-tab-title ul {
+    height: 36px;
+    
+}
+.layui-tab-title {
+    height: 36px !important;
+    border-bottom-color: #DDDDDD;
+    width: 64%;
+    min-width: 900px;
+}
+/*头部tab的每个单个的li的样式*/
+    .layui-tab-title li {
+        height: 36px !important;
+        border-radius: 5px 5px 0px 0px;
+        padding: 0px !important;
+        color: #333333;
+       
+    }
+/*选中的li样式*/
+.layui-this {
+    height: 36px;
+    opacity: 1;
+    border-bottom: 2px solid #029803;
+}
+.layui-tab-title .layui-this {
+    color: #ffffff;
+}
+.layui-tab-brief > .layui-tab-more li.layui-this:after, .layui-tab-brief > .layui-tab-title .layui-this:after {
+    border: none;
+    border-radius: 0;
+}
+/*单个订单DIV*/
+.layui-card {
+    /*  border: 1px solid #1f9fff;*/
+    margin-top: 20px;
+    overflow: hidden;
+    padding-bottom: 20px;
+    width: 100%;
+    background: #FFFFFF;
+    opacity: 1;
+    border-radius: 10px;
+    border: solid 1px #ddd;
+}
+/*单个订单DIV的上部分*/
+.layui-card-header {
+    width: calc(100% - 80px);
+    height: 48px;
+    margin-left: 40px;
+    padding: 0px;
+    line-height: 48px;
+    text-align: center;
+    border-bottom: 1px solid #DDDDDD;
+}
+    .layui-card-header div {
+        float: left;
+        margin: 0px 10px 0px 0px;
+    }
+
+ .layui-card-header div span {
+            font-weight: bold;
+            font-size: 150%;
+        }
+
+ .layui-card-header .Right {
+        float: Right;
+    }
+/*订单详情按钮*/
+.xiangqing {
+    border: 0px;
+    background-color: #FFFFFF;
+    color: #3399FF;
+}
+/*单个订单DIV的身体部分*/
+.layui-card-body {
+    padding: 0px;
+    width: calc(100% - 80px);
+    margin-left: 40px;
+    display: inline-block;
+}
+/*订单编号那一栏的每个小DIV*/
+.codediv {
+    width: 30%;
+    float: left;
+    color: #666666;
+    font-size: 14px;
+    
+    font-weight: 400;
+}
+/*订单编号那一栏的每个小DIV的值的样式*/
+.codediv label {
+    margin-left: 5px;
+}
+.layui-card-body div {
+    float: left;
+    /*margin: 0px 10px 0px 0px;*/
+}
+/*订单状态样式*/
+.OrderStatus {
+    float: right !important;
+    background-color: #F2F3F5;
+    opacity: 1;
+    height: 32px;
+    border-radius: 16px;
+    text-align: center;
+    line-height: 32px;
+    display: inline;
+    border-left: 10px solid #F2F3F5;
+    border-right: 10px solid #F2F3F5;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #333333;
+    margin-top:5px;
+}
+/*订单每个商品部位的DIV*/
+.OrderProduct {
+    width: 100%;
+    height: 120px;
+    background: #FFFFFF;
+    margin-top: 10px;
+}
+/*商品图片样式*/
+.Picture img {
+    width: 120px;
+    height: 120px;
+    margin-right: 20px;
+}
+/*商品中间部分标题，sku，数量, 型号的大DIV*/
+.procenter {
+    float:left;
+    width:calc(100% - 160px);
+    height:120px;
+}
+/*商品标题样式*/
+.title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 30px;
+    width: 90%;
+    line-height: 30px;
+    font-size: 16px;
+    
+    font-weight: 400;
+    color: #333333;
+    opacity: 1;
+}
+/*变体标题样式*/
+.variant {
+    height: 28px;
+    background-color: #F2F3F5;
+    opacity: 1;
+    border-radius: 18px;
+    border-left: 10px solid #F2F3F5;
+    border-right: 10px solid #F2F3F5;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #666666;
+}
+/*变体数量样式*/
+.quantity {
+    width: 48px;
+    height: 28px;
+    background: #F2F3F5;
+    opacity: 1;
+    border-radius: 18px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #666666;
+    margin-left:10px;
+    text-align:center;
+}
+/*商品右边价格部分样式*/
+.unitprice {
+    width:160px;
+    height: 120px;
+    line-height: 120px;
+    float: right;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #333333;
+    opacity: 1;
+    text-align:right;
+}
+.pricespan {
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #FF5555 !important;
+    opacity: 1;
+}
+/*物流价格样式*/
+.Shiping {
+    float: right !important;
+    font-size: 14px;
+    
+    font-weight: 400;
+    line-height: 16px;
+    color: #333333;
+    opacity: 1;
+    height:32px;
+    line-height:32px;
+    margin-right:20px;
+}
+.ShippingPrice {
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #FF5555 !important;
+    opacity: 1;
+}
+/*税费价格样式*/
+.VAT {
+    float: right !important;
+    font-size: 14px;
+    
+    font-weight: 400;
+    line-height: 16px;
+    color: #333333;
+    opacity: 1;
+    height: 32px;
+    line-height: 32px;
+
+}
+
+/*下分隔符样式*/
+.buttom_rule {
+    width: calc(100% - 80px);
+ /*   height: 1px;
+    background: #DDDDDD;*/
+    border-bottom: 1px solid #DDDDDD !important;
+    opacity: 1;
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 0px !important;
+}
+/*每条订单下半部分样式，用来放按钮*/
+.buttom {
+    height: 42px;
+    width: calc(100% - 80px);
+    margin-top: 0px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
+.Operation  {
+    margin-top:16px;
+}
+/*咨询报价按钮*/
+.zixun {
+    width: 140px;
+    height: 32px;
+    background: #029803;
+    opacity: 1;
+    border-radius: 24px;
+    float: right;
+    margin-left: 20px;
+    border: 1px solid #029803;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+/*作废订单按钮*/
+.zuofie {
+    width: 140px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 24px;
+    float: right;
+    margin-left: 20px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #333333;
+    cursor:pointer;
+}
+/*支付按钮*/
+.zhifu {
+    width: 140px;
+    height: 32px;
+    background: #029803;
+    opacity: 1;
+    border-radius: 24px;
+    float: right;
+    margin-left: 20px;
+    border: 1px solid #029803;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+/*申请退款按钮*/
+.refund {
+    width: 140px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 24px;
+    float: right;
+    margin-left: 20px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #333333;
+    cursor:pointer;
+}
+/*申请发票按钮*/
+.invoice {
+    width: 140px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 24px;
+    float: right;
+    margin-left: 20px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #333333;
+    cursor:pointer;
+}
+/*物流时效样式*/
+.aging {
+    float: right !important;
+    width: 129px;
+    height: 32px;
+    line-height: 32px;
+    background: #F2F3F5;
+    opacity: 1;
+    border-radius: 16px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #666666;
+    text-align:center;
+    margin-right:20px;
+}
+
+/*大的物流选择框DIV*/
+.model-select-box {
+    line-height: 32px !important;
+    float: right !important;
+    margin-right: 20px;
+    position: relative;
+    text-align: center;
+    width: 240px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 16px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #333333;
+}
+/*物流选择框显示的那个div*/
+.model-select-text {
+    line-height: 32px !important;
+    float: right;
+    margin-right: 20px;
+    position: relative;
+    text-align: center;
+    width: 240px;
+    height: 32px;
+    background: #FFFFFF;
+ /*   border: 1px solid #DDDDDD;*/
+    opacity: 1;
+    border-radius: 16px;
+    font-size: 14px;
+    
+    font-weight: 400;
+    width: 240px;
+    height: 32px;
+    cursor: pointer;
+}
+/*物流选择框的ul选项列表*/
+.model-select-option {
+    display: none;
+    position: absolute;
+    background: #FFFFFF;
+    width: 100%;
+    left: -1px;
+    border: 1px solid #DDDDDD;
+    margin-top: 34px;
+    border-radius: 5px;
+}
+/*物流选择框的单个选项li样式*/
+    .model-select-option li {
+        border-radius: 5px;
+        height: 32px;
+        line-height: 32px;
+        color: #000;
+        cursor: pointer;
+    }
+        /*物流选择框选择的li样式*/
+        .model-select-option li.selected {
+            background: #F2F3F5;
+            /*     color: #fff;*/
+        }
+
+/* 小三角 */
+.bg1 {
+    position: absolute;
+    top: 16px;
+    right: 10px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #DDDDDD transparent transparent transparent;
+}
+/*弹窗头部标题样式*/
+.layui-layer-title {
+    height: 46px !important;
+   /* width: 840px !important;*/
+    line-height: 46px !important;
+    padding: 0px 0px !important;
+    margin-left: 30px;
+    border-bottom: 1px hidden #DDDDDD !important;
+}
+/*layui.msg的样式*/
+.layui-layer-msg .layui-layer-content {
+    font-size: 16px;
+}
+/*layui.msg的样式改为圆角为5px透明度为0.8*/
+.layui-layer-hui {
+    background-color: rgba(0,0,0,.8) !important;
+    border-radius:5px !important;
+}
+/*.layui-layer {
+    border-radius: 16px;
+}*/
+/*底部的总计操作栏*/
+#total {
+    width: calc(100% - 120px);
+    height: 60px;
+    line-height: 60px;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    border-radius: 10px 10px 0px 0px;
+    position: fixed;
+    bottom: 0;
+    display: none;
+}
+
+#tatalSelect {
+    font-size: 16px;
+    
+    font-weight: 400;
+    line-height: 18px;
+    color: #333333;
+    opacity: 1;
+    height: 60px;
+    line-height: 60px;
+    margin-left: 10px;
+}
+/*支付所有选中订单按钮*/
+.PayAllProduct {
+    width: 140px;
+    height: 32px;
+    background: #029803;
+    opacity: 1;
+    border-radius: 24px;
+    float: right;
+    margin-left: 20px;
+    border: 1px solid #029803;
+    font-size: 14px;
+    
+    font-weight: 400;
+    color: #FFFFFF;
+}
+.disabled {
+    background: #666666;
+}
+/*sku同步提示框*/
+.info {
+    margin-top: -55px;
+    position: absolute;
+    width: 308px;
+    height: 40px;
+    line-height: 40px;
+    background: #000000;
+    /* box-shadow: 1px 2px 3px #e9d985;*/
+    border: 1px solid #000000;
+    border-radius: 4px;
+    text-align: center;
+    color: #FFFFFF;
+    z-index: 99;
+    margin-left: -30px;
+    opacity: 0.8;
+}
+.nav {
+    position: absolute;
+    left: 30px;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid dashed dashed dashed;
+    opacity: 0.8;
+}
+.nav-background {
+    top: 40px;
+    border-color: #000000 transparent transparent transparent;
+}

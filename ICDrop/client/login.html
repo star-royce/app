@@ -850,11 +850,13 @@
         function doLoop() {
             nums--;
             if (nums > 0) {
+                btn.style.color = "#333333";
                 btn.value = nums + 'S';
             } else {
                 clearInterval(clock); //清除js定时器
                 btn.disabled = false;
                 btn.style.backgroundColor = "#1FBB7D";
+                btn.style.color = "#ffffff";
                 btn.value = 'Send Email';
                 nums = 60; //重置时间
             }

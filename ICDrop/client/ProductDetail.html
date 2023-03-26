@@ -1,16 +1,19 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>产品详情页</title>
     <meta name="renderer" content="webkit">
-    <meta name="referrer"  content="no-referrer"/>
+    <meta name="referrer" content="no-referrer" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
     <link rel="stylesheet" href="/css/ProductDetail.css?v=2" media="all">
+    <link rel="icon" href="/images/favicon.ico">
 </head>
+
 <body>
     <div id="productInfo" class="productInfo">
     </div>
@@ -35,10 +38,10 @@
             var $ = layui.jquery,
                 layer = layui.layer,
                 form = layui.form,
-            i18n = layui.i18n;
+                i18n = layui.i18n;
 
 
-             YDHConfig = layui.data('YDH-Customer');
+            YDHConfig = layui.data('YDH-Customer');
             // 请求拦截器，添加请求头
             $.ajaxSetup({
                 beforeSend: function (req) {
@@ -49,7 +52,7 @@
                     }
                 },
             });
-      
+
             var id = getQueryVariable("id");
             var RoleName = getQueryVariable("RoleName");
             //获取div
@@ -86,11 +89,11 @@
                 var PriceRule = new Object();
                 PriceRule.Status = "Y";
                 Logisticsprice.dto = PriceRule;
-        
+
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Price/QueryPriceRuleList',
+                    url: BackgroundDomain + '/api/Price/QueryPriceRuleList',
                     data: JSON.stringify(Logisticsprice),
                     success: function (data) {
                         LogisticspriceList = data.data;
@@ -101,7 +104,7 @@
                 });
             }
 
-       
+
             function GetBody() {
                 var SerchproductInfo = new Object();
                 SerchproductInfo.id = id;
@@ -109,9 +112,9 @@
                 dto_obj.page = 1;
                 dto_obj.limit = 10;
                 dto_obj.dto = SerchproductInfo;
-                var url = BackgroundDomain +'/api/Product/QueryImportProductInfo'
+                var url = BackgroundDomain + '/api/Product/QueryImportProductInfo'
                 if (RoleName == "Client") {
-                    url = BackgroundDomain +'/api/Product/QueryClientProductInfo'
+                    url = BackgroundDomain + '/api/Product/QueryClientProductInfo'
                 }
                 $.ajax({
                     type: "post",
@@ -184,12 +187,12 @@
                             countryLable.setAttribute('style', 'margin-left:400px;');
                             countryLable.innerHTML = $.i18n.prop('country')
                             from.appendChild(countryLable);
-                  
+
                             var countrydiv = document.createElement("div");
                             countrydiv.setAttribute('class', 'layui-input-inline');
                             countrydiv.setAttribute('style', 'margin-left:20px;');
                             from.appendChild(countrydiv);
-              
+
                             var countryselect = document.createElement("select");
                             countryselect.setAttribute('class', 'countryselect');
                             countryselect.setAttribute('onchange', 'countryselectchange');
@@ -202,13 +205,13 @@
                             shipinglable.setAttribute('style', 'margin-left:20px;');
                             shipinglable.innerHTML = $.i18n.prop('travelling.speed')
                             from.appendChild(shipinglable);
-                       
+
 
                             var shipingdiv = document.createElement("div");
                             shipingdiv.setAttribute('class', 'layui-input-inline');
                             shipingdiv.setAttribute('style', 'margin-left:20px;');
                             from.appendChild(shipingdiv);
-                           
+
 
                             var shipingselect = document.createElement("select");
                             shipingselect.setAttribute('class', 'countryselect');
@@ -258,7 +261,7 @@
                             $.ajax({
                                 type: "post",
                                 contentType: "application/json",
-                                url: BackgroundDomain +'/api/Product/QueryProductPriceInfo',
+                                url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
                                 data: JSON.stringify(productprice),
                                 success: function (data) {
                                     variantList = data.data;
@@ -286,7 +289,7 @@
                                     else {
                                         pricehtml += "<li  class='head_font'style='width:50%;' >" + $.i18n.prop('attribute') + "<br></li>";
                                     }
-                                  
+
                                     pricehtml += "<li class='head_font'style='width:15%;' >" + $.i18n.prop('Quantity') + "<br></li>";
                                     pricehtml += "<li class='head_font'style='width:10%;' >" + $.i18n.prop('Weight.kg') + "<br></li>";
                                     pricehtml += "<li class='head_font'style='width:10%;'>" + $.i18n.prop('price.$') + "<br></li>";
@@ -315,10 +318,10 @@
                                         } else {
                                             pricehtml1 += "<li  class='price_body'style='width:50%;'>" + data.data[i].attribute + "<br></li>"
                                         }
-                                        pricehtml1 += "<li class='price_body'style='width:15%;'><div class='input-stack'><div class='add' onclick='upclick(" + data.data[i].id + ")'>+</div><input id = 'quantity" + data.data[i].id + "' class='form-control' type = 'text' value='1' data-weight='" + data.data[i].variantExtend.weight + "' data-isElectricity='" + data.data[i].variantExtend.attribute + "' onchange='UpdateQuantity(" + data.data[i].id + ")' padding-left='20px;' /><div class='add' onclick='downclick(" + data.data[i].id +")'>-</div></div></input><br></li>";
+                                        pricehtml1 += "<li class='price_body'style='width:15%;'><div class='input-stack'><div class='add' onclick='upclick(" + data.data[i].id + ")'>+</div><input id = 'quantity" + data.data[i].id + "' class='form-control' type = 'text' value='1' data-weight='" + data.data[i].variantExtend.weight + "' data-isElectricity='" + data.data[i].variantExtend.attribute + "' onchange='UpdateQuantity(" + data.data[i].id + ")' padding-left='20px;' /><div class='add' onclick='downclick(" + data.data[i].id + ")'>-</div></div></input><br></li>";
                                         pricehtml1 += "<li class='price_body'style='width:10%;'>" + data.data[i].variantExtend.weight + "<br></li>";
                                         pricehtml1 += "<li class='price_body'style='width:10%;'>" + data.data[i].price + "<br></li>";
-                                       
+
 
                                         //计算预估运费
                                         var Logisticspriceid = $("#shipingselect").val;
@@ -334,7 +337,7 @@
                                                 freight = i.price * weight + i.registrationFee + i.handlingFee;
                                             }
                                         }
-                                        pricehtml1 += "<li class='price_body'style='width:10%;'><div class='freight' id='freight" + data.data[i].id + "'>" + freight+"</div><br></li>";
+                                        pricehtml1 += "<li class='price_body'style='width:10%;'><div class='freight' id='freight" + data.data[i].id + "'>" + freight + "</div><br></li>";
                                         priceul1.innerHTML = pricehtml1;
                                     }
 
@@ -344,19 +347,19 @@
                             //添加导入商品的按钮,如果是登录状态则显示，否则不显示
                             if (YDHConfig.Secret) {
 
-                            
-                            var importdiv = document.createElement("div");
-                            importdiv.setAttribute('class', 'importproduct');
-                            div.appendChild(importdiv);
+
+                                var importdiv = document.createElement("div");
+                                importdiv.setAttribute('class', 'importproduct');
+                                div.appendChild(importdiv);
 
 
-                            var importinput = document.createElement("input");
-                            importinput.setAttribute('type', 'button');
-                            importinput.setAttribute('id', 'importbtn' + id);
-                            importinput.setAttribute('class', 'importbtn');
-                            importinput.setAttribute('value', $.i18n.prop('Import.goods'));
-                            importinput.setAttribute('onclick', 'ImportProduct(' + id + ')');
-                            importdiv.appendChild(importinput);
+                                var importinput = document.createElement("input");
+                                importinput.setAttribute('type', 'button');
+                                importinput.setAttribute('id', 'importbtn' + id);
+                                importinput.setAttribute('class', 'layui-icon importbtn');
+                                importinput.setAttribute('value', $.i18n.prop('Import.goods'));
+                                importinput.setAttribute('onclick', 'ImportProduct(' + id + ')');
+                                importdiv.appendChild(importinput);
                             }
 
                             //描叙详情
@@ -383,7 +386,7 @@
                             $.ajax({
                                 type: "post",
                                 contentType: "application/json",
-                                url: BackgroundDomain +'/api/Product/QueryProductDescriptionInfo',
+                                url: BackgroundDomain + '/api/Product/QueryProductDescriptionInfo',
                                 data: JSON.stringify(productdescription),
                                 success: function (data) {
                                     div6.innerHTML = data.dto.content;
@@ -423,7 +426,7 @@
             }
 
 
-       
+
 
             // 国际化初始化
             var YDHConfigc = layui.data('YDH');
@@ -476,7 +479,7 @@
 
                 for (var i = 0; i < variantList.length; i++) {
                     var freightdiv = document.getElementById("freight" + variantList[i].id);
-              
+
                     //计算预估运费
                     var isElectricity = variantList[i].variantExtend.attribute == 0 ? "N" : "Y";
                     var unitweight = variantList[i].variantExtend.weight;
@@ -581,18 +584,18 @@
                 input.value = Number(input.value) - 1;
                 UpdateQuantity(id);
             }
-   
+
         }
 
 
         //数量更改事件，运费相应的发生改变
         function UpdateQuantity(id) {
             //计算预估运费
-            var input = document.getElementById("quantity"+id);
+            var input = document.getElementById("quantity" + id);
             var Logisticspriceid = $("#shipingselect").val;
-            var unitweight = $("#quantity"+id).attr("data-weight");
+            var unitweight = $("#quantity" + id).attr("data-weight");
             var isElectricity = $("#quantity" + id).attr("data-isElectricity") == 0 ? "N" : "Y";
-            
+
             var quantity = input.value;
             var weight = unitweight * quantity;
             var freight = "undefined";
@@ -604,7 +607,7 @@
                 }
 
             }
-            var freightdiv = document.getElementById("freight"+id);
+            var freightdiv = document.getElementById("freight" + id);
             $("#freight" + id).innerHTML = "";
             freightdiv.innerHTML = freight;
         }
@@ -633,17 +636,17 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/ImportProductInfo',
+                url: BackgroundDomain + '/api/Product/ImportProductInfo',
                 data: JSON.stringify(productInfo),
                 success: function (data) {
                     if (data.code == 1) {
                         layer.msg("Successfully !")
                     } else {
-                     
+
                     }
                 },
                 error: function (jqXHR) {
-                 
+
                 }
             })
         }
@@ -669,4 +672,5 @@
 
     </script>
 </body>
+
 </html>

@@ -1,29 +1,34 @@
-﻿html{
-    height:100%;
+﻿html {
+    height: 100%;
 }
+
 body {
     height: calc(100% - 60px);
     margin: 30px 50px;
 }
+
 label {
     width: 180px;
     display: inline-block;
 }
+
 /*矢量图标样式*/
 .layui-icon:before {
     color: #333333;
     font-size: 24px;
     vertical-align: middle;
 }
+
 /*最外面的大的div*/
 .big {
     width: 100%;
-    height:100%;
+    height: 100%;
     background-color: #FFFFFF;
     opacity: 1;
     border-radius: 10px;
-   
+
 }
+
 /*左边大的DIV*/
 .left {
     /*  position: relative;*/
@@ -32,6 +37,7 @@ label {
     /*border-right: 1px solid #DDDDDD !important;*/
     /*float: left;*/
 }
+
 /*左边图标的img样式*/
 .bigimg {
     width: 112px;
@@ -39,18 +45,20 @@ label {
     margin-top: 30px;
     margin-left: 44px;
 }
+
 /*    导航栏*/
 .nav-ul {
     background-color: #FFFFFF;
     color: #333333;
     /*height:240px;*/
-  /*  width:200px;*/
-    margin-top:30px;
-    cursor:pointer;
+    /*  width:200px;*/
+    margin-top: 30px;
+    cursor: pointer;
 }
+
 /*导航栏里面的单个LI样式*/
 .nav-ul li {
-    float:left;
+    float: left;
     width: 174px;
     height: 48px;
     line-height: 48px;
@@ -59,105 +67,119 @@ label {
     color: #333333;
     padding-left: 26px;
 }
+
 /*选中的li样式*/
 .nav-this {
     border-bottom: 4px solid #029803;
     /* width: 170px !important;*/
     padding-left: 22px !important;
 }
+
 /*导航栏图标*/
 .nav-img {
     width: 24px !important;
     height: 24px !important;
 }
+
 /*导航栏里的文字*/
 .nav-font {
     margin-left: 9px;
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #333333;
 }
+
 /*右边大的DIV*/
 .right {
     /*float:right;*/
-    width:calc(100% - 202px);
-    height:100%;
+    width: calc(100% - 202px);
+    height: 100%;
 
 }
+
 /*我的余额内容部分样式*/
 .BalanceContent {
     margin: 0px 40px;
     width: calc(100% - 80px);
     height: calc(100% - 30px);
 }
+
 /*右边的内容样式*/
 .contentdiv {
     margin: 0px 40px;
     width: calc(100% - 80px);
     /*height: calc(100% - 30px);*/
 }
+
 /*右边我的余额文本样式*/
 .MineBalance {
     margin-top: 30px;
     height: 40px;
     line-height: 40px;
     font-size: 16px;
-    
+
     font-weight: bold;
     line-height: 18px;
     color: #333333;
     opacity: 1;
 }
+
 /*余额的文本样式*/
 .BalanceDiv {
     height: 64px;
     line-height: 64px;
     margin-top: 10px;
     font-size: 40px;
-    
+
     font-weight: bold;
     line-height: 45px;
     color: #FF5555;
 }
+
 /*整个奖励栏目样式*/
-.AllRewards{
-    margin-top:30px;
-    height:36px;
-    line-height:36px;
+.AllRewards {
+    margin-top: 30px;
+    height: 36px;
+    line-height: 36px;
 }
+
 /*可用奖励样式*/
 .AvailableRewards {
     font-size: 16px;
-    
+
     font-weight: bold;
     color: #333333;
     opacity: 1;
-    float:left;
-    margin-right:5px;
+    float: left;
+    margin-right: 5px;
 }
+
 /*总奖励样式*/
 .TotalRewardsLabel {
     font-size: 16px;
-    
+
     font-weight: 400;
     color: #999999;
     opacity: 1;
-    float:left;
+    float: left;
 }
+
 /*邀请样式*/
 .DistributionText {
     font-size: 14px;
-    
+
     font-weight: 400;
     margin-top: 10px;
     color: #333333;
     opacity: 1;
 }
+
 .InvitationDiv {
-height:36px;
-margin-top:10px;
+    height: 36px;
+    margin-top: 10px;
 }
+
 /*邀请链接的Input样式*/
 .InvitationUrl {
     width: 634px;
@@ -169,19 +191,21 @@ margin-top:10px;
     border-radius: 6px 0px 0px 6px;
     vertical-align: middle;
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #333333;
 }
+
 /*一个lable放邀请链接，用来计算链接长度来设置input框长度*/
 .Invitationlable {
     display: inline-block;
     visibility: hidden;
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #333333;
 }
+
 /*复制邀请链接的按钮样式*/
 .Invitationbutton {
     width: 152px;
@@ -206,6 +230,7 @@ margin-top:10px;
     font-weight: bold;
     color: #ffffff;
 }
+
 /*弹窗头部标题样式*/
 .layui-layer-title {
     height: 46px !important;
@@ -214,32 +239,37 @@ margin-top:10px;
     margin-left: 30px;
     border-bottom: 1px hidden #DDDDDD !important;
 }
+
 /*充值记录和邀请记录按钮大IDV框样式*/
 .CutButton {
     margin-top: 30px;
     opacity: 1;
-    height:30px;
-    line-height:30px;
+    height: 30px;
+    line-height: 30px;
 }
+
 .thisCut {
     font-size: 16px;
-    
+
     font-weight: bold;
     color: #333333;
-    border-bottom:1px solid #029803;
+    border-bottom: 1px solid #029803;
 }
+
 /*查看充值记录列表*/
 #Record {
     cursor: pointer;
 }
+
 /*查看邀请列表按钮*/
 #Invitation {
     cursor: pointer;
 }
+
 /*充值记录列表大的DIv*/
 .Records {
     margin-top: 1px;
-    height:calc(100% - 375px);
+    height: calc(100% - 375px);
     width: 100%;
 }
 
@@ -247,7 +277,7 @@ margin-top:10px;
 .head_font {
     height: 47px;
     line-height: 47px;
-    width:33%;
+    width: 33%;
     /*text-align: center;*/
     float: left;
     border-width: 0 0 1px 0;
@@ -256,6 +286,7 @@ margin-top:10px;
     position: relative;
     cursor: pointer;
 }
+
 /*充值记录的数据DIV样式*/
 .table-body {
     width: 100%;
@@ -265,26 +296,30 @@ margin-top:10px;
     /* text-align: center;*/
     overflow-y: auto;
 }
-    /*充值记录的数据UL样式*/
-    .table-body ul {
-        width: 100%;
-        height: 63px;
-    }
+
+/*充值记录的数据UL样式*/
+.table-body ul {
+    width: 100%;
+    height: 63px;
+}
+
 /*充值记录单挑数据的单个li样式*/
 .body_font {
     float: left;
     width: 33%;
     height: 63px;
     line-height: 63px;
-   /* text-align: center;*/
+    /* text-align: center;*/
     border-bottom: 1px dashed #DDDDDD;
 }
+
 /*我的店铺列表大的DIv*/
 .MyShop {
     margin: 50px 40px 240px 40px;
     width: calc(100% - 80px);
     height: calc(100% - 25%);
 }
+
 /*操作店铺展示状态的按钮样式*/
 .operationButton {
     width: 84px;
@@ -293,8 +328,9 @@ margin-top:10px;
     border: 1px solid #DDDDDD;
     opacity: 1;
     border-radius: 6px;
-    cursor:pointer;
+    cursor: pointer;
 }
+
 /*绑定新店铺按钮*/
 .BindShop {
     width: 400px;
@@ -305,8 +341,10 @@ margin-top:10px;
     border: 1px solid #029803;
     font-weight: bold;
     margin-top: 30px;
-    cursor:pointer;
+    cursor: pointer;
+    color: #FFFFFF;
 }
+
 /*用户设置大的DIV*/
 .AccountSetting {
     margin-top: 30px;
@@ -318,22 +356,25 @@ margin-top:10px;
     /*float:left;
     margin-right:10px;*/
 }
+
 /*用户设置大的内容*/
 .AccountSettingContent {
-   /* margin-left: calc((100% - 400px) / 2);*/
+    /* margin-left: calc((100% - 400px) / 2);*/
     width: 400px;
 }
+
 /*用户设置每一行的文本显示*/
 .Text {
     margin-top: 20px;
     height: 40px;
     font-size: 14px;
-    
+
     font-weight: bold;
     line-height: 40px;
     color: #333333;
     opacity: 1;
 }
+
 /*用户设置每一行的Input框*/
 .AccountSettingInput {
     width: 300px;
@@ -346,6 +387,7 @@ margin-top:10px;
     margin-left: 6px;
     padding-left: 20px;
 }
+
 /*修改用户设置的按钮样式*/
 .ModifyAccountSetting {
     width: 150px;
@@ -360,8 +402,9 @@ margin-top:10px;
     /* margin-left: calc((100% - 150px) / 2);*/
     margin-left: 40px;
     margin-bottom: 10px;
+    color: #ffffff;
 }
-}
+
 /*价格开关设置大的DIV*/
 .priceSwitch {
     width: 100%;
@@ -372,6 +415,7 @@ margin-top:10px;
     border-radius: 10px;
     margin-top: 30px;
 }
+
 /*价格设置界面文本样式*/
 .priceSettingText {
     margin-top: 10px;
@@ -379,19 +423,21 @@ margin-top:10px;
     height: 50px;
     line-height: 50px;
     font-size: 20px;
-    
+
     font-weight: 400;
     color: #333333;
     opacity: 1;
 }
+
 /*价格倍数设置DIv*/
 .PriceSetting {
     margin-top: 10px;
     margin-left: 40px;
     height: 40px;
-    line-height:40px;
-    width:550px;
+    line-height: 40px;
+    width: 550px;
 }
+
 /*填写倍数的input框*/
 .multiple {
     width: 80px;
@@ -401,8 +447,9 @@ margin-top:10px;
     opacity: 1;
     border-radius: 6px;
     margin-left: 6px;
-    padding-left:6px;
+    padding-left: 6px;
 }
+
 /*打开价格设置的开关按钮样式*/
 /* Switch开关样式 */
 /*input[type='checkbox'].switch {
@@ -438,8 +485,8 @@ margin-top:10px;
         background: #029803;
     }*/
 
-        /* 当input[type=checkbox]被选中时：伪元素显示下面样式 位置发生变化 */
-        /*input[type='checkbox'].switch:checked::after {
+/* 当input[type=checkbox]被选中时：伪元素显示下面样式 位置发生变化 */
+/*input[type='checkbox'].switch:checked::after {
             content: 'ON';
             position: absolute;
             left: 63%;
@@ -447,8 +494,9 @@ margin-top:10px;
         }*/
 /*修改密码界面提示样式*/
 .UpdatePsdhint {
-    display:none;
+    display: none;
 }
+
 /*打开价格设置的开关按钮样式*/
 /* Switch开关样式 */
 /*智能开关样式*/
@@ -464,10 +512,10 @@ margin-top:10px;
     width: 80px;
     height: 30px;
     background-color: #ccc;
-/*    box-shadow: #ccc 0px 0px 0px 2px;*/
+    /*    box-shadow: #ccc 0px 0px 0px 2px;*/
     border-radius: 12px;
     overflow: hidden;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .circle {
@@ -487,13 +535,13 @@ margin-top:10px;
 }
 
 .on {
-   /* color: #fff;*/
+    /* color: #fff;*/
     display: none;
     text-indent: 15px;
 }
 
 .off {
-  /*  color: #fff;*/
+    /*  color: #fff;*/
     display: inline-block;
     text-indent: 34px;
 }
@@ -503,37 +551,41 @@ margin-top:10px;
     transition: all 0.3s;
 }
 
-#switch:checked + label.button-label .circle {
+#switch:checked+label.button-label .circle {
     left: 50px;
 }
 
-#switch:checked + label.button-label .on {
+#switch:checked+label.button-label .on {
     display: inline-block;
 }
 
-#switch:checked + label.button-label .off {
+#switch:checked+label.button-label .off {
     display: none;
 }
 
-#switch:checked + label.button-label {
+#switch:checked+label.button-label {
     background-color: #029803;
 }
+
 /*layui.msg的样式*/
 .layui-layer-msg .layui-layer-content {
     font-size: 16px;
 }
+
 /*layui.msg的样式改为圆角为5px透明度为0.8*/
 .layui-layer-hui {
-    background-color: rgba(0,0,0,.8) !important;
+    background-color: rgba(0, 0, 0, .8) !important;
     border-radius: 5px !important;
 }
+
 /*感叹号样式*/
 .exclamation {
-    float:left;
+    float: left;
     opacity: 1;
-    margin-right:5px;
-    margin-top:8px;
+    margin-right: 5px;
+    margin-top: 8px;
 }
+
 .DistributionShows {
     width: 320px;
     height: 330px;
@@ -541,14 +593,14 @@ margin-top:10px;
     background: rgba(255, 255, 255, 0.39);
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     opacity: 1;
-    margin-left:-40px;
-    position:absolute;
-    z-index:999;
-    background:#FFFFFF;
-    margin-top:20px;
-    text-align:center;
-    border-radius:12px;
-    display:none;
+    margin-left: -40px;
+    position: absolute;
+    z-index: 999;
+    background: #FFFFFF;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 12px;
+    display: none;
 }
 
 .nav {
@@ -567,41 +619,44 @@ margin-top:10px;
     border-color: transparent transparent #FFFFFF transparent;
     /*opacity: 0.8;*/
 }
+
 /*分销说明标题*/
 .explainTitle {
     margin-left: 20px;
     margin-right: 20px;
     font-size: 16px;
-    
+
     font-weight: bold;
     line-height: 18px;
     color: #333333;
-    width:280px;
+    width: 280px;
     height: 30px;
-    line-height:30px;
-    text-align:left;
+    line-height: 30px;
+    text-align: left;
 }
+
 /*分销说明详情*/
 .explainDetail {
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #333333;
     width: 280px;
-    margin-left:20px;
-    margin-right:20px;
-    text-align:left;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: left;
 }
+
 /*解释权说明样式*/
 .Interpretation {
     font-size: 14px;
-    
+
     font-weight: 400;
     line-height: 20px;
     color: #999999;
     opacity: 1;
-    width:280px;
-    margin-left:20px;
-    margin-right:20px;
-    margin-top:18px;
+    width: 280px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 18px;
 }

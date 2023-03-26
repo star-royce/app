@@ -148,8 +148,8 @@
         }
 
         .code1 {
-            margin-left: 10px;
-            width: 95px;
+            /* margin-left: 10px; */
+            width: 110px !important;
             height: 36px;
             border-width: 1px;
             border-style: solid;
@@ -816,17 +816,28 @@
 
         var btn;
         function sendCode(thisBtn) {
-            btn = thisBtn;
-            btn.disabled = true; //将按钮置为不可点击
-            btn.style.backgroundColor = "#F2F3F5 ";
-            btn.value = nums + 'S';
-
             var user = new Object();
             user.Email = document.getElementById('username').value;
             if (user.Email == "") {
                 user.Email = document.getElementById('up_username').value;
             }
+            if (user.Email == "") {
+                layer.msg('Email address cannot be empty！');
+                return false;
+            }
+            var password = document.getElementById('password').value;
+            if (password == "") {
+                password = document.getElementById('up_password').value;
+            }
+            if (password == "") {
+                layer.msg('Password cannot be empty！');
+                return false;
+            }
 
+            btn = thisBtn;
+            btn.disabled = true; //将按钮置为不可点击
+            btn.style.backgroundColor = "#39B75D";
+            btn.value = 'ReSend(' + nums + 'S)';
             $.ajax({
                 type: "post",
                 url: BackgroundDomain + "/api/Login/GetVerificationCode",
@@ -850,8 +861,7 @@
         function doLoop() {
             nums--;
             if (nums > 0) {
-                btn.style.color = "#333333";
-                btn.value = nums + 'S';
+                btn.value = 'ReSend(' + nums + 'S)';
             } else {
                 clearInterval(clock); //清除js定时器
                 btn.disabled = false;

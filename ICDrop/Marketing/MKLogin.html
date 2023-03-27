@@ -1,12 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
-
+    
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="../../css/MkLogin.css?v=20220525" media="all">
     <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css?v=20220525" media="all">
 </head>
-
 <body>
     <div class="container">
         <div class="top">
@@ -27,21 +25,16 @@
                 <div class="line-text">E-mail</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-yingxiao-9-E-mail" for="email" id="icon-email"></label>
-                    <input type="text" name="email" id="email" lay-verify="required|account" placeholder="Email address"
-                        autocomplete="off" class="layui-input">
+                    <input type="text" name="email" id="email" lay-verify="required|account" placeholder="Email address" autocomplete="off" class="layui-input">
                 </div>
                 <div class="line-text">Password</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-a-yingxiao-11-Setpassword" for="password" id="icon-pwd"></label>
-                    <input type="password" name="pwd" id="pwd" lay-verify="required|password" placeholder="Password"
-                        autocomplete="off" class="layui-input">
+                    <input type="password" name="pwd" id="pwd" lay-verify="required|password" placeholder="Password" autocomplete="off" class="layui-input">
                 </div>
                 <div>
-                    <label class="botLable" i18n_Text="login.Label.ForgetPwd.Text"
-                        style="color: #999999; cursor: pointer; " id="up_psd">Forget Password?</label>
-                    <label class="botLable" i18n_Text="login.button.Reg.Text"
-                        style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; " id="Reg">Sign
-                        up</label>
+                    <label class="botLable" i18n_Text="login.Label.ForgetPwd.Text" style="color: #999999; cursor: pointer; " id="up_psd">Forget Password?</label>
+                    <label class="botLable" i18n_Text="login.button.Reg.Text" style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; " id="Reg">Sign up</label>
                 </div>
                 <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid determine">Log in</button>
             </div>
@@ -50,38 +43,29 @@
                 <div class="line-text">Name</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-yingxiao-8-Name" id="icon-reg-name"></label>
-                    <input type="text" id="RegName" name="RegName" lay-verify="required|account" autocomplete="off"
-                        class="layui-input" placeholder="Username">
+                    <input type="text" id="RegName" name="RegName" lay-verify="required|account" autocomplete="off" class="layui-input" placeholder="Username">
                 </div>
                 <div class="line-text">E-mail</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-yingxiao-9-E-mail" id="icon-reg-email"></label>
-                    <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" id="RegEmail"
-                        name="RegEmail" lay-verify="required|account" autocomplete="off" class="layui-input"
-                        placeholder="Email address">
-                    <span id="regSendCode"
-                        style="font-size: 28px; font-family: PingFang SC; font-weight: 400; position: absolute; top: 20px; right: 30px; color: #3399FF; "
-                        onclick="SendCode(this)">Send code</span>
+                    <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" id="RegEmail" name="RegEmail" lay-verify="required|account" autocomplete="off" class="layui-input" placeholder="Email address">
+                    <span id="regSendCode" style="font-size: 28px; font-family: PingFang SC; font-weight: 400; position: absolute; top: 20px; right: 30px; color: #3399FF; " onclick="SendCode(this)">Send code</span>
                 </div>
                 <div class="line-text">Code</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-yingxiao-10-Code" id="icon-reg-code"></label>
-                    <input type="text" name="RegCode" id="RegCode" lay-verify="required|password" autocomplete="off"
-                        class="layui-input" placeholder="Verification code">
+                    <input type="text" name="RegCode" id="RegCode" lay-verify="required|password" autocomplete="off" class="layui-input" placeholder="Verification code">
                 </div>
                 <div class="line-text">Set password</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-a-yingxiao-11-Setpassword" id="icon-reg-psd"></label>
-                    <input type="password" name="RegPsd" placeholder="Password" autocomplete="off"
-                        lay-verify="required|captcha" class="layui-input" id="RegPsd">
+                    <input type="password" name="RegPsd" placeholder="Password" autocomplete="off" lay-verify="required|captcha" class="layui-input" id="RegPsd">
                 </div>
                 <div class="line-text">Your business</div>
                 <div class="layui-form-item">
-                    <div class="layui-input-inline"> </div>
-                    <label class="layui-icon icon-a-yingxiao-12-Yourbusiness" style="z-index:999;"
-                        id="icon-reg-business"></label>
-                    <select name="BusinessName" is="template" lay-verify="required" class="select" id="select"
-                        lay-filter="type">
+                    <div class="layui-input-inline">  </div>
+                    <label class="layui-icon icon-a-yingxiao-12-Yourbusiness" style="z-index:999;" id="icon-reg-business"></label>
+                    <select name="BusinessName" is="template" lay-verify="required" class="select" id="select" lay-filter="type">
                         <option value="">Please select</option>
                         <option value="A">Shop technical services</option>
                         <option value="B">Shop owner</option>
@@ -92,8 +76,7 @@
 
                 </div>
                 <div>
-                    <label id="login" class="botLable"
-                        style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; ">Log in</label>
+                    <label id="login" class="botLable" style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; ">Log in</label>
                 </div>
                 <div class="layui-form-item">
                     <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid register">Sign up</button>
@@ -108,29 +91,22 @@
                 <div class="line-text">E-mail</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-yingxiao-9-E-mail" id="icon-up-email"></label>
-                    <input type="text" name="up_Emial" id="up_Emial" lay-verify="required|account" autocomplete="off"
-                        class="layui-input" placeholder="E-mail">
-                    <span id="upSendCode"
-                        style="font-size: 28px; font-family: PingFang SC; font-weight: 400; position: absolute; top: 20px; right:30px; color: #3399FF; "
-                        onclick="SendCode(this)">Send code</span>
+                    <input  type="text" name="up_Emial" id="up_Emial" lay-verify="required|account" autocomplete="off" class="layui-input" placeholder="E-mail" >
+                    <span id="upSendCode" style="font-size: 28px; font-family: PingFang SC; font-weight: 400; position: absolute; top: 20px; right:30px; color: #3399FF; " onclick="SendCode(this)">Send code</span>
                 </div>
                 <div class="line-text">Code</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-yingxiao-10-Code" id="icon-up-code"></label>
-                    <input placeholder="Verification code" type="text" name="up_code" id="up_code"
-                        lay-verify="required|password" autocomplete="off" class="layui-input">
+                    <input placeholder="Verification code" type="text" name="up_code" id="up_code" lay-verify="required|password" autocomplete="off" class="layui-input">
                 </div>
                 <div class="line-text">Confirm password</div>
                 <div class="layui-form-item">
                     <label class="layui-icon icon-a-yingxiao-11-Setpassword" id="icon-up-psd"></label>
-                    <input type="password" name="up_psd" autocomplete="off" lay-verify="required|captcha"
-                        class="layui-input" id="up_Psd" placeholder="Password">
+                    <input type="password" name="up_psd" autocomplete="off" lay-verify="required|captcha" class="layui-input" id="up_Psd" placeholder="Password">
                 </div>
-                <div> <label id="bk_login" class="botLable"
-                        style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; ">Log in</label></div>
+                <div>  <label id="bk_login" class="botLable" style="float: right; margin-right: 30px; color: #3399FF; cursor: pointer; ">Log in</label></div>
                 <div class="layui-form-item">
-                    <button style="color: #333333; font-size: 16px; font-family: Arial;"
-                        class="layui-btn layui-btn layui-btn-normal layui-btn-fluid confirm">Log in</button>
+                    <button style="color: #333333; font-size: 16px; font-family: Arial;" class="layui-btn layui-btn layui-btn-normal layui-btn-fluid confirm">Log in</button>
                 </div>
 
 
@@ -223,7 +199,7 @@
                 var Encrypt = $.md5(email + $.md5(pwd) + timestamp);
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain + "/api/Login/MarketingLogin",
+                    url: BackgroundDomain +"/api/Login/MarketingLogin",
                     contentType: "application/json;",
                     data: JSON.stringify({ "Email": email, "TimeStamp": timestamp, "Pw": Encrypt }),
                     dataType: "json",
@@ -247,7 +223,7 @@
                             else {
                                 window.location.href = "/Marketing/MKInVite.html?MarketingCode=" + YDHMarketing.MarketingCode;
                             }
-
+                            
                         }
                         return false;
                     }
@@ -297,7 +273,7 @@
 
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain + "/api/Login/InsertCustomerByMarketing",
+                    url: BackgroundDomain +"/api/Login/InsertCustomerByMarketing",
                     contentType: "application/json;",
                     data: JSON.stringify({ "Email": Email, "Pw": Encrypt, "VerificationCode": code, "UserName": username, "BusinessId": business, "IsUpdate": false, "InvitationCode": YDHMarketing.MarketingCode }),
                     dataType: "json",
@@ -311,7 +287,7 @@
                                 key: 'email'
                                 , value: username
                             });
-                            if (!YDHMarketing.MarketingCode || YDHMarketing.MarketingCode == "manage" || YDHMarketing.MarketingCode == "") {
+                            if (!YDHMarketing.MarketingCode ||YDHMarketing.MarketingCode == "manage" || YDHMarketing.MarketingCode == "") {
                                 window.location.href = "/Marketing/MKIndex.html";
                             }
                             else {
@@ -346,7 +322,7 @@
 
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain + "/api/Login/UpdateCustomerPsdByEmail",
+                    url: BackgroundDomain +"/api/Login/UpdateCustomerPsdByEmail",
                     contentType: "application/json;",
                     data: JSON.stringify({ "Email": Email, "Pw": Encrypt, "VerificationCode": code, "IsUpdate": true }),
                     dataType: "json",
@@ -360,7 +336,7 @@
                                 key: 'email'
                                 , value: Email
                             });
-                            if (!YDHMarketing.MarketingCode || YDHMarketing.MarketingCode == "manage" || YDHMarketing.MarketingCode == "") {
+                            if (!YDHMarketing.MarketingCode ||YDHMarketing.MarketingCode == "manage" || YDHMarketing.MarketingCode == "") {
                                 window.location.href = "/Marketing/MKIndex.html";
                             }
                             else {
@@ -480,7 +456,7 @@
                     $("#icon-up-psd").removeClass("icon");
                 }
             })
-
+           
 
         });
         var clock = '';
@@ -496,7 +472,7 @@
             btn = thisBtn;
             //btn.innerHTML = nums + 'S';
             var user = new Object();
-            var btnid = $(thisBtn).attr("id");
+            var  btnid = $(thisBtn).attr("id");
             if (btnid == "regSendCode") {
                 user.Email = document.getElementById('RegEmail').value;
             }
@@ -507,10 +483,10 @@
                 layer.msg('Email address cannot be empty! ', { icon: 5, time: 3000, shade: 0.4 });
                 return false;
             }
-
+           
             $.ajax({
                 type: "post",
-                url: BackgroundDomain + "/api/Login/GetVerificationCode",
+                url: BackgroundDomain +"/api/Login/GetVerificationCode",
                 contentType: "application/json;",
                 data: JSON.stringify(user),
                 dataType: "json",
@@ -538,5 +514,4 @@
         }
     </script>
 </body>
-
 </html>

@@ -146,55 +146,13 @@
 
 
                         //类型
-                        var titlediv7 = document.createElement("div");
-                        titlediv7.setAttribute('class', 'select-type');
-                        var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
-                        titlediv7.innerHTML = type;
-                        titlediv4.appendChild(titlediv7);
-                        $(".changetype").html($.i18n.prop('type'));
-
-                        var titleinput1 = document.createElement("input");
-                        titleinput1.setAttribute('type', 'text');
-                        titleinput1.setAttribute('class', 'input-type');
-                        titleinput1.setAttribute('id', 'update_type' + msg.data[0].id);
-                        var type = msg.data[0].productType;
-                        if (msg.data[0].productType == null) {
-                            type = '';
-                        }
-                        titleinput1.setAttribute('value', type);
-                        titleinput1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
-                        //数据发生变化时更新
-                        titleinput1.setAttribute('onchange', "UpdateInfo('updatetype'," + msg.data[0].id + " )");
-                        titlediv7.appendChild(titleinput1);
-
-                        //标签
-                        var titlediv8 = document.createElement("div");
-                        titlediv8.setAttribute('class', 'select-lable');
-                        var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>标签</font></font></br>";
-                        titlediv8.innerHTML = lable;
-                        titlediv4.appendChild(titlediv8);
-                        $(".changelable").html($.i18n.prop('tags'));
-
-                        var titleinput2 = document.createElement("input");
-                        titleinput2.setAttribute('type', 'text');
-                        titleinput2.setAttribute('class', 'input-lable');
-                        titleinput2.setAttribute('id', 'update_label' + msg.data[0].id);
-                        var label = msg.data[0].label;
-                        if (msg.data[0].label == null) {
-                            label = '';
-                        }
-                        titleinput2.setAttribute('value', label);
-                        titleinput2.setAttribute('placeholder', $.i18n.prop('Separate.multiple.entries.with.commas'));
-                        //数据发生变化时更新
-                        titleinput2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[0].id + " )");
-                        titlediv8.appendChild(titleinput2);
-
+                       
                         var titlediv9 = document.createElement("div");
                         titlediv9.setAttribute('class', 'select-lable');
-                        var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
+                        var lable = "<font style='vertical-align:inherit;'><font class='changelablecatalogue' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
                         titlediv9.innerHTML = lable;
                         titlediv4.appendChild(titlediv9);
-                        $(".changelable").html($.i18n.prop('tags'));
+                        $(".changelablecatalogue").html($.i18n.prop('type'));
                         var titleselect = document.createElement("select");
                         titleselect.setAttribute('class', 'input-lable');
                         titleselect.setAttribute('id', 'update_catalogue' + msg.data[0].id);
@@ -204,6 +162,7 @@
                         op.appendChild(document.createTextNode("选择分类"));
                         titleselect.appendChild(op);
                         for (var i = 0; i < ProCatalogueList.length; i++) {
+                            if(ProCatalogueList[i].superiorId >= 1){
                             op = document.createElement("option");
                             op.setAttribute("value", ProCatalogueList[i].id);
                             if (msg.data[0].catalogueId == ProCatalogueList[i].id) {
@@ -211,11 +170,48 @@
                             }
                             op.appendChild(document.createTextNode(ProCatalogueList[i].catalogueName));
                             titleselect.appendChild(op);
+                          }
                         }
                        // titleselect.setAttribute('placeholder', $.i18n.prop('Separate.multiple.entries.with.commas'));
                         //数据发生变化时更新
                         titleselect.setAttribute('onchange', "UpdateInfo('update_catalogue'," + msg.data[0].id + " )");
                         titlediv9.appendChild(titleselect);
+
+                        //标签
+                        var titlediv8 = document.createElement("div");
+                        titlediv8.setAttribute('class', 'select-lable');
+                        var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>标签</font></font></br>";
+                        titlediv8.innerHTML = lable;
+                        titlediv4.appendChild(titlediv8);
+                        $(".changelable").html($.i18n.prop('tags'));
+
+
+                        var titleinput2 = document.createElement("select");
+                        titleinput2.setAttribute('class', 'input-lable');
+                        titleinput2.setAttribute('id', 'update_label' + msg.data[0].id);
+
+                        var op = document.createElement("option");
+                        op.setAttribute("value", "");
+                        op.appendChild(document.createTextNode("选择标签"));
+                        titleinput2.appendChild(op);
+                        var labelArr =[];
+                        labelArr.push("Hot-Trend");
+                        labelArr.push("Winning products");
+                        labelArr.push("Discount Sale");
+             
+                        for (var i = 0; i < labelArr.length; i++) {
+                            op = document.createElement("option");
+                            op.setAttribute("value", labelArr[i]);
+                            if (msg.data[0].label == labelArr[i]) {
+                                op.setAttribute("selected", 'selected');
+                            }
+                            op.appendChild(document.createTextNode(labelArr[i]));
+                            titleinput2.appendChild(op);
+                        }
+                        //数据发生变化时更新
+                        titleinput2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[0].id + " )");
+                        titlediv8.appendChild(titleinput2);
+
 
                         //li选中切换
                         $(function () {
@@ -337,8 +333,6 @@
                                     success: function (data) {
                                         document.getElementById("productbody" + id).innerHTML = "";
                                         var titlediv = document.getElementById("productbody" + id);
-
-
                                         //左边放图片
                                         var titlediv3 = document.createElement("div");
                                         titlediv3.setAttribute('class', 'pic');
@@ -372,65 +366,44 @@
                                         titlediv4.appendChild(titleinput);
 
                                         //类型
-                                        var titlediv7 = document.createElement("div");
-                                        titlediv7.setAttribute('class', 'select-type');
-                                        var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
-                                        titlediv7.innerHTML = type;
-                                        titlediv4.appendChild(titlediv7);
-                                        $(".changetype").html($.i18n.prop('type'));
+                                        // var titlediv7 = document.createElement("div");
+                                        // titlediv7.setAttribute('class', 'select-type');
+                                        // var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
+                                        // titlediv7.innerHTML = type;
+                                        // titlediv4.appendChild(titlediv7);
+                                        // $(".changetype").html($.i18n.prop('type'));
 
-                                        var titleinput1 = document.createElement("input");
-                                        titleinput1.setAttribute('type', 'text');
-                                        titleinput1.setAttribute('class', 'input-type');
-                                        titleinput1.setAttribute('id', 'update_type' + data.data[0].id);
-                                        var type = data.data[0].productType;
-                                        if (data.data[0].productType == null) {
-                                            type = '';
-                                        }
-                                        titleinput1.setAttribute('value', type);
-                                        titleinput1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
-                                        //数据发生变化时更新
-                                        titleinput1.setAttribute('onchange', "UpdateInfo('updatetype'," + data.data[0].id + " )");
-                                        titlediv7.appendChild(titleinput1);
-
-                                        //标签
-                                        var titlediv8 = document.createElement("div");
-                                        titlediv8.setAttribute('class', 'select-lable');
-                                        var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>标签</font></font></br>";
-                                        titlediv8.innerHTML = lable;
-                                        titlediv4.appendChild(titlediv8);
-                                        $(".changelable").html($.i18n.prop('tags'));
-
-                                        var titleinput2 = document.createElement("input");
-                                        titleinput2.setAttribute('type', 'text');
-                                        titleinput2.setAttribute('class', 'input-lable');
-                                        titleinput2.setAttribute('id', 'update_label' + data.data[0].id);
-                                        var label = data.data[0].label;
-                                        if (data.data[0].label == null) {
-                                            label = '';
-                                        }
-                                        titleinput2.setAttribute('value', label);
-                                        titleinput2.setAttribute('placeholder', $.i18n.prop('Separate.multiple.entries.with.commas'));
-                                        //数据发生变化时更新
-                                        titleinput2.setAttribute('onchange', "UpdateInfo('updatelabel'," + data.data[0].id + " )");
-                                        titlediv8.appendChild(titleinput2);
+                                        // var titleinput1 = document.createElement("input");
+                                        // titleinput1.setAttribute('type', 'text');
+                                        // titleinput1.setAttribute('class', 'input-type');
+                                        // titleinput1.setAttribute('id', 'update_type' + data.data[0].id);
+                                        // var type = data.data[0].productType;
+                                        // if (data.data[0].productType == null) {
+                                        //     type = '';
+                                        // }
+                                        // titleinput1.setAttribute('value', type);
+                                        // titleinput1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
+                                        // //数据发生变化时更新
+                                        // titleinput1.setAttribute('onchange', "UpdateInfo('updatetype'," + data.data[0].id + " )");
+                                        // titlediv7.appendChild(titleinput1);
 
                                         // 分类
                                         var titlediv9 = document.createElement("div");
                                         titlediv9.setAttribute('class', 'select-lable');
-                                        var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
+                                        var lable = "<font style='vertical-align:inherit;'><font class='changelablecatalogue' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
                                         titlediv9.innerHTML = lable;
                                         titlediv4.appendChild(titlediv9);
-                                        $(".changelable").html($.i18n.prop('tags'));
+                                        $(".changelablecatalogue").html($.i18n.prop('type'));
                                         var titleselect = document.createElement("select");
                                         titleselect.setAttribute('class', 'input-lable');
                                         titleselect.setAttribute('id', 'update_catalogue' + data.data[0].id);
-                                        debugger
+
                                         var op = document.createElement("option");
                                         op.setAttribute("value", 0);
                                         op.appendChild(document.createTextNode("选择分类"));
                                         titleselect.appendChild(op);
                                         for (var i = 0; i < ProCatalogueList.length; i++) {
+                                            if(ProCatalogueList[i].superiorId >= 1){
                                             op = document.createElement("option");
                                             op.setAttribute("value", ProCatalogueList[i].id);
                                             if (data.data[0].catalogueId == ProCatalogueList[i].id) {
@@ -438,6 +411,7 @@
                                             }
                                             op.appendChild(document.createTextNode(ProCatalogueList[i].catalogueName));
                                             titleselect.appendChild(op);
+                                        }
                                         }
 
                                         //var label = data.data[0].label;
@@ -449,6 +423,34 @@
                                         //数据发生变化时更新
                                         titleselect.setAttribute('onchange', "UpdateInfo('update_catalogue'," + data.data[0].id + " )");
                                         titlediv9.appendChild(titleselect);
+
+                                        //标签
+                                      
+                        var titleinput2 = document.createElement("select");
+                        titleinput2.setAttribute('class', 'input-lable');
+                        titleinput2.setAttribute('id', 'update_label' + msg.data[0].id);
+
+                        var op = document.createElement("option");
+                        op.setAttribute("value", "");
+                        op.appendChild(document.createTextNode("选择标签"));
+                        titleinput2.appendChild(op);
+                        var labelArr =[];
+                        labelArr.push("Hot-Trend");
+                        labelArr.push("Winning products");
+                        labelArr.push("Discount Sale");
+                        for (var i = 0; i < labelArr.length; i++) {
+                            op = document.createElement("option");
+                            op.setAttribute("value", labelArr[i]);
+                            if (msg.data[0].label == labelArr[i]) {
+                                op.setAttribute("selected", 'selected');
+                            }
+                            op.appendChild(document.createTextNode(labelArr[i]));
+                            titleinput2.appendChild(op);
+                        }
+                        //数据发生变化时更新
+                        titleinput2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[0].id + " )");
+                        titlediv8.appendChild(titleinput2);
+
 
                                     }
                                 })

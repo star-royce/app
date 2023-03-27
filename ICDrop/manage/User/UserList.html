@@ -43,7 +43,7 @@
             <script type="text/html" id="toolbarDemo">
                 <div class="layui-btn-container">
                     <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                    <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete" style="display:none;"> 删除 </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete" style="display:none;"> 失效 </button>
                 </div>
             </script>
 
@@ -51,7 +51,7 @@
 
             <script type="text/html" id="currentTableBar">
                 <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">失效</a>
             </script>
 
         </div>
@@ -190,7 +190,7 @@
                             success: function (sre) {
                                 console.log("sre" + JSON.stringify(sre));
                                 if (sre.data == "1") {
-                                    obj.del();
+                                    //obj.del();
                                     layer.msg("提交成功！");
 
                                     //setTimeout(function () {
@@ -231,11 +231,11 @@
                     dto_obj.UserName = massage.field.UserName;
                     dto_obj.TokenKey = massage.field.TokenKey;
                     dto_obj.userStatus = 0;
-                    if (massage.field.userStatus == false) {
+                    if (!massage.field.userStatus || massage.field.userStatus!='on') {
                         dto_obj.userStatus = 1;
                     }
 
-
+debugger
                     $.ajax({
                         type: "post",
                         contentType: "application/json;",

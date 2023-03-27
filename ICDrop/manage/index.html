@@ -69,15 +69,6 @@
                         <a href="javascript:;" class="UserName"></a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
-                            </dd>
-                            <dd>
-                                <a href="indexCase.html" data-title="开发案例" data-icon="fa fa-gears">开发案例<span class="layui-badge-dot"></span></a>
-                            </dd>
-                            <dd>
-                                <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
-                            </dd>
-                            <dd>
                                 <hr>
                             </dd>
                             <dd>
@@ -178,7 +169,7 @@
 
                 $.ajax({
                     type: "post",
-                    url: "/api/Login/SignOut",
+                    url: BackgroundDomain+ "/api/Login/SignOut",
                     contentType: "application/json;",
                     success: function () {
                         layui.data('YDH', {
@@ -190,7 +181,7 @@
                             , remove: true
                         });
                         layer.msg('退出登录成功', function () {
-                            window.location = 'views/login.html';
+                            window.location = '/manage/login.html';
                         });
                     }
                 });

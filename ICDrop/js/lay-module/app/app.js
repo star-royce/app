@@ -1,5 +1,10 @@
 ﻿layui.define(function (exports) {
 
+    var BackgroundDomain = "";
+    if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
+        BackgroundDomain = "http://localhost"
+    }
+
     $ = layui.$;
     var i18n = layui.i18n;
     var layer = layui.layer;
@@ -54,7 +59,7 @@
                         maxmin: true,
                         shadeClose: true,
                         area: ['920px', '580px'],
-                        content: '/client/WindowsLogin.html',
+                        content:BackgroundDomain+  '/client/WindowsLogin.html',
                     })
                 } else if (config.OnlineType == "YDH") {
                     app.AuthorizationPage();
@@ -77,10 +82,10 @@
 
         if (OType === "manage") {
             config.OnlineType = "YDH";
-            config.LoginLink = "/manage/login.html";
+            config.LoginLink =BackgroundDomain+ "/manage/login.html";
         } else if (OType === "client") {
             config.OnlineType = "YDH-Customer";
-            config.LoginLink = "/client/index.html";
+            config.LoginLink = BackgroundDomain+ "/client/index.html";
         } else {
             config.OnlineType = parent.app.config.OnlineType
             config.PermissionLink = parent.app.config.PermissionLink;
@@ -128,7 +133,7 @@
             key: 'CreateTime'
             , remove: true
         });
-       
+      
         if (!config.LoginLink)
             config.LoginLink = parent.app.config.LoginLink;
         if (config.LoginLink) {
@@ -139,6 +144,7 @@
     //退出
     app.SignOut = function ()
     {
+        debugger
         $.ajax({
             type: "post",
             url: BackgroundDomain +"/api/Login/SignOut",

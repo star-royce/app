@@ -18,12 +18,17 @@
         }
 
         .BasicInfo {
-            float: left;
             margin-bottom: 20px;
+            float: left;
         }
 
             .BasicInfo .layui-input-block {
-                width: 200px
+                width: 200px;
+                float: left;
+                margin-left:0 !important;
+            }
+            .BasicInfo .layui-form-label {
+                width: 130px
             }
     </style>
 </head>
@@ -31,19 +36,6 @@
     <div class="layui-form layuimini-form">
         <fieldset class="layui-elem-field">
             <div class="layui-field-box">
-                <div class="BasicInfo">
-                    <label class="layui-form-label ">币种</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input currency" type="text" name="currency" readonly="readonly" />
-                    </div>
-                </div>
-                <div class="BasicInfo">
-                    <label class="layui-form-label">汇率(美元)：</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input exchangeRate" type="text" name="exchangeRate" readonly="readonly" />
-                    </div>
-
-                </div>
                 <div class="BasicInfo">
                     <label class="layui-form-label">产品单价：</label>
                     <div class="layui-input-block">
@@ -81,23 +73,7 @@
                                 <input type="text" name="sku" id="sku" autocomplete="off" class="layui-input">
                             </div>
                         </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">币种</label>
-                            <div class="layui-input-inline">
-                                <select id="TemplateCurrency" name="TemplateCurrency" lay-search lay-verify="">
-                                    <option value="">请选择</option>
-                                    <option value="USD">美元</option>
-                                    <option value="RMB">人名币</option>
-                                    <option value="EURO">欧元</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">汇率：</label>
-                            <div class="layui-input-inline">
-                                <input class="layui-input TemplateExchangeRate" id="TemplateExchangeRate" type="text" name="TemplateExchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="" />
-                            </div>
-                        </div>
+                        
 
                         <div class="layui-inline">
                             <button  class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
@@ -221,11 +197,7 @@
                 //请求的参数
                 var ware = new Object();
                 ware.sku = $("#sku").val();
-                ware.currency = $("#TemplateCurrency").val();
-                if ($("#TemplateExchangeRate").val()) { 
-                    ware.exchangeRate = $("#TemplateExchangeRate").val();
-                }
-            
+              
                 if ($.isEmptyObject($("#sku").val()) != true) {
                     $.ajax({
                         type: "post",
@@ -249,6 +221,9 @@
 
                                 document.querySelector(".goods").innerHTML = html;
                                 
+                            }else
+                            {
+                                layer.msg("没有找到sku（"+ware.sku+"）的对应报价！", { icon: 5, time: 2000, shift: 6 });
                             }
                         }
                     });
@@ -258,8 +233,6 @@
                     var ware = new Object();
                     ware.orderId = order_id;
                     ware.Id = wareId;
-                    ware.currency = $("#TemplateCurrency").val();
-                    ware.exchangeRate = $("#TemplateExchangeRate").val();
                     $.ajax({
                         type: "post",
                         url:BackgroundDomain + "/api/Order/QueryPlatformWareByOrderSKU",
@@ -277,9 +250,7 @@
                                     MergeAttributes = MergeAttributes.substring(0, MergeAttributes.length - 1);
                                     sre[i].mergeAttributes = MergeAttributes;
                                 }
-
                                 var html = template('productModule', sre)
-
                                 document.querySelector(".goods").innerHTML = html;
                                 return false;
 
@@ -299,8 +270,6 @@
                 var TemplateTaxesProfit = $(this).attr("taxesProfit");
                 var TemplateFreightProfit = $(this).attr("freightProfit");
 
-                $(".currency").val($("#TemplateCurrency").val());
-                $(".exchangeRate").val($("#TemplateExchangeRate").val());
                 $(".unitPrice").val(TemplatePurchaseCost);
                 $(".unitProfit").val(TemplatePurchaseProfit);
                 $(".unitTaxesProfit").val(TemplateTaxesProfit);
@@ -339,16 +308,8 @@
                 ware.PurchaseProfit = $(".unitProfit").val();
                 ware.TaxesProfit = $(".unitTaxesProfit").val();
                 ware.FreightProfit = $(".unitFreightProfit").val();
-                ware.Currency = $(".currency").val();
-                var ExchangeRate;
-                if ($.isEmptyObject($(".exchangeRate").val()) == true) {
-                    ExchangeRate = 1;
-                }
-                else {
-                    ExchangeRate = $(".exchangeRate").val();
-                }
-                ware.ExchangeRate = ExchangeRate;
-                
+                ware.Currency ="CNY";
+                ware.ExchangeRate = 1;
 
                 $.ajax({
                     type: "post",

@@ -253,3 +253,5 @@ PutAway = Put Away
 Default.pricing.BasicInfo = Basic Info
 Default.pricing.ChangePassword = Change Password
 login.out = Sign out
+productDetail.Stock = Inventory
+travelling.shoppingFrom = shopping from

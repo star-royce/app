@@ -408,7 +408,7 @@
                                                             var att = JSON.parse(data.data[0].attribute);
                                                             if (att != null) {
                                                                 var attcount = Object.keys(att).length;
-                                                                var width = Math.floor(45 / attcount);
+                                                                var width = Math.floor(34 / attcount);
                                                                 for (var key in att) {
                                                                     pricehtml += "<li  class='head_font'style='width:calc((100% - 20px) * 0." + width + ");text-align:center;' ><input type = 'text' style='width:95%;max-width:320px;border:1px solid #EEEEEE;height:28px;border-radius: 16px;text-align:center;float:left;margin-top:9px;'    data-type='" + key + "' data-key='" + id + "'  value = '" + key + "' onchange='UpdateAttributetitel(this)'/></li>";
                                                                 }
@@ -417,6 +417,7 @@
                                                                 pricehtml += "<li id='attribute" + id + "'  class='head_font'style='width:calc((100% - 20px) * 0.45);;text-align:center;float:left;margin-top:9px;' >property<br/></li>";
 
                                                             }
+                                                            pricehtml += "<li class='head_font'style='width:10%;' >仓库<br></li>";
                                                             pricehtml += "<li id='currency" + id + "' class='head_font'style='width:calc((100% - 20px) * 0.15);' >币种<br></li>";
                                                             pricehtml += "<li id='cost" + id + "' class='head_font'style='width:calc((100% - 20px) * 0.1);'>成本<br></li>";
                                                             pricehtml += "<li id='in18price" + id + "' class='head_font'style='width:calc((100% - 20px) * 0.15);'>价格<br></li>";
@@ -427,6 +428,18 @@
                                                             $("#cost" + id).html($.i18n.prop('cost'));
                                                             $("#in18price" + id).html($.i18n.prop('price') + "&nbsp;&nbsp;<button type='button' class='layui-btn layui-btn-primary layui-btn-xs AllPrice ' data-price='" + id + "'>Change All</button> ");
 
+                                                            var stockAddress =[];
+                                                            $.ajax({
+                                                                type: "post",
+                                                                contentType: "application/json",
+                                                                url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku',
+                                                                data: JSON.stringify({productId:id}),
+                                                                async:false,
+                                                                success: function (ret) 
+                                                                    {
+                                                                        stockAddress = ret.data;
+                                                                    }
+                                                               })
 
                                                             //循环数据添加主体部分
                                                             for (var i = 0; i < data.data.length; i++) {
@@ -445,7 +458,7 @@
                                                                 var att1 = JSON.parse(data.data[i].attribute);
                                                                 if (att1 != null) {
                                                                     var attcount1 = Object.keys(att1).length;
-                                                                    var width1 = Math.floor(45 / attcount1);
+                                                                    var width1 = Math.floor(34 / attcount1);
                                                                     for (var key in att1) {
                                                                         pricehtml1 += "<li  class='price_body'style='width:calc((100% - 20px) * 0." + width1 + ");text-align:center;'>" +
                                                                             "<input type = 'text' class='layui-input' style='width:95%;max-width:320px;border-radius: 16px;text-align: center;float:left;'  data-type='" + key + "' data-key='" + data.data[i].id + "'  value = '" + att1[key] + "' onchange='UpdateAttribute(this)'/> <br/></li> ";
@@ -454,6 +467,22 @@
                                                                     pricehtml1 += "<li  class='price_body'style='width:calc((100% - 20px) * 0.45);float:left;'><br/></li > "
                                                                 }
 
+                                                                var oen = " <option value ='0'>请选择仓库</option>";
+                                                                if(stockAddress && stockAddress.length>0)
+                                                                {
+                                                                   var stocksku= stockAddress.filter(j=>j.sku==data.data[i].sku);
+                                                                      for (let index = 0; index < stocksku.length; index++) {
+                                                                        if(stocksku[index].id == data.data[i].stockId)
+                                                                        {
+                                                                            oen+="<option value ='"+stocksku[index].id+"' selected = 'selected'>"+stocksku[index].address+"</option>";
+                                                                        }else
+                                                                        {
+                                                                            oen+="<option value ='"+stocksku[index].id+"'>"+stocksku[index].address+"</option>";
+                                                                        }    
+                                                                      }
+                                                                }
+                                                            
+                                                                pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;'   data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >"+oen+"<select> <br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:calc((100% - 20px) * 0.15);'>" + data.data[i].currency + "<br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:calc((100% - 20px) * 0.1);'>" + data.data[i].cost + "<br></li>";
                                                                 var onchange = "UpdatePrice(" + data.data[i].id + ")";
@@ -567,42 +596,6 @@
                                                             //数据发生变化时更新
                                                             titleinput2.setAttribute('onchange', "UpdateInfo('updatelabel'," + data.data[0].id + " )");
                                                             titlediv8.appendChild(titleinput2);
-
-                                                            // 分类
-                                                            var titlediv9 = document.createElement("div");
-                                                            titlediv9.setAttribute('class', 'select-lable');
-                                                            var lable = "<font style='vertical-align:inherit;'><font class='changelable' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
-                                                            titlediv9.innerHTML = lable;
-                                                            titlediv4.appendChild(titlediv9);
-                                                            $(".changelable").html($.i18n.prop('tags'));
-                                                            var titleselect = document.createElement("select");
-                                                            titleselect.setAttribute('class', 'input-lable');
-                                                            titleselect.setAttribute('id', 'update_catalogue' + data.data[0].id);
-                                                            debugger
-                                                            var op = document.createElement("option");
-                                                            op.setAttribute("value", 0);
-                                                            op.appendChild(document.createTextNode("选择分类"));
-                                                            titleselect.appendChild(op);
-                                                            for (var i = 0; i < ProCatalogueList.length; i++) {
-                                                                op = document.createElement("option");
-                                                                op.setAttribute("value", ProCatalogueList[i].id);
-                                                                if (data.data[0].catalogueId == ProCatalogueList[i].id) {
-                                                                    op.setAttribute("selected", 'selected');
-                                                                }
-                                                                op.appendChild(document.createTextNode(ProCatalogueList[i].catalogueName));
-                                                                titleselect.appendChild(op);
-                                                            }
-
-                                                            //var label = data.data[0].label;
-                                                            //if (data.data[0].label == null) {
-                                                            //    label = '';
-                                                            //}
-                                                            //titleselect.setAttribute('value', label);
-
-                                                            //数据发生变化时更新
-                                                            titleselect.setAttribute('onchange', "UpdateInfo('update_catalogue'," + data.data[0].id + " )");
-                                                            titlediv9.appendChild(titleselect);
-
                                                         }
                                                     })
 
@@ -756,6 +749,23 @@
             };
         })
 
+         //修改变体库存
+         function UpdateStock(input) {
+            var priceInfo = new Object();
+            priceInfo.id = $(input).attr("data-key");
+            priceInfo.stockId = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProductStock',
+                data: JSON.stringify(priceInfo),
+                success: function (data) {
+                    if (data.code > 0) {
+                        layer.msg("修改仓库成功!")
+                    }
+                }
+            })
+        }
 
 
         ////提交增删改数据

@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>产品详情</title>
@@ -12,7 +11,6 @@
     <link rel="stylesheet" href="../../../css/Automation/AutomationDetails.css?v=2" media="all">
     <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
 </head>
-
 <body>
     <hr />
     <div class="data">
@@ -79,10 +77,10 @@
         <!--如果是已授权自动化的产品则显示解绑按钮，否则显示绑定按钮-->
         <div id="updateStatus{{id}}">
             {{if isAutomation =="1"}}
-            <button type="button" class="layui-btn layui-btn-primary outsync" exp-data="{{id}}" i18n_Text="Out.sync">取消同步</button>
+            <button type="button" class="layui-btn layui-btn-primary  outsync" exp-data="{{id}}" i18n_Text="Out.sync">取消同步</button>
             {{/if}}
             {{if isAutomation =="0"}}
-            <button type="button" class="layui-btn sync" exp-data="{{id}}" i18n_Text="Sync.order.with.SKU">同步</button>
+            <button type="button" class="layui-btn  sync" exp-data="{{id}}" i18n_Text="Sync.order.with.SKU">同步</button>
             {{/if}}
         </div>
     </script>
@@ -125,7 +123,7 @@
                 var productId = $(this).attr("exp-data");
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain + "/api/Automation/UpdateAutomationStatus",
+                    url: BackgroundDomain +"/api/Automation/UpdateAutomationStatus",
                     contentType: "application/json;",
                     data: JSON.stringify({ "id": productId, "isAutomation": "1" }),
                     dataType: "json",
@@ -139,7 +137,7 @@
                         //授权后按钮变为取消授权
                         var updateStatusdiv = document.getElementById("updateStatus" + productId);
 
-                        var html = '<button type="button" class="layui-btn layui-btn-primary outsync" exp-data="' + productId + '" i18n_Text="Out.sync">Out sync</button>';
+                        var html = '<button type="button" class="layui-btn layui-btn-primary  outsync" exp-data="' + productId + '" i18n_Text="Out.sync">Out sync</button>';
                         updateStatusdiv.innerHTML = html;
 
                     }
@@ -152,7 +150,7 @@
                 var productId = $(this).attr("exp-data");
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain + "/api/Automation/UpdateAutomationStatus",
+                    url: BackgroundDomain +"/api/Automation/UpdateAutomationStatus",
                     contentType: "application/json;",
                     data: JSON.stringify({ "id": productId, "isAutomation": "0" }),
                     dataType: "json",
@@ -177,7 +175,7 @@
 
             $.ajax({
                 type: "post",
-                url: BackgroundDomain + "/api/Automation/QueryAutomationWareListById",
+                url: BackgroundDomain +"/api/Automation/QueryAutomationWareListById",
                 contentType: "application/json;",
                 data: JSON.stringify({ "Id": AutomationId }),
                 dataType: "json",
@@ -226,5 +224,4 @@
         }
     </script>
 </body>
-
 </html>

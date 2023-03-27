@@ -82,10 +82,7 @@
                                 <label class="layui-form-label">币种</label>
                                 <div class="layui-input-inline">
                                     <select id="currency" name="currency" lay-search lay-verify="">
-                                        <option value="">请选择</option>
-                                        <option value="USD">美元</option>
                                         <option value="RMB">人名币</option>
-                                        <option value="EURO">欧元</option>
                                     </select>
                                 </div>
                             </div>
@@ -99,6 +96,7 @@
 
                             <div class="layui-inline">
                                 <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                <button  class="layui-btn layui-btn-primary" lay-submit lay-filter="data-restore-btn"> 还 原</button>
                             </div>
                         </div>
                     </form>
@@ -567,7 +565,7 @@
                         type: 2,
                         shade: 0.2,
                         shadeClose: true,
-                        area: ['1500px', '800px'],
+                        area: ['80%', '80%'],
                         content: '/manage/order/TemplateQuote.html?orderId=' + checkStatus.data[0].orderId + '&wareId=' + checkStatus.data[0].id,
                     });
 

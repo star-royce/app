@@ -250,3 +250,5 @@ ImportList = 导入列表
 ViewProduct = 查看
 PutAway = 收起
 login.out = 退 出
+productDetail.Stock = 仓库
+travelling.shoppingFrom = 地点

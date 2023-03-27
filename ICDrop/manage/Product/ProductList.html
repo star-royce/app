@@ -68,6 +68,15 @@
                 next = "next page ";
             }
 
+            var ProCatalogueList = null;
+            $.ajax({
+                type: "get",
+                url: BackgroundDomain +'/api/Product/GetProCatalogueList',
+                async: false,
+                success: function (data) {
+                    ProCatalogueList = data;
+                }
+            });
 
             var YDHCustomer = layui.data('YDH-Customer');
             function QueryImportProduct(count, SerchproductInfo) {
@@ -174,27 +183,63 @@
                                             input.setAttribute('onchange', "UpdateInfo('updatetitle'," + msg.data[i].id + " )");
                                             div4.appendChild(input);
 
-                                            //类型
-                                            var div7 = document.createElement("div");
-                                            div7.setAttribute('class', 'select-type');
-                                            var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
-                                            div7.innerHTML = type;
-                                            div4.appendChild(div7);
-                                            $(".changetype").html($.i18n.prop('type'));
 
-                                            var input1 = document.createElement("input");
-                                            input1.setAttribute('type', 'text');
-                                            input1.setAttribute('class', 'input-type');
-                                            input1.setAttribute('id', 'update_type' + msg.data[i].id);
-                                            var type = msg.data[i].productType;
-                                            if (msg.data[i].productType == null) {
-                                                type = '';
+                                            var div7 = document.createElement("div");
+                                            div7.setAttribute('class', 'select-lable');
+                                        var lable = "<font style='vertical-align:inherit;'><font class='changelablecatalogue' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
+                                        div7.innerHTML = lable;
+                                        div4.appendChild(div7);
+                                        $(".changelablecatalogue").html($.i18n.prop('type'));
+                                        var input1 = document.createElement("select");
+                                        input1.setAttribute('class', 'input-lable');
+                                        input1.setAttribute('id', 'update_catalogue' + msg.data[i].id);
+
+                                        var op1 = document.createElement("option");
+                                        op1.setAttribute("value", 0);
+                                        op1.appendChild(document.createTextNode("选择分类"));
+                                        input1.appendChild(op1);
+                                        for (var j = 0; j < ProCatalogueList.length; j++) {
+                                            if(ProCatalogueList[j].superiorId >= 1){
+                                            op1 = document.createElement("option");
+                                            op1.setAttribute("value", ProCatalogueList[j].id);
+                                            if (msg.data[i].catalogueId == ProCatalogueList[j].id) {
+                                                op1.setAttribute("selected", 'selected');
                                             }
-                                            input1.setAttribute('value', type);
-                                            input1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
-                                            //数据发生变化时更新
-                                            input1.setAttribute('onchange', "UpdateInfo('updatetype'," + msg.data[i].id + " )");
-                                            div7.appendChild(input1);
+                                            op1.appendChild(document.createTextNode(ProCatalogueList[j].catalogueName));
+                                            input1.appendChild(op1);
+                                         }
+                                        }
+
+                                        //var label = data.data[0].label;
+                                        //if (data.data[0].label == null) {
+                                        //    label = '';
+                                        //}
+                                        //titleselect.setAttribute('value', label);
+                                      
+                                        //数据发生变化时更新
+                                        input1.setAttribute('onchange', "UpdateInfo('update_catalogue'," + msg.data[i].id + " )");
+                                        div7.appendChild(input1);
+                                            //类型
+                                            // var div7 = document.createElement("div");
+                                            // div7.setAttribute('class', 'select-type');
+                                            // var type = "<font style='vertical-align:inherit;'><font  class='changetype' style='vertical-align:inherit;font-size:14px;color:#666666;'>类型</font></font></br>";
+                                            // div7.innerHTML = type;
+                                            // div4.appendChild(div7);
+                                            // $(".changetype").html($.i18n.prop('type'));
+
+                                            // var input1 = document.createElement("input");
+                                            // input1.setAttribute('type', 'text');
+                                            // input1.setAttribute('class', 'input-type');
+                                            // input1.setAttribute('id', 'update_type' + msg.data[i].id);
+                                            // var type = msg.data[i].productType;
+                                            // if (msg.data[i].productType == null) {
+                                            //     type = '';
+                                            // }
+                                            // input1.setAttribute('value', type);
+                                            // input1.setAttribute('placeholder', $.i18n.prop('Insert.Type.Here'));
+                                            // //数据发生变化时更新
+                                            // input1.setAttribute('onchange', "UpdateInfo('updatetype'," + msg.data[i].id + " )");
+                                            // div7.appendChild(input1);
 
                                             //标签
                                             var div8 = document.createElement("div");
@@ -204,20 +249,39 @@
                                             div4.appendChild(div8);
                                             $(".changelable").html($.i18n.prop('tags'));
 
-                                            var input2 = document.createElement("input");
-                                            input2.setAttribute('type', 'text');
-                                            input2.setAttribute('class', 'input-lable');
-                                            input2.setAttribute('id', 'update_label' + msg.data[i].id);
-
                                             var label = msg.data[i].label;
                                             if (msg.data[i].label == null) {
                                                 label = '';
                                             }
-                                            input2.setAttribute('value', label);
-                                            input2.setAttribute('placeholder', $.i18n.prop('Separate.multiple.entries.with.commas'));
-                                            //数据发生变化时更新
-                                            input2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[i].id + " )");
-                                            div8.appendChild(input2);
+                                          
+                                            var input2 = document.createElement("select");
+                                            input2.setAttribute('class', 'input-lable');
+                                            input2.setAttribute('id', 'update_label' + msg.data[i].id);
+                                            var op = document.createElement("option");
+                                            op.setAttribute("value", "");
+                                            op.appendChild(document.createTextNode("选择标签"));
+                                            input2.appendChild(op);
+                                            var labelArr =[];
+                                            labelArr.push("Hot-Trend");
+                                            labelArr.push("Winning products");
+                                            labelArr.push("Discount Sale");
+                                         
+                                            for (var j = 0; j < labelArr.length; j++) {
+                                           op = document.createElement("option");
+                                           op.setAttribute("value", labelArr[j]);
+                                          if (msg.data[i].label == labelArr[j]) {
+                                           op.setAttribute("selected", 'selected');
+                                          }
+                                         op.appendChild(document.createTextNode(labelArr[j]));
+                                         input2.appendChild(op);
+                                      }
+                        //数据发生变化时更新
+                        input2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[i].id + " )");
+                        div8.appendChild(input2);
+
+
+
+
 
                                             //下分隔符
                                             var fg1 = document.createElement("div");
@@ -283,13 +347,13 @@
                                                             priceul.setAttribute('class', 'table-header');
                                                             priceul.setAttribute('id', 'price' + data.data[0].productId);
                                                             pricediv.appendChild(priceul);
-                                                            pricehtml += "<li id='image" + id + "' class='head_font'style='width:9%;' >图片<br></li>";
+                                                            pricehtml += "<li id='image" + id + "' class='head_font'style='width:8%;' >图片<br></li>";
                                                             pricehtml += "<li  class='head_font'style='width:14%;' >sku<br></li>";
                                                             //将属性字段分隔成单个属性
                                                             var att = JSON.parse(data.data[0].attribute);
                                                             if (att != null) {
                                                                 var attcount = Object.keys(att).length;
-                                                                var width = Math.floor(34 / attcount);
+                                                                var width = Math.floor(20 / attcount);
                                                                 for (var key in att) {
                                                                     pricehtml += "<li  class='head_font'style='width:" + width + "%;text-align:left;' ><div style='width=auto !important;text-align:center;max-width:320px;margin-top:0px;'><input type = 'text' style='width:60%;max-width:320px;border:1px solid #EEEEEE;min-width:150px;height:28px;'    data-type='" + key + "' data-key='" + id + "'  value = '" + key + "' onchange='UpdateAttributetitel(this)'/></div></li>";
                                                                 }
@@ -298,15 +362,28 @@
                                                                 pricehtml += "<li id='attribute" + id + "'  class='head_font'style='width:34%;text-align:left;' >属性<br/></li>";
 
                                                             }
+                                                            pricehtml += "<li class='head_font'style='width:10%;' >仓库<br></li>";
                                                             pricehtml += "<li class='head_font'style='width:4%;' ><button type='button' class='layui-btn layui-btn-primary layui-btn-xs AllQuantity ' data-quantity='" + id + "' >维护库存</button><br></li>";
                                                             pricehtml += "<li id='currency" + id + "' class='head_font'style='width:4%;' >币种<br></li>";
-                                                            pricehtml += "<li id='cost" + id + "' class='head_font'style='width:7%;'>阿里价<br></li>";
-                                                            pricehtml += "<li id='in18price" + id + "' class='head_font'style='width:7%;'>采购价</li>";
+                                                            pricehtml += "<li id='cost" + id + "' class='head_font'style='width:6%;'>阿里价<br></li>";
+                                                            pricehtml += "<li id='in18price" + id + "' class='head_font'style='width:6%;'>采购价</li>";
                                                             pricehtml += "<li class='head_font'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs AllPurchusePrice ' data-productid='" + id + "'>维护采购价</button></li>";
-                                                            pricehtml += "<li class='head_font'style='width:5%;'>已维护属性</li>";
+                                                            pricehtml += "<li class='head_font'style='width:8%;'>已维护属性</li>";
                                                             pricehtml += "<li class='head_font'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs AllEetendChange 'data-productid='" + id + "'>维护扩展属性</button></li>";
                                                             priceul.innerHTML = pricehtml;
 
+                                                            var stockAddress =[];
+                                                            $.ajax({
+                                                                type: "post",
+                                                                contentType: "application/json",
+                                                                url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku',
+                                                                data: JSON.stringify({productId:id}),
+                                                                async:false,
+                                                                success: function (ret) 
+                                                                    {
+                                                                        stockAddress = ret.data;
+                                                                    }
+                                                               })
                                                             //循环数据添加主体部分
                                                             for (var i = 0; i < data.data.length; i++) {
                                                                 var pricediv1 = document.createElement("div");
@@ -318,13 +395,13 @@
                                                                 pricediv1.appendChild(priceul1);
                                                                 var pricehtml1 = "";
                                                                 pricehtml1 += "<li class='price_body' style='width:20px;'><label><input  type='checkbox'  data-key='" + data.data[i].id + "' id='prchk" + data.data[i].id + "' onchange='Updatecheckvariant(this)'/></label></li>";
-                                                                pricehtml1 += "<li class='price_body'style='width:calc(9% - 20px);'><img src='" + data.data[i].pictureUrl + "' style='height:50px' referrerPolicy='no-referrer'><br></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:calc(8% - 20px);'><img src='" + data.data[i].pictureUrl + "' style='height:50px' referrerPolicy='no-referrer'><br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:14%;'>" + data.data[i].sku + "<br></li>";
                                                                 //将属性字段分隔成单个属性
                                                                 var att1 = JSON.parse(data.data[i].attribute);
                                                                 if (att1 != null) {
                                                                     var attcount1 = Object.keys(att1).length;
-                                                                    var width1 = Math.floor(34 / attcount1);
+                                                                    var width1 = Math.floor(20 / attcount1);
                                                                     for (var key in att1) {
                                                                         pricehtml1 += "<li  class='price_body'style='width:" + width1 + "%;text-align:left;'>" +
                                                                             "<input type = 'text' class='layui-input' style='float:left;width:95%;max-width:320px;'  data-type='" + key + "' data-key='" + data.data[i].id + "'  value = '" + att1[key] + "' onchange='UpdateAttribute(this)'/> <br/></li> ";
@@ -332,17 +409,37 @@
                                                                 } else {
                                                                     pricehtml1 += "<li  class='price_body'style='width:34%;float:left;'><br/></li > "
                                                                 }
+
+                                                          
+                                                               var oen = " <option value ='0'>请选择仓库</option>";
+                                                               if(stockAddress && stockAddress.length>0)
+                                                                 {
+                                                                   var stocksku= stockAddress.filter(j=>j.sku==data.data[i].sku);
+                                                                      for (let index = 0; index < stocksku.length; index++) {
+                                                                        if(stocksku[index].id == data.data[i].stockId)
+                                                                        {
+                                                                            oen+="<option value ='"+stocksku[index].id+"' selected = 'selected'>"+stocksku[index].address+"</option>";
+                                                                        }else
+                                                                        {
+                                                                            oen+="<option value ='"+stocksku[index].id+"'>"+stocksku[index].address+"</option>";
+                                                                        }    
+                                                                      }
+                                                                  }
+                                                                 
+                                                               
+                                                              
+                                                                pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;' data-productid = '" + id + "'  data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >"+oen+"<select> <br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:4%;'><input type = 'text' class='layui-input' style='float:left;width:100%;' data-productid = '" + id + "'  data-key='" + data.data[i].id + "'  value = '" + data.data[i].quantity + "' onchange='UpdateQuantity(this)'/> </li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:4%;'>" + data.data[i].currency + "<br></li>";
-                                                                pricehtml1 += "<li class='price_body'style='width:7%;'>" + data.data[i].cost + "<br></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:6%;'>" + data.data[i].cost + "<br></li>";
                                                                 var onchange = "UpdatePrice(" + data.data[i].id + ")";
-                                                                pricehtml1 += "<li class='price_body'style='width:7%;' id='PurchasePrice" + data.data[i].id + "' data-product='" + id + "'>" + data.data[i].price + "<br></li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:6%;' id='PurchasePrice" + data.data[i].id + "' data-product='" + id + "'>" + data.data[i].price + "<br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs PurchusePrice ' data-productid='" + id + "' data-wareid='" + data.data[i].id + "'>维护采购价</button></li>";
                                                                 var IsCompleteExtend = "否";
                                                                 if (data.data[i].isCompleteExtend == "1") {
                                                                     IsCompleteExtend = "是";
                                                                 }
-                                                                pricehtml1 += "<li class='price_body'style='width:5%;'>" + IsCompleteExtend+"</li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:8%;'>" + IsCompleteExtend+"</li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs EetendChange ' data-productid='" + id + "' data-wareid='" + data.data[i].id + "'>维护扩展属性</button></li>";
 
                                                                 priceul1.innerHTML = pricehtml1;
@@ -351,6 +448,8 @@
                                                                     document.getElementById("prchk" + data.data[i].id).checked = true;
                                                                 }
                                                             }
+
+                                                         
                                                         }
                                                     })
                                                 });
@@ -375,7 +474,6 @@
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
                                                             var titlediv = document.getElementById("productbody" + id);
-
 
                                                             //左边放图片
                                                             var titlediv3 = document.createElement("div");
@@ -649,6 +747,25 @@
                     }
                 })
             }
+             //修改分类
+             if (type == "update_catalogue") {
+                var catalogueId = document.getElementById('update_catalogue' + id).value;
+                var productInfo = new Object();
+                productInfo.id = id;
+                productInfo.CatalogueId = catalogueId;
+                $.ajax({
+                    type: "post",
+                    contentType: "application/json",
+                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    data: JSON.stringify(productInfo),
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg($.i18n.prop('The.update.is.successful'))
+                        }
+                    }
+                })
+            }
+
 
         }
 
@@ -708,7 +825,7 @@
                 form.on('submit(up_Purchase)', function (massage) {
                     var dto_obj = new Object();
                     dto_obj.ProductId = parseInt(data.productId);
-                    dto_obj.Currency = massage.field.currency;
+                    //dto_obj.Currency = massage.field.currency;
                     dto_obj.ExchangeRate = massage.field.exchangeRate;
                     dto_obj.PurchaseCost = massage.field.PurchaseCost;
                     dto_obj.PurchaseProfit = massage.field.PurchaseProfit;
@@ -1148,6 +1265,24 @@
             })
         }
 
+        //修改变体库存
+        function UpdateStock(input) {
+            var priceInfo = new Object();
+            priceInfo.id = $(input).attr("data-key");
+            priceInfo.stockId = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProductStock',
+                data: JSON.stringify(priceInfo),
+                success: function (data) {
+                    if (data.code > 0) {
+                        layer.msg("修改仓库成功!")
+                    }
+                }
+            })
+        }
+
         // 修改商品所有库存
         $(document).on('click', '.AllQuantity', function () {
 
@@ -1195,17 +1330,16 @@
                         <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input" readonly="readonly">
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <!-- <div class="layui-form-item">
                     <label class="layui-form-label">币种</label>
                     <div class="layui-input-inline">
                         <select id="currency" name="currency" lay-search lay-verify="required">
                             <option value="">请选择</option>
-                            <option value="USD">美元</option>
                             <option value="RMB">人名币</option>
-                            <option value="EURO">欧元</option>
+                         
                         </select>
                     </div>
-                </div>
+                </div> -->
                 <div class="layui-form-item">
                     <label class="layui-form-label">汇率：</label>
                     <div class="layui-input-inline">

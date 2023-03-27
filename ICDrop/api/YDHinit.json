@@ -159,12 +159,6 @@
             "href": "/manage/Taxes/TaxesMaintain.html",
             "icon": "fa fa-file-text",
             "target": "_self"
-          },
-          {
-            "title": "订单申报",
-            "href": "/manage/Cle/CleOrderManage.html",
-            "icon": "fa fa-file-text",
-            "target": "_self"
           }
         ]
       }

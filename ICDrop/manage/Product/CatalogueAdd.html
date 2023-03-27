@@ -100,6 +100,7 @@
             $.ajax({
                 type: "get",
                 url: BackgroundDomain +'/api/Product/GetProCatalogueList',
+                async:false,
                 success: function (data) {
                     var str = "<option value='0'>无上级</option>";
                     for (let i of data.filter(i => i.superiorId < 1)) {
@@ -117,6 +118,7 @@
                 $.ajax({
                     type: "get",
                     url: BackgroundDomain +'/api/Product/GetProCatalogue?id=' + catalogueid,
+                    async:false,
                     success: function (data) {
                         form.val("CatalogueForm", data);
                         form.render();

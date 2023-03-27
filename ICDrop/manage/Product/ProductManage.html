@@ -50,17 +50,16 @@
                                     <input type="text" id="ProductTitle" name="ProductTitle" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
-                            <div class="layui-inline">
+                            <!-- <div class="layui-inline">
                                 <label class="layui-form-label">币种</label>
                                 <div class="layui-input-inline">
                                     <select id="currency" name="currency" lay-search lay-verify="">
                                         <option value="">请选择</option>
-                                        <option value="USD">美元</option>
                                         <option value="RMB">人名币</option>
-                                        <option value="EURO">欧元</option>
+                                      
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="layui-inline">
                                 <label class="layui-form-label">汇率：</label>
                                 <div class="layui-input-inline">
@@ -259,12 +258,12 @@
                 , cols: [[ //标题栏
                     { type: "checkbox", width: 50 },
                     {
-                        title: '#', width: 50, children: [
+                        title: '#', width: 50,collapse: true, children: [
                             {
                                 title: 'sku'
                                 , method: "post"
                                 , contentType: "application/json;"
-                                , url: BackgroundDomain +'/api/Product/QueryProductPriceInfo'
+                                , url: BackgroundDomain +'/api/Product/QueryManageProductPriceInfo'
                                 , height: 500
                                 , cellMinHeight: 80
                                 , where: function (row) {
@@ -274,35 +273,11 @@
                                 , page: false
                                 , cols: [[
                                     { type: 'checkbox', fixed: 'left' },
-                                    {
-                                        title: '#', width: 50, children: [
-                                            {
-                                                title: '仓库库存'
-                                                , method: "post"
-                                                , contentType: "application/json;"
-                                                , url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku'
-                                                , height: 300
-                                                , cellMinHeight: 80
-                                                , where: function (row) {
-                                                    console.log(row);
-                                                    return { sku: row.sku }
-                                                }
-                                                , page: false
-                                                , cols: [[
-                                                    { type: 'checkbox', fixed: 'left' },
-                                                    { field: 'stockCode', title: '仓库编码', width: 200, sort: true, filter: true },
-                                                    { field: 'address', title: '地址', width: 200, sort: true, filter: true },
-                                                    { field: 'stock', title: '库存', width: 200, sort: true, filter: true },
-                                                    /* { title: '操作', width: 156, templet: '#childBar' }*/
-                                                ]]
-                                                , done: function () {
-                                                    soulTable.render(this);
-                                                }
-                                            }
-                                        ]
-                                    },
                                     { field: 'sku', title: 'sku', width: 200, sort: true, filter: true },
                                     { templet: skuImagebox, width: 100, title: '图片' },
+                                    { field: 'stockCode', title: '仓库编码', width: 200, sort: true, filter: true },
+                                    { field: 'address', title: '地址', width: 200, sort: true, filter: true },
+                                    { field: 'stock', title: '库存', width: 200, sort: true, filter: true },
                                     { field: 'cost', title: '成本', width: 200, sort: true, filter: true },
                                     { field: 'price', title: '售卖价格', width: 200, sort: true, filter: true },
                                     { field: 'attribute', title: '属性', width: 200, sort: true, filter: true },
@@ -385,7 +360,7 @@
                                 title: 'sku'
                                 , method: "post"
                                 , contentType: "application/json;"
-                                , url: BackgroundDomain +'/api/Product/QueryProductPriceInfo'
+                                , url: BackgroundDomain +'/api/Product/QueryManageProductPriceInfo'
                                 , height: 500
                                 , cellMinHeight: 80
                                 , where: function (row) {
@@ -395,42 +370,11 @@
                                 , page: false
                                 , cols: [[
                                     { type: 'checkbox', fixed: 'left' },
-                                    {
-                                        title: '#', width: 50, children: [
-                                            {
-                                                title: '仓库库存'
-                                                , method: "post"
-                                                , contentType: "application/json;"
-                                                , url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku'
-                                                , height: 300
-                                                , cellMinHeight: 80
-                                                , where: function (row) {
-                                                    console.log(row);
-                                                    return { sku: row.sku }
-                                                }
-                                                , page: false
-                                                , cols: [[
-                                                    { type: 'checkbox', fixed: 'left' },
-                                                    { field: 'sku', title: 'sku', width: 200, sort: true, filter: true },
-                                                    { templet: skuImagebox, width: 100, title: '图片' },
-                                                    { field: 'cost', title: '成本', width: 200, sort: true, filter: true },
-                                                    { field: 'price', title: '售卖价格', width: 200, sort: true, filter: true },
-                                                    { field: 'attribute', title: '属性', width: 200, sort: true, filter: true },
-                                                    { field: 'purchaseCost', title: '采购成本价', width: 200, sort: true, filter: true },
-                                                    { field: 'purchaseProfit', title: '采购利润', width: 200, sort: true, filter: true },
-                                                    { field: 'taxesProfit', width: 120, title: '税费利润' },
-                                                    { field: 'freightProfit', width: 120, title: '运费利润' },
-                                                    { field: 'quantity', title: '库存', width: 200, sort: true, filter: true },
-                                                    /* { title: '操作', width: 156, templet: '#childBar' }*/
-                                                ]]
-                                                , done: function () {
-                                                    soulTable.render(this);
-                                                }
-                                            }
-                                        ]
-                                    },
                                     { field: 'sku', title: 'sku', width: 200, sort: true, filter: true },
                                     { templet: skuImagebox, width: 100, title: '图片' },
+                                    { field: 'stockCode', title: '仓库编码', width: 200, sort: true, filter: true },
+                                    { field: 'address', title: '地址', width: 200, sort: true, filter: true },
+                                    { field: 'stock', title: '库存', width: 200, sort: true, filter: true },
                                     { field: 'cost', title: '成本', width: 200, sort: true, filter: true },
                                     { field: 'price', title: '售卖价格', width: 200, sort: true, filter: true },
                                     { field: 'attribute', title: '属性', width: 200, sort: true, filter: true },
@@ -576,7 +520,7 @@
                 , cols: [[ //标题栏
                     { field: 'id', width: 0, title: '分类ID', hide: true },
                     { field: 'catalogueName', minwidth: 280, title: '分类名称' },
-                    { templet: Catalogueimagebox, width: 150, title: '图片' },
+                    // { templet: Catalogueimagebox, width: 150, title: '图片' },
                     { field: 'superiorId', width: 200, title: '上级ID' },
                     { field: 'rank', width: 100, title: '级别' },
                     { field: 'score', title: '操作', width: 120, align: 'center', toolbar: '#catalogueOperation', fixed: 'right' }
@@ -617,6 +561,7 @@
                             alert("导入成功！");
                             table.cache["Product_import"] = null;
                             table.reload('Product_import', { data: null });
+                           document.getElementById("import").value=''; 
                             return;
                         }
                         return false;
@@ -650,15 +595,15 @@
             form.on('submit(data-search-btn)', function (data) {
                 var result = JSON.stringify(data.field);
                 obj = $.parseJSON(result);
-                if ($("#currency").val() != "") {
-                    if ($("#exchangeRate").val() == "") {
-                        alert("请填写汇率");
-                        return false;
-                    }
-                }
+                // if ($("#currency").val() != "") {
+                //     if ($("#exchangeRate").val() == "") {
+                //         alert("请填写汇率");
+                //         return false;
+                //     }
+                // }
                 var dto_obj = new Object();
                 if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
-                if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
+                // if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
                 if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
                 if ($.isEmptyObject(obj.isPutAway) != true) { dto_obj.isPutAway = obj.isPutAway; }
                 if ($.isEmptyObject(obj.isCompletePurchase) != true) { dto_obj.isCompletePurchase = obj.isCompletePurchase; }
@@ -681,15 +626,15 @@
             form.on('submit(Automation-search-btn)', function (data) {
                 var result = JSON.stringify(data.field);
                 obj = $.parseJSON(result);
-                if ($("#currency").val() != "") {
-                    if ($("#exchangeRate").val() == "") {
-                        alert("请填写汇率");
-                        return false;
-                    }
-                }
+                // if ($("#currency").val() != "") {
+                //     if ($("#exchangeRate").val() == "") {
+                //         alert("请填写汇率");
+                //         return false;
+                //     }
+                // }
                 var dto_obj = new Object();
                 if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
-                if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
+                // if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
                 if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
                 if ($.isEmptyObject(obj.Email) != true) { dto_obj.Email = obj.Email; }
                 if ($.isEmptyObject(obj.isAutomation) != true) { dto_obj.isAutomation = obj.isAutomation; }
@@ -881,15 +826,15 @@
         //平台商品重载
         function overloadPlatform() {
 
-            if ($("#currency").val() != "") {
-                if ($("#exchangeRate").val() == "") {
-                    alert("请填写汇率");
-                    return false;
-                }
-            }
+            // if ($("#currency").val() != "") {
+            //     if ($("#exchangeRate").val() == "") {
+            //         alert("请填写汇率");
+            //         return false;
+            //     }
+            // }
             var dto_obj = new Object();
             if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
-            if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
+            //if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
             if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
             if ($.isEmptyObject($("#isPutAway").val()) != true) { dto_obj.isPutAway = $.isEmptyObject($("#isPutAway").val()); }
             if ($.isEmptyObject($("#isCompletePurchase").val()) != true) { dto_obj.isCompletePurchase = $.isEmptyObject($("#isCompletePurchase").val()); }

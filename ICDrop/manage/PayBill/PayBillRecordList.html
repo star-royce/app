@@ -27,7 +27,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">订单编号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="userName" autocomplete="off" class="layui-input">
+                                    <input type="text" name="OrderCode" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
@@ -124,19 +124,13 @@
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
-                var result = JSON.stringify(data.field);
-                layer.alert(result, {
-                    title: '最终的搜索信息'
-                });
-
+              
                 //执行搜索重载
                 table.reload('currentTableId', {
                     page: {
                         curr: 1
                     }
-                    , where: {
-                        searchParams: result
-                    }
+                    , where:{Dto:data.field}
                 }, 'data');
 
                 return false;

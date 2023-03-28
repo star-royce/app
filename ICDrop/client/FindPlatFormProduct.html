@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>查找产品</title>
@@ -20,17 +21,21 @@
     <!--下载产品-->
     <div class="getmaterial">
         <div style="width: 100%; text-align: center; margin-bottom: 38px;">
-            <div class="getMaterialText"><img src="../../images/ander/Ander rop .svg" style="height:62px;width:372px;" /></div>
+            <div class="getMaterialText"><img src="../../images/ander/Ander rop .svg"
+                    style="height:62px;width:372px;" /></div>
         </div>
         <form action="" lay-filter="formTest" class="layui-form layui-form-pane">
             <div style="margin-left: 8%; margin-bottom: 3px;">
-                <button class="layui-btn layui-btn-primary" id="demo4" style="float: left; margin-right: 10px" onclick="return false;">
+                <button class="layui-btn layui-btn-primary" id="demo4" style="float: left; margin-right: 10px"
+                    onclick="return false;">
                     <i class="layui-icon layui-icon-spread-left layui-font-12"></i>
                 </button>
                 <input type="text" i18n_Attr="placeholder:Input.commodity.title;"
-                       style="width: 80%; background-color: #F5F5F5 !important;"
-                       name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle" />
-                <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn" style="float: left; width: 68px; background-color: #F5F5F5 !important;"><img src="../../../images/find1.png" /></button>
+                    style="width: 80%; background-color: #F5F5F5 !important;" name="productTitle" id="productTitle"
+                    lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle" />
+                <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn"
+                    style="float: left; width: 68px; background-color: #F5F5F5 !important;"><img
+                        src="../../../images/button/search.svg" /></button>
             </div>
         </form>
     </div>
@@ -38,25 +43,41 @@
     <div class="label" style="margin-bottom: 20px;">
         <div class="label" style="margin: auto;">
             <ul class="layui-row">
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Hot-Trend')" src="/images/CategoryPictures/Hot-Trend.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Winning products')" src="/images/CategoryPictures/Winning products.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Discount Sale')" src="/images/CategoryPictures/Discount Sale.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Women\'s clothing')" src="/images/CategoryPictures/Women's clothing.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Men\'s clothing')" src="/images/CategoryPictures/Men's clothing.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Hot-Trend')"
+                            src="/images/CategoryPictures/Hot-Trend.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Winning products')"
+                            src="/images/CategoryPictures/Winning products.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Discount Sale')"
+                            src="/images/CategoryPictures/Discount Sale.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Women\'s clothing')"
+                            src="/images/CategoryPictures/Women's clothing.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Men\'s clothing')"
+                            src="/images/CategoryPictures/Men's clothing.svg" style="width: 100%;" /></a></li>
             </ul>
             <ul class="layui-row">
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Beauty')" src="/images/CategoryPictures/Beauty.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Electronics')" src="/images/CategoryPictures/Electronics.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Jewelry Watches and glasses')" src="/images/CategoryPictures/Jewelry Watches and glasses.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Bags')" src="/images/CategoryPictures/Bags.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Shoes')" src="/images/CategoryPictures/Shoes.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Beauty')"
+                            src="/images/CategoryPictures/Beauty.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Electronics')"
+                            src="/images/CategoryPictures/Electronics.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Jewelry Watches and glasses')"
+                            src="/images/CategoryPictures/Jewelry Watches and glasses.svg" style="width: 100%;" /></a>
+                </li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Bags')"
+                            src="/images/CategoryPictures/Bags.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Shoes')"
+                            src="/images/CategoryPictures/Shoes.svg" style="width: 100%;" /></a></li>
             </ul>
             <ul class="layui-row">
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Home & Garden')" src="/images/CategoryPictures/Home Garden.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Pet & Aminals')" src="/images/CategoryPictures/Pet Aminals.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Toys & Baby')" src="/images/CategoryPictures/Toys Baby.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Exercise & Outdoor')" src="/images/CategoryPictures/Exercise Outdoor.svg" style="width: 100%;"/></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Car & Motorcycle')" src="/images/CategoryPictures/Car Motorcycle.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Home & Garden')"
+                            src="/images/CategoryPictures/Home Garden.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Pet & Aminals')"
+                            src="/images/CategoryPictures/Pet Aminals.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Toys & Baby')"
+                            src="/images/CategoryPictures/Toys Baby.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Exercise & Outdoor')"
+                            src="/images/CategoryPictures/Exercise Outdoor.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Car & Motorcycle')"
+                            src="/images/CategoryPictures/Car Motorcycle.svg" style="width: 100%;" /></a></li>
             </ul>
         </div>
     </div>
@@ -78,26 +99,11 @@
             <div class="AddSuccessMessage">
                 <img src="../../images/clickhere.png" style="margin-top:20px;" />
                 <div class="DownloadInstructions" i18n_Text="DownloadInstructions"></div>
-                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">View</button>
-                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">Later</button>
+                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn"
+                    style="float: left;width:68px;">View</button>
+                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn"
+                    style="float: left;width:68px;">Later</button>
                 <div class="nav nav-background"></div>
-            </div>
-            <!--添加进度栏收缩状态-->
-            <div class="schedule-shrink">
-                <i class="layui-icon icon-a-ImportList" style=" margin-left:23px;margin-right:10px;"></i>
-                <label i18n_Text="ImportList" style="font-size: 16px;  font-weight: bold; line-height: 20px; color: #333333;"></label>
-                <label i18n_Text="ViewProduct" style="margin-left:150px;font-size: 14px;  font-weight: 400; line-height: 16px; color: #3399FF;margin-right:20px;" onclick="ViewImportList()"></label>
-            </div>
-            <!--添加进度栏查看状态-->
-            <div class="schedule-view">
-                <div class="schedule-top">
-                    <i class="layui-icon icon-a-ImportList" style="margin-right:10px;"></i>
-                    <label i18n_Text="ImportList" style="font-size: 16px;  font-weight: bold; line-height: 20px; color: #333333;"></label>
-                    <label i18n_Text="PutAway" style="margin-left:125px;font-size: 14px;  font-weight: 400; line-height: 16px; color: #3399FF;" onclick="PutAwayImportList()"></label>
-                </div>
-                <div class="schedule-body" id="schedule-body">
-                    <span onchange=""></span>
-                </div>
             </div>
             <!--分页-->
             <div id="test1" style="float:right;margin-right:70px;"></div>
@@ -150,7 +156,7 @@
             function GetPlatform(form) {
                 $.ajax({
                     type: "post",
-                    url:BackgroundDomain + "/api/Product/QueryPlatformType",
+                    url: BackgroundDomain + "/api/Product/QueryPlatformType",
                     contentType: "application/json;",
                     data: JSON.stringify("GetPlatformProduct"),
                     dataType: "json",
@@ -175,7 +181,7 @@
             var CatalogueMenu;
             $.ajax({
                 type: "Get",
-                url:BackgroundDomain + "/api/Product/GetCatalogueMenu",
+                url: BackgroundDomain + "/api/Product/GetCatalogueMenu",
                 async: false,
                 success: function (data) {
                     CatalogueMenu = data;
@@ -207,7 +213,7 @@
 
                 $.ajax({
                     type: "post",
-                    url:BackgroundDomain +"/api/Product/QueryGrabProduct",
+                    url: BackgroundDomain + "/api/Product/QueryGrabProduct",
                     contentType: "application/json;",
                     data: result,
                     dataType: "json",
@@ -317,58 +323,28 @@
         })
         ////导入产品
         function ImportProduct(id) {
+            var myMsg = layer.msg("加载中...", {
+                icon: 16,
+                time: -1
+            })
+
             var productInfo = new Object();
             productInfo.id = id;
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/ImportProductInfo',
+                url: BackgroundDomain + '/api/Product/ImportProductInfo',
                 data: JSON.stringify(productInfo),
                 success: function (data) {
+                    layer.close(myMsg);//手动关闭
                     if (data.code == 1) {
                         message.run($.i18n.prop('Import.Complete'));
-                        //如果是第一次添加商品，则显示下载产品提示
-                        var NowTime = new Date(getNowTime());
-                        var CustomerTime = new Date(YDHCustomer.CreateTime);
-                        if (CustomerTime.getFullYear() == NowTime.getFullYear()
-                            && CustomerTime.getMonth() == NowTime.getMonth()
-                            && CustomerTime.getDate() == NowTime.getDate()) {
-                            if (!YDHCustomer.ImportHint || YDHCustomer.ImportHint != "1") {
-                                $(".AddSuccessMessage").show();
-                                layui.data('YDH-Customer', {
-                                    key: 'ImportHint'
-                                    , value: "1"
-                                });
-                                YDHCustomer = layui.data('YDH-Customer');
-                            }
-                        }
-                        $(".schedule-view").show();
-                        var addProductList = document.getElementById("schedule-body");
-                        var addp = document.createElement("p");
-                        addp.setAttribute("class", "Copywriting");
-                        addp.setAttribute("style", "margin-right:14px;margin-top:30px;margin-bottom:30px;");
-                        addp.innerHTML = "You need to edit the product information on the <a  class='ViewImpro href' style='    color: #3399FF;background: #fff;' >Import List</a> before the import is complete";
-                        addProductList.appendChild(addp);
-                        var addProduct = document.createElement("div");
-                        addProduct.setAttribute("class", "AddProduct");
-                        addProductList.appendChild(addProduct);
-                        var sussessimg = document.createElement("img");
-                        sussessimg.setAttribute("src", "../../images/hint/success.png");
-                        sussessimg.setAttribute("style", "margin-right:14px;float:left;margin-top:30px;");
-                        addProduct.appendChild(sussessimg);
-                        var addproductimg = document.createElement("img");
-                        addproductimg.setAttribute("src", data.dto.indexPicture);
-                        addproductimg.setAttribute("style", "margin-right:10px;width:64px;height:64px;float:left;margin-top:10px;");
-                        addProduct.appendChild(addproductimg);
-                        var addproducttitle = document.createElement("div");
-                        addproducttitle.innerHTML = data.dto.productTitle;
-                        addproducttitle.setAttribute("class", "AddProductTitle");
-                        addProduct.appendChild(addproducttitle);
                     } else {
                         message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
                     }
                 },
                 error: function (jqXHR) {
+                    layer.close(myMsg);//手动关闭
                     if (jqXHR.status == 401) {
                         var index = layer.open({
                             title: 'Login',
@@ -399,7 +375,7 @@
             /*    console.log(id);*/
             $("#FreightList" + FreightLine).css("display", "block");
 
-           
+
 
         }
         //获取当前时间
@@ -441,7 +417,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/QueryPlatformProductList',
+                url: BackgroundDomain + '/api/Product/QueryPlatformProductList',
                 data: JSON.stringify(dto_obj),
                 success: function (msg) {
                     count = msg.count;
@@ -459,7 +435,7 @@
                             $.ajax({
                                 type: "post",
                                 contentType: "application/json",
-                                url: BackgroundDomain +'/api/Product/QueryPlatformProductList',
+                                url: BackgroundDomain + '/api/Product/QueryPlatformProductList',
                                 data: JSON.stringify(dto_obj),
                                 success: function (msg) {
                                     $("#productList").empty();
@@ -526,7 +502,7 @@
                                         $.ajax({
                                             type: "post",
                                             contentType: "application/json",
-                                            url: BackgroundDomain +'/api/Product/QueryProductPriceInfo',
+                                            url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
                                             data: JSON.stringify(productprice),
                                             success: function (data) {
                                                 var fontadd = document.getElementById("price" + data.data[0].productId);
@@ -606,9 +582,9 @@
                                         div4.appendChild(input);
 
 
-                                     
+
                                         //鼠标移入移出事件
-                                      
+
                                     }
                                 }
                             })
@@ -623,19 +599,17 @@
             QueryImportProduct(count, { "Label": Labelname });
         }
 
-        function productlistMouseover(id)
-        {
+        function productlistMouseover(id) {
             $('#product-list' + id).mouseover(function () {
-                 /* $('#price' + id).css("display", "none")*/
-                 $('#importbtn' + id).css("display", "block");
-                 $("#product-list" + id).addClass("shadow");
-                 $("#ProcessingFee" + id).css("display", "none");
-             })
-                                            
+                /* $('#price' + id).css("display", "none")*/
+                $('#importbtn' + id).css("display", "block");
+                $("#product-list" + id).addClass("shadow");
+                $("#ProcessingFee" + id).css("display", "none");
+            })
+
         }
-        function productlistMouseout(id)
-        {
-            
+        function productlistMouseout(id) {
+
             $('#product-list' + id).mouseout(function () {
                 /*     $('#price' + id).css("display", "block")*/
                 $('#importbtn' + id).css("display", "none")
@@ -646,4 +620,5 @@
         }
     </script>
 </body>
+
 </html>

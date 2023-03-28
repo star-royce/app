@@ -17,11 +17,11 @@
     config.LoginLink = "";
 
     $.ajaxSetup({
-        
+
         beforeSend: function (req) {
             if (!parent.app) {
-               
-              /*  window.location = "/client/WindowsLogin.html";*/
+
+                /*  window.location = "/client/WindowsLogin.html";*/
                 var index = layer.open({
                     title: 'Login',
                     type: 2,
@@ -59,15 +59,14 @@
                         maxmin: true,
                         shadeClose: true,
                         area: ['920px', '580px'],
-                        content:BackgroundDomain+  '/client/WindowsLogin.html',
+                        content: BackgroundDomain + '/client/WindowsLogin.html',
                     })
                 } else if (config.OnlineType == "YDH") {
                     app.AuthorizationPage();
                 }
-                
+
             }
-            if (err.status == 400)
-            {
+            if (err.status == 400) {
                 layui.layer.msg(err.responseJSON.i18nKey ? i18n.prop(err.responseJSON.i18nKey) : err.responseJSON.message);
             }
         }
@@ -82,10 +81,10 @@
 
         if (OType === "manage") {
             config.OnlineType = "YDH";
-            config.LoginLink =BackgroundDomain+ "/manage/login.html";
+            config.LoginLink = BackgroundDomain + "/manage/login.html";
         } else if (OType === "client") {
             config.OnlineType = "YDH-Customer";
-            config.LoginLink = BackgroundDomain+ "/client/index.html";
+            config.LoginLink = BackgroundDomain + "/client/index.html";
         } else {
             config.OnlineType = parent.app.config.OnlineType
             config.PermissionLink = parent.app.config.PermissionLink;
@@ -97,7 +96,7 @@
         if (!YDHConfig.Secret) {
 
             //window.location = config.LoginLink;
-           
+
         } else {
             if (!config.PermissionLink)
                 config.PermissionLink = parent.app.config.PermissionLink;
@@ -133,21 +132,20 @@
             key: 'CreateTime'
             , remove: true
         });
-      
+
         if (!config.LoginLink)
             config.LoginLink = parent.app.config.LoginLink;
         if (config.LoginLink) {
             window.location = config.LoginLink;
-            }
-        
+        }
+
     }
     //退出
-    app.SignOut = function ()
-    {
+    app.SignOut = function () {
         debugger
         $.ajax({
             type: "post",
-            url: BackgroundDomain +"/api/Login/SignOut",
+            url: BackgroundDomain + "/api/Login/SignOut",
             success: function () {
                 app.AuthorizationPage();
             }

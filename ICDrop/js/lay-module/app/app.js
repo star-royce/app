@@ -1,5 +1,7 @@
 ﻿layui.define(function (exports) {
 
+    // // TODO 本地测试
+    // var BackgroundDomain = "https://app.anderdrop.com";
     var BackgroundDomain = "";
     if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
         BackgroundDomain = "http://localhost"

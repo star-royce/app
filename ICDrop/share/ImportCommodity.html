@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>进口商品</title>
@@ -18,12 +19,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layuimini-main">
         <div class="" style="width: 100%;height:40px; margin: 20px 0px;">
             <form class="layui-form layui-form-pane" action="/share/ImportCommodity.html" method="get">
                 <div class="model-select-box">
-                    <div class="model-select-text" id="selectshop" value="" i18n_text="Input.Please.select;"><img class="shoplogo" src="../../../images/shop.png" />Please Select</div>
+                    <div class="model-select-text" id="selectshop" value="" i18n_text="Input.Please.select;"><img
+                            class="shoplogo" src="../../../images/shop.png" />Please Select</div>
                     <b class="bg1"></b>
 
                     <ul class="model-select-option" id="model-select-option">
@@ -31,8 +34,11 @@
                 </div>
 
                 <div id="top-right" style="width: calc(100% - 310px); float: right;margin-left:30px; ">
-                    <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle">
-                    <button type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"><img src="../../../images/sousuo.png" /></button>
+                    <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle"
+                        id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题"
+                        class="inputprotitle">
+                    <button type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"><img
+                            src="../../../images/sousuo.png" /></button>
                 </div>
 
 
@@ -47,10 +53,16 @@
         <div id="test1" style="float:right;margin-right:40px;margin-bottom:50px;"></div>
         <!--批量操作栏-->
         <div id="total">
-            <input class='TotalChk' style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;' type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
+            <input class='TotalChk'
+                style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;'
+                type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
             <span id="tatalSelect"></span>
-            <input type="button" id="PushAllProduct" class="pushpro" style="float:right;margin-right:40px !important;margin-top:14px;" value="推送到商店" onclick="PushAllProduct()">
-            <input type="button" id="DelAllProduct" class="deletepro" style="float: right; margin-top: 14px; border: 1px solid #DDDDDD; " i18n_text="deleteproduct" value="删除产品" onclick="DelAllProduct()">
+            <input type="button" id="PushAllProduct" class="pushpro"
+                style="float:right;margin-right:40px !important;margin-top:14px;" value="推送到商店"
+                onclick="PushAllProduct()">
+            <input type="button" id="DelAllProduct" class="deletepro"
+                style="float: right; margin-top: 14px; border: 1px solid #DDDDDD; " i18n_text="deleteproduct"
+                value="删除产品" onclick="DelAllProduct()">
 
         </div>
     </div>
@@ -88,11 +100,10 @@
                 id = YDHConfig.Lang.id;
                 lang = YDHConfig.Lang.id;
             }
-
             var ProCatalogueList = null;
             $.ajax({
                 type: "get",
-                url: BackgroundDomain +'/api/Product/GetProCatalogueList',
+                url: BackgroundDomain + '/api/Product/GetProCatalogueList',
                 async: false,
                 success: function (data) {
                     ProCatalogueList = data;
@@ -124,7 +135,7 @@
             function Getshop(form) {
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Customer/GetCustomerShopifyList",
+                    url: BackgroundDomain + "/api/Customer/GetCustomerShopifyList",
                     contentType: "application/json;",
                     data: JSON.stringify(dto_obj),
                     dataType: "json",
@@ -159,7 +170,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
                     data: JSON.stringify(dto_obj),
                     success: function (msg) {
                         $("#productList").empty();
@@ -207,7 +218,7 @@
                                 $.ajax({
                                     type: "post",
                                     contentType: "application/json",
-                                    url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
                                     data: JSON.stringify(dto_obj),
                                     success: function (msg) {
                                         var totalDiv = document.getElementById("total");
@@ -385,7 +396,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url: BackgroundDomain +'/api/Product/QueryProductPriceInfo',
+                                                        url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
                                                         data: JSON.stringify(productprice),
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
@@ -428,18 +439,17 @@
                                                             $("#cost" + id).html($.i18n.prop('cost'));
                                                             $("#in18price" + id).html($.i18n.prop('price') + "&nbsp;&nbsp;<button type='button' class='layui-btn layui-btn-primary layui-btn-xs AllPrice ' data-price='" + id + "'>Change All</button> ");
 
-                                                            var stockAddress =[];
+                                                            var stockAddress = [];
                                                             $.ajax({
                                                                 type: "post",
                                                                 contentType: "application/json",
-                                                                url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku',
-                                                                data: JSON.stringify({productId:id}),
-                                                                async:false,
-                                                                success: function (ret) 
-                                                                    {
-                                                                        stockAddress = ret.data;
-                                                                    }
-                                                               })
+                                                                url: BackgroundDomain + '/api/Product/GetProProductStockAddressBySku',
+                                                                data: JSON.stringify({ productId: id }),
+                                                                async: false,
+                                                                success: function (ret) {
+                                                                    stockAddress = ret.data;
+                                                                }
+                                                            })
 
                                                             //循环数据添加主体部分
                                                             for (var i = 0; i < data.data.length; i++) {
@@ -468,21 +478,18 @@
                                                                 }
 
                                                                 var oen = " <option value ='0'>请选择仓库</option>";
-                                                                if(stockAddress && stockAddress.length>0)
-                                                                {
-                                                                   var stocksku= stockAddress.filter(j=>j.sku==data.data[i].sku);
-                                                                      for (let index = 0; index < stocksku.length; index++) {
-                                                                        if(stocksku[index].id == data.data[i].stockId)
-                                                                        {
-                                                                            oen+="<option value ='"+stocksku[index].id+"' selected = 'selected'>"+stocksku[index].address+"</option>";
-                                                                        }else
-                                                                        {
-                                                                            oen+="<option value ='"+stocksku[index].id+"'>"+stocksku[index].address+"</option>";
-                                                                        }    
-                                                                      }
+                                                                if (stockAddress && stockAddress.length > 0) {
+                                                                    var stocksku = stockAddress.filter(j => j.sku == data.data[i].sku);
+                                                                    for (let index = 0; index < stocksku.length; index++) {
+                                                                        if (stocksku[index].id == data.data[i].stockId) {
+                                                                            oen += "<option value ='" + stocksku[index].id + "' selected = 'selected'>" + stocksku[index].address + "</option>";
+                                                                        } else {
+                                                                            oen += "<option value ='" + stocksku[index].id + "'>" + stocksku[index].address + "</option>";
+                                                                        }
+                                                                    }
                                                                 }
-                                                            
-                                                                pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;'   data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >"+oen+"<select> <br></li>";
+
+                                                                pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;'   data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >" + oen + "<select> <br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:calc((100% - 20px) * 0.15);'>" + data.data[i].currency + "<br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:calc((100% - 20px) * 0.1);'>" + data.data[i].cost + "<br></li>";
                                                                 var onchange = "UpdatePrice(" + data.data[i].id + ")";
@@ -514,7 +521,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                                                        url: BackgroundDomain + '/api/Product/QueryImportProductList',
                                                         data: JSON.stringify(producttitle),
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
@@ -613,7 +620,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url: BackgroundDomain +'/api/Product/QueryProductDescriptionInfo',
+                                                        url: BackgroundDomain + '/api/Product/QueryProductDescriptionInfo',
                                                         data: JSON.stringify(productdescription),
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
@@ -625,8 +632,7 @@
                                                             //富文本编辑器
                                                             var E = window.wangEditor;
                                                             const editor = new E('#Description' + data.dto.id)
-                                                            if (lang == "en_us")
-                                                            {
+                                                            if (lang == "en_us") {
                                                                 editor.config.lang = "en";
                                                                 editor.i18next = window.i18next;
                                                             }
@@ -672,7 +678,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url: BackgroundDomain +'/api/Product/QueryProductImagesInfo',
+                                                        url: BackgroundDomain + '/api/Product/QueryProductImagesInfo',
                                                         data: JSON.stringify(productpicture),
                                                         success: function (data) {
                                                             if (data.data) {
@@ -703,25 +709,16 @@
                 })
             }
 
-
-
-
-
             i18n.loadProperties(id);
-
 
             $("#btnsearch").click(function (data) {
                 var result = document.getElementById("productTitle").value;
-
 
                 if ($.isEmptyObject(result) != true) {
                     SerchproductInfo.productTitle = result;
                 }
                 QueryImportProduct(count, SerchproductInfo);
             })
-
-
-
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
@@ -749,15 +746,15 @@
             };
         })
 
-         //修改变体库存
-         function UpdateStock(input) {
+        //修改变体库存
+        function UpdateStock(input) {
             var priceInfo = new Object();
             priceInfo.id = $(input).attr("data-key");
             priceInfo.stockId = $(input).val();
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductStock',
+                url: BackgroundDomain + '/api/Product/UpdateProductStock',
                 data: JSON.stringify(priceInfo),
                 success: function (data) {
                     if (data.code > 0) {
@@ -780,7 +777,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -799,7 +796,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -818,7 +815,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -843,7 +840,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductPrice',
+                url: BackgroundDomain + '/api/Product/UpdateProductPrice',
                 data: JSON.stringify(priceInfo),
                 success: function (data) {
                     if (data.code == 1) {
@@ -871,7 +868,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductPrice',
+                    url: BackgroundDomain + '/api/Product/UpdateProductPrice',
                     data: JSON.stringify(priceInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -896,7 +893,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductAttribute',
+                url: BackgroundDomain + '/api/Product/UpdateProductAttribute',
                 data: JSON.stringify(priceInfo),
                 success: function (data) {
                     if (data.data > 0) {
@@ -914,7 +911,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/ModifyProductAttriName',
+                url: BackgroundDomain + '/api/Product/ModifyProductAttriName',
                 data: JSON.stringify(Attributetitel),
                 success: function (data) {
                     if (data.data > 0) {
@@ -936,7 +933,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/ModifyProductVariantCheck',
+                url: BackgroundDomain + '/api/Product/ModifyProductVariantCheck',
                 data: JSON.stringify(pro),
                 success: function (data) {
                     if (data.data > 0) {
@@ -989,7 +986,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductDescription',
+                url: BackgroundDomain + '/api/Product/UpdateProductDescription',
                 data: JSON.stringify(DescriptionInfo),
                 success: function (data) {
                     if (data.code == 1) {
@@ -1005,7 +1002,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url:BackgroundDomain + '/api/Product/DeleteProduct',
+                url: BackgroundDomain + '/api/Product/DeleteProduct',
                 data: JSON.stringify(product),
                 success: function (data) {
                     if (data.code == 1) {
@@ -1044,7 +1041,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url:BackgroundDomain + '/api/Product/PushShopifyProduct',
+                url: BackgroundDomain + '/api/Product/PushShopifyProduct',
                 data: JSON.stringify(product),
                 success: function (data) {
                     layer.close(loading);
@@ -1087,7 +1084,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/DeleteAllChkProduct',
+                url: BackgroundDomain + '/api/Product/DeleteAllChkProduct',
                 data: JSON.stringify(product),
                 success: function (data) {
                     if (data.code == 1) {
@@ -1139,7 +1136,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/PushAllChkShopifyProduct',
+                url: BackgroundDomain + '/api/Product/PushAllChkShopifyProduct',
                 data: JSON.stringify(product),
                 success: function (data) {
                     layer.close(loading);
@@ -1241,7 +1238,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProImageStatus',
+                url: BackgroundDomain + '/api/Product/UpdateProImageStatus',
                 data: JSON.stringify(productpicture),
                 success: function (data) {
                     if (data.dto) {
@@ -1365,4 +1362,5 @@
     </script>
 
 </body>
+
 </html>

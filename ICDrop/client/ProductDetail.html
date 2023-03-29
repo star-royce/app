@@ -8,21 +8,24 @@
   <meta name="referrer" content="no-referrer" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all" />
-  <link rel="stylesheet" href="/css/public.css" media="all" />
-  <link rel="stylesheet" href="/css/ProductDetail.css?v=2" media="all" />
   <link rel="icon" href="/images/favicon.ico">
+  <link rel="stylesheet" href="/lib/layui-v2.7.6/layui/css/layui.css" media="all" />
+  <link rel="stylesheet" href="../../css/public.css" media="all">
+  <link rel="stylesheet" href="/css/ProductDetail.css?v=2" media="all" />
+  <link rel="stylesheet" href="../../css/Message.css?v=2" media="all">
 </head>
 
 <body>
   <div id="productInfo" class="productInfo"></div>
 
-  <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+  <script src="/lib/layui-v2.7.6/layui/layui.js" charset="utf-8"></script>
   <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
   <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
   <script src="/js/web-template.js"></script>
   <script src="/js/web-diff.js"></script>
+  <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
   <script type="text/javascript">
+    var message = null;
     //用来保存物流价格信息
     var LogisticspriceList = new Object()
     //选中的物流价格信息
@@ -45,13 +48,14 @@
 
     var stockAddress = []
 
-    layui.use(['form', 'laypage', 'i18n'], function () {
+    layui.use(['form', 'laypage', 'message', 'i18n'], function () {
       var $ = layui.jquery,
         layer = layui.layer,
         form = layui.form,
-        i18n = layui.i18n
-
+        i18n = layui.i18n;
+      message = layui.message;
       YDHConfig = layui.data('YDH-Customer')
+
       // 请求拦截器，添加请求头
       $.ajaxSetup({
         beforeSend: function (req) {
@@ -768,6 +772,10 @@
 
     ////导入产品
     function ImportProduct(id) {
+      var myMsg = layer.msg("loading...", {
+        icon: 16,
+        time: -1
+      })
       var productInfo = new Object()
       productInfo.id = id
       $.ajax({
@@ -776,12 +784,17 @@
         url: BackgroundDomain + '/api/Product/ImportProductInfo',
         data: JSON.stringify(productInfo),
         success: function (data) {
+          layer.close(myMsg);//手动关闭
           if (data.code == 1) {
-            layer.msg('Successfully !')
+            message.run($.i18n.prop('Import.Complete'));
           } else {
+            message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
           }
         },
-        error: function (jqXHR) { },
+        error: function (jqXHR) {
+          layer.close(myMsg);//手动关闭
+          message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
+        },
       })
     }
 

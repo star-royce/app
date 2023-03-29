@@ -202,7 +202,6 @@
 
             // 监听搜索操作（抓取平台产品）
             form.on('submit(data-import-btn)', function (data) {
-                debugger
                 var result = JSON.stringify(data.field);
                 obj = $.parseJSON(result);
 
@@ -210,7 +209,11 @@
                     message.run($.i18n.prop('Import.Failed'), $.i18n.prop('IsEmpty'), "error");
                     return false;
                 }
-
+                debugger
+                var myMsg = layer.msg("loading...", {
+                    icon: 16,
+                    time: -1
+                })
                 $.ajax({
                     type: "post",
                     url: BackgroundDomain + "/api/Product/QueryGrabProduct",
@@ -218,6 +221,7 @@
                     data: result,
                     dataType: "json",
                     success: function (e) {
+                        layer.close(myMsg);//手动关闭
                         if (e.code = 1) {
                             message.run($.i18n.prop('Import.Complete'));
                             //如果是第一次添加商品，则显示下载产品提示
@@ -259,6 +263,7 @@
                         }
                     },
                     error: function (jqXHR) {
+                        layer.close(myMsg);//手动关闭
                         message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
                         return false;
                     }
@@ -289,7 +294,6 @@
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
-                debugger
                 var result = JSON.stringify(data.field);
                 obj = JSON.parse(result);
                 if ($.isEmptyObject(obj.productTitle) != true) {
@@ -323,7 +327,7 @@
         })
         ////导入产品
         function ImportProduct(id) {
-            var myMsg = layer.msg("加载中...", {
+            var myMsg = layer.msg("loading...", {
                 icon: 16,
                 time: -1
             })
@@ -410,6 +414,10 @@
 
 
         function QueryImportProduct(count, SerchproductInfo) {
+            var myMsg = layer.msg("loading...", {
+                icon: 16,
+                time: -1
+            })
             var dto_obj = new Object();
             dto_obj.page = 1;
             dto_obj.limit = 20;
@@ -420,6 +428,7 @@
                 url: BackgroundDomain + '/api/Product/QueryPlatformProductList',
                 data: JSON.stringify(dto_obj),
                 success: function (msg) {
+                    layer.close(myMsg);//手动关闭
                     count = msg.count;
                     //分页
                     laypage.render({

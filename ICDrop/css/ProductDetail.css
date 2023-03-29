@@ -241,13 +241,6 @@
     color: #ffffff;
 }
 
-/*layui.msg的样式*/
-.layui-layer-msg .layui-layer-content {
-    background-color: #FFD401;
-    color: #FFFFFF;
-    font-size: 16px;
-}
-
 /*描述详情分隔符*/
 .buttom_rule {}
 

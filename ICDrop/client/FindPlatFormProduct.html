@@ -564,18 +564,6 @@
 
                                         FreightList.innerHTML = FreightListHtml;
 
-                                        //操作费
-                                        var ProcessingFeeLine = document.createElement("div");
-                                        ProcessingFeeLine.setAttribute("class", "ProcessingFeeLine");
-                                        ProcessingFeeLine.setAttribute("id", "ProcessingFee" + msg.data[i].id)
-                                        changediv.appendChild(ProcessingFeeLine);
-                                        ProcessingFeeLine.html($.i18n.prop("ProcessingFee"));
-
-                                        var ProcessingFeeLabel = document.createElement("label");
-                                        ProcessingFeeLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #333333;");
-                                        ProcessingFeeLine.appendChild(ProcessingFeeLabel);
-                                        ProcessingFeeLabel.innerHTML = $.i18n.prop("Free");
-
                                         //导入商品
                                         var div4 = document.createElement("div");
                                         div4.setAttribute('class', 'importproduct');
@@ -613,7 +601,6 @@
                 /* $('#price' + id).css("display", "none")*/
                 $('#importbtn' + id).css("display", "block");
                 $("#product-list" + id).addClass("shadow");
-                $("#ProcessingFee" + id).css("display", "none");
             })
 
         }
@@ -623,7 +610,6 @@
                 /*     $('#price' + id).css("display", "block")*/
                 $('#importbtn' + id).css("display", "none")
                 $("#product-list" + id).removeClass("shadow");
-                $("#ProcessingFee" + id).css("display", "block");
                 $("#FreightList" + id).css("display", "none");
             })
         }

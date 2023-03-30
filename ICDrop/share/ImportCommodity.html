@@ -18,6 +18,9 @@
             border: solid 1px #ddd;
         }
     </style>
+    <script type="text/javascript">
+        console.log('load')
+    </script>
 </head>
 
 <body>
@@ -37,8 +40,8 @@
                     <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle"
                         id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题"
                         class="inputprotitle">
-                    <button type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"><img
-                            src="../../../images/sousuo.png" /></button>
+                    <button id="searchBtn" type="submit" class="searchButton" lay-submit
+                        lay-filter="data-search-btn"><img src="../../../images/sousuo.png" /></button>
                 </div>
 
 
@@ -82,7 +85,9 @@
         var id = "en_us";
         var lang = "en_us";
         var miniTab;
+        console.log("come in")
         layui.use(['form', 'app', 'laypage', 'i18n', 'message', 'miniTab'], function () {
+            console.log("user layui")
             var $ = layui.jquery,
                 form = layui.form,
                 layer = layui.layer,
@@ -113,6 +118,7 @@
             var count;
             var SerchproductInfo = new Object();
             //查找出该客户（管理员）的进口商品信息
+            console.log('start QueryImportProduct')
             QueryImportProduct(count, SerchproductInfo);
 
             var prev = "";
@@ -163,17 +169,24 @@
 
             var YDHCustomer = layui.data('YDH-Customer');
             function QueryImportProduct(count, SerchproductInfo) {
+                console.log('in QueryImportProduct')
                 var dto_obj = new Object();
                 dto_obj.page = 1;
                 dto_obj.limit = 10;
                 dto_obj.dto = SerchproductInfo;
+                var timestamp = new Date().getTime();
+                console.log(timestamp); // 输出当前时间的毫秒数
+
+                var myMsg = layer.msg("loading...", {
+                    icon: 16,
+                    time: -1
+                })
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
+                    url: BackgroundDomain + '/api/Product/QueryImportProductList?time=' + timestamp,
                     data: JSON.stringify(dto_obj),
                     success: function (msg) {
-                        $("#productList").empty();
                         if (!msg) {
                             $("#productList").empty();
                             //获取div
@@ -201,6 +214,7 @@
                             add.setAttribute('onclick', 'ToAddProduct()');
                             NoProduct.appendChild(add);
                             $(".add").val($.i18n.prop('TO.ADD'));
+                            layer.close(myMsg);//手动关闭
                             return null;
                         }
                         count = msg.count;
@@ -215,10 +229,14 @@
                                 dto_obj.page = obj.curr;
                                 dto_obj.limit = obj.limit;
                                 dto_obj.dto = SerchproductInfo;
+                                // debugger
+                                // if first. {
+
+                                // }
                                 $.ajax({
                                     type: "post",
                                     contentType: "application/json",
-                                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
+                                    url: BackgroundDomain + '/api/Product/QueryImportProductList?time=' + timestamp,
                                     data: JSON.stringify(dto_obj),
                                     success: function (msg) {
                                         var totalDiv = document.getElementById("total");
@@ -701,6 +719,7 @@
 
 
                                         }
+                                        layer.close(myMsg);//手动关闭
                                     }
                                 })
                             }
@@ -711,14 +730,14 @@
 
             i18n.loadProperties(id);
 
-            $("#btnsearch").click(function (data) {
-                var result = document.getElementById("productTitle").value;
+            // $("#btnsearch").click(function (data) {
+            //     var result = document.getElementById("productTitle").value;
 
-                if ($.isEmptyObject(result) != true) {
-                    SerchproductInfo.productTitle = result;
-                }
-                QueryImportProduct(count, SerchproductInfo);
-            })
+            //     if ($.isEmptyObject(result) != true) {
+            //         SerchproductInfo.productTitle = result;
+            //     }
+            //     QueryImportProduct(count, SerchproductInfo);
+            // })
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
@@ -742,7 +761,7 @@
                 //if ($.isEmptyObject(result) != true) {
                 //    SerchproductInfo.productTitle = result;
                 //}
-                QueryImportProduct(count, SerchproductInfo);
+                // QueryImportProduct(count, SerchproductInfo);
             };
         })
 

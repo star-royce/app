@@ -390,7 +390,7 @@
             </div>
         </div>
 
-        <!--无限极左侧菜单-->
+        <!--无限极左侧菜单 11-->
         <div class="layui-side layui-bg-white layuimini-menu-left" style="background:#FFFFFF;" id="leftmenu">
 
         </div>
@@ -676,11 +676,11 @@
             dropdown.render({
                 elem: '.demo1'
                 , data: [{
-                    title: '中文简体'
-                    , id: 'zh_cn'
-                }, {
                     title: 'English'
                     , id: 'en_us'
+                }, {
+                    title: '中文简体'
+                    , id: 'zh_cn'
                 }]
                 , click: function (obj) {
 
@@ -708,35 +708,6 @@
             $('.login-out').on("click", function () {
                 app.SignOut();
             });
-            //////跳转营销活动
-            //$("#Join").on("click", function () {
-            //    var url = window.location.origin + '/Marketing/MKIndex.html';
-            //    window.open(url);
-            //    $("#MarketingDetail").hide();
-            //})
-            //$("#MarketingDetail").on("click", function () {
-            //    //var url = "http://" + window.location.host + '/Marketing/MKIndex.html';
-            //    //window.open(url);
-            //    $("#MarketingDetail").hide();
-            //})
-
-            ////  鼠标移入移出
-            //var Marketing = document.getElementById("Marketing");
-            //Marketing.onmouseover = function () {
-            //    $("#MarketingDetail").show();
-            //};
-            //$("html").click(() => {
-            //    $("#MarketingDetail").hide();
-            //})
-            //Marketing.onmouseout = function () {
-            //    $("#MarketingDetail").hide();
-            //};
-            //var aa = document.getElementByAttr("target");
-            //var lis = document.getElementById("multi_module_0");
-            //var lis1 = document.getElementById("leftmenu");
-
-            //var divs = document.getElementByAttr('a', 'target', '_self1');
-
 
             var Customer = layui.data('YDH-Customer');
             var dto_obj = new Object();

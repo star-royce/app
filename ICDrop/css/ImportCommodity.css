@@ -12,10 +12,12 @@
     height: 100%;
     background-color: #029803;
 }
+
 /*分页的当前页的字体颜色*/
 .layui-laypage .layui-laypage-curr em {
     color: #ffffff;
 }
+
 /*弹窗头部标题样式*/
 .layui-layer-title {
     height: 46px !important;
@@ -24,6 +26,7 @@
     margin-left: 30px;
     border-bottom: 1px hidden #DDDDDD !important;
 }
+
 /*输入产品标题进行搜索的input框*/
 .inputprotitle {
     width: calc(100% - 91px);
@@ -36,6 +39,7 @@
     float: left;
     padding-left: 20px;
 }
+
 /*搜索按钮*/
 .searchButton {
     width: 68px;
@@ -45,40 +49,45 @@
     border: 1px solid #029803;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
-    cursor:pointer;
+    cursor: pointer;
 }
+
 /*大的产品列表*/
 .productList {
     width: 100%;
 }
+
 /*大产品下的每个小产品*/
- .product {
-        margin-top:20px;
-        width: 100%;
-        height: 375px;
-        background: #FFFFFF;
-        opacity: 1;
-        border-radius: 10px;
-    }
+.product {
+    margin-top: 20px;
+    width: 100%;
+    height: 375px;
+    background: #FFFFFF;
+    opacity: 1;
+    border-radius: 10px;
+}
+
 /*    每个小产品上面的标题栏*/
 .producttop {
     height: 48px;
     width: calc(100% - 80px);
     margin: 0px 40px;
 }
+
 /*产品标题栏上面单个的li*/
 .producttop ul li {
-        width: 120px;
-        height: 48px;
-        line-height: 48px;
-        float: left;
-        text-align: center;
-        color: #39434f;
-        font-size: 16px;
-        position: relative;
-        cursor: pointer;
-        opacity:1;
-    }
+    width: 120px;
+    height: 48px;
+    line-height: 48px;
+    float: left;
+    text-align: center;
+    color: #39434f;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    opacity: 1;
+}
+
 /*产品头部和中间部分的分割线*/
 .cutoff_rule {
     width: calc(100% - 80px);
@@ -87,14 +96,16 @@
     opacity: 1;
     margin: 0px 40px;
 }
+
 /*商品中间部分*/
 .productbody {
     width: calc(100% - 80px);
     height: 260px;
     margin: 0 40px;
     overflow-y: auto;
-   /* text-align:left;*/
+    /* text-align:left;*/
 }
+
 /*商品中间右边部分*/
 .right {
     width: calc(100% - 230px);
@@ -102,11 +113,12 @@
     margin-top: 30px;
     margin-left: 30px;
 }
+
 /*商品产品栏目标题部分*/
 .title {
     height: 36px;
     font-size: 16px;
-    
+
     font-weight: 400;
     line-height: 36px;
     color: #666666;
@@ -114,8 +126,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width:100%;
+    width: 100%;
 }
+
 /*商品产品栏目更改名称文本*/
 .upNameText {
     width: 100%;
@@ -123,11 +136,12 @@
     line-height: 36px;
     background: #FFFFFF;
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #666666;
     opacity: 1;
 }
+
 /*商品产品栏目更改名称input框*/
 .upNameInput {
     width: calc(100% - 22px);
@@ -137,7 +151,7 @@
     opacity: 1;
     border-radius: 18px;
     font-size: 16px;
-    
+
     font-weight: 400;
     line-height: 36px;
     color: #666666;
@@ -146,20 +160,23 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 /*类型*/
 .select-type {
     margin-top: 10px;
     width: calc((100% - 30px) / 2);
     float: left;
     opacity: 1;
-    margin-right:30px;
+    margin-right: 30px;
 }
+
 /*标签*/
 .select-lable {
     margin-top: 10px;
     width: calc((100% - 30px) / 2);
     float: left;
 }
+
 /*修改类型的input框*/
 .input-type {
     margin-top: 10px;
@@ -170,6 +187,7 @@
     padding-left: 20px;
     border-radius: 6px;
 }
+
 /*修改标签的input框*/
 .input-lable {
     margin-top: 10px;
@@ -180,6 +198,7 @@
     padding-left: 6px;
     border-radius: 6px;
 }
+
 /*产品中间部分和下部分的分隔符*/
 .cutoff_rule_button {
     width: calc(100% - 80px);
@@ -188,18 +207,21 @@
     opacity: 1;
     margin: 0px 40px;
 }
+
 /*    每个小产品的下部分*/
 .productbuttom {
     height: 64px;
     width: calc(100% - 80px);
     margin: 0px 40px;
 }
+
 /*商品下部分的装两个按钮的DIV*/
 .pro {
     text-align: center;
     margin: 16px auto;
     float: right;
 }
+
 /*删除商品按钮*/
 .deletepro {
 
@@ -212,8 +234,9 @@
     border: 1px solid #DDDDDD;
     opacity: 1;
     border-radius: 6px;
-    cursor:pointer;
+    cursor: pointer;
 }
+
 /*推送商品按钮*/
 .pushpro {
     width: 140px;
@@ -225,11 +248,12 @@
     cursor: pointer;
     color: #ffffff;
 }
+
 /*选中产品栏目的li样式*/
 .select:after {
     /*    border-bottom: 2px #029803 solid;*/
     content: '';
-/*    position: absolute;*/
+    /*    position: absolute;*/
     position: absolute;
     width: 40px;
     height: 2px;
@@ -237,6 +261,7 @@
     bottom: 0;
     background-color: #029803;
 }
+
 /*价格栏中标题信息的li样式*/
 .head_font {
     height: 48px;
@@ -248,26 +273,29 @@
     border-color: #DDDDDD;
     cursor: pointer;
 }
+
 /*价格栏中总的变体ul样式*/
 .table-body {
     height: 71px;
     text-align: center;
     margin: 0 auto;
-    opacity:1;
-        
+    opacity: 1;
+
 }
+
 /*价格栏中每个变体信息的li样式*/
 .price_body {
     height: 71px;
     text-align: center;
-  /*  display: block;*/
+    /*  display: block;*/
     line-height: 71px;
     float: left;
     border-width: 0 0 1px 0;
     border-style: dashed;
     border-color: #DDDDDD;
-    
+
 }
+
 /*富文本编辑器的样式*/
 .Description {
     text-align: center;
@@ -279,6 +307,7 @@
     width: 100% !important;
     height: 232px !important;
 }
+
 /*每个产品图片栏目的每个小图片的li的样式*/
 .pirturebody {
     border-width: 1px;
@@ -287,6 +316,7 @@
     text-align: center;
     margin: 5px 5px;
 }
+
 .layui-box {
     margin: 20px auto !important;
 }
@@ -303,8 +333,8 @@
 
 /*复选框样式*/
 /*input[type="checkbox"] {*/
-    /*   -webkit-appearance: none;*/
-    /*border-radius: 5px;
+/*   -webkit-appearance: none;*/
+/*border-radius: 5px;
     width: 20px;
     height: 20px;
     color: #FFD401 !important;
@@ -322,49 +352,53 @@ input[type=checkbox] {
     position: relative;
     border-radius: 5px;
 }
-    input[type=checkbox]:checked {
-         background: #029803;
-    }
-    input[type=checkbox]:before,
-    input[type=checkbox]:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #333333;
-        transform-origin: 0 0;
-        transition: transform 0ms linear 0ms;
-    }
+
+input[type=checkbox]:checked {
+    background: #029803;
+}
+
+input[type=checkbox]:before,
+input[type=checkbox]:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333333;
+    transform-origin: 0 0;
+    transition: transform 0ms linear 0ms;
+}
 
 /*构成勾勾 的前半部分；控制角度和粗细*/
 input[type=checkbox]:before {
     transform: rotate(-45deg) translateY(45%) translateX(-30%) scaleX(0.1) scaleY(0);
 }
-/*这 一段 构成勾勾的后半部分。控制角度和粗细*/
-    input[type=checkbox]:after {
-        transform: rotate(225deg) translateY(-30%) translateX(-95%) scaleX(0.1) scaleY(0);
-        transition-delay: 0ms;
-       
-    }
 
- input[type=checkbox]:indeterminate:before {
-  transform: rotate(0) translateY(37.5%) translateX(10%) scaleX(0.8) scaleY(0.25);
-  transition-duration: 0ms;
+/*这 一段 构成勾勾的后半部分。控制角度和粗细*/
+input[type=checkbox]:after {
+    transform: rotate(225deg) translateY(-30%) translateX(-95%) scaleX(0.1) scaleY(0);
+    transition-delay: 0ms;
+
+}
+
+input[type=checkbox]:indeterminate:before {
+    transform: rotate(0) translateY(37.5%) translateX(10%) scaleX(0.8) scaleY(0.25);
+    transition-duration: 0ms;
 }
 
 input[type=checkbox]:checked:before {
- transform: rotate(312deg) translateY(45%) translateX(-30%) scaleX(0.1) scaleY(0.4);
-transition-duration: 0ms;
+    transform: rotate(312deg) translateY(45%) translateX(-30%) scaleX(0.1) scaleY(0.4);
+    transition-duration: 0ms;
 }
 
-    input[type=checkbox]:checked:after {
-        transform: rotate(216deg) translateY(-40%) translateX(-90%) scaleX(0.1) scaleY(0.7);
-        transition-duration: 0ms;
-        transition-delay: 0ms;
-    
-    }
+input[type=checkbox]:checked:after {
+    transform: rotate(216deg) translateY(-40%) translateX(-90%) scaleX(0.1) scaleY(0.7);
+    transition-duration: 0ms;
+    transition-delay: 0ms;
+
+}
+
 /*layui按钮样式*/
 .layui-layer-btn .layui-layer-btn0 {
     border-color: #FFD401 !important;
@@ -372,12 +406,12 @@ transition-duration: 0ms;
     color: #fff;
     border-radius: 5px;
 }
+
 /*layui.msg的样式*/
 .layui-layer-msg .layui-layer-content {
-    background-color: #FFD401;
-    color: #FFFFFF;
     font-size: 16px;
 }
+
 /*.layui-layer-content {
     background-color: #FFD401;
     color: #FFFFFF;
@@ -404,72 +438,81 @@ transition-duration: 0ms;
     bottom: 0;
     display: none;
 }
+
 #tatalSelect {
     font-size: 16px;
-    
+
     font-weight: 400;
     line-height: 18px;
     color: #333333;
     opacity: 1;
     height: 60px;
-    line-height:60px;
+    line-height: 60px;
     margin-left: 10px;
 }
+
 /*placeholder框内字体样式*/
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
     font-size: 16px;
-    
+
     font-weight: 400;
     color: #999999;
     opacity: 1;
 }
 
-input:-moz-placeholder, textarea:-moz-placeholder {
+input:-moz-placeholder,
+textarea:-moz-placeholder {
     font-size: 16px;
-    
+
     font-weight: 400;
     color: #999999;
     opacity: 1;
 }
 
-input::-moz-placeholder, textarea::-moz-placeholder {
+input::-moz-placeholder,
+textarea::-moz-placeholder {
     font-size: 16px;
-    
+
     font-weight: 400;
     color: #999999;
     opacity: 1;
 }
 
-input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
     font-size: 16px;
-    
+
     font-weight: 400;
     color: #999999;
     opacity: 1;
 }
+
 /*修改所有价格按钮*/
 .AllPrice {
     border-radius: 12px;
 }
+
 /*大的店铺选择框DIV*/
 .model-select-box {
     line-height: 32px !important;
     float: left !important;
-   /* margin-right: 20px;*/
+    /* margin-right: 20px;*/
     position: relative;
-   /* text-align: center;*/
+    /* text-align: center;*/
     width: 280px;
     height: 40px;
     background: #FFFFFF;
-  /*  border: 1px solid #DDDDDD;*/
+    /*  border: 1px solid #DDDDDD;*/
     opacity: 1;
     border-radius: 5px;
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #333333;
     border-radius: 20px;
 }
+
 /*店铺选择框显示的那个div*/
 .model-select-text {
     line-height: 40px !important;
@@ -483,11 +526,12 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     opacity: 1;
     border-radius: 5px;
     font-size: 14px;
-    
+
     font-weight: 400;
     cursor: pointer;
     border-radius: 20px;
 }
+
 /*店铺选择框的ul选项列表*/
 .model-select-option {
     display: none;
@@ -499,24 +543,26 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     margin-top: 42px;
     border-radius: 5px;
     opacity: 1;
-    z-index:999;
-    height:200px;
-    overflow-y:auto;
+    z-index: 999;
+    height: 200px;
+    overflow-y: auto;
 }
-    /*店铺选择框的单个选项li样式*/
-    .model-select-option li {
-        border-radius: 5px;
-        height: 40px;
-        line-height: 40px;
-        color: #333333 !important;
-        cursor: pointer;
-        opacity: 1;
-    }
-        /*店铺选择框选择的li样式*/
-        .model-select-option li.selected {
-            background: #F5F5F5;
-            color: #fff;
-        }
+
+/*店铺选择框的单个选项li样式*/
+.model-select-option li {
+    border-radius: 5px;
+    height: 40px;
+    line-height: 40px;
+    color: #333333 !important;
+    cursor: pointer;
+    opacity: 1;
+}
+
+/*店铺选择框选择的li样式*/
+.model-select-option li.selected {
+    background: #F5F5F5;
+    color: #fff;
+}
 
 /* 小三角 */
 .bg1 {
@@ -527,11 +573,13 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     border-style: solid;
     border-color: #DDDDDD transparent transparent transparent;
 }
+
 /*下拉框中shopify店铺图标样式*/
 .shoplogo {
-    margin-right:10px;
-    margin-left:16px;
+    margin-right: 10px;
+    margin-left: 16px;
 }
+
 /*图片选中样式*/
 .pirturebody {
     height: 150px;
@@ -543,24 +591,26 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     margin: 15px 0.7% 0px 0;
     position: relative;
     cursor: pointer;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
-    .pirturebody i {
-        width: 24px;
-        height: 22px;
-        background: #029803;
-        color: #333333;
-        border: 1px solid #029803;
-        position:absolute;
-        margin-left:126px;
-        border-bottom-left-radius:5px;
-        border-top-right-radius:5px;
-    }
+.pirturebody i {
+    width: 24px;
+    height: 22px;
+    background: #029803;
+    color: #333333;
+    border: 1px solid #029803;
+    position: absolute;
+    margin-left: 126px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
 .layui-icon:before {
     font-size: 24px;
     vertical-align: middle;
 }
+
 /*模拟checkbox样式*/
 .simulatecheckbox {
     width: 20px;
@@ -569,21 +619,24 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     opacity: 1;
     border-radius: 5px;
     margin-top: 13px;
-    display:inline-block;
+    display: inline-block;
 }
+
 .simulatechecked {
     background: #029803;
     content: "\e60b";
     font-size: 24px;
     vertical-align: middle;
-  
+
 }
+
 /*layui.msg的样式*/
 .layui-layer-msg .layui-layer-content {
     font-size: 16px;
 }
+
 /*layui.msg的样式改为圆角为5px透明度为0.8*/
 .layui-layer-hui {
-    background-color: rgba(0,0,0,.8) !important;
+    background-color: rgba(0, 0, 0, .8) !important;
     border-radius: 5px !important;
 }

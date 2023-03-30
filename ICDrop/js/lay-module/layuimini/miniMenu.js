@@ -107,7 +107,7 @@ layui.define(["i18n", "element", "laytpl", "jquery"], function (exports) {
                 var children = me.renderChildrenMenu(leftMenu.child, { childOpenClass: options.childOpenClass });
                 /*         console.log("children:" + children);*/
                 var href = leftMenu.href;
-                if (!children) { href = leftMenu.href + "?v=" + new Date().getDate() + versions; }
+                if (!children) { href = leftMenu.href + '?v=' + new Date().valueOf() + versions }
                 /* console.log("href:" + href);*/
                 var leftMenuHtml = me.compileMenu({
                     href: href,
@@ -199,7 +199,7 @@ layui.define(["i18n", "element", "laytpl", "jquery"], function (exports) {
          * 监听
          */
         listen: function () {
-            
+
             /**
              * 菜单模块切换
              */

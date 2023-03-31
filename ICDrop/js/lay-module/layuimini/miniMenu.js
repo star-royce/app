@@ -65,7 +65,7 @@ layui.define(["i18n", "element", "laytpl", "jquery"], function (exports) {
 
             var menuHtml = `<li {{#if( d.menu){ }}  data-menu="{{d.menu}}" {{#}}} class="layui-nav-item menu-li {{d.childOpenClass}} {{d.className}}"  
             {{#if( d.id){ }}  id="{{d.id}}" {{#}}}> <a {{#if( d.href){ }} layuimini-href="{{d.href}}" {{#}}} 
-            {{#if( d.target){ }}  target="{{d.target}}" {{#}}} href="javascript:location.href.includes('ImportCommodity')&&location.reload();">
+            {{#if( d.target){ }}  target="{{d.target}}" {{#}}} href="javascript:location.href.includes('ImportCommodity')&&document.getElementById('addImportTab').contentWindow.location.reload();">
             {{#if( d.icon){ }}  <i style="font-size: 24px;float: left;padding-top: 5px;margin-right: 12px; " class="{{d.icon}}"></i> {{#}}} <span class="layui-left-nav">{{d.title}}</span></a>  
             {{# if(d.children){}} {{d.children}} {{#}}} </li>`;
             if (isSub) {
@@ -114,6 +114,7 @@ layui.define(["i18n", "element", "laytpl", "jquery"], function (exports) {
                 if (!children) { href = leftMenu.href + '?v=' + new Date().valueOf() + versions }
                 /* console.log("href:" + href);*/
                 var leftMenuHtml = me.compileMenu({
+                    id: new Date().valueOf(),
                     href: href,
                     target: leftMenu.target,
                     childOpenClass: options.childOpenClass,

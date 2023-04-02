@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>产品详情</title>
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="../../../css/Automation/AutomationDetails.css?v=2" media="all">
     <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
 </head>
+
 <body>
     <hr />
     <div class="data">
@@ -114,20 +116,25 @@
                 id = YDHConfig.Lang.id
             }
             i18n.loadProperties(id);
-            debugger
+
             //获取产品sku列表
             GetProductWareListById(AutomationId);
 
             //授权自动化产品
             $(document).on('click', '.sync', function () {
                 var productId = $(this).attr("exp-data");
+                var myMsg = layer.msg("loading...", {
+                    icon: 16,
+                    time: -1
+                })
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Automation/UpdateAutomationStatus",
+                    url: BackgroundDomain + "/api/Automation/UpdateAutomationStatus",
                     contentType: "application/json;",
                     data: JSON.stringify({ "id": productId, "isAutomation": "1" }),
                     dataType: "json",
                     success: function (data) {
+                        layer.close(myMsg);//手动关闭
                         if (id == "zh_cn") {
                             layer.msg("授权自动化产品成功");
                         }
@@ -148,13 +155,18 @@
             //取消授权自动化产品
             $(document).on('click', '.outsync', function () {
                 var productId = $(this).attr("exp-data");
+                var myMsg = layer.msg("loading...", {
+                    icon: 16,
+                    time: -1
+                })
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Automation/UpdateAutomationStatus",
+                    url: BackgroundDomain + "/api/Automation/UpdateAutomationStatus",
                     contentType: "application/json;",
                     data: JSON.stringify({ "id": productId, "isAutomation": "0" }),
                     dataType: "json",
                     success: function (data) {
+                        layer.close(myMsg);//手动关闭
                         if (id == "zh_cn") {
                             layer.msg("已取消授权");
                         }
@@ -172,10 +184,13 @@
 
         //获取产品sku列表
         function GetProductWareListById(AutomationId) {
-
+            var myMsg = layer.msg("loading...", {
+                icon: 16,
+                time: -1
+            })
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Automation/QueryAutomationWareListById",
+                url: BackgroundDomain + "/api/Automation/QueryAutomationWareListById",
                 contentType: "application/json;",
                 data: JSON.stringify({ "Id": AutomationId }),
                 dataType: "json",
@@ -183,6 +198,7 @@
                     Binding(data);
                 }
             });
+            layer.close(myMsg);//手动关闭
         }
 
         // 绑定页面
@@ -224,4 +240,5 @@
         }
     </script>
 </body>
+
 </html>

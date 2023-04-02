@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -11,38 +12,48 @@
     <link rel="stylesheet" href="../../../css/OrderList.css?v=2" media="all">
     <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
 </head>
+
 <body>
     <div class="" style=" width: 100%;">
         <div class="layuimini-main">
             <form action="" lay-filter="formTest" class="layui-form" style=" margin-top: 20px;width:100%;">
 
                 <div style="width: 36%; float: right; max-width: calc(100% - 875px);">
-                    <input type="text" i18n_Attr="placeholder:Enter.order.number" name="OrderNumber" placeholder="请输入订单号" autocomplete="off" class="OrderNumPut">
-                    <button type="submit" lay-submit lay-filter="data-search-btn" class="searchOrder"><img src="../../../images/search.png" /></button>
+                    <input type="text" i18n_Attr="placeholder:Enter.order.number" name="OrderNumber"
+                        placeholder="请输入订单号" autocomplete="off" class="OrderNumPut">
+                    <button type="submit" lay-submit lay-filter="data-search-btn" class="searchOrder"><img
+                            src="../../../images/search.png" /></button>
                 </div>
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin-top:20px;">
                     <ul class="layui-tab-title">
-                        <li class="layui-this" id="all" i18n_Text="all" style="width:108px;">全部订单</li>
+                        <li class="layui-this" id="all" i18n_Text="all" style="width:108px;">All Order</li>
 
-                        <li  id="inquiry" i18n_Text="Wating.for.sourcing" style="width: 146px; ">待询价</li>
+                        <li id="inquiry" i18n_Text="Wating.for.sourcing" style="width: 146px; ">Wating for sourcing</li>
                         <!--<li id="pending" i18n_Text="pending">待处理</li>-->
-                        <li id="unpaid" i18n_Text="unpaid" style=" width: 146px;">待支付</li>
-                        <li id="Processing" i18n_Text="In.Processing" style="width:144px;">加工中</li>
-                        <li id="transit" i18n_Text="transit" style="width:106px;">运输中</li>
-                        <li id="sign" i18n_Text="sign" style="width:120px;">已签收</li>
+                        <li id="unpaid" i18n_Text="unpaid" style=" width: 146px;">Waiting for payment</li>
+                        <li id="Processing" i18n_Text="In.Processing" style="width:144px;">In processing</li>
+                        <li id="transit" i18n_Text="transit" style="width:106px;">Shipped</li>
+                        <li id="sign" i18n_Text="sign" style="width:120px;">Fulfilled</li>
                         <!--<li id="applyRefund" i18n_Text="applyRefund">申请退款</li>-->
-                        <li id="Cancelled" i18n_Text="Cancelled" style="width:120px;">取消</li>
+                        <li id="Cancelled" i18n_Text="Cancelled" style="width:120px;">Cancelled</li>
 
                     </ul>
                     <!--多选框和自动化管理说明-->
                     <div style="width:100%;margin-top:20px;height:32px;line-height:32px;">
                         <div class="checkallleft" id="checkallleft" style=" float:left;">
-                            <div class="allcheck" style="border-radius: 5px; width: 20px; height: 20px;margin-top:10px; background-color:#ffffff; float:left;">
-                                <input class='TotalChk' style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;cursor:pointer;' type='checkbox' onclick="checkAllChange(this)">
+                            <div class="allcheck"
+                                style="border-radius: 5px; width: 20px; height: 20px;margin-top:10px; background-color:#ffffff; float:left;">
+                                <input class='TotalChk'
+                                    style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;cursor:pointer;'
+                                    type='checkbox' onclick="checkAllChange(this)">
                             </div>
-                            <div style="width: 56px; height: 32px;line-height:32px; background: #FFFFFF; border-radius: 16px 16px 16px 16px; opacity: 1;margin-left:40px;text-align:center; ">All</div>
+                            <div
+                                style="width: 56px; height: 32px;line-height:32px; background: #FFFFFF; border-radius: 16px 16px 16px 16px; opacity: 1;margin-left:40px;text-align:center; ">
+                                All</div>
                         </div>
-                        <div style="float:right;">Don't want to pay in advance for each order? <a onclick="LinkAutomationProduct()" style="color: #3399FF;">Set on Automatic Bulk  DropShipping</a></div>
+                        <div style="float:right;">Don't want to pay in advance for each order? <a
+                                onclick="LinkAutomationProduct()" style="color: #3399FF;">Set on Automatic Bulk
+                                DropShipping</a></div>
                     </div>
 
                     <div class="layui-tab-content">
@@ -246,10 +257,17 @@
             </script>
             <!--批量操作栏-->
             <div id="total">
-                <input class='TotalChk' style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;cursor:pointer;' type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
+                <input class='TotalChk'
+                    style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;cursor:pointer;'
+                    type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
                 <span id="tatalSelect"></span>
-                <button type="submit" id="enquiryAll" i18n_Text="OrderList.orderModule.button.enquiry" class="PayAllProduct" onclick="EnquiryAllProduct()" style="float: right; margin-right: 40px !important; margin-top: 14px; color: #FFFFFF; cursor: pointer; ">咨询价格</button>
-                <button type="submit" id="PayAllProduct" i18n_Text="OrderList.orderModule.button.PayAll" lay-submit lay-filter="data-search-btn" class="PayAllProduct" style="float: right; margin-right: 40px !important; margin-top: 14px; color: #FFFFFF; cursor: pointer;" onclick="PayAllProduct()">合并支付</button>
+                <button type="submit" id="enquiryAll" i18n_Text="OrderList.orderModule.button.enquiry"
+                    class="PayAllProduct" onclick="EnquiryAllProduct()"
+                    style="float: right; margin-right: 40px !important; margin-top: 14px; color: #FFFFFF; cursor: pointer; ">咨询价格</button>
+                <button type="submit" id="PayAllProduct" i18n_Text="OrderList.orderModule.button.PayAll" lay-submit
+                    lay-filter="data-search-btn" class="PayAllProduct"
+                    style="float: right; margin-right: 40px !important; margin-top: 14px; color: #FFFFFF; cursor: pointer;"
+                    onclick="PayAllProduct()">合并支付</button>
             </div>
         </div>
     </div>
@@ -303,7 +321,7 @@
             function Getshop(form) {
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Customer/GetCustomerShopifyList",
+                    url: BackgroundDomain + "/api/Customer/GetCustomerShopifyList",
                     contentType: "application/json;",
                     data: JSON.stringify(dto_obj),
                     dataType: "json",
@@ -344,7 +362,7 @@
                 var orderId = $(this).attr("exp-data");
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Order/ConsultingPrice",
+                    url: BackgroundDomain + "/api/Order/ConsultingPrice",
                     contentType: "application/json;",
                     data: JSON.stringify(orderId),
                     dataType: "json",
@@ -435,35 +453,58 @@
             // 作废订单
             $(document).on('click', '.zuofie', function () {
                 var orderId = $(this).attr("exp-data");
-                $.ajax({
-                    type: "post",
-                    url:BackgroundDomain + "/api/Order/InvalidateOrder",
-                    contentType: "application/json;",
-                    data: JSON.stringify(orderId),
-                    dataType: "json",
-                    async: false,//同步
-                    success: function (data) {
-                        if (id == "zh_cn") {
-                            layer.msg("作废成功！");
-                        }
-                        else if (id == "en_us") {
-                            layer.msg("Success!");
-                        }
-                        GetOrderList("inquiry", laypage);
-                    },
-                    error: function (jqXHR) {
-                        if (jqXHR.responseJSON.message) {
-                            layer.msg(jqXHR.responseJSON.message);
-                        }
-                        else {
-                            if (id == "zh_cn") {
-                                layer.msg("作废异常！");
+
+                layer.confirm($.i18n.prop('order.cancel.confim'), {
+                    id: "order_cacnel",
+                    title: "Confirm",
+                    icon: 3,
+                    closeBtn: 2,
+                    shade: 0.3,
+                    btn: ['YES', 'NO'],
+                    yes: function (index) {
+                        var myMsg = layer.msg("running...", {
+                            icon: 16,
+                            time: -1
+                        })
+                        var TabId = $("li[class=layui-this]").attr("id");
+                        $.ajax({
+                            type: "post",
+                            url: BackgroundDomain + "/api/Order/InvalidateOrder",
+                            contentType: "application/json;",
+                            data: JSON.stringify(orderId),
+                            dataType: "json",
+                            async: false,//同步
+                            success: function (data) {
+                                layer.close(myMsg);//手动关闭
+                                layer.close(index);
+                                if (id == "zh_cn") {
+                                    layer.msg("作废成功！");
+                                }
+                                else if (id == "en_us") {
+                                    layer.msg("Success!");
+                                }
+                                GetOrderList(TabId, laypage);
+                            },
+                            error: function (jqXHR) {
+                                layer.close(myMsg);//手动关闭
+                                layer.close(index);
+                                if (jqXHR.responseJSON.message) {
+                                    layer.msg(jqXHR.responseJSON.message);
+                                }
+                                else {
+                                    layer.close(myMsg);//手动关闭
+                                    if (id == "zh_cn") {
+                                        layer.msg("作废异常！");
+                                    }
+                                    else if (id == "en_us") {
+                                        layer.msg("Failed. Contact the administrator!");
+                                    }
+                                }
                             }
-                            else if (id == "en_us") {
-                                layer.msg("Failed. Contact the administrator!");
-                            }
-                        }
+                        });
+
                     }
+                }, function () {
                 });
                 return true;
             });
@@ -473,7 +514,7 @@
                 var orderId = $(this).attr("exp-data");
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Order/OrderApplyRefund",
+                    url: BackgroundDomain + "/api/Order/OrderApplyRefund",
                     contentType: "application/json;",
                     data: JSON.stringify(orderId),
                     dataType: "json",
@@ -599,7 +640,7 @@
                         $.ajax({
                             type: "post",
                             contentType: "application/json;",
-                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            url: BackgroundDomain + '/api/Price/SelectPrice',
                             data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
                             success: function (msg) {
                                 /*       location.reload();*/
@@ -668,7 +709,7 @@
                         $.ajax({
                             type: "post",
                             contentType: "application/json;",
-                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            url: BackgroundDomain + '/api/Price/SelectPrice',
                             data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
                             success: function (msg) {
                                 /*       location.reload();*/
@@ -773,10 +814,14 @@
                 prev = "previous page";
                 next = "next page ";
             }
+            var myMsg = layer.msg("loading...", {
+                icon: 16,
+                time: -1
+            })
 
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Order/QueryCustomerOrderList",
+                url: BackgroundDomain + "/api/Order/QueryCustomerOrderList",
                 contentType: "application/json;",
                 data: JSON.stringify({ "Dto": { "OrderStatus": OrderStatus, "ShopifyId": ShopId, "OrderNum": OrderNum }, "Page": Page, "limit": limit }),
                 dataType: "json",
@@ -785,6 +830,7 @@
                         /* layer.msg(i18n.prop(sre.msg));*/
                         Binding(TabId, null);
 
+                        layer.close(myMsg);//手动关闭
                     } else {
                         laypage.render({
                             elem: 'pagination' //注意，这里的 pagination 是 ID，不用加 # 号
@@ -796,20 +842,19 @@
                             , jump: function (obj, first) {
                                 $.ajax({
                                     type: "post",
-                                    url: BackgroundDomain +"/api/Order/QueryCustomerOrderList",
+                                    url: BackgroundDomain + "/api/Order/QueryCustomerOrderList",
                                     contentType: "application/json;",
                                     data: JSON.stringify({ "Dto": { "OrderStatus": OrderStatus, "ShopifyId": ShopId, "OrderNum": OrderNum }, "Page": obj.curr, "limit": obj.limit }),
                                     dataType: "json",
                                     success: function (data) {
                                         Binding(TabId, data);
+                                        layer.close(myMsg);//手动关闭
                                     }
                                 });
                             }
                         });
-
                         return false;
                     }
-
                 }
             });
 
@@ -1093,7 +1138,7 @@
 
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Order/ConsultingAllPrice",
+                url: BackgroundDomain + "/api/Order/ConsultingAllPrice",
                 contentType: "application/json;",
                 data: JSON.stringify(orderId),
                 dataType: "json",
@@ -1139,4 +1184,5 @@
     </script>
 
 </body>
+
 </html>

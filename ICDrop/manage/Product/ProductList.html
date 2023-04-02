@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>进口商品</title>
@@ -12,12 +13,15 @@
     <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">
 
 </head>
+
 <body>
     <div class="layuimini-main">
         <div class="" style="width: 100%;height:40px; margin: 20px 0px;">
             <form class="layui-form layui-form-pane" action="/share/ImportCommodity.html" method="get">
-                <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle">
-                <button i18n_Text="search" type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"> 搜 索</button>
+                <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle" id="productTitle"
+                    lay-verify="title" autocomplete="off" placeholder="Search" class="inputprotitle">
+                <button i18n_Text="search" type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"> 搜
+                    索</button>
             </form>
         </div>
 
@@ -71,7 +75,7 @@
             var ProCatalogueList = null;
             $.ajax({
                 type: "get",
-                url: BackgroundDomain +'/api/Product/GetProCatalogueList',
+                url: BackgroundDomain + '/api/Product/GetProCatalogueList',
                 async: false,
                 success: function (data) {
                     ProCatalogueList = data;
@@ -87,7 +91,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url:BackgroundDomain + '/api/Product/QueryImportProductList',
+                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
                     data: JSON.stringify(dto_obj),
                     success: function (msg) {
                         count = msg.count;
@@ -105,7 +109,7 @@
                                 $.ajax({
                                     type: "post",
                                     contentType: "application/json",
-                                    url: BackgroundDomain +'/api/Product/QueryImportProductList',
+                                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
                                     data: JSON.stringify(dto_obj),
                                     success: function (msg) {
                                         $("#productList").empty();
@@ -186,39 +190,39 @@
 
                                             var div7 = document.createElement("div");
                                             div7.setAttribute('class', 'select-lable');
-                                        var lable = "<font style='vertical-align:inherit;'><font class='changelablecatalogue' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
-                                        div7.innerHTML = lable;
-                                        div4.appendChild(div7);
-                                        $(".changelablecatalogue").html($.i18n.prop('type'));
-                                        var input1 = document.createElement("select");
-                                        input1.setAttribute('class', 'input-lable');
-                                        input1.setAttribute('id', 'update_catalogue' + msg.data[i].id);
+                                            var lable = "<font style='vertical-align:inherit;'><font class='changelablecatalogue' style='vertical-align:inherit;font-size:14px;color:#666666;'>分类</font></font></br>";
+                                            div7.innerHTML = lable;
+                                            div4.appendChild(div7);
+                                            $(".changelablecatalogue").html($.i18n.prop('type'));
+                                            var input1 = document.createElement("select");
+                                            input1.setAttribute('class', 'input-lable');
+                                            input1.setAttribute('id', 'update_catalogue' + msg.data[i].id);
 
-                                        var op1 = document.createElement("option");
-                                        op1.setAttribute("value", 0);
-                                        op1.appendChild(document.createTextNode("选择分类"));
-                                        input1.appendChild(op1);
-                                        for (var j = 0; j < ProCatalogueList.length; j++) {
-                                            if(ProCatalogueList[j].superiorId >= 1){
-                                            op1 = document.createElement("option");
-                                            op1.setAttribute("value", ProCatalogueList[j].id);
-                                            if (msg.data[i].catalogueId == ProCatalogueList[j].id) {
-                                                op1.setAttribute("selected", 'selected');
-                                            }
-                                            op1.appendChild(document.createTextNode(ProCatalogueList[j].catalogueName));
+                                            var op1 = document.createElement("option");
+                                            op1.setAttribute("value", 0);
+                                            op1.appendChild(document.createTextNode("选择分类"));
                                             input1.appendChild(op1);
-                                         }
-                                        }
+                                            for (var j = 0; j < ProCatalogueList.length; j++) {
+                                                if (ProCatalogueList[j].superiorId >= 1) {
+                                                    op1 = document.createElement("option");
+                                                    op1.setAttribute("value", ProCatalogueList[j].id);
+                                                    if (msg.data[i].catalogueId == ProCatalogueList[j].id) {
+                                                        op1.setAttribute("selected", 'selected');
+                                                    }
+                                                    op1.appendChild(document.createTextNode(ProCatalogueList[j].catalogueName));
+                                                    input1.appendChild(op1);
+                                                }
+                                            }
 
-                                        //var label = data.data[0].label;
-                                        //if (data.data[0].label == null) {
-                                        //    label = '';
-                                        //}
-                                        //titleselect.setAttribute('value', label);
-                                      
-                                        //数据发生变化时更新
-                                        input1.setAttribute('onchange', "UpdateInfo('update_catalogue'," + msg.data[i].id + " )");
-                                        div7.appendChild(input1);
+                                            //var label = data.data[0].label;
+                                            //if (data.data[0].label == null) {
+                                            //    label = '';
+                                            //}
+                                            //titleselect.setAttribute('value', label);
+
+                                            //数据发生变化时更新
+                                            input1.setAttribute('onchange', "UpdateInfo('update_catalogue'," + msg.data[i].id + " )");
+                                            div7.appendChild(input1);
                                             //类型
                                             // var div7 = document.createElement("div");
                                             // div7.setAttribute('class', 'select-type');
@@ -253,7 +257,7 @@
                                             if (msg.data[i].label == null) {
                                                 label = '';
                                             }
-                                          
+
                                             var input2 = document.createElement("select");
                                             input2.setAttribute('class', 'input-lable');
                                             input2.setAttribute('id', 'update_label' + msg.data[i].id);
@@ -261,23 +265,23 @@
                                             op.setAttribute("value", "");
                                             op.appendChild(document.createTextNode("选择标签"));
                                             input2.appendChild(op);
-                                            var labelArr =[];
+                                            var labelArr = [];
                                             labelArr.push("Hot-Trend");
                                             labelArr.push("Winning products");
                                             labelArr.push("Discount Sale");
-                                         
+
                                             for (var j = 0; j < labelArr.length; j++) {
-                                           op = document.createElement("option");
-                                           op.setAttribute("value", labelArr[j]);
-                                          if (msg.data[i].label == labelArr[j]) {
-                                           op.setAttribute("selected", 'selected');
-                                          }
-                                         op.appendChild(document.createTextNode(labelArr[j]));
-                                         input2.appendChild(op);
-                                      }
-                        //数据发生变化时更新
-                        input2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[i].id + " )");
-                        div8.appendChild(input2);
+                                                op = document.createElement("option");
+                                                op.setAttribute("value", labelArr[j]);
+                                                if (msg.data[i].label == labelArr[j]) {
+                                                    op.setAttribute("selected", 'selected');
+                                                }
+                                                op.appendChild(document.createTextNode(labelArr[j]));
+                                                input2.appendChild(op);
+                                            }
+                                            //数据发生变化时更新
+                                            input2.setAttribute('onchange', "UpdateInfo('updatelabel'," + msg.data[i].id + " )");
+                                            div8.appendChild(input2);
 
 
 
@@ -335,7 +339,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url:BackgroundDomain + '/api/Product/QueryProductPriceInfo',
+                                                        url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
                                                         data: JSON.stringify(productprice),
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
@@ -372,18 +376,17 @@
                                                             pricehtml += "<li class='head_font'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs AllEetendChange 'data-productid='" + id + "'>维护扩展属性</button></li>";
                                                             priceul.innerHTML = pricehtml;
 
-                                                            var stockAddress =[];
+                                                            var stockAddress = [];
                                                             $.ajax({
                                                                 type: "post",
                                                                 contentType: "application/json",
-                                                                url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku',
-                                                                data: JSON.stringify({productId:id}),
-                                                                async:false,
-                                                                success: function (ret) 
-                                                                    {
-                                                                        stockAddress = ret.data;
-                                                                    }
-                                                               })
+                                                                url: BackgroundDomain + '/api/Product/GetProProductStockAddressBySku',
+                                                                data: JSON.stringify({ productId: id }),
+                                                                async: false,
+                                                                success: function (ret) {
+                                                                    stockAddress = ret.data;
+                                                                }
+                                                            })
                                                             //循环数据添加主体部分
                                                             for (var i = 0; i < data.data.length; i++) {
                                                                 var pricediv1 = document.createElement("div");
@@ -410,25 +413,22 @@
                                                                     pricehtml1 += "<li  class='price_body'style='width:34%;float:left;'><br/></li > "
                                                                 }
 
-                                                          
-                                                               var oen = " <option value ='0'>请选择仓库</option>";
-                                                               if(stockAddress && stockAddress.length>0)
-                                                                 {
-                                                                   var stocksku= stockAddress.filter(j=>j.sku==data.data[i].sku);
-                                                                      for (let index = 0; index < stocksku.length; index++) {
-                                                                        if(stocksku[index].id == data.data[i].stockId)
-                                                                        {
-                                                                            oen+="<option value ='"+stocksku[index].id+"' selected = 'selected'>"+stocksku[index].address+"</option>";
-                                                                        }else
-                                                                        {
-                                                                            oen+="<option value ='"+stocksku[index].id+"'>"+stocksku[index].address+"</option>";
-                                                                        }    
-                                                                      }
-                                                                  }
-                                                                 
-                                                               
-                                                              
-                                                                pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;' data-productid = '" + id + "'  data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >"+oen+"<select> <br></li>";
+
+                                                                var oen = " <option value ='0'>请选择仓库</option>";
+                                                                if (stockAddress && stockAddress.length > 0) {
+                                                                    var stocksku = stockAddress.filter(j => j.sku == data.data[i].sku);
+                                                                    for (let index = 0; index < stocksku.length; index++) {
+                                                                        if (stocksku[index].id == data.data[i].stockId) {
+                                                                            oen += "<option value ='" + stocksku[index].id + "' selected = 'selected'>" + stocksku[index].address + "</option>";
+                                                                        } else {
+                                                                            oen += "<option value ='" + stocksku[index].id + "'>" + stocksku[index].address + "</option>";
+                                                                        }
+                                                                    }
+                                                                }
+
+
+
+                                                                pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;' data-productid = '" + id + "'  data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >" + oen + "<select> <br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:4%;'><input type = 'text' class='layui-input' style='float:left;width:100%;' data-productid = '" + id + "'  data-key='" + data.data[i].id + "'  value = '" + data.data[i].quantity + "' onchange='UpdateQuantity(this)'/> </li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:4%;'>" + data.data[i].currency + "<br></li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:6%;'>" + data.data[i].cost + "<br></li>";
@@ -439,7 +439,7 @@
                                                                 if (data.data[i].isCompleteExtend == "1") {
                                                                     IsCompleteExtend = "是";
                                                                 }
-                                                                pricehtml1 += "<li class='price_body'style='width:8%;'>" + IsCompleteExtend+"</li>";
+                                                                pricehtml1 += "<li class='price_body'style='width:8%;'>" + IsCompleteExtend + "</li>";
                                                                 pricehtml1 += "<li class='price_body'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs EetendChange ' data-productid='" + id + "' data-wareid='" + data.data[i].id + "'>维护扩展属性</button></li>";
 
                                                                 priceul1.innerHTML = pricehtml1;
@@ -449,7 +449,7 @@
                                                                 }
                                                             }
 
-                                                         
+
                                                         }
                                                     })
                                                 });
@@ -469,7 +469,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url:BackgroundDomain + '/api/Product/QueryImportProductList',
+                                                        url: BackgroundDomain + '/api/Product/QueryImportProductList',
                                                         data: JSON.stringify(producttitle),
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
@@ -569,7 +569,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url:BackgroundDomain + '/api/Product/QueryProductDescriptionInfo',
+                                                        url: BackgroundDomain + '/api/Product/QueryProductDescriptionInfo',
                                                         data: JSON.stringify(productdescription),
                                                         success: function (data) {
                                                             document.getElementById("productbody" + id).innerHTML = "";
@@ -623,7 +623,7 @@
                                                     $.ajax({
                                                         type: "post",
                                                         contentType: "application/json",
-                                                        url: BackgroundDomain +'/api/Product/QueryProductImagesInfo',
+                                                        url: BackgroundDomain + '/api/Product/QueryProductImagesInfo',
                                                         data: JSON.stringify(productpicture),
                                                         success: function (data) {
                                                             if (data.data) {
@@ -700,7 +700,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -719,7 +719,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url:BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -738,7 +738,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url:BackgroundDomain + '/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -747,8 +747,8 @@
                     }
                 })
             }
-             //修改分类
-             if (type == "update_catalogue") {
+            //修改分类
+            if (type == "update_catalogue") {
                 var catalogueId = document.getElementById('update_catalogue' + id).value;
                 var productInfo = new Object();
                 productInfo.id = id;
@@ -756,7 +756,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductInfo',
+                    url: BackgroundDomain + '/api/Product/UpdateProductInfo',
                     data: JSON.stringify(productInfo),
                     success: function (data) {
                         if (data.code == 1) {
@@ -769,7 +769,7 @@
 
         }
 
-        
+
         //维护产品所有sku的采购价格
         $(document).on('click', '.AllPurchusePrice', function () {
             var data = new Object();
@@ -818,8 +818,8 @@
                     "PurchaseSystem": data.system,
                     "PurchaseCost": "",
                     "PurchaseProfit": "",
-                    "TaxesProfit":"",
-                    "FreightProfit":""
+                    "TaxesProfit": "",
+                    "FreightProfit": ""
                 });
                 //点击确认修改所有商品的采购价格
                 form.on('submit(up_Purchase)', function (massage) {
@@ -834,7 +834,7 @@
                     $.ajax({
                         type: "post",
                         contentType: "application/json",
-                        url: BackgroundDomain +'/api/Product/UpdatePurchasePrice',
+                        url: BackgroundDomain + '/api/Product/UpdatePurchasePrice',
                         data: JSON.stringify(dto_obj),
                         success: function (data) {
                             setTimeout(function () {
@@ -869,7 +869,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json;",
-                    url: BackgroundDomain +'/api/Product/QueryVariantInfoByVariantId',
+                    url: BackgroundDomain + '/api/Product/QueryVariantInfoByVariantId',
                     data: JSON.stringify(id),
                     success: function (msg) {
                         if (msg.purchaseCost != "0") {
@@ -886,7 +886,7 @@
                                 "PurchaseSystem": data.system,
                                 "PurchaseCost": "",
                                 "PurchaseProfit": "",
-                                "TaxesProfit":"",
+                                "TaxesProfit": "",
                                 "FreightProfit": ""
                             });
                         }
@@ -906,7 +906,7 @@
                     $.ajax({
                         type: "post",
                         contentType: "application/json",
-                        url: BackgroundDomain +'/api/Product/UpdatePurchasePrice',
+                        url: BackgroundDomain + '/api/Product/UpdatePurchasePrice',
                         data: JSON.stringify(dto_obj),
                         success: function (data) {
                             setTimeout(function () {
@@ -994,7 +994,7 @@
                 form.on('submit(up_Extend)', function (massage) {
                     var dto_obj = new Object();
                     dto_obj.ProductId = parseInt(data.productId);
-                  /*  dto_obj.WareId = parseInt(data.wareId);*/
+                    /*  dto_obj.WareId = parseInt(data.wareId);*/
                     dto_obj.Length = massage.field.length;
                     dto_obj.Width = massage.field.width;
                     dto_obj.Height = massage.field.height;
@@ -1005,7 +1005,7 @@
                     $.ajax({
                         type: "post",
                         contentType: "application/json",
-                        url: BackgroundDomain +'/api/Product/UpdateAllVariantExtend',
+                        url: BackgroundDomain + '/api/Product/UpdateAllVariantExtend',
                         data: JSON.stringify(dto_obj),
                         success: function (data) {
                             setTimeout(function () {
@@ -1026,7 +1026,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json;",
-                    url: BackgroundDomain +'/api/Product/QueryVariantInfoByVariantId',
+                    url: BackgroundDomain + '/api/Product/QueryVariantInfoByVariantId',
                     data: JSON.stringify(id),
                     success: function (msg) {
                         if (msg.variantExtend != null) {
@@ -1043,7 +1043,7 @@
                         else {
                             form.val("MaintainExtend", {
                                 "PurchaseSystem": data.system,
-                                "length":"",
+                                "length": "",
                                 "width": "",
                                 "height": "",
                                 "volumeCoefficient": "",
@@ -1069,7 +1069,7 @@
                     $.ajax({
                         type: "post",
                         contentType: "application/json",
-                        url: BackgroundDomain +'/api/Product/UpdateVariantExtend',
+                        url: BackgroundDomain + '/api/Product/UpdateVariantExtend',
                         data: JSON.stringify(dto_obj),
                         success: function (data) {
                             setTimeout(function () {
@@ -1095,7 +1095,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductAttribute',
+                url: BackgroundDomain + '/api/Product/UpdateProductAttribute',
                 data: JSON.stringify(priceInfo),
                 success: function (data) {
                     if (data.data > 0) {
@@ -1113,7 +1113,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/ModifyProductAttriName',
+                url: BackgroundDomain + '/api/Product/ModifyProductAttriName',
                 data: JSON.stringify(Attributetitel),
                 success: function (data) {
                     if (data.data > 0) {
@@ -1135,7 +1135,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/ModifyProductVariantCheck',
+                url: BackgroundDomain + '/api/Product/ModifyProductVariantCheck',
                 data: JSON.stringify(pro),
                 success: function (data) {
                     if (data.data > 0) {
@@ -1166,7 +1166,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductDescription',
+                url: BackgroundDomain + '/api/Product/UpdateProductDescription',
                 data: JSON.stringify(DescriptionInfo),
                 success: function (data) {
                     if (data.code == 1) {
@@ -1182,7 +1182,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/DeleteProduct',
+                url: BackgroundDomain + '/api/Product/DeleteProduct',
                 data: JSON.stringify(product),
                 success: function (data) {
                     if (data.code == 1) {
@@ -1206,7 +1206,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url:BackgroundDomain + '/api/Product/PushShopifyProduct',
+                url: BackgroundDomain + '/api/Product/PushShopifyProduct',
                 data: JSON.stringify(product),
                 success: function (data) {
                     layer.close(loading);
@@ -1230,7 +1230,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProImageStatus',
+                url: BackgroundDomain + '/api/Product/UpdateProImageStatus',
                 data: JSON.stringify(productpicture),
                 success: function (data) {
                     if (data.dto) {
@@ -1255,7 +1255,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductQuantity',
+                url: BackgroundDomain + '/api/Product/UpdateProductQuantity',
                 data: JSON.stringify(priceInfo),
                 success: function (data) {
                     if (data.data > 0) {
@@ -1273,7 +1273,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Product/UpdateProductStock',
+                url: BackgroundDomain + '/api/Product/UpdateProductStock',
                 data: JSON.stringify(priceInfo),
                 success: function (data) {
                     if (data.code > 0) {
@@ -1302,13 +1302,13 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain +'/api/Product/UpdateProductQuantity',
+                    url: BackgroundDomain + '/api/Product/UpdateProductQuantity',
                     data: JSON.stringify(priceInfo),
                     success: function (data) {
-                      
-                       $("[data-productid='" + id + "']").val(pass);
+
+                        $("[data-productid='" + id + "']").val(pass);
                         layer.msg('修改库存成功');
-                       
+
                     }
                 })
             });
@@ -1327,7 +1327,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">维护体系</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input" readonly="readonly">
+                        <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input"
+                            readonly="readonly">
                     </div>
                 </div>
                 <!-- <div class="layui-form-item">
@@ -1343,7 +1344,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">汇率：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" />
+                        <input class="layui-input" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value=""
+                            lay-verify="required" />
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -1372,7 +1374,8 @@
                 </div>
                 <div class="layui-form-item" style="margin-top:40px">
                     <div class="layui-input-block">
-                        <button class="layui-btn  layui-btn-submit " lay-submit="" lay-filter="up_Purchase">确认修改</button>
+                        <button class="layui-btn  layui-btn-submit " lay-submit=""
+                            lay-filter="up_Purchase">确认修改</button>
                     </div>
                 </div>
             </form>
@@ -1382,49 +1385,56 @@
     <!--维护商品扩展属性-->
     <div class="layui-row" id="MaintainExtend" style="display:none;">
         <div class="layui-col-md10">
-            <form class="layui-form layui-from-pane" lay-filter="MaintainExtend"  action="" style="margin-top:20px">
+            <form class="layui-form layui-from-pane" lay-filter="MaintainExtend" action="" style="margin-top:20px">
                 <h2 style="color:red;margin-left:30px;">长，宽，高单位为厘米，最多保留一位小数，材积重计算公式：（长*高*宽）/材积系数，重量最多保留5位小数</h2>
                 <h2 style="color: red; margin-left: 30px;">是否带电框中，如果带电请填Y否则填N</h2>
                 <div class="layui-form-item">
                     <label class="layui-form-label">维护体系</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input" readonly="readonly">
+                        <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input"
+                            readonly="readonly">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">长：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input length" type="text" name="length" value="" lay-verify="required" lay-reqtext="长度不能为空" autocomplete="off" />
+                        <input class="layui-input length" type="text" name="length" value="" lay-verify="required"
+                            lay-reqtext="长度不能为空" autocomplete="off" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">宽：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input width" type="text" name="width" value="" lay-verify="required" lay-reqtext="商品宽不能为空" autocomplete="off" />
+                        <input class="layui-input width" type="text" name="width" value="" lay-verify="required"
+                            lay-reqtext="商品宽不能为空" autocomplete="off" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">高：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input height" type="text" name="height" value="" lay-verify="required" lay-reqtext="商品高不能为空" autocomplete="off" />
+                        <input class="layui-input height" type="text" name="height" value="" lay-verify="required"
+                            lay-reqtext="商品高不能为空" autocomplete="off" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">材积系数：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input volumeCoefficient" type="text" name="volumeCoefficient" value="" lay-verify="required" lay-reqtext="材积系数不能为空" autocomplete="off" />
+                        <input class="layui-input volumeCoefficient" type="text" name="volumeCoefficient" value=""
+                            lay-verify="required" lay-reqtext="材积系数不能为空" autocomplete="off" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">是否带电：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input attribute" type="text" name="attribute" value="" lay-verify="required" lay-reqtext="属性不能为空" autocomplete="off" />
+                        <input class="layui-input attribute" type="text" name="attribute" value="" lay-verify="required"
+                            lay-reqtext="属性不能为空" autocomplete="off" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">重量：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input weight" type="text" name="weight" value="" lay-verify="required" lay-reqtext="重量不能为空" autocomplete="off" />
+                        <input class="layui-input weight" type="text" name="weight" value="" lay-verify="required"
+                            lay-reqtext="重量不能为空" autocomplete="off" />
                     </div>
                 </div>
                 <div class="layui-form-item" style="margin-top:40px">
@@ -1436,4 +1446,5 @@
         </div>
     </div>
 </body>
+
 </html>

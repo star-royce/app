@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="../../css/OrderDetails.css" media="all">
     <link rel="stylesheet" href="../../css/Message.css?v=2" media="all">
 </head>
+
 <body>
     <hr />
     <div class="">
@@ -21,7 +23,7 @@
     </div>
     <script type="text/html" id="orderModule">
         <div class="header">
-            <div i18n_Text="The.order.situation" style="float:left;font-weight:bold;">订单详情</div>
+            <div i18n_Text="The.order.situation" style="float:left;font-weight:bold;">Order Detail</div>
             <div class="orderStatus"> {{if LangId=="zh_cn" }}{{statusName}}{{else  LangId=="en_us" }}{{statusNameEn}}{{/if}} </div>
         </div>
         <div class="">
@@ -69,29 +71,34 @@
             {{/if}}
         </div>
         <div class="prodect-body">
-            <table class="" lay-skin="line">
+            <table class="layui-table" lay-skin="line">
+                <!-- <colgroup>
+                  <col width="150">
+                  <col width="200">
+                  <col>
+                </colgroup> -->
                 <thead>
-                    <tr style="height: 36px; background: #F2F3F5; text-align: center; font-size: 14px; font-family: Arial; font-weight: 400; color: #333333; ">
-                        <th style="width:90px;"></th>
-                        <th style="width:340px;" i18n_Text="OrderDetails.orderModule.div.ProductName">商品名称</th>
-                        <th style="width:160px;" i18n_Text="OrderDetails.orderModule.div.ProductAttribute">属性</th>
-                        <th style="width:105px;" i18n_Text="OrderDetails.orderModule.div.ProductQuantity">数量</th>
-                        <th style="width:105px;" i18n_Text="OrderDetails.orderModule.div.Price">价格</th>
+                    <tr style="font-size: 14px; font-family: Arial; font-weight: 400; color: #333333;">
+                        <th></th>
+                        <th i18n_Text="OrderDetails.orderModule.div.ProductName">商品名称</th>
+                        <th i18n_Text="OrderDetails.orderModule.div.ProductAttribute">属性</th>
+                        <th i18n_Text="OrderDetails.orderModule.div.ProductQuantity">数量</th>
+                        <th i18n_Text="OrderDetails.orderModule.div.Price">价格</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{each ordWaresList}}
-                    <tr style="height: 92px; border-bottom: 1px solid #DDDDDD; text-align: center; font-size: 14px; font-family: Arial; font-weight: 400; color: #666666; ">
-                        <td style="width:90px;text-align:center;"><img src="{{ $value.picture }}" style="width:60px;height:60px;" /></td>
+                    <tr style="font-size: 14px; font-family: Arial; font-weight: 400; color: #333333;">
+                        <td><img src="{{ $value.picture }}" style="width:60px;height:60px;" /></td>
 
-                        <td style="width:340px;">{{ $value.productName }}</td>
-                        <td style="width:160px;">{{ $value.variantTitle }}</td>
-                        <td style="width:105px;">{{ $value.quantity }}</td>
-                        <td style="width:105px;"><span style=" color: #FF5555 !important;">{{ $value.proAllPrice.toFixed(2) }}</span> USD</td>
+                        <td>{{ $value.productName }}</td>
+                        <td>{{ $value.variantTitle }}</td>
+                        <td>{{ $value.quantity }}</td>
+                        <td><span style=" color: #FF5555 !important;">{{ $value.proAllPrice.toFixed(2) }}</span> USD</td>
                     </tr>
                     {{/each}}
                 </tbody>
-            </table>
+              </table>
         </div>
         {{ if orderStatus!="A"&& orderStatus!="C" && orderStatus!="Z"}}
         <div class="logistics " style="width: 800px; height: 32px; line-height: 32px; margin-top: 10px;">
@@ -175,7 +182,7 @@
 
 
         {{ if ordConsignee!=null }}
-        <div class="" style="margin-top: 20px; width: 150px; color: #333333; font-weight: bold;" i18n_Text="OrderDetails.orderModule.div.Recipients">收件人信息</div>
+        <div class="" style="margin-top: 20px; color: #333333; font-weight: bold;" i18n_Text="OrderDetails.orderModule.div.Recipients">收件人信息</div>
         <hr style=" margin:0px !important;margin-top:10px !important;display:block;" />
         <div class="">
             <div class="top-one">
@@ -250,7 +257,7 @@
 
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Order/QueryOrderByOrderId",
+                url: BackgroundDomain + "/api/Order/QueryOrderByOrderId",
                 contentType: "application/json;",
                 data: JSON.stringify(orderId),
                 dataType: "json",
@@ -267,7 +274,7 @@
 
             // 绑定页面
             function Binding(data) {
-              /*  console.log(data);*/
+                /*  console.log(data);*/
                 data.LangId = id;
                 //计算商品总价格
                 var total = 0;
@@ -287,7 +294,7 @@
             $(document).on('click', '.zixun', function () {
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Order/ConsultingPrice",
+                    url: BackgroundDomain + "/api/Order/ConsultingPrice",
                     contentType: "application/json;",
                     data: JSON.stringify(orderId),
                     dataType: "json",
@@ -318,7 +325,7 @@
                 //如果没有选择运费则不让继续操作付款
                 if (price == 0) {
                     if (id == "zh_cn") {
-                        message.run("请选择物流报价", "","error");
+                        message.run("请选择物流报价", "", "error");
                     }
                     else if (id == "en_us") {
                         message.run("Abnormal Payment!", "Please select freight first", "error");
@@ -327,7 +334,7 @@
                 }
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Order/PaypalPayView",
+                    url: BackgroundDomain + "/api/Order/PaypalPayView",
                     contentType: "application/json;",
                     data: JSON.stringify(orderId),
                     dataType: "json",
@@ -353,7 +360,7 @@
             $(document).on('click', '.zuofie', function () {
                 $.ajax({
                     type: "post",
-                    url:BackgroundDomain + "/api/Order/InvalidateOrder",
+                    url: BackgroundDomain + "/api/Order/InvalidateOrder",
                     contentType: "application/json;",
                     data: JSON.stringify(orderId),
                     dataType: "json",
@@ -388,7 +395,7 @@
             $(document).on('click', '.tuikuan', function () {
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Order/OrderApplyRefund",
+                    url: BackgroundDomain + "/api/Order/OrderApplyRefund",
                     contentType: "application/json;",
                     data: JSON.stringify(orderId),
                     dataType: "json",
@@ -467,7 +474,7 @@
                         $.ajax({
                             type: "post",
                             contentType: "application/json;",
-                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            url: BackgroundDomain + '/api/Price/SelectPrice',
                             data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
                             success: function (msg) {
                                 /*       location.reload();*/
@@ -536,7 +543,7 @@
                         $.ajax({
                             type: "post",
                             contentType: "application/json;",
-                            url: BackgroundDomain +'/api/Price/SelectPrice',
+                            url: BackgroundDomain + '/api/Price/SelectPrice',
                             data: JSON.stringify({ "Aging": aging, "OrderId": orderid }),
                             success: function (msg) {
                                 /*       location.reload();*/
@@ -596,4 +603,5 @@
     </script>
 
 </body>
+
 </html>

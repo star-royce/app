@@ -52,6 +52,11 @@ layui.define(["i18n", "element", "layer", "jquery"], function (exports) {
             }
             var ele = element;
             if (options.isIframe) ele = parent.layui.element;
+            // ele.tabAdd('layuiminiTab', {
+            //     title: '<span class="layuimini-tab-active"></span><span>' + options.title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
+            //     , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + options.href + '"></iframe>'
+            //     , id: options.tabId
+            // });
             var content = '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + options.href + '"></iframe>'
             if (options.href.includes("ImportCommodity")) {
                 console.log("include ImportCommodity, set id")
@@ -59,8 +64,8 @@ layui.define(["i18n", "element", "layer", "jquery"], function (exports) {
             }
             ele.tabAdd('layuiminiTab', {
                 title: '<span class="layuimini-tab-active"></span><span>' + options.title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
-                , 
-                content: content, 
+                ,
+                content: content,
                 id: options.tabId
             });
             $('.layuimini-menu-left').attr('layuimini-tab-tag', 'add');
@@ -259,7 +264,7 @@ layui.define(["i18n", "element", "layer", "jquery"], function (exports) {
                         $("#bindShopify").hide();
                         $("#addProduct").show();
                     }
-                } catch (e) {}
+                } catch (e) { }
 
             });
 

@@ -55,3 +55,31 @@ window.GetRequest = (function (key) {
     var value = theRequest[key];
     return value;
 });
+
+        function setCookie(cname,cvalue,exdays)
+        {
+          var d = new Date();
+          d.setTime(d.getTime()+(exdays*24*60*60*1000));
+          var expires = "expires="+d.toGMTString();
+          var domain = "";
+          if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
+            domain = ";domain=localhost"
+        }
+        var path = "";
+          if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
+            path = ";path=/"
+        }
+          document.cookie = cname + "=" + cvalue + ";" + expires+domain+path;
+        }
+
+        function getCookie(cname)
+        {
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i=0; i<ca.length; i++) 
+          {
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+          }
+          return "";
+        }

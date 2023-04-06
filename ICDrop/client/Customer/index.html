@@ -230,6 +230,14 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        .layui-menu.layui-dropdown-menu
+        {
+            max-height: 400px;
+        }
+        .layui-dropdown.layui-border-box.layui-panel.layui-anim.layui-anim-downbit
+        {
+            overflow: auto;
+        }
     </style>
     <script type="text/javascript">
         //window.$crisp = [];
@@ -291,6 +299,16 @@
 
                 <form class="layui-form" action="openboarding()">
                     <ul class="layui-nav layui-layout-right">
+
+                        <li class="layui-nav-item" lay-unselect>
+                            <div class="layui-btn-container">
+                                <button class="layui-btn  currency" style="background-color: White; color: rgba(5, 5, 5, 0.7); ">
+                                    <span id="currency">USD-1</span>
+                                    <i class="layui-nav-more"></i>
+                                </button>
+                            </div>
+                        </li>
+
                         <li class="layui-nav-item" lay-unselect>
                             <div class="layui-btn-container">
                                 <button class="layui-btn  demo1" style="background-color: White; color: rgba(107, 107, 107, 0.7); visibility: hidden; ">
@@ -401,6 +419,44 @@
                     location.reload();
                 }
             });
+
+
+
+
+            var currency= layui.data('currency');
+            if (currency.currency) {
+                $("#currency").text(currency.currency.title);
+            }else
+            {
+                layui.data('currency', {
+                    key: 'currency'
+                    , value: {title:"USD-1",id:"USD"}
+                });
+            }
+          $.ajax({
+            type: 'get',
+            url: BackgroundDomain + '/api/product/GetLatestExchangeRate',
+            success: function (data) {
+                var currencyarr =[];
+            for (let index = 0; index < data.length; index++) {
+                const element = data[index];
+                currencyarr.push({title:element.currency+"-"+element.rates,id:element.currency});
+            }
+                dropdown.render({
+                elem: '.currency'
+                , data: currencyarr
+                , click: function (obj) {
+                    $("#currency").text(obj.title);
+                    layui.data('currency', {
+                        key: 'currency'
+                        , value: obj
+                    });
+                    location.reload();
+                }
+            });
+
+            },
+          })
 
 
             var options = {

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
 </head>
+
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -33,7 +35,8 @@
 
 
                             <div class="layui-inline">
-                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                             </div>
                         </div>
                     </form>
@@ -71,7 +74,7 @@
                 method: "post",
                 contentType: "application/json;",
                 elem: '#currentTableId',
-                url: BackgroundDomain +'/api/User/QueryUserList',
+                url: BackgroundDomain + '/api/User/QueryUserList',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
@@ -183,7 +186,7 @@
 
                         $.ajax({
                             type: "post",
-                            url: BackgroundDomain +"/api/User/DeleteUser",
+                            url: BackgroundDomain + "/api/User/DeleteUser",
                             contentType: "application/json;",
                             data: JSON.stringify(dto_obj),
                             dataType: "json",
@@ -220,7 +223,7 @@
                 form.val("formEditUser", {
                     "UserName": data.userName,
                     "TokenKey": data.tokenKey,
-                    "userStatus": userStatus ,
+                    "userStatus": userStatus,
                 });
 
                 form.on('submit(saveBtn)', function (massage) {
@@ -231,15 +234,13 @@
                     dto_obj.UserName = massage.field.UserName;
                     dto_obj.TokenKey = massage.field.TokenKey;
                     dto_obj.userStatus = 0;
-                    if (!massage.field.userStatus || massage.field.userStatus!='on') {
+                    if (!massage.field.userStatus || massage.field.userStatus != 'on') {
                         dto_obj.userStatus = 1;
                     }
-
-debugger
                     $.ajax({
                         type: "post",
                         contentType: "application/json;",
-                        url: BackgroundDomain +'/api/User/ModifyUser',
+                        url: BackgroundDomain + '/api/User/ModifyUser',
                         data: JSON.stringify(dto_obj),
                         async: false,//同步
                         success: function (msg) {
@@ -266,7 +267,8 @@ debugger
             <div class="layui-form-item">
                 <label class="layui-form-label required">用户名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名称不能为空" placeholder="请输入用户名称" value="" class="layui-input">
+                    <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名称不能为空"
+                        placeholder="请输入用户名称" value="" class="layui-input">
                 </div>
             </div>
 
@@ -279,7 +281,8 @@ debugger
             <div class="layui-form-item">
                 <label class="layui-form-label">用户状态</label>
                 <div class="layui-input-block">
-                    <input type="checkbox" checked="" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="正常|失效">
+                    <input type="checkbox" checked="" name="userStatus" lay-skin="switch" lay-filter="switchTest"
+                        lay-text="正常|失效">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -290,4 +293,5 @@ debugger
         </form>
     </div>
 </body>
+
 </html>

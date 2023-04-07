@@ -204,30 +204,10 @@ layui.define(["i18n", "element", "laytpl", "jquery"], function (exports) {
          * 监听
          */
         listen: function () {
-
-            /**
-             * 菜单模块切换
-             */
-            //$('body').on('click', '[data-menu]', function () {
-            //   // debugger
-            //    var loading = layer.load(0, { shade: false, time: 2 * 1000 });
-            //    var menuId = $(this).attr('data-menu');
-            //    // header
-            //    $(".layuimini-header-menu .layui-nav-item.layui-this").removeClass('layui-this');
-            //    $(this).addClass('layui-this');
-            //    // left
-            //    $(".layuimini-menu-left .layui-nav.layui-nav-tree.layui-this").addClass('layui-hide');
-            //    $(".layuimini-menu-left .layui-nav.layui-nav-tree.layui-this.layui-hide").removeClass('layui-this');
-            //    $("#" + menuId).removeClass('layui-hide');
-            //    $("#" + menuId).addClass('layui-this');
-            //    layer.close(loading);
-            //});
-
             /**
              * 菜单缩放
              */
             $('body').on('click', '.layuimini-site-mobile', function () {
-                debugger
                 var loading = layer.load(0, { shade: false, time: 2 * 1000 });
                 var isShow = $('.layuimini-tool [data-side-fold]').attr('data-side-fold');
                 if (isShow == 1) { // 缩放
@@ -250,7 +230,6 @@ layui.define(["i18n", "element", "laytpl", "jquery"], function (exports) {
              * 菜单缩放
              */
             $('body').on('click', '[data-side-fold]', function () {
-                debugger
                 var loading = layer.load(0, { shade: false, time: 2 * 1000 });
                 var isShow = $('.layuimini-tool [data-side-fold]').attr('data-side-fold');
                 if (isShow == 1) { // 缩放

@@ -271,7 +271,7 @@
                     <input type="text" name="authcode"
                         i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off"
                         lay-verify="required|captcha" class="layui-input  Verification-Code authcode" id="authcode">
-                    <input type="button" style="color: #ffffff; font-size: 13px; "
+                    <input id="register" type="button" style="color: #ffffff; font-size: 13px; "
                         i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
                 </div>
                 <div class="layui-form-item">
@@ -317,7 +317,7 @@
                         i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off"
                         lay-verify="required|captcha" class="layui-input  Verification-Code up_authcode"
                         id="up_authcode">
-                    <input type="button" style="color: #ffffff; font-size: 15px; "
+                    <input id="forgot" type="button" style="color: #ffffff; font-size: 15px; "
                         i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
                 </div>
                 <div class="layui-form-item">
@@ -814,21 +814,29 @@
         var btn;
         function sendCode(thisBtn) {
             var user = new Object();
-            user.Email = document.getElementById('username').value;
-            if (user.Email == "") {
+            var password = ""
+            if (thisBtn.id == "register") {
+                user.Email = document.getElementById('username').value;
+                if (user.Email == "") {
+                    layer.msg('Email address cannot be empty！');
+                    return false;
+                }
+                password = document.getElementById('password').value;
+                if (password == "") {
+                    layer.msg('Password cannot be empty！');
+                    return false;
+                }
+            } else if (thisBtn.id == "forgot") {
                 user.Email = document.getElementById('up_username').value;
-            }
-            if (user.Email == "") {
-                layer.msg('Email address cannot be empty！');
-                return false;
-            }
-            var password = document.getElementById('password').value;
-            if (password == "") {
+                if (user.Email == "") {
+                    layer.msg('Email address cannot be empty！');
+                    return false;
+                }
                 password = document.getElementById('up_password').value;
-            }
-            if (password == "") {
-                layer.msg('Password cannot be empty！');
-                return false;
+                if (password == "") {
+                    layer.msg('Password cannot be empty！');
+                    return false;
+                }
             }
 
             btn = thisBtn;

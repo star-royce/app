@@ -313,6 +313,17 @@ label {
     border-bottom: 1px dashed #DDDDDD;
 }
 
+
+.body_href_font {
+    float: left;
+    width: 33%;
+    height: 63px;
+    line-height: 63px;
+    /* text-align: center;*/
+    border-bottom: 1px dashed #DDDDDD;
+    cursor: pointer
+}
+
 /*我的店铺列表大的DIv*/
 .MyShop {
     margin: 50px 40px 240px 40px;

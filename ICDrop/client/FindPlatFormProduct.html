@@ -200,79 +200,6 @@
                 }
             });
 
-            // 监听搜索操作（抓取平台产品）
-            form.on('submit(data-import-btn)', function (data) {
-                var result = JSON.stringify(data.field);
-                obj = $.parseJSON(result);
-
-                if (obj.Url == "") {
-                    message.run($.i18n.prop('Import.Failed'), $.i18n.prop('IsEmpty'), "error");
-                    return false;
-                }
-                var myMsg = layer.msg("loading...", {
-                    icon: 16,
-                    time: -1
-                })
-                $.ajax({
-                    type: "post",
-                    url: BackgroundDomain + "/api/Product/QueryGrabProduct",
-                    contentType: "application/json;",
-                    data: result,
-                    dataType: "json",
-                    success: function (e) {
-                        layer.close(myMsg);//手动关闭
-                        if (e.code = 1) {
-                            message.run($.i18n.prop('Import.Complete'));
-                            //如果是第一次添加商品，则显示下载产品提示
-                            var NowTime = new Date(getNowTime());
-                            var CustomerTime = new Date(YDHCustomer.CreateTime);
-                            if (CustomerTime.getFullYear() == NowTime.getFullYear()
-                                && CustomerTime.getMonth() == NowTime.getMonth()
-                                && CustomerTime.getDate() == NowTime.getDate()) {
-                                if (!YDHCustomer.ImportHint || YDHCustomer.ImportHint != "1") {
-                                    $(".AddSuccessMessage").show();
-                                    layui.data('YDH-Customer', {
-                                        key: 'ImportHint'
-                                        , value: "1"
-                                    });
-                                    YDHCustomer = layui.data('YDH-Customer');
-                                }
-                            }
-                            $(".schedule-view").show();
-                            var addProductList = document.getElementById("schedule-body");
-                            var addProduct = document.createElement("div");
-                            addProduct.setAttribute("class", "AddProduct");
-                            addProductList.appendChild(addProduct);
-                            var sussessimg = document.createElement("img");
-                            sussessimg.setAttribute("src", "../../images/hint/success.png");
-                            sussessimg.setAttribute("style", "margin-right:14px;float:left;margin-top:30px;");
-                            addProduct.appendChild(sussessimg);
-                            var addproductimg = document.createElement("img");
-                            addproductimg.setAttribute("src", e.dto.indexPicture);
-                            addproductimg.setAttribute("style", "margin-right:10px;width:64px;height:64px;float:left;margin-top:10px;");
-                            addProduct.appendChild(addproductimg);
-                            var addproducttitle = document.createElement("div");
-                            addproducttitle.innerHTML = e.dto.productTitle;
-                            addproducttitle.setAttribute("class", "AddProductTitle");
-                            addProduct.appendChild(addproducttitle);
-                            return false;
-                        } else {
-                            message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
-                            return false;
-                        }
-                    },
-                    error: function (jqXHR) {
-                        layer.close(myMsg);//手动关闭
-                        message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
-                        return false;
-                    }
-                });
-
-
-                return false;
-            });
-
-
             var SerchproductInfo = new Object();
             //查找出该客户（管理员）的进口商品信息
             QueryImportProduct(count, SerchproductInfo);
@@ -410,7 +337,6 @@
             $(".schedule-shrink").show();
             $(".schedule-view").hide();
         }
-
 
         function QueryImportProduct(count, SerchproductInfo) {
             var myMsg = layer.msg("loading...", {

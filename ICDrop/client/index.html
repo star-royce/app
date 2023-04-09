@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="/css/themes/default.css" media="all">
     <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../../css/Message.css?v=2" media="all">
 
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -451,23 +452,24 @@
     <script src="/js/web-template.js"></script>
     <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
     <script src="/js/web-diff.js"></script>
+    <script src="/js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
     <script>
 
         var app = null;
         var element;
         var miniTab;
 
-        layui.use(['i18n', 'form', 'app', 'layer', 'miniAdmin', 'miniTongji', 'miniTab', 'element'], function () {
+        layui.use(['i18n', 'form', 'app', 'layer', 'message', 'miniAdmin', 'miniTongji', 'miniTab', 'element'], function () {
 
             layer = layui.layer,
                 form = layui.form,
                 miniAdmin = layui.miniAdmin,
                 dropdown = layui.dropdown,
-
                 i18n = layui.i18n;
             element = layui.element;
             miniTab = layui.miniTab,
                 app = layui.app;
+            message = layui.message;
             // 权限
             app.Load("client");
 
@@ -622,37 +624,10 @@
                     success: function (e) {
                         layer.close(myMsg);//手动关闭
                         if (e.code = 1) {
-                            var tabId = "/share/ImportCommodity.html";
-                            title = "Edit";
-                            var isexit = miniTab.check(tabId, true);
-                            if (!isexit) {
-                                miniTab.create({
-                                    tabId: tabId,
-                                    href: tabId,
-                                    title: title,
-                                    isIframe: false,
-                                    maxTabNum: 20,
-                                });
-                            }
-                            if (!isexit) {
-                                parent.layui.element.tabAdd('layuiminiTab', {
-                                    title: '<span class="layuimini-tab-active"></span><span>' + title + '</span><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
-                                    , content: '<iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"   src="' + tabId + '"></iframe>'
-                                    , id: tabId
-                                });
-                            } else {
-                                var iframes = document.querySelectorAll("iframe");
-                                for (var i = 0; i < iframes.length; i++) {
-                                    if (iframes[i].getAttribute("src").includes("ImportCommodity.html")) {
-                                        var fn = iframes[i].contentWindow["btnSearch"];
-                                        if (fn) {
-                                            fn();
-                                        }
-                                    }
-                                }
-                            }
-                            parent.layui.element.tabChange('layuiminiTab', tabId);
-                            layer.msg('Success！');
+                            CountImportedProduct()
+                            return false;
+                        } else {
+                            message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
                             return false;
                         }
                     },
@@ -748,6 +723,33 @@
                 });
             }
         });
+
+        function CountImportedProduct() {
+            var myMsg = layer.msg("loading...", {
+                icon: 16,
+                time: -1
+            })
+            var count = 0
+            var dto_obj = new Object();
+            dto_obj.page = 1;
+            dto_obj.limit = 1;
+            dto_obj.dto = new Object();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain + '/api/Product/QueryImportProductList',
+                data: JSON.stringify(dto_obj),
+                success: function (msg) {
+                    layer.close(myMsg);//手动关闭
+                    count = msg.count;
+                    var tips = "A new item has been added to your Import List. You now have " + count +
+                        " items in your Import List."
+                    message.run(tips);
+                }
+            })
+            return count;
+        }
+
 
         // 获取店铺信息
         function GetShopifytest(element, url, type, title, data) {

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title></title>
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="/css/public.css" media="all">
 
 </head>
+
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -36,7 +38,8 @@
                                     <input type="text" name="email" autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-inline">
-                                    <button type="submit" i18n_Text="search" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                    <button type="submit" i18n_Text="search" class="layui-btn layui-btn-primary"
+                                        lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +89,7 @@
                 contentType: "application/json;",
                 height: 630,
                 elem: '#currentTableId', //指定原始表格元素选择器（推荐id选择器）
-                url: BackgroundDomain +'/api/Customer/GetCreditCustomerList',//数据接口
+                url: BackgroundDomain + '/api/Customer/GetCreditCustomerList',//数据接口
                 toolbar: '#toolbarDemo',//开启表格头部工具栏区域，该参数支持四种类型值：
                 defaultToolbar: ['filter', 'exports', 'print', { //该参数可自由配置头部工具栏右侧的图标按钮
                     title: '提示',
@@ -97,7 +100,7 @@
                     { type: "checkbox", width: 50 },
                     { type: "numbers", width: 50, title: '序号' },
                     { field: 'id', width: 120, title: 'ID', hide: true },
-                    { field: 'email', width: 320, title: '店铺' },
+                    { field: 'email', width: 320, title: '账号' },
                     { field: 'registTime', width: 180, title: '注册时间' },
                     { field: 'balance', width: 180, title: '余额' },
                     { field: 'creditAmout', width: 180, title: '赊账总额度' },
@@ -110,8 +113,7 @@
                 limits: [10, 15, 20, 25, 50, 100],//每页条数的选择项
                 limit: 15,//每页显示的条数
                 page: true, //开启分页
-                done: function (res, curr, count)
-                {
+                done: function (res, curr, count) {
                     // 上面的表格执行完成出来在国际化
                     i18n.loadProperties(id);
                 }
@@ -168,7 +170,7 @@
                     //动态向表传递赋值
                     search_shopifyValue(obj, checkStatus);
                 }
-            
+
             });
             //监听工具条
             table.on('tool(currentTableFilter)', function (obj) {
@@ -227,7 +229,7 @@
                         type: 'asc'
                     },
                     sort: true,
-                    url: BackgroundDomain +'/api/Customer/GetCustomerShopify',//数据接口
+                    url: BackgroundDomain + '/api/Customer/GetCustomerShopify',//数据接口
                     cols: [[  //表头
                         { field: 'gnum', width: 80, title: '序号12', type: 'numbers' },
                         { field: 'id', width: 100, title: 'id', hide: true },
@@ -256,7 +258,7 @@
                     $.ajax({
                         type: "post",
                         contentType: "application/json;",
-                        url: BackgroundDomain +'/api/Customer/ModiCusCustomerAccount',
+                        url: BackgroundDomain + '/api/Customer/ModiCusCustomerAccount',
                         data: JSON.stringify(dto_obj),
                         success: function (msg) {
                             console.log(msg);
@@ -299,7 +301,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">充值金额：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="balance" lay-verify="required" lay-reqtext="客户金额必须输入" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="balance" lay-verify="required" lay-reqtext="客户金额必须输入" placeholder="请输入"
+                            autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item" style="margin-top:40px">
@@ -311,4 +314,5 @@
         </div>
     </div>
 </body>
+
 </html>

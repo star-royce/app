@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Anderdrop</title>
@@ -10,21 +11,27 @@
     <link rel="stylesheet" href="/css/public.css" media="all">
     <style>
         .layui-table-view .layui-table td {
-        height:100px;
+            height: 100px;
         }
-   
+
         .laytable-cell-1-0-4 {
-        padding:0px;
+            padding: 0px;
         }
+
         .layui-table-cell {
             line-height: 17px !important;
             height: auto;
-          /*  overflow: visible;*/
-          /*  text-overflow: inherit;*/
+            /*  overflow: visible;*/
+            /*  text-overflow: inherit;*/
             white-space: normal;
+        }
+
+        .layui-form-label {
+            width: 140px !important;
         }
     </style>
 </head>
+
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -78,7 +85,7 @@
                                     <input type="text" name="WaybillCode" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
-                            <div class="layui-inline">
+                            <!-- <div class="layui-inline">
                                 <label class="layui-form-label">币种</label>
                                 <div class="layui-input-inline">
                                     <select id="currency" name="currency" lay-search lay-verify="">
@@ -92,11 +99,13 @@
                                     <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="" />
                                 </div>
 
-                            </div>
+                            </div> -->
 
                             <div class="layui-inline">
-                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
-                                <button  class="layui-btn layui-btn-primary" lay-submit lay-filter="data-restore-btn"> 还 原</button>
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                <button class="layui-btn layui-btn-primary" lay-submit lay-filter="data-restore-btn"> 还
+                                    原</button>
                             </div>
                         </div>
                     </form>
@@ -140,7 +149,7 @@
                 table = layui.table;
             app = layui.app;
             app.Load("manage");
-      
+
 
             var entity = new Object();
             var ordstatus = {};
@@ -159,7 +168,7 @@
                 //动态获取下拉选项的接口，返回数据主要是id+name
                 type: "post",
                 contentType: "application/json;",
-                url: BackgroundDomain +'/api/Order/QueryOrderStatusList',
+                url: BackgroundDomain + '/api/Order/QueryOrderStatusList',
                 data: JSON.stringify(entity),
                 success: function (data) {
                     let str = "<option value=''>全部</option>";
@@ -178,10 +187,10 @@
 
             table.render({
                 method: "post",
-                height: 650 ,
+                height: 650,
                 contentType: "application/json;",
                 elem: '#currentTableId',
-                url: BackgroundDomain +'/api/Order/QueryOrderListFromManage',
+                url: BackgroundDomain + '/api/Order/QueryOrderListFromManage',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
@@ -194,25 +203,25 @@
                     { field: 'id', width: 80, title: '订单产品ID', hide: true },
                     { field: 'orderId', width: 80, title: '订单ID', hide: true },
                     { templet: imagebox, width: 60, title: '图片' },
-                    { field: 'picture', width: 170, title: 'Picture', hide: true  },
+                    { field: 'picture', width: 170, title: 'Picture', hide: true },
                     { field: 'email', width: 200, title: '客户邮箱' },
                     { field: 'shopifyOrderCode', width: 200, title: '店铺订单号' },
                     { field: 'countryCode', width: 200, title: '国家二字码' },
-                    { field: 'title', width: 180, title: '商品名称', hide: true  },
+                    { field: 'title', width: 180, title: '商品名称', hide: true },
                     { field: 'variantTitle', width: 120, title: '商品属性' },
                     { field: 'quantity', width: 60, title: '数量' },
                     { field: 'orderStatus', width: 90, title: '状态' },
-                    { field: 'itemUrl', width: 200, title: '链接', hide: true   },
-                    { field: 'freightAllPrice', width: 100, title: '总运费' },
-                    { field: 'taxesAllPrice', width: 100, title: '总税费' },
-                    { field: 'proAllPrice', width: 100, title: '报价' },
-                    { field: 'allCostPrice', width: 100, title: '总成本' },
-                    { field: 'totalPrice', width: 100, title: '总价' },
-                    { field: 'allProfitsPrice', width: 100, title: '总利润' },
-                    { field: 'grossProfitRate', width: 100, title: '毛利率' },
+                    { field: 'itemUrl', width: 200, title: '链接', hide: true },
+                    { templet: freightAllPrice, width: 100, title: '总运费' },
+                    { templet: taxesAllPrice, width: 100, title: '总税费' },
+                    { templet: proAllPrice, width: 100, title: '报价' },
+                    { templet: allCostPrice, width: 100, title: '总成本' },
+                    { templet: totalPrice, width: 100, title: '总价' },
+                    { templet: allProfitsPrice, width: 100, title: '总利润' },
+                    { templet: grossProfitRate, width: 100, title: '毛利率' },
                     { field: 'waybillCode', width: 200, title: '运单号' },
-                    { field: 'orderCode', width: 200, title: '订单号' },                    
-                    { title: '操作', minWidth: 150, toolbar: '#currentTableBar', fixed: 'right' } 
+                    { field: 'orderCode', width: 200, title: '订单号' },
+                    { title: '操作', minWidth: 150, toolbar: '#currentTableBar', fixed: 'right' }
                 ]],
                 limits: [10, 15, 20, 25, 50, 100],
                 limit: 15,
@@ -240,6 +249,7 @@
                         var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']");
                         tr.css("background-color", colors[num % 2]);
                     });
+
                 }
             });
 
@@ -385,7 +395,7 @@
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
-                        area: ['80%', '80%'],
+                        area: ['85%', '80%'],
                         content: '/manage/order/OrderDetail.html?orderId=' + checkStatus.data[0].orderId,
                     })
                 }
@@ -422,7 +432,7 @@
 
                     $.ajax({
                         type: "post",
-                        url:BackgroundDomain + "/api/Order/CreateMaBangOrder",
+                        url: BackgroundDomain + "/api/Order/CreateMaBangOrder",
                         contentType: "application/json;",
                         data: JSON.stringify(checkStatus.data[0].orderId),
                         dataType: "json",
@@ -505,7 +515,7 @@
                     var YDHConfig = layui.data('YDH');
                     var idstr = idsArray.join(',');//将数组元素连接起来以构建一个字符串
                     var method = 'post';//请求方法
-                    var url = BackgroundDomain +'/api/Order/ImportWaresList';//请求url
+                    var url = BackgroundDomain + '/api/Order/ImportWaresList';//请求url
                     var xhr = new XMLHttpRequest();//定义一个XMLHttpRequest对象
                     xhr.open(method, url, true);
                     xhr.responseType = 'blob';//设置ajax的响应类型为blob
@@ -535,7 +545,7 @@
                 //上传批量报价数据
                 else if (obj.event == 'UploadQuotation') {
                     var index = layer.open({
-                        title: '日志',
+                        title: '批量导入税率',
                         type: 2,
                         shade: 0.2,
                         maxmin: true,
@@ -555,8 +565,7 @@
                         return false;
                     }
                     //只有待处理状态的订单才能进行报价
-                    if (checkStatus.data[0].orderStatus != "C" && checkStatus.data[0].orderStatus != "A" && checkStatus.data[0].orderStatus != "S")
-                    {
+                    if (checkStatus.data[0].orderStatus != "C" && checkStatus.data[0].orderStatus != "A" && checkStatus.data[0].orderStatus != "S") {
                         layer.alert("只有待处理状态下的订单才能进行报价");
                         return false;
                     }
@@ -595,7 +604,7 @@
 
                     $.ajax({
                         type: "post",
-                        url:BackgroundDomain + "/api/Order/ConfirmQuote",
+                        url: BackgroundDomain + "/api/Order/ConfirmQuote",
                         contentType: "application/json;",
                         data: JSON.stringify(OrdWares),
                         dataType: "json",
@@ -620,7 +629,7 @@
                 var billRecordId = idstr;
                 $.ajax({
                     type: "post",
-                    url:BackgroundDomain + "/api/Order/CreditPayAllChk",
+                    url: BackgroundDomain + "/api/Order/CreditPayAllChk",
                     contentType: "application/json;",
                     data: JSON.stringify(billRecordId),
                     dataType: "json",
@@ -673,7 +682,7 @@
 
                     $.ajax({
                         type: "post",
-                        url:BackgroundDomain + "/api/Order/EmptyTaxesQuote",
+                        url: BackgroundDomain + "/api/Order/EmptyTaxesQuote",
                         contentType: "application/json;",
                         data: JSON.stringify(OrdWares),
                         dataType: "json",
@@ -685,7 +694,7 @@
                         }
                     });
                 }
-                
+
             });
             //图片赋值
             function imagebox(data) {
@@ -695,8 +704,54 @@
 
                 return img;
             }
+
+            function freightAllPrice(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.freightAllPrice;
+            }
+
+
+            function taxesAllPrice(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.taxesAllPrice;
+            }
+            function proAllPrice(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.proAllPrice;
+            }
+            function allCostPrice(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.allCostPrice;
+            }
+            function totalPrice(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.totalPrice;
+            }
+            function allProfitsPrice(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.allProfitsPrice;
+            }
+            function grossProfitRate(data) {
+                if (data.orderStatus == "A" || data.orderStatus == "C") {
+                    return "null"
+                }
+                return data.grossProfitRate;
+            }
         });
     </script>
 
 </body>
+
 </html>

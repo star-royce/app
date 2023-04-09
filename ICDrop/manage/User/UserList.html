@@ -237,6 +237,8 @@
                     if (!massage.field.userStatus || massage.field.userStatus != 'on') {
                         dto_obj.userStatus = 1;
                     }
+
+
                     $.ajax({
                         type: "post",
                         contentType: "application/json;",

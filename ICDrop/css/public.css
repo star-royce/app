@@ -1,16 +1,18 @@
-
 @font-face {
     font-family: 'poppins-bold';
     src: url('poppins/poppins-bold.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'poppins-light';
     src: url('poppins/poppins-light.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'poppins-medium';
     src: url('poppins/poppins-medium.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'poppins-semibold';
     src: url('poppins/poppins-semibold.ttf') format('truetype');
@@ -38,7 +40,7 @@ a {
 }
 
 /**必填红点 */
-.layuimini-form > .layui-form-item > .required:after {
+.layuimini-form>.layui-form-item>.required:after {
     content: '*';
     color: red;
     position: absolute;
@@ -49,21 +51,21 @@ a {
     right: 5px;
 }
 
-.layuimini-form > .layui-form-item > .layui-form-label {
+.layuimini-form>.layui-form-item>.layui-form-label {
     width: 120px !important;
 }
 
-.layuimini-form > .layui-form-item > .layui-input-block {
+.layuimini-form>.layui-form-item>.layui-input-block {
     margin-left: 150px !important;
 }
 
-    .layuimini-form > .layui-form-item > .layui-input-block > tip {
-        display: inline-block;
-        margin-top: 10px;
-        line-height: 10px;
-        font-size: 10px;
-        color: #a29c9c;
-    }
+.layuimini-form>.layui-form-item>.layui-input-block>tip {
+    display: inline-block;
+    margin-top: 10px;
+    line-height: 10px;
+    font-size: 10px;
+    color: #a29c9c;
+}
 
 /**搜索框*/
 .layuimini-container .table-search-fieldset {
@@ -91,4 +93,8 @@ a {
     -webkit-border-radius: 2em;
     -moz-border-radius: 2em;
     border-radius: 2em
+}
+
+.layui-form-label {
+    width: auto !important;
 }

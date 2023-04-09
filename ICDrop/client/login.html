@@ -282,7 +282,8 @@
                         i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off"
                         lay-verify="required|captcha" class="Verification-Code authcode" id="authcode">
                     <input type="button" style="color: #ffffff; font-size: 15px; "
-                        i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
+                        i18n_Attr="value:login.button.code1.value;" class="code1" data-type="1"
+                        onclick="sendCode(this)" />
                 </div>
                 <div class="layui-form-item">
                     <button style="color: #333333; font-size: 16px; "
@@ -318,7 +319,8 @@
                         i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off"
                         lay-verify="required|captcha" class="Verification-Code up_authcode" id="up_authcode">
                     <input type="button" style="color: #ffffff; font-size: 15px; "
-                        i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
+                        i18n_Attr="value:login.button.code1.value;" class="code1" data-type="2"
+                        onclick="sendCode(this)" />
                 </div>
                 <div class="layui-form-item">
                     <button i18n_Text="login.button.confirm.Text" style="color: #333333; font-size: 16px; "
@@ -838,6 +840,7 @@
             btn.disabled = true; //将按钮置为不可点击
             btn.style.backgroundColor = "#39B75D";
             btn.value = 'ReSend(' + nums + 'S)';
+            user.CaptchaType = $(thisBtn).attr("data-type")
             $.ajax({
                 type: "post",
                 url: BackgroundDomain + "/api/Login/GetVerificationCode",

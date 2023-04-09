@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Anderdrop</title>
@@ -33,9 +34,9 @@
             text-overflow: inherit;
             white-space: normal;
         }
-       
     </style>
 </head>
+
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -47,7 +48,8 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">产品标题</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="ProductTitle" name="ProductTitle" autocomplete="off" class="layui-input">
+                                    <input type="text" id="ProductTitle" name="ProductTitle" autocomplete="off"
+                                        class="layui-input">
                                 </div>
                             </div>
                             <!-- <div class="layui-inline">
@@ -60,13 +62,13 @@
                                     </select>
                                 </div>
                             </div> -->
-                            <div class="layui-inline">
+                            <!-- <div class="layui-inline">
                                 <label class="layui-form-label">汇率：</label>
                                 <div class="layui-input-inline">
                                     <input class="layui-input exchangeRate" id="exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="" />
                                 </div>
 
-                            </div>
+                            </div> -->
 
                         </div>
                     </form>
@@ -74,7 +76,8 @@
             </fieldset>
             <div class="layui-card-body">
                 <div class="layui-tab layui-tab-card">
-                    <ul class="layui-tab-title" style="padding-right: 30px;height: auto!important;white-space: normal!important;">
+                    <ul class="layui-tab-title"
+                        style="padding-right: 30px;height: auto!important;white-space: normal!important;">
                         <li class="layui-this">平台商品</li>
                         <li>客户自动化商品</li>
                         <li>商品分类</li>
@@ -96,7 +99,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">完成报价</label>
                                     <div class="layui-input-inline">
-                                        <select id="isCompletePurchase" name="isCompletePurchase" lay-search lay-verify="">
+                                        <select id="isCompletePurchase" name="isCompletePurchase" lay-search
+                                            lay-verify="">
                                             <option value="">全部</option>
                                             <option value="0">未完成</option>
                                             <option value="1">已报价</option>
@@ -113,7 +117,9 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button class="layui-btn layui-btn-primary" data-type="PlatformReload" id="but_PlatformReload" lay-submit lay-filter="data-search-btn" style="width: 90px">搜索</button>
+                                <button class="layui-btn layui-btn-primary" data-type="PlatformReload"
+                                    id="but_PlatformReload" lay-submit lay-filter="data-search-btn"
+                                    style="width: 90px">搜索</button>
 
                             </div>
                             <script type="text/html" id="PlatformOperation">
@@ -122,8 +128,7 @@
                                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="Operation-ViewPlatform">修改详情</a>
                             </script>
 
-                            <table class="layui-table" id="Product_Platform"
-                                   lay-filter="Product_Platform"></table>
+                            <table class="layui-table" id="Product_Platform" lay-filter="Product_Platform"></table>
                         </div>
 
 
@@ -146,15 +151,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button class="layui-btn layui-btn-primary" data-type="AutomationReload" id="but_AutomationReload" lay-submit lay-filter="Automation-search-btn" style="width: 90px">搜索</button>
+                                <button class="layui-btn layui-btn-primary" data-type="AutomationReload"
+                                    id="but_AutomationReload" lay-submit lay-filter="Automation-search-btn"
+                                    style="width: 90px">搜索</button>
                             </div>
 
                             <script type="text/html" id="AutomationOperation">
                                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="Operation-UpdayeAutomation">修改报价</a>
                             </script>
 
-                            <table class="layui-table" id="Product_Automation"
-                                   lay-filter="Product_Automation"></table>
+                            <table class="layui-table" id="Product_Automation" lay-filter="Product_Automation"></table>
                         </div>
 
                         <!--商品分类-->
@@ -164,10 +170,13 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">分类名称</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" id="catalogueName" name="catalogueName" autocomplete="off" class="layui-input">
+                                        <input type="text" id="catalogueName" name="catalogueName" autocomplete="off"
+                                            class="layui-input">
                                     </div>
                                 </div>
-                                <button class="layui-btn layui-btn-primary" data-type="catalogueReload" id="but_AutomationReload" lay-submit lay-filter="catalogue-search-btn" style="width: 90px">搜索</button>
+                                <button class="layui-btn layui-btn-primary" data-type="catalogueReload"
+                                    id="but_AutomationReload" lay-submit lay-filter="catalogue-search-btn"
+                                    style="width: 90px">搜索</button>
                             </div>
 
                             <script type="text/html" id="catalogueOperation">
@@ -180,8 +189,7 @@
                                 </div>
                             </script>
 
-                            <table class="layui-table" id="Product_catalogue"
-                                   lay-filter="Product_catalogue"></table>
+                            <table class="layui-table" id="Product_catalogue" lay-filter="Product_catalogue"></table>
                         </div>
 
                         <!--导入商品-->
@@ -192,14 +200,17 @@
                                     <input type="file" id="import" name="import" autocomplete="off">
                                 </div>
                             </div>
-                            <button class="layui-btn layui-btn-primary" data-type="import" id="but_define_import" lay-submit lay-filter="define_import-btn" style="width: 90px">确定导入</button>
+                            <button class="layui-btn layui-btn-primary"
+                                onclick="window.location.href=BackgroundDomain +'/api/Product/ImportProductTemplate'"
+                                style="width: 90px">导出模板</button>
+                            <button class="layui-btn layui-btn-primary" data-type="import" id="but_define_import"
+                                lay-submit lay-filter="define_import-btn" style="width: 90px">确定导入</button>
 
                             <script type="text/html" id="importOperation">
                                 <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
                             </script>
 
-                            <table class="layui-table" id="Product_import"
-                                   lay-filter="Product_import"></table>
+                            <table class="layui-table" id="Product_import" lay-filter="Product_import"></table>
                         </div>
                     </div>
                 </div>
@@ -254,16 +265,16 @@
                 method: "post",
                 contentType: "application/json;",
                 elem: '#Product_Platform'
-                , url: BackgroundDomain +'/api/Product/QueryImportProductList'
+                , url: BackgroundDomain + '/api/Product/QueryImportProductList'
                 , cols: [[ //标题栏
                     { type: "checkbox", width: 50 },
                     {
-                        title: '#', width: 50,collapse: true, children: [
+                        title: '#', width: 50, collapse: true, children: [
                             {
                                 title: 'sku'
                                 , method: "post"
                                 , contentType: "application/json;"
-                                , url: BackgroundDomain +'/api/Product/QueryManageProductPriceInfo'
+                                , url: BackgroundDomain + '/api/Product/QueryManageProductPriceInfo'
                                 , height: 500
                                 , cellMinHeight: 80
                                 , where: function (row) {
@@ -350,7 +361,7 @@
                 method: "post",
                 contentType: "application/json;",
                 elem: '#Product_Automation'
-                , url: BackgroundDomain +'/api/Automation/QueryAutomationList'
+                , url: BackgroundDomain + '/api/Automation/QueryAutomationList'
                 , cols: [[ //标题栏
                     { type: "checkbox", width: 50, hide: true },
                     { type: "numbers", width: 50, title: '序号' },
@@ -360,7 +371,7 @@
                                 title: 'sku'
                                 , method: "post"
                                 , contentType: "application/json;"
-                                , url: BackgroundDomain +'/api/Product/QueryManageProductPriceInfo'
+                                , url: BackgroundDomain + '/api/Product/QueryManageProductPriceInfo'
                                 , height: 500
                                 , cellMinHeight: 80
                                 , where: function (row) {
@@ -429,7 +440,7 @@
             var OnelevelProCatalogue;
             $.ajax({
                 type: "Get",
-                url: BackgroundDomain +"/api/Product/GetOnelevelProCatalogue",
+                url: BackgroundDomain + "/api/Product/GetOnelevelProCatalogue",
                 async: false,
                 success: function (data) {
                     OnelevelProCatalogue = data;
@@ -445,7 +456,7 @@
                 formData.append('file', this.files[0]);
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Product/ImportProduct",
+                    url: BackgroundDomain + "/api/Product/ImportProduct",
                     data: formData,
                     dataType: "json",
                     height: 700,
@@ -516,7 +527,7 @@
                 contentType: "application/json;",
                 elem: '#Product_catalogue'
                 , toolbar: '#toolbarDemo'
-                , url: BackgroundDomain +'/api/Product/QueryCatalogueList'
+                , url: BackgroundDomain + '/api/Product/QueryCatalogueList'
                 , cols: [[ //标题栏
                     { field: 'id', width: 0, title: '分类ID', hide: true },
                     { field: 'catalogueName', minwidth: 280, title: '分类名称' },
@@ -552,7 +563,7 @@
                 }
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Product/SubmitImportProduct",
+                    url: BackgroundDomain + "/api/Product/SubmitImportProduct",
                     contentType: "application/json;",
                     data: JSON.stringify(importData),
                     dataType: "json",
@@ -561,7 +572,7 @@
                             alert("导入成功！");
                             table.cache["Product_import"] = null;
                             table.reload('Product_import', { data: null });
-                           document.getElementById("import").value=''; 
+                            document.getElementById("import").value = '';
                             return;
                         }
                         return false;
@@ -602,12 +613,11 @@
                 //     }
                 // }
                 var dto_obj = new Object();
-                if ($.isEmptyObject($("#ProductTitle").val()) != true) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
-                // if ($.isEmptyObject($("#currency").val()) != true) { dto_obj.Currency = $("#currency").val(); }
-                if ($.isEmptyObject($("#exchangeRate").val()) != true) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
-                if ($.isEmptyObject(obj.isPutAway) != true) { dto_obj.isPutAway = obj.isPutAway; }
-                if ($.isEmptyObject(obj.isCompletePurchase) != true) { dto_obj.isCompletePurchase = obj.isCompletePurchase; }
-                if ($.isEmptyObject(obj.isCompleteExtend) != true) { dto_obj.isCompleteExtend = obj.isCompleteExtend; }
+                if ($("#ProductTitle").val()) { dto_obj.ProductTitle = $("#ProductTitle").val(); }
+                if ($("#exchangeRate").val()) { dto_obj.ExchangeRate = $("#exchangeRate").val(); }
+                if (obj.isPutAway) { dto_obj.isPutAway = obj.isPutAway; }
+                if (obj.isCompletePurchase) { dto_obj.isCompletePurchase = obj.isCompletePurchase; }
+                if (obj.isCompleteExtend) { dto_obj.isCompleteExtend = obj.isCompleteExtend; }
 
                 //执行搜索重载
                 table.reload('Product_Platform', {
@@ -668,7 +678,7 @@
 
                     $.ajax({
                         type: "post",
-                        url: BackgroundDomain +"/api/Product/UpdateProductStatus",
+                        url: BackgroundDomain + "/api/Product/UpdateProductStatus",
                         contentType: "application/json;",
                         data: JSON.stringify(Product),
                         dataType: "json",
@@ -694,7 +704,7 @@
                     Product.IsPutAway = "1";
                     $.ajax({
                         type: "post",
-                        url: BackgroundDomain +"/api/Product/UpdateProductStatus",
+                        url: BackgroundDomain + "/api/Product/UpdateProductStatus",
                         contentType: "application/json;",
                         data: JSON.stringify(Product),
                         dataType: "json",
@@ -783,7 +793,7 @@
 
                     $.ajax({
                         type: "Get",
-                        url: BackgroundDomain +"/api/Product/DeleteCatalogue?id=" + data.id,
+                        url: BackgroundDomain + "/api/Product/DeleteCatalogue?id=" + data.id,
                         async: false,
                         success: function (str) {
                             if (str.data == 1) {
@@ -876,4 +886,5 @@
         }
     </script>
 </body>
+
 </html>

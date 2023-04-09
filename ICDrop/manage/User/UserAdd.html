@@ -20,9 +20,9 @@
 <body>
     <form class="layui-form" action="">
         <div class="layui-form-item">
-            <label class="layui-form-label required">用户代码</label>
+            <label class="layui-form-label required">登录账号</label>
             <div class="layui-input-block">
-                <input type="text" name="UserCode" lay-verify="required" lay-reqtext="用户代码不能为空" placeholder="请输入用户代码"
+                <input type="text" name="UserCode" lay-verify="required" lay-reqtext="登录账号不能为空" placeholder="请输入登录账号"
                     value="" class="layui-input">
             </div>
         </div>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">tokenKey</label>
+            <label class="layui-form-label">Token</label>
             <div class="layui-input-block">
                 <input type="text" name="TokenKey" value="" class="layui-input">
             </div>
@@ -64,6 +64,8 @@
             //监听提交
             form.on('submit(saveBtn)', function (data) {
                 var postData = data.field;
+                /*postData.password = $.md5(postData.password);*/
+
                 console.log(JSON.stringify(data));
                 console.log(JSON.stringify(data.field));
                 $.ajax({

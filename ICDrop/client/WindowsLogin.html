@@ -272,7 +272,8 @@
                         i18n_Attr="placeholder:login.button.Verification.Code.placeholder;" autocomplete="off"
                         lay-verify="required|captcha" class="layui-input  Verification-Code authcode" id="authcode">
                     <input id="register" type="button" style="color: #ffffff; font-size: 13px; "
-                        i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
+                        i18n_Attr="value:login.button.code1.value;" class="code1" data-type="1"
+                        onclick="sendCode(this)" />
                 </div>
                 <div class="layui-form-item">
                     <button style="color: #ffffff; font-size: 16px; "
@@ -318,7 +319,8 @@
                         lay-verify="required|captcha" class="layui-input  Verification-Code up_authcode"
                         id="up_authcode">
                     <input id="forgot" type="button" style="color: #ffffff; font-size: 15px; "
-                        i18n_Attr="value:login.button.code1.value;" class="code1" onclick="sendCode(this)" />
+                        i18n_Attr="value:login.button.code1.value;" class="code1" data-type="2"
+                        onclick="sendCode(this)" />
                 </div>
                 <div class="layui-form-item">
                     <button i18n_Text="login.button.confirm.Text" style="color: #ffffff; font-size: 16px; "
@@ -657,7 +659,7 @@
                                 , value: username
                             });
                             if (!shop) {
-                                window.location.href = "/client/index.html";
+                                top.window.location.href = "/client/index.html";
                             } else {
                                 window.location.href = "/shopify/shopify_Welcome.html?shop=" + shop;
                             }
@@ -849,7 +851,7 @@
             if (user.Email == "") {
                 user.Email = document.getElementById('up_username').value;
             }
-
+            user.CaptchaType = $(thisBtn).attr("data-type");
             $.ajax({
                 type: "post",
                 url: BackgroundDomain + "/api/Login/GetVerificationCode",

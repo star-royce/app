@@ -85,14 +85,14 @@
 /*标题*/
 .title {
     width: 1016px;
-    height: 42px;
+    height: auto;
     font-size: 16px;
 
     font-weight: bold;
     line-height: 24px;
     color: #333333;
     opacity: 1;
-    margin-left: 30px;
+    /* margin-left: 30px; */
 }
 
 /*运输相关的选择下拉框的大DIV*/

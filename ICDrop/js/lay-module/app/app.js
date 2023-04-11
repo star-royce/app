@@ -2,7 +2,7 @@
 
     var BackgroundDomain = "";
     if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
-        BackgroundDomain = "http://127.0.0.1:5921"
+        BackgroundDomain = "http://127.0.0.1:8081"
     }
 
     $ = layui.$;

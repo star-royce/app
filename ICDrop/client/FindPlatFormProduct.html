@@ -267,8 +267,8 @@
                 data: JSON.stringify(productInfo),
                 success: function (data) {
                     layer.close(myMsg);//手动关闭
-                    if (data.code == 1) {
-                        message.run($.i18n.prop('Import.Complete'));
+                    if (data.code == 1) { 
+                        CountImportedProduct()
                     } else {
                         message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
                     }
@@ -298,6 +298,34 @@
             window.open('productdetail.html?id=' + id + '&RoleName=Manage');
 
         }
+
+        function CountImportedProduct() {
+            var myMsg = layer.msg("loading...", {
+                icon: 16,
+                time: -1
+            })
+            var count = 0
+            var dto_obj = new Object();
+            dto_obj.page = 1;
+            dto_obj.limit = 1;
+            dto_obj.dto = new Object();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain + '/api/Product/QueryImportProductList',
+                data: JSON.stringify(dto_obj),
+                success: function (msg) {
+                    layer.close(myMsg);//手动关闭
+                    count = msg.count;
+                    var tips = "A new item has been added to your Import List. You now have " + count +
+                        " items in your Import List."
+                    message.run(tips);
+                }
+            })
+            return count;
+        }
+
+    
         //查看物流时效列表
         function ViewFreightList(FreightLine) {
 

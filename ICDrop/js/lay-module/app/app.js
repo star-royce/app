@@ -2,7 +2,7 @@
 
     var BackgroundDomain = "";
     if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
-        BackgroundDomain = "http://127.0.0.1:8081"
+        BackgroundDomain = "http://localhost:8081"
     }
 
     $ = layui.$;
@@ -146,9 +146,7 @@
     app.SignOut = function () {
         $.ajax({
             type: "post",
-            // TODO local test
-            // url: BackgroundDomain +"/api/Login/SignOut",
-            url: "https://app.anderdrop.com" + "/api/Login/SignOut",
+            url: BackgroundDomain +"/api/Login/SignOut",
             success: function () {
                 app.AuthorizationPage();
             }

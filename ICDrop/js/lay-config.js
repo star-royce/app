@@ -21,6 +21,7 @@ var BackgroundDomain = "https://app.anderdrop.com";
 //     BackgroundDomain = "http://localhost"
 // }
 
+
 layui.config({
     base: rootPath + "lay-module/",
     version: true

@@ -1,5 +1,28 @@
 ﻿body {}
 
+/* 添加了媒体查询，以适应小屏幕设备 */
+@media screen and (max-width: 1366px) {
+    /* 调整产品图像的大小和位置 */
+    .product-image img {
+      width: 100%;
+      margin-top: 50px;
+    }
+  
+    /* 设置产品标题和描述的字体大小 */
+    .product-title {
+      font-size: 24px;
+    }
+    .product-description {
+      font-size: 16px;
+    }
+  
+    /* 调整购买按钮的宽度和高度 */
+    .btn-buy {
+      width: 150px;
+      height: 50px;
+    }
+}
+
 /*最外面大的div*/
 .productInfo {
     width: 1620px;

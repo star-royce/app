@@ -2,16 +2,16 @@
 
 /*最外面大的div*/
 .productInfo {
-    width: 1620px;
+    max-width: 1200px;
+    width: 100%;
     background: #FFFFFF;
     opacity: 1;
     border-radius: 10px;
-    margin: 0 auto;
 }
 
 /*头部DIV*/
 .divtop {
-    margin-left: 50px;
+    /* margin-left: 50px; */
     padding-top: 46px;
 }
 
@@ -38,25 +38,21 @@
 
 /*价格显示部分*/
 .pricelist {
-    width: 1470px;
-    margin-left: 100px;
+    max-width: 1200px; /* 设置最大宽度 */
+    width: 100%; /* 使用百分比宽度 */
     margin-top: 20px;
     height: 554px;
 }
 
+
 /*图片部分*/
 .indexpicture {
-    width: 400px;
+    width: 35%;
     float: left;
     height: 494px;
     background-color: #ffffff;
 }
 
-/*大图*/
-.bigimg {
-    max-width: 400px;
-    max-height: 400px;
-}
 
 /*小图片列表*/
 .divimglist {
@@ -65,26 +61,33 @@
     width: 400px;
 }
 
+/*大图*/
+.bigimg {
+    max-width: 70%;
+    max-height: 400px;
+    margin-left: 30px;
+}
+
 /*小图片样式*/
 .smallimg {
+    width: 30%px;
     height: 62px;
-    width: 62px;
     margin-right: 9px;
     border: 1px solid #029803;
 }
 
 /*右边信息div样式*/
 .product-introduce {
-    width: 1040px;
-    height: 478px;
-    margin-left: 30px;
+    width: 65%;
+    height: auto;
+    /* margin-left: 30px; */
     float: right;
 
 }
 
 /*标题*/
 .title {
-    width: 1016px;
+    width: 95%;
     height: auto;
     font-size: 16px;
 
@@ -262,12 +265,11 @@
       height: auto;
     }
   
-    /* 设置产品标题和描述的字体大小 */
     .product-title {
-      font-size: 24px;
-    }
+        font-size: 2em; /* 在小屏幕设备上将标题字体大小调整为 2em */
+      }
     .product-description {
-      font-size: 16px;
+        font-size: 1em; /* 在小屏幕设备上将描述字体大小调整为 1em */
     }
   
     /* 调整购买按钮尺寸 */

@@ -29,29 +29,29 @@
         <div class="">
             <div class="top-one">
                 <div class="Column">
-                    <div> <span i18n_Text="OrderDetails.orderModule.div.shop">订单店铺</span>: </div>
+                    <div> <span i18n_Text="OrderDetails.orderModule.div.shop">shop</span>: </div>
                     <div style="font-size: 14px; color: #333333; font-family: Arial; font-weight: bold;">  {{customerShopify.shopifyShop}}</div>
                 </div>
                 <div class="Column">
-                    <div> <span i18n_Text="OrderDetails.orderModule.div.CreationTime">创建时间</span>: </div>
+                    <div> <span i18n_Text="OrderDetails.orderModule.div.CreationTime">Create date</span>: </div>
                     <div> {{orderTime}} </div>
                 </div>
             </div>
             <div class="top-one">
                 <div class="Column">
-                    <div><span i18n_Text="OrderDetails.orderModule.div.shopCode">订单店铺编号</span>: </div>
+                    <div><span i18n_Text="OrderDetails.orderModule.div.shopCode">order number</span>: </div>
                     <div style="font-size: 14px;">  {{shopifyOrderCode}}</div>
                 </div>
                 {{ if orderStatus!="A"&& orderStatus!="C" && orderStatus!="Z" && orderStatus!="D"  && paymentTime!=null }}
                 <div class="Column">
-                    <div> <span i18n_Text="OrderDetails.orderModule.div.PaymentTime">支付时间</span>: </div>
+                    <div> <span i18n_Text="OrderDetails.orderModule.div.PaymentTime">Paid Date</span>: </div>
                     <div> {{paymentTime}} </div>
                 </div>
                 {{/if}}
             </div>
             <div class="top-one">
                 <div class="Column">
-                    <div><span i18n_Text="OrderDetails.orderModule.div.OrderCode">订单编号</span> :</div>
+                    <div><span i18n_Text="OrderDetails.orderModule.div.OrderCode">Anderdrop order number</span> :</div>
                     <div style="font-size:14px;">
                         {{orderCode}}
                     </div>
@@ -60,7 +60,7 @@
             {{ if orderStatus=="Q" || orderStatus=="W"}}
             <div class="top-one">
                 <div class="Column">
-                    <div><span i18n_Text="OrderDetails.orderModule.div.Waybill">运单号</span> :</div>
+                    <div><span i18n_Text="OrderDetails.orderModule.div.Waybill">Way Bill</span> :</div>
                     <div style="font-size:14px;">
                         {{waybillCode}}
                         <img src="../../../images/button/copy.png" class="copyWaybill" style="margin-left:10px;cursor:pointer;" data-waybill="{{waybillCode}}" data-key="{{orderId}}" />
@@ -303,7 +303,7 @@
                             layer.msg("咨询操作成功，请耐性等待后台处理！");
                         }
                         else if (id == "en_us") {
-                            layer.msg("Consultation operation succeeded, please wait patiently for background processing!");
+                            layer.msg("Succeed! You can check it on the pending souring page.");
                         }
                         GetOrderList("inquiry", laypage);
 

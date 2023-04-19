@@ -345,34 +345,30 @@
                     // var attcount = Object.keys(att).length
                     // var width = Math.floor(40 / attcount)
                     for (var key in att) {
-                      if (key == "Size") {
+                      console.log('key: ' + key);
+                      if (key == "color") {
                         pricehtml +=
                           "<li  class='head_font'style='width: 15%;' >" +
                           key +
                           '<br></li>'
                       } else {
                         pricehtml +=
-                          "<li  class='head_font'style='width: 10%;' >" +
+                          "<li  class='head_font'style='width: 5%;' >" +
                           key +
                           '<br></li>'
                       }
                     }
-                  } else {
-                    pricehtml +=
-                      "<li  class='head_font'style='width:40%;' >" +
-                      $.i18n.prop('attribute') +
-                      '<br></li>'
                   }
                   pricehtml +=
                     "<li class='head_font'style='width:10%;' >" +
                     $.i18n.prop('productDetail.Stock') +
                     '<br></li>'
                   pricehtml +=
-                    "<li class='head_font'style='width:15%;' >" +
+                    "<li class='head_font'style='width:20%;' >" +
                     $.i18n.prop('Quantity') +
                     '<br></li>'
                   pricehtml +=
-                    "<li class='head_font'style='width:5%;' >" +
+                    "<li class='head_font'style='width:10%;' >" +
                     $.i18n.prop('Weight.kg') +
                     '<br></li>'
                   pricehtml +=
@@ -380,7 +376,7 @@
                     $.i18n.prop('cost.$') +
                     '<br></li>'
                   pricehtml +=
-                    "<li class='head_font'style='width:10%;'>" +
+                    "<li class='head_font'style='width:15%;'>" +
                     $.i18n.prop('freight.$') +
                     '<br></li>'
                   priceul.innerHTML = pricehtml
@@ -397,30 +393,25 @@
                     pricediv1.appendChild(priceul1)
                     var pricehtml1 = ''
                     pricehtml1 +=
-                      "<li class='price_body'style=''><img src='" +
+                      "<li class='price_body' style='width:5%;background: #FFFFFF;'><img src='" +
                       data.data[i].pictureUrl +
                       "' style='height:40px;width:40px;' referrerPolicy='no-referrer'><br></li>"
                     //将属性字段分隔成单个属性
                     var att1 = JSON.parse(data.data[i].attribute)
                     if (att1 != null) {
                       for (var key in att1) {
-                        if (key == "Size") {
+                        if (key == "color") {
                           pricehtml1 +=
                             "<li  class='price_body'style='width:15%;' >" +
                             att1[key] +
                             '<br></li>'
                         } else {
                           pricehtml1 +=
-                            "<li  class='price_body'style='width:10%;' >" +
+                            "<li  class='price_body'style='width:5%;' >" +
                             att1[key] +
                             '<br></li>'
                         }
                       }
-                    } else {
-                      pricehtml1 +=
-                        "<li  class='price_body'style='width:40%;'>" +
-                        data.data[i].attribute +
-                        '<br></li>'
                     }
                     pricehtml1 +=
                       "<li class='price_body'style='width:10%;' id='inventory" +
@@ -429,7 +420,7 @@
                       12 +
                       '<br></li>'
                     pricehtml1 +=
-                      "<li class='price_body'style='width:15%;'><div class='input-stack'><div class='add' onclick='upclick(" +
+                      "<li class='price_body'style='width:20%;'><div class='input-stack'><div class='add' onclick='upclick(" +
                       data.data[i].id +
                       ")'>+</div><input id = 'quantity" +
                       data.data[i].id +
@@ -443,7 +434,7 @@
                       data.data[i].id +
                       ")'>-</div></div></input><br></li>"
                     pricehtml1 +=
-                      "<li class='price_body'style='width:5%;'>" +
+                      "<li class='price_body'style='width:10%;'>" +
                       data.data[i].variantExtend.weight +
                       '<br></li>'
                     pricehtml1 +=
@@ -472,7 +463,7 @@
                       }
                     }
                     pricehtml1 +=
-                      "<li class='price_body'style='width:10%;'><div class='freight' id='freight" +
+                      "<li class='price_body'style='width:15%;'><div class='freight' id='freight" +
                       data.data[i].id +
                       "'>" +
                       freight +
@@ -487,7 +478,7 @@
               if (YDHConfig.Secret) {
                 var importdiv = document.createElement('div')
                 importdiv.setAttribute('class', 'importproduct')
-                div.appendChild(importdiv)
+                div1.appendChild(importdiv)
 
                 var importinput = document.createElement('input')
                 importinput.setAttribute('type', 'button')
@@ -503,25 +494,22 @@
 
               //描叙详情
               var descriptiondiv = document.createElement('div')
-              descriptiondiv.setAttribute(
-                'style',
-                'max-width:984px;margin:0px auto',
-              )
               divf.appendChild(descriptiondiv)
 
+              var div6x = document.createElement('div')
+              div6x.setAttribute('style', 'max-width:984px;margin-left:20px')
+              descriptiondiv.appendChild(div6x)
+              div6x.innerHTML = $.i18n.prop('Product.description')
+
               var div6 = document.createElement('div')
-              div6.setAttribute('style', 'max-width:984px;margin:30px auto')
-              divf.appendChild(div6)
+              div6.setAttribute('style', 'max-width:984px;margin-top:20px;margin-left:30px')
+              descriptiondiv.appendChild(div6)
 
-              var span = document.createElement('span')
-              descriptiondiv.appendChild(span)
-              span.setAttribute('style', 'font-size:21px;')
-              span.innerHTML = $.i18n.prop('Product.description')
+              // var span = document.createElement('span')
+              // descriptiondiv.appendChild(span)
+              // span.setAttribute('style', 'font-size:21px;')
+              // span.innerHTML = $.i18n.prop('Product.description')
 
-              //尾部分隔符
-              var fgbuttom = document.createElement('hr')
-              fgbuttom.setAttribute('class', 'buttom_rule')
-              descriptiondiv.appendChild(fgbuttom)
 
               var productdescription = new Object()
               productdescription.productId = id

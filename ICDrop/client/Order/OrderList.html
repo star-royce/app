@@ -18,7 +18,7 @@
         <div class="layuimini-main">
             <form action="" lay-filter="formTest" class="layui-form" style=" margin-top: 20px;width:100%;">
 
-                <div style="width: 36%; float: right; max-width: calc(100% - 875px);">
+                <div style="width: 30%; float: right;">
                     <input type="text" i18n_Attr="placeholder:Enter.order.number" name="OrderNumber"
                         placeholder="请输入订单号" autocomplete="off" class="OrderNumPut">
                     <button type="submit" lay-submit lay-filter="data-search-btn" class="searchOrder"><img
@@ -26,14 +26,13 @@
                 </div>
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin-top:20px;">
                     <ul class="layui-tab-title">
-                        <li class="layui-this" id="all" i18n_Text="all" style="width:108px;">All Order</li>
-
+                        <li class="layui-this" id="all" i18n_Text="all" style="width:50px;">All</li>
                         <li id="inquiry" i18n_Text="Wating.for.sourcing" style="width: 146px; ">Wating for sourcing</li>
-                        <!--<li id="pending" i18n_Text="pending">待处理</li>-->
+                        <li id="pending" i18n_Text="pending" style="width: 70px; ">Quoting</li>
                         <li id="unpaid" i18n_Text="unpaid" style=" width: 146px;">Waiting for payment</li>
-                        <li id="Processing" i18n_Text="In.Processing" style="width:144px;">In processing</li>
-                        <li id="transit" i18n_Text="transit" style="width:106px;">Shipped</li>
-                        <li id="sign" i18n_Text="sign" style="width:120px;">Fulfilled</li>
+                        <li id="Processing" i18n_Text="In.Processing" style="width:40px;">Paid</li>
+                        <li id="transit" i18n_Text="transit" style="width:70px;">Shipped</li>
+                        <li id="sign" i18n_Text="sign" style="width:70px;">Fulfilled</li>
                         <!--<li id="applyRefund" i18n_Text="applyRefund">申请退款</li>-->
                         <li id="Cancelled" i18n_Text="Cancelled" style="width:120px;">Cancelled</li>
 
@@ -59,9 +58,8 @@
                     <div class="layui-tab-content">
 
                         <div class="layui-tab-item layui-show all"></div>
-                        <div class="layui-tab-item  inquiry">
-                        </div>
-                        <!--<div class="layui-tab-item pending"></div>-->
+                        <div class="layui-tab-item  inquiry"></div>
+                        <div class="layui-tab-item pending"></div>
                         <div class="layui-tab-item unpaid"></div>
                         <div class="layui-tab-item Processing"></div>
                         <div class="layui-tab-item transit"></div>
@@ -97,13 +95,13 @@
                         <div style="width: 100%; height: 48px; line-height:48px;margin:0 auto; ">
                             <div style="width: 90%;float:left;">
                                 <div class="codediv" style="width: 40%;">
-                                    <div i18n_Text="OrderList.orderModule.div.orderCode">订单编号:</div><label>{{$value.orderCode}}</label>
+                                    <div i18n_Text="OrderList.orderModule.div.orderCode">anderdrop order number:</div><label>{{$value.orderCode}}</label>
                                 </div>
                                 <div class="codediv">
-                                    <div i18n_Text="OrderList.orderModule.div.shopifyOrderCode">店铺编号:</div><label>{{$value.shopifyOrderCode}}</label>
+                                    <div i18n_Text="OrderList.orderModule.div.shopifyOrderCode">shopify&woo order number:</div><label>{{$value.shopifyOrderCode}}</label>
                                 </div>
                                 <div class="codediv">
-                                    <div i18n_Text="OrderList.orderModule.div.OrderTime">订单时间:</div><label>{{$value.orderTime}} (GTM+8)</label>
+                                    <div i18n_Text="OrderList.orderModule.div.OrderTime">date:</div><label>{{$value.orderTime}} (GTM+8)</label>
                                 </div>
                             </div>
                             <div style="width:10%;float:right;">
@@ -372,7 +370,7 @@
                             layer.msg("咨询操作成功，请耐性等待后台处理！");
                         }
                         else if (id == "en_us") {
-                            layer.msg("Consultation operation succeeded, please wait patiently for background processing!"/*, { time:20000000 }*/);
+                            layer.msg("Succeed! You can check it on the pending souring page."/*, { time:20000000 }*/);
                         }
 
                         GetOrderList(TabId, laypage);
@@ -574,7 +572,7 @@
                     type: 2,
                     shade: 0.2,
                     shadeClose: true,
-                    area: ['900px', '800px'],
+                    area: ['80%', '90%'],
                     content: '/share/OrderDetails.html?orderId=' + orderId,
                 });
                 return false;
@@ -784,6 +782,9 @@
                 case "inquiry":
                     OrderStatus = "A,C,S";
                     break;
+                case "pending":
+                    OrderStatus = "C";
+                    break;
                 case "unpaid":
                     OrderStatus = "B,D";
                     break;
@@ -829,7 +830,6 @@
                     if (!data) {
                         /* layer.msg(i18n.prop(sre.msg));*/
                         Binding(TabId, null);
-
                         layer.close(myMsg);//手动关闭
                     } else {
                         laypage.render({
@@ -861,7 +861,6 @@
         }
         // 绑定页面
         function Binding(TabId, data) {
-
             //批量操作勾选框恢复为未选中
             $("input[class='TotalChk']").prop('checked', false);
             //将其他tab的内容置空，不然会影响批量操作获取选中的checkbox框

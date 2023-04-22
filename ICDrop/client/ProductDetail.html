@@ -347,7 +347,7 @@
                     // var width = Math.floor(40 / attcount)
                     for (var key in att) {
                       console.log('key: ' + key);
-                      if (key == "color") {
+                      if (key == "color" || key == "Color") {
                         pricehtml +=
                           "<li  class='head_font'style='width: 15%;' >" +
                           key +
@@ -401,10 +401,10 @@
                     var att1 = JSON.parse(data.data[i].attribute)
                     if (att1 != null) {
                       for (var key in att1) {
-                        if (key == "color") {
+                        if (key == "color" || key == "Color") {
                           pricehtml1 +=
-                            "<li  class='price_body'style='width:15%;' >" +
-                            att1[key] +
+                            "<li  class='long-price_body'style='width:15%;' data-fulltext="+ att1[key] + 'ddddddddddd' +" >" +
+                            att1[key] + 'ddddddddddd' +
                             '<br></li>'
                         } else {
                           pricehtml1 +=

@@ -192,8 +192,36 @@
     line-height: 55px;
     float: left;
     white-space: normal;
+}
+
+.long-price_body {
+    height: 55px;
+    text-align: left;
+    display: block;
+    line-height: 55px;
+    float: left;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* 使用 :hover 伪类，显示完整文本的悬浮层 */
+.long-price_body:hover::after {
+    content: attr(data-fulltext);
+    height: 20px !important;
+    line-height: 20px !important;
+    position: absolute;
+    transform: translateY(-50%);
+    z-index: 1;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    white-space: normal;
+    overflow: visible;
+  }
+  
+.long-price_body:not([title]):not(:hover)::after {
+    content: none;
 }
 
 /*每条变体的div样式*/

@@ -29,25 +29,6 @@
                 <legend>批量导入税率</legend>
                 <div style="margin: 10px 10px 10px 10px" id="btn">
                     <form class="layui-form layui-form-pane" action="">
-                        <h1 style="color:red;margin-bottom:10px;">先选择币种和汇率再选择文件</h1>
-                        <div class="BasicInfo">
-                            <label class="layui-form-label required">币种</label>
-                            <div class="layui-input-block">
-                                <select id="currency" name="currency" lay-search lay-verify="required">
-                                    <option value="">请选择</option>
-                                    <option value="USD">美元</option>
-                                    <option value="RMB">人名币</option>
-                                    <option value="EURO">欧元</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="BasicInfo">
-                            <label class="layui-form-label">汇率：</label>
-                            <div class="layui-input-block">
-                                <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" lay-reqtext="汇率不能为空" />
-                            </div>
-
-                        </div>
                         <button type="button" class="layui-btn  layui-btn-radius layui-btn-normal" id="Import_File">
                             <i class="layui-icon">&#xe67c;</i>从文件选择
                         </button>

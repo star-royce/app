@@ -172,8 +172,6 @@
                 form.on('submit(up_Purchase)', function (massage) {
                     var dto_obj = new Object();
                     dto_obj.AutomationId = parseInt(data.AutomationId);
-                    dto_obj.Currency = massage.field.currency;
-                    dto_obj.ExchangeRate = massage.field.exchangeRate;
                     dto_obj.UnitPrice = massage.field.PurchaseCost;
                     dto_obj.UnitProfit = massage.field.PurchaseProfit;
                     dto_obj.UnitTaxesProfit = massage.field.TaxesProfit;
@@ -299,23 +297,6 @@
                     <label class="layui-form-label">维护体系</label>
                     <div class="layui-input-inline">
                         <input type="text" name="PurchaseSystem" autocomplete="off" class="layui-input" readonly="readonly">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">币种</label>
-                    <div class="layui-input-inline">
-                        <select id="currency" name="currency" lay-search lay-verify="required">
-                            <option value="">请选择</option>
-                            <option value="USD">美元</option>
-                            <option value="RMB">人名币</option>
-                            <option value="EURO">欧元</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">汇率：</label>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" />
                     </div>
                 </div>
                 <div class="layui-form-item">

@@ -21,7 +21,7 @@
           {
             "title": "首页",
             "i18nKey": "menu.child.Home",
-            "href": "/client/Customer/NoviceGuide.html",
+            "href": "/client/Customer/Home.html",
             "icon": "icon-home-1",
             "target": "_self"
           },

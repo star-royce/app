@@ -14,13 +14,10 @@ window.rootPath = (function (src) {
     return src.substring(0, src.lastIndexOf("/") + 1);
 })();
 
-// TODO 本地测试
-var BackgroundDomain = "https://app.anderdrop.com";
-// var BackgroundDomain = "";
-// if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
-//     BackgroundDomain = "http://localhost"
-// }
-
+var BackgroundDomain = "";
+if (location.href.includes("127.0.0.1") || location.href.includes("localhost")) {
+    BackgroundDomain = "http://localhost"
+}
 
 layui.config({
     base: rootPath + "lay-module/",

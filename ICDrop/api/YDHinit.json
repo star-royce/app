@@ -27,12 +27,6 @@
                 "href": "/manage/task/TaskList.html",
                 "icon": "fa fa-tachometer",
                 "target": "_self"
-              },
-              {
-                "title": "查看日记",
-                "href": "/manage/BrowseDiary/DiaryList.html",
-                "icon": "fa fa-tachometer",
-                "target": "_self"
               }
             ]
           },

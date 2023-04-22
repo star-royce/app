@@ -1,14 +1,17 @@
 ﻿html {
     height: 100%;
 }
+
 body {
     height: calc(100% - 60px);
     margin: 30px 50px;
 }
+
 /*分页的当前页的字体颜色*/
 .layui-laypage .layui-laypage-curr em {
     color: #333334;
 }
+
 /*分页栏选中样式*/
 .layui-laypage .layui-laypage-curr .layui-laypage-em {
     position: absolute;
@@ -32,6 +35,7 @@ body {
     padding-left: 50px;
     margin-left: 40px;
 }
+
 /*搜索框*/
 .searchOrder {
     padding-left: 20px;
@@ -47,15 +51,17 @@ body {
     margin-left: calc(-1 * (100% - 41px));
     margin-top: 10px;
 }
+
 /*大的内容样式*/
 .content {
     width: 100%;
     background: #FFFFFF;
     border-radius: 10px 10px 10px 10px;
     opacity: 1;
-    margin-top:20px;
-    height:calc(100% - 90px);
+    margin-top: 20px;
+    height: calc(100% - 90px);
 }
+
 /*头部标题框*/
 .top {
     margin: 0px 40px;
@@ -63,11 +69,13 @@ body {
     height: 48px;
     line-height: 48px;
 }
+
 .productList {
-height:calc(100% - 48px);
-overflow-y:auto;
-width:100%;
+    height: calc(100% - 48px);
+    overflow-y: auto;
+    width: 100%;
 }
+
 /*单个产品框样式*/
 .product {
     margin: 0px 40px;
@@ -75,34 +83,38 @@ width:100%;
     width: calc(100% - 80px);
     border-top: 1px solid #DDDDDD;
 }
+
 /*单个产品中间内容部分样式*/
 .product-content {
-    height:80px;
-    margin:20px 0px;
-    width:100%;
+    height: 80px;
+    margin: 20px 0px;
+    width: 100%;
 }
+
 /*单个产品里面的标题样式*/
 .product-title {
     height: 80px;
     width: calc(100% - 140px);
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp:3;
+    -webkit-line-clamp: 3;
     float: left;
     font-size: 16px;
-    
+
     font-weight: 400;
     color: #333333;
     overflow: hidden;
 }
+
 /*单个产品的上市成本样式*/
 .listingcost {
     font-size: 16px;
-    
+
     font-weight: bold;
     color: #333333;
-    height:80px;
+    height: 80px;
 }
+
 /*取消同步按钮样式*/
 .outsync {
     width: 100%;
@@ -116,6 +128,7 @@ width:100%;
     font-weight: 400;
     color: #333333;
 }
+
 /*同步按钮样式*/
 .sync {
     /* width: 170px;
@@ -130,6 +143,7 @@ width:100%;
     color: #ffffff;
     margin-top: 24px;
 }
+
 /*sku同步提示框*/
 .info {
     margin-top: -55px;
@@ -145,7 +159,7 @@ width:100%;
     color: #FFFFFF;
     z-index: 99;
     margin-left: -30px;
-   /* opacity: 0.8;*/
+    /* opacity: 0.8;*/
 }
 
 .nav {
@@ -156,7 +170,7 @@ width:100%;
     height: 0;
     border-width: 10px;
     border-style: solid dashed dashed dashed;
-   /* opacity: 0.8 !important;*/
+    /* opacity: 0.8 !important;*/
 }
 
 .nav-background {

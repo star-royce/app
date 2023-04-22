@@ -4,8 +4,7 @@
 }
 
 /*头部右侧选中背景色 headerRightBgThis */
-.layui-layout-admin .layui-header .layuimini-header-content>ul>.layui-nav-item.layui-this,
-.layuimini-tool i:hover {
+.layui-layout-admin .layui-header .layuimini-header-content > ul > .layui-nav-item.layui-this, .layuimini-tool i:hover {
     background-color: #e4e4e4 !important;
 }
 
@@ -20,8 +19,7 @@
 }
 
 /*头部右侧鼠标选中 headerRightColorThis */
-.layui-header .layuimini-menu-header-pc.layui-nav .layui-nav-item a:hover,
-.layui-header .layuimini-header-menu.layuimini-pc-show.layui-nav .layui-this a {
+.layui-header .layuimini-menu-header-pc.layui-nav .layui-nav-item a:hover, .layui-header .layuimini-header-menu.layuimini-pc-show.layui-nav .layui-this a {
     color: #565656 !important;
 }
 
@@ -31,15 +29,12 @@
 }
 
 /*头部右侧更多下拉颜色 headerRightNavMore */
-.layui-header .layui-nav .layui-nav-mored,
-.layui-header .layui-nav-itemed>a .layui-nav-more {
+.layui-header .layui-nav .layui-nav-mored, .layui-header .layui-nav-itemed > a .layui-nav-more {
     border-color: transparent transparent rgba(160, 160, 160, 0.7) !important;
 }
 
 /**头部右侧更多下拉配置色 headerRightNavMoreBg headerRightNavMoreColor */
-.layui-header .layui-nav .layui-nav-child dd.layui-this a,
-.layui-header .layui-nav-child dd.layui-this,
-.layui-layout-admin .layui-header .layui-nav .layui-nav-item .layui-nav-child .layui-this a {
+.layui-header .layui-nav .layui-nav-child dd.layui-this a, .layui-header .layui-nav-child dd.layui-this, .layui-layout-admin .layui-header .layui-nav .layui-nav-item .layui-nav-child .layui-this a {
     background-color: #029803 !important;
     color: #ffffff !important;
 }
@@ -60,65 +55,47 @@
 }
 
 /*左侧菜单更多下拉样式 leftMenuNavMore */
-.layuimini-menu-left .layui-nav .layui-nav-more,
-.layuimini-menu-left-zoom.layui-nav .layui-nav-more {
+.layuimini-menu-left .layui-nav .layui-nav-more, .layuimini-menu-left-zoom.layui-nav .layui-nav-more {
     border-top-color: rgb(191, 187, 187);
 }
 
 /*左侧菜单更多下拉样式 leftMenuNavMore */
-.layuimini-menu-left .layui-nav .layui-nav-mored,
-.layuimini-menu-left .layui-nav-itemed>a .layui-nav-more,
-.layuimini-menu-left-zoom.layui-nav .layui-nav-mored,
-.layuimini-menu-left-zoom.layui-nav-itemed>a .layui-nav-more {
+.layuimini-menu-left .layui-nav .layui-nav-mored, .layuimini-menu-left .layui-nav-itemed > a .layui-nav-more, .layuimini-menu-left-zoom.layui-nav .layui-nav-mored, .layuimini-menu-left-zoom.layui-nav-itemed > a .layui-nav-more {
     border-color: transparent transparent rgb(191, 187, 187) !important;
 }
 
 /*左侧菜单背景 leftMenuBg */
-.layui-side.layui-bg-black,
-.layui-side.layui-bg-black>.layuimini-menu-left>ul,
-.layuimini-menu-left-zoom>ul {
+.layui-side.layui-bg-black, .layui-side.layui-bg-black > .layuimini-menu-left > ul, .layuimini-menu-left-zoom > ul {
     background-color: #ECE9EC !important;
 }
 
 /*左侧菜单选中背景 leftMenuBgThis */
-.layuimini-menu-left .layui-nav-tree .layui-this,
-.layuimini-menu-left .layui-nav-tree .layui-this>a,
-.layuimini-menu-left .layui-nav-tree .layui-nav-child dd.layui-this,
-.layuimini-menu-left .layui-nav-tree .layui-nav-child dd.layui-this a,
-.layuimini-menu-left-zoom.layui-nav-tree .layui-this,
-.layuimini-menu-left-zoom.layui-nav-tree .layui-this>a,
-.layuimini-menu-left-zoom.layui-nav-tree .layui-nav-child dd.layui-this,
-.layuimini-menu-left-zoom.layui-nav-tree .layui-nav-child dd.layui-this a {
+.layuimini-menu-left .layui-nav-tree .layui-this, .layuimini-menu-left .layui-nav-tree .layui-this > a, .layuimini-menu-left .layui-nav-tree .layui-nav-child dd.layui-this, .layuimini-menu-left .layui-nav-tree .layui-nav-child dd.layui-this a, .layuimini-menu-left-zoom.layui-nav-tree .layui-this, .layuimini-menu-left-zoom.layui-nav-tree .layui-this > a, .layuimini-menu-left-zoom.layui-nav-tree .layui-nav-child dd.layui-this, .layuimini-menu-left-zoom.layui-nav-tree .layui-nav-child dd.layui-this a {
     background-color: #ECE9EC !important
 }
 
 /*左侧菜单子菜单背景 leftMenuChildBg */
-.layuimini-menu-left .layui-nav-itemed>.layui-nav-child {
+.layuimini-menu-left .layui-nav-itemed > .layui-nav-child {
     background-color: #0c0f13 !important;
 }
 
 /*左侧菜单字体颜色 leftMenuColor */
-.layuimini-menu-left .layui-nav .layui-nav-item a,
-.layuimini-menu-left-zoom.layui-nav .layui-nav-item a {
+.layuimini-menu-left .layui-nav .layui-nav-item a, .layuimini-menu-left-zoom.layui-nav .layui-nav-item a {
     color: rgb(191, 187, 187) !important;
 }
 
 /*左侧菜单选中字体颜色 leftMenuColorThis */
-.layuimini-menu-left .layui-nav .layui-nav-item a:hover,
-.layuimini-menu-left .layui-nav .layui-this a,
-.layuimini-menu-left-zoom.layui-nav .layui-nav-item a:hover,
-.layuimini-menu-left-zoom.layui-nav .layui-this a {
-    color: rgb(191, 187, 187) !important;
-    /*background-color:#ff0000 !important;*/
-}
+    .layuimini-menu-left .layui-nav .layui-nav-item a:hover, .layuimini-menu-left .layui-nav .layui-this a, .layuimini-menu-left-zoom.layui-nav .layui-nav-item a:hover, .layuimini-menu-left-zoom.layui-nav .layui-this a {
+        color: rgb(191, 187, 187) !important;
+        /*background-color:#ff0000 !important;*/
+    }
 
 /**tab选项卡选中颜色 tabActiveColor */
 .layuimini-tab .layui-tab-title .layui-this .layuimini-tab-active {
     background-color: #029803;
 }
-
 .layui-side .layui-bg-black .layuimini-menu-left {
-    width: 250px;
+    width:250px;
 }
 
 .icon-home-1 {
@@ -127,42 +104,37 @@
     background: url(../../images/indexioc.png) no-repeat;
     background-position: -173px 2px;
 }
-
 .icon-find-1 {
     width: 25px;
     height: 25px;
     background: url(../../images/indexioc.png) no-repeat;
     background-position: -137px 2px;
 }
-
 .icon-import-1 {
     width: 25px;
     height: 25px;
     background: url(../../images/indexioc.png) no-repeat;
     background-position: 0px 2px;
 }
-
 .icon-order-1 {
     width: 25px;
     height: 25px;
     background: url(../../images/indexioc.png) no-repeat;
     background-position: -69px 2px;
 }
-
 .icon-product-1 {
     width: 26px;
     height: 25px;
     background: url(../../images/indexioc.png) no-repeat;
     background-position: -102px 2px;
 }
-
 .icon-my-account-1 {
     width: 25px;
     height: 25px;
     background: url(../../images/indexioc.png) no-repeat;
     background-position: -33px 2px;
 }
-
-.layui-form-label {
-    width: auto !important;
+.layui-form-label
+{
+    width:auto !important;
 }

@@ -35,7 +35,7 @@
                     lay-verify="title" autocomplete="off" placeholder="Search" class="inputprotitle" />
                 <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn"
                     style="float: left; width: 68px; background-color: #F5F5F5 !important;"><img
-                        src="../../../images/button/search.svg" /></button>
+                        src="../../../images/find1.png" /></button>
             </div>
         </form>
     </div>
@@ -267,7 +267,7 @@
                 data: JSON.stringify(productInfo),
                 success: function (data) {
                     layer.close(myMsg);//手动关闭
-                    if (data.code == 1) { 
+                    if (data.code == 1) {
                         CountImportedProduct()
                     } else {
                         message.run($.i18n.prop('Import.Failed'), $.i18n.prop('consult.customer.service'), "error");
@@ -325,7 +325,7 @@
             return count;
         }
 
-    
+
         //查看物流时效列表
         function ViewFreightList(FreightLine) {
 
@@ -468,7 +468,12 @@
                                             data: JSON.stringify(productprice),
                                             success: function (data) {
                                                 var fontadd = document.getElementById("price" + data.data[0].productId);
-
+                                                var currency = layui.data('currency');
+                                                if (currency.currency) {
+                                                    currency = currency.currency.id;
+                                                } else {
+                                                    currency = "USD";
+                                                }
                                                 //采购价
                                                 var listCostLine = document.createElement("div");
                                                 listCostLine.setAttribute("class", "ListingCost");
@@ -478,7 +483,7 @@
                                                 var listcostLabel = document.createElement("label");
                                                 listcostLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #FF5555;");
                                                 listCostLine.appendChild(listcostLabel);
-                                                listcostLabel.innerHTML = "$" + data.data[0].price;
+                                                listcostLabel.innerHTML = currency + ":" + data.data[0].price;
 
                                                 //零售价
                                                 var RetailPriceLine = document.createElement("div");
@@ -489,7 +494,7 @@
                                                 var RetailPriceLabel = document.createElement("label");
                                                 RetailPriceLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #333333;");
                                                 RetailPriceLine.appendChild(RetailPriceLabel);
-                                                RetailPriceLabel.innerHTML = "$" + data.data[0].cost;
+                                                RetailPriceLabel.innerHTML = currency + ":" + data.data[0].cost;
                                             }
                                         })
                                         //物流时效

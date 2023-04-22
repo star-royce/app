@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>运费报价</title>
@@ -9,17 +10,17 @@
     <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
     <style>
-
         .BasicInfo {
             float: left;
             margin-bottom: 20px;
         }
 
-      .BasicInfo .layui-input-block {
-                width: 200px
-            }
+        .BasicInfo .layui-input-block {
+            width: 200px
+        }
     </style>
 </head>
+
 <body>
     <div class="layui-form layuimini-form">
         <fieldset class="layui-elem-field">
@@ -38,7 +39,8 @@
             <div class="BasicInfo">
                 <label class="layui-form-label">汇率（一美元等于）：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" lay-reqtext="汇率不能为空"  onchange="ChangeRate()" />
+                    <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种"
+                        value="" lay-verify="required" lay-reqtext="汇率不能为空" onchange="ChangeRate()" />
                 </div>
             </div>
             <div class="BasicInfo">
@@ -50,13 +52,15 @@
             <div class="BasicInfo">
                 <label class="layui-form-label">材积重：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input VolumeWeight" type="text" name="VolumeWeight" value="" readonly="readonly" />
+                    <input class="layui-input VolumeWeight" type="text" name="VolumeWeight" value=""
+                        readonly="readonly" />
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" style=" width:250PX;">所属订单其他已报价sku选择的时效：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input SelectAging" style="width:calc(80% - 250px);" type="text" name="SelectAging" value="" readonly="readonly" />
+                    <input class="layui-input SelectAging" style="width:calc(80% - 250px);" type="text"
+                        name="SelectAging" value="" readonly="readonly" />
                 </div>
             </div>
 
@@ -161,9 +165,9 @@
             //匹配运费
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Order/QueryPriceRuleByWare",
+                url: BackgroundDomain + "/api/Order/QueryPriceRuleByWare",
                 contentType: "application/json;",
-                data: JSON.stringify({ orderId: order_id, WareId: wareId}),
+                data: JSON.stringify({ orderId: order_id, WareId: wareId }),
                 dataType: "json",
                 success: function (sre) {
                     if (count(sre.data) > 0) {
@@ -193,7 +197,7 @@
 
                         document.querySelector(".freight").innerHTML = html;
                     }
-                 
+
                 }
             })
 
@@ -212,7 +216,7 @@
                     layer.msg("运费利润不能为空", { icon: 5, time: 2000, shift: 6 });
                     return false;
                 }
-                 // 选择的运单报价
+                // 选择的运单报价
                 var id_array = new Array();
                 $('input[class="ChekcFreight"]:checked').each(function () {
                     id_array.push($(this).attr("data-key"));//向数组中添加元素
@@ -223,17 +227,17 @@
                 }
 
                 var freights = [];
-                var all_freight_array=[];
+                var all_freight_array = [];
                 for (var i = 0; i < id_array.length; i++) {
                     var Aging = $("#profit" + id_array[i]).attr("aging");
                     Aging = Aging.replace(/ /g, '');
                     console.log(Aging);
                     console.log("SelectAging" + SelectAging);
                     if (SelectAging.length != 0) {
-                    if (SelectAging.indexOf(Aging) == -1) {
-                        layer.msg("该订单已报价的SKU不包含此物流时效:" + Aging+"，请确认", { icon: 5, time: 2000, shift: 6 });
-                        return false;
-                    }
+                        if (SelectAging.indexOf(Aging) == -1) {
+                            layer.msg("该订单已报价的SKU不包含此物流时效:" + Aging + "，请确认", { icon: 5, time: 2000, shift: 6 });
+                            return false;
+                        }
                     }
                     if (!all_freight_array.includes(Aging)) {
                         all_freight_array.push(Aging);
@@ -256,10 +260,10 @@
 
 
 
-                    }
+                }
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain +"/api/Order/UpdateFreightQuote",
+                    url: BackgroundDomain + "/api/Order/UpdateFreightQuote",
                     contentType: "application/json;",
                     data: JSON.stringify(freights),
                     dataType: "json",
@@ -291,7 +295,7 @@
                                     $("#profit" + freightList[i].id).val((freightList[i].freightProfit * $(".exchangeRate").val()).toFixed(2));
                                 }
                             }
-                            
+
                         }
                     }
                     else if ($("[name='currency']").val() == "USD") {
@@ -328,17 +332,17 @@
                 $("input[class='ChekcFreight']").prop('checked', true);
             } else {
                 $("input[class='ChekcFreight']").prop('checked', false);
-               
+
             };
         }
         //利润范围选择事件
         function changeProfit(chk) {
-/*            console.log("checkid:" + $().attr("id"));*/
+            /*            console.log("checkid:" + $().attr("id"));*/
 
             var priceid = $(chk).attr("data-key");
             var FreightProfitid = $(chk).val()
             var freightCost = $("#profit" + priceid).attr("freightCost")
-            var FreightProfit = Math.ceil(FreightProfitid * freightCost * 100) / 100 ;
+            var FreightProfit = Math.ceil(FreightProfitid * freightCost * 100) / 100;
             $("#profit" + priceid).val(FreightProfit)
 
         }
@@ -367,4 +371,5 @@
     </script>
 
 </body>
+
 </html>

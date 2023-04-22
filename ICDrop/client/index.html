@@ -280,6 +280,14 @@
         .layui-tab-item.layui-show {
             border: 1px #ECE9EC solid;
         }
+
+        .layui-menu.layui-dropdown-menu {
+            max-height: 400px;
+        }
+
+        .layui-dropdown.layui-border-box.layui-panel.layui-anim.layui-anim-downbit {
+            overflow: auto;
+        }
     </style>
 
 
@@ -357,6 +365,15 @@
                 <form class="layui-form">
                     <ul class="layui-nav layui-layout-right">
 
+                        <li class="layui-nav-item" lay-unselect>
+                            <div class="layui-btn-container">
+                                <button class="layui-btn  currency"
+                                    style="background-color: White; color: rgba(5, 5, 5, 0.7); ">
+                                    <span id="currency">USD-1</span>
+                                    <i class="layui-nav-more"></i>
+                                </button>
+                            </div>
+                        </li>
 
                         <li class="layui-nav-item" lay-unselect>
                             <div class="layui-btn-container">
@@ -391,7 +408,7 @@
             </div>
         </div>
 
-        <!--无限极左侧菜单 11-->
+        <!--无限极左侧菜单-->
         <div class="layui-side layui-bg-white layuimini-menu-left" style="background:#FFFFFF;" id="leftmenu">
 
         </div>
@@ -465,6 +482,7 @@
                 form = layui.form,
                 miniAdmin = layui.miniAdmin,
                 dropdown = layui.dropdown,
+
                 i18n = layui.i18n;
             element = layui.element;
             miniTab = layui.miniTab,
@@ -473,11 +491,39 @@
             // 权限
             app.Load("client");
 
-            // 获取当前 iframe 所在弹出层的索引值
-            var index = layer.getFrameIndex(window.name);
+            var currency = layui.data('currency');
+            if (currency.currency) {
+                $("#currency").text(currency.currency.title);
+            } else {
+                layui.data('currency', {
+                    key: 'currency'
+                    , value: { title: "USD-1", id: "USD" }
+                });
+            }
+            $.ajax({
+                type: 'get',
+                url: BackgroundDomain + '/api/product/GetLatestExchangeRate',
+                success: function (data) {
+                    var currencyarr = [];
+                    for (let index = 0; index < data.length; index++) {
+                        const element = data[index];
+                        currencyarr.push({ title: element.currency + "-" + element.rates, id: element.currency });
+                    }
+                    dropdown.render({
+                        elem: '.currency'
+                        , data: currencyarr
+                        , click: function (obj) {
+                            $("#currency").text(obj.title);
+                            layui.data('currency', {
+                                key: 'currency'
+                                , value: obj
+                            });
+                            location.reload();
+                        }
+                    });
 
-            // 在控制台输出索引值
-            console.log("index: " + index);
+                },
+            })
 
             // 获取登录的用户名
             var YDHConfig = layui.data('YDH-Customer');
@@ -654,11 +700,11 @@
             dropdown.render({
                 elem: '.demo1'
                 , data: [{
-                    title: 'English'
-                    , id: 'en_us'
-                }, {
                     title: '中文简体'
                     , id: 'zh_cn'
+                }, {
+                    title: 'English'
+                    , id: 'en_us'
                 }]
                 , click: function (obj) {
 

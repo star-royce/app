@@ -23,24 +23,7 @@
     <div class="layui-form layuimini-form">
         <fieldset class="layui-elem-field">
             <legend>税费匹配</legend>
-                <div class="BasicInfo">
-                    <label class="layui-form-label required">币种</label>
-                    <div class="layui-input-block">
-                        <select id="currency" name="currency" lay-search lay-verify="required">
-                            <option value="">请选择</option>
-                            <option value="USD">美元</option>
-                            <option value="RMB">人名币</option>
-                            <option value="EURO">欧元</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="BasicInfo">
-                    <label class="layui-form-label">汇率（一美元等于）：</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input exchangeRate" type="text" name="exchangeRate" placeholder="一美元=多少所选币种" value="" lay-verify="required" lay-reqtext="汇率不能为空"  onchange="ChangeRate()" />
-                    </div>
-
-                </div>
+                
                 <div class="taxes"></div>
         </fieldset>
         <div class="layui-form-item">

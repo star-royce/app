@@ -192,6 +192,8 @@
     line-height: 55px;
     float: left;
     white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*每条变体的div样式*/

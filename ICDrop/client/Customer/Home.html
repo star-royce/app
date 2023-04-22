@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title></title>
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="../../../css/Message.css?v=20220505" media="all">
     <link rel="stylesheet" href="../../../css/Home.css?v=4" media="all">
 </head>
+
 <body>
     <div style="overflow:auto;height:100%;width:100%;">
         <div id="content">
@@ -85,12 +87,12 @@
                             <img src="../../../images/mail.png" style="margin-right:6px;">
                         </b>
                         <strong style=""></strong>
-                        <div class="tel" onclick="OpenWhatsApp()">
+                        <!-- <div class="tel" onclick="OpenWhatsApp()">
                             <img src="../../../images/tel.png" style="margin-right:6px;">
                             <strong>
                                 +86 136 0240 0458
                             </strong>
-                        </div>
+                        </div> -->
                     </div>
 
 
@@ -102,12 +104,14 @@
                                     <img src="../../../images/person.png">
 
                                 </div>
-                                <div class="msg">I can help you with product sourcing, dropshipping needs,App using guidance.</div>
+                                <div class="msg">I can help you with product sourcing, dropshipping needs,App using
+                                    guidance.</div>
                             </div>
 
                         </div>
                         <div class="new_bottom_bottom">
-                            <textarea id="message" class="message" rows="4" placeholder="Click here to send a message,I will get back to you in 24 hours..."></textarea>
+                            <textarea id="message" class="message" rows="4"
+                                placeholder="Click here to send a message,I will get back to you in 24 hours..."></textarea>
                             <div class="btn-box">
                                 <input class="send-btn" type="button" onclick="updateService()" value="Send">
                             </div>
@@ -131,7 +135,7 @@
         var id = "en_us";
         var UserEmail;
         layui.config({
-            version:'1.0.1'
+            version: '1.0.1'
         }).use(['i18n', 'app', 'jquery', 'layer', 'miniTab', 'element', 'miniTongji', 'message'], function () {
             var $ = layui.jquery,
                 layer = layui.layer,
@@ -167,7 +171,7 @@
 
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Customer/GetCusCustomerList",
+                url: BackgroundDomain + "/api/Customer/GetCusCustomerList",
                 contentType: "application/json;",
                 data: JSON.stringify(dto_obj),
                 dataType: "json",
@@ -208,7 +212,7 @@
                             }
                             var UsedRange = (arrValue[0].usedcredit / arrValue[0].creditAmout).toFixed(2) * 100;
                             var UsedRangeDiv = document.getElementById("UsedRange");
-                            UsedRangeDiv.setAttribute('style', "width:" + UsedRange +"%!important;");
+                            UsedRangeDiv.setAttribute('style', "width:" + UsedRange + "%!important;");
 
                         }
                         $("#allAmout").html("$" + arrValue[0].creditAmout);
@@ -256,7 +260,7 @@
             dto_obj.message = $('#message').val();
             $.ajax({
                 type: "post",
-                url: BackgroundDomain +"/api/Customer/InsertCustomerMessage",
+                url: BackgroundDomain + "/api/Customer/InsertCustomerMessage",
                 contentType: "application/json;",
                 data: JSON.stringify(dto_obj),
                 dataType: "json",
@@ -333,7 +337,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain +'/api/Customer/UpdateCreditApplyStatusByEmail',
+                url: BackgroundDomain + '/api/Customer/UpdateCreditApplyStatusByEmail',
                 data: JSON.stringify({ "Email": UserEmail, "creditApply": "1" }),
                 success: function (data) {
                     layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
@@ -341,7 +345,7 @@
                         app = layui.app;
                         var layer = layui.layer,
                             message = layui.message;
-                        message.run("修改成功");
+                        message.run("modify successfully!");
                     });
                 }
             })
@@ -365,10 +369,11 @@
             miniTab.delete(tabId, true);
         }
 
-        function OpenWhatsApp() {
-            window.open("https://wa.link/pk5zyr");
-        }
+        // function OpenWhatsApp() {
+        //     window.open("https://wa.link/pk5zyr");
+        // }
 
     </script>
 </body>
+
 </html>

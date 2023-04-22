@@ -853,14 +853,17 @@
                                 });
                             }
                         });
+
                         return false;
                     }
+
                 }
             });
 
         }
         // 绑定页面
         function Binding(TabId, data) {
+
             //批量操作勾选框恢复为未选中
             $("input[class='TotalChk']").prop('checked', false);
             //将其他tab的内容置空，不然会影响批量操作获取选中的checkbox框

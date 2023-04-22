@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -10,7 +9,6 @@
     <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
 </head>
-
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -23,7 +21,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">登录账号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="userCode" autocomplete="off" class="layui-input">
+                                    <input type="text" name="userCode" id="userCode" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -35,8 +33,7 @@
 
 
                             <div class="layui-inline">
-                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit
-                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                             </div>
                         </div>
                     </form>
@@ -74,7 +71,7 @@
                 method: "post",
                 contentType: "application/json;",
                 elem: '#currentTableId',
-                url: BackgroundDomain + '/api/User/QueryUserList',
+                url: BackgroundDomain +'/api/User/QueryUserList',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
@@ -186,23 +183,24 @@
 
                         $.ajax({
                             type: "post",
-                            url: BackgroundDomain + "/api/User/DeleteUser",
+                            url: BackgroundDomain +"/api/User/DeleteUser",
                             contentType: "application/json;",
                             data: JSON.stringify(dto_obj),
                             dataType: "json",
                             success: function (sre) {
                                 console.log("sre" + JSON.stringify(sre));
-                                if (sre.data == "1") {
-                                    //obj.del();
+                                if (sre.data > "0") {
+                                  
                                     layer.msg("提交成功！");
 
-                                    //setTimeout(function () {
-
-                                    //    var iframeIndex = parent.layer.getFrameIndex(window.name);
-                                    //    parent.layer.close(iframeIndex);
-
-                                    //}, 3000);
-
+                                    table.reload('currentTableId', {
+                                      page: {
+                                          curr: 1
+                                      }
+                                      , where: {
+                                          Dto: dto_obj
+                                      }
+                                  }, 'data');
                                 }
                                 layer.close(index);
                                 return false;
@@ -223,7 +221,7 @@
                 form.val("formEditUser", {
                     "UserName": data.userName,
                     "TokenKey": data.tokenKey,
-                    "userStatus": userStatus,
+                    "userStatus": userStatus ,
                 });
 
                 form.on('submit(saveBtn)', function (massage) {
@@ -234,7 +232,7 @@
                     dto_obj.UserName = massage.field.UserName;
                     dto_obj.TokenKey = massage.field.TokenKey;
                     dto_obj.userStatus = 0;
-                    if (!massage.field.userStatus || massage.field.userStatus != 'on') {
+                    if (!massage.field.userStatus || massage.field.userStatus!='on') {
                         dto_obj.userStatus = 1;
                     }
 
@@ -242,15 +240,13 @@
                     $.ajax({
                         type: "post",
                         contentType: "application/json;",
-                        url: BackgroundDomain + '/api/User/ModifyUser',
+                        url: BackgroundDomain +'/api/User/ModifyUser',
                         data: JSON.stringify(dto_obj),
                         async: false,//同步
                         success: function (msg) {
-                            console.log(msg);
-                            /*layer.alert("msg=" + JSON.stringify(msg));*/
+                            debugger
                             if (msg.code == "1") {
                                 layer.msg("修改成功", { icon: 6 });
-                                /*parent.layer.closeAll();*/
                                 layer.closeAll('loading');
                             }
                             else {
@@ -259,6 +255,7 @@
                         }
 
                     })
+                    return false;
                 })
             }
         });
@@ -269,22 +266,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label required">用户名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名称不能为空"
-                        placeholder="请输入用户名称" value="" class="layui-input">
+                    <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名称不能为空" placeholder="请输入用户名称" value="" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">tokenKey</label>
-                <div class="layui-input-block">
-                    <input type="text" name="TokenKey" value="" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
                 <label class="layui-form-label">用户状态</label>
                 <div class="layui-input-block">
-                    <input type="checkbox" checked="" name="userStatus" lay-skin="switch" lay-filter="switchTest"
-                        lay-text="正常|失效">
+                    <input type="checkbox" checked="" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="正常|失效">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -295,5 +284,4 @@
         </form>
     </div>
 </body>
-
 </html>

@@ -1,14 +1,14 @@
 ﻿layui.define(function (exports) {
     const message = {
         background: '', // 背景颜色
-        color: '',//字体颜色
+        color:'',//字体颜色
         outside: '', // 外框元素
         inside: '', // 信息显示元素
-        describe: '',//具体描述显示元素
+        describe:'',//具体描述显示元素
         insideSetTime: '', // 信息移除setTime
         body: '', // body元素
         time: 0, // 显示时间
-        run(msg = "success", describe = "", type = 'success', time = 3000) {
+        run(msg = "success", describe="", type = 'success', time = 2000) {
             // 显示时间
             this.time = time;
 
@@ -41,7 +41,7 @@
                 else {
                     this.inside.innerHTML = `<div class="message_box_message"><span>${picture}${msg}</span></div>`
                 }
-
+           
                 outsideShow.appendChild(this.inside);
 
                 //if (describe != '') {
@@ -50,7 +50,7 @@
                 //    this.describe.innerHTML = `<span>${describe}</span>`
                 //    this.inside.appendChild(this.describe);
                 //}
-
+      
 
             } else {
                 // 最外框
@@ -74,7 +74,7 @@
                 else {
                     this.inside.innerHTML = `<div class="message_box_message"><span>${picture}${msg}</span></div>`
                 }
-
+      
 
                 // 显示
                 outsideShow.appendChild(this.inside);
@@ -123,19 +123,19 @@
             return '#FFFFFF'; // 默认级别
         },
         // 判定字体颜色
-        colorCheck(type) {
-            if (type === 'success') return '#07C160';
-            if (type === 'error') return ' #FF5555';
-            if (type === 'warning') return ' #FF5555';
+       colorCheck(type) {
+           if (type === 'success') return '#07C160';
+           if (type === 'error') return ' #FF5555';
+           if (type === 'warning') return ' #FF5555';
             // if (type === 'info') return '#909399';
-            return '#07C160'; // 默认级别
+           return '#07C160'; // 默认级别
         },
 
         pictureCheck(type) {
             if (type === 'success') return '<img class="picture" src="/images/hint/success.png"/>';
             if (type === 'error') return '<img class="picture" src="/images/hint/warn.png"/>';
             if (type === 'warning') return '<img class="picture" src="/images/hint/warn.png"/>';
-
+    
             return '<img class="picture" src="/images/hint/success.png"/>'; // 默认级别
         }
     }

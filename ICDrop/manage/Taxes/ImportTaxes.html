@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>导入税率</title>
@@ -15,7 +14,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -54,7 +52,7 @@
             //执行实例
             var uploadInst = upload.render({
                 elem: '#Import_File' //绑定元素
-                , url: BackgroundDomain + '/api/Price/UploadTaxesList' //上传接口
+                , url: BackgroundDomain +'/api/Price/UploadTaxesList' //上传接口
                 , accept: 'file' //允许上传的文件类型
                 , choose: function (obj) {// 选择文件回调
                     var files = obj.pushFile();
@@ -87,7 +85,7 @@
                             'countryCode': 'C',
                             'taxRate': 'D',
                             'status': '',
-
+                           
                         }
                     }, function (data) {
                         var arr = new Array();
@@ -98,13 +96,13 @@
                                 countryCode: data[0].Sheet1[i].countryCode,
                                 taxRate: data[0].Sheet1[i].taxRate,
                                 status: '',
-
+                             
                             };
                             arr.push(tt);
                         }
                         $.ajax({
                             async: false,
-                            url: BackgroundDomain + '/api/Price/UploadTaxesList',
+                            url: BackgroundDomain +'/api/Price/UploadTaxesList',
                             type: 'post',
                             dataType: "json",
                             contentType: "application/x-www-form-urlencoded",
@@ -136,10 +134,10 @@
 
                                     }, 'data');
                                     parent.table.reload('currentTableId', {
-                                        page: {
-                                            curr: 1,
-                                        },
-                                    });
+                                            page: {
+                                              curr: 1,
+                                            },
+                                     });
                                 } else {
                                     //表格导入失败后，重载文件上传
                                     layer.alert(data.message + "请重新上传", { icon: 2 });
@@ -177,5 +175,4 @@
 
     </script>
 </body>
-
 </html>

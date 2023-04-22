@@ -603,10 +603,10 @@
                                 if (top.location != self.location)
                                     top.location = self.location;
                                 else {
-                                    window.location.href = "/client/index.html";
+                                    top.window.location.href = "/client/index.html";
                                 }
                             } else {
-                                window.location.href = "/shopify/shopify_Welcome.html?shop=" + shop;
+                                top.window.location.href = "/shopify/shopify_Welcome.html?shop=" + shop;
                             }
 
                             return false;
@@ -889,7 +889,7 @@
         //为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳
         function chgUrl(url) {
             code = (new Date()).valueOf();
-            url = BackgroundDomain + "/api/Login/GetLoginVerificationCode?TimeStamp=" + code
+            url = BackgroundDomain + "/api/Login/GetLoginVerificationCode/" + code
             return url;
         }
 

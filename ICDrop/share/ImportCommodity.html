@@ -18,9 +18,6 @@
             border: solid 1px #ddd;
         }
     </style>
-    <script type="text/javascript">
-        console.log('load')
-    </script>
 </head>
 
 <body>
@@ -85,9 +82,7 @@
         var id = "en_us";
         var lang = "en_us";
         var miniTab;
-        console.log("come in")
         layui.use(['form', 'app', 'laypage', 'i18n', 'message', 'miniTab'], function () {
-            console.log("user layui")
             var $ = layui.jquery,
                 form = layui.form,
                 layer = layui.layer,
@@ -105,6 +100,7 @@
                 id = YDHConfig.Lang.id;
                 lang = YDHConfig.Lang.id;
             }
+
             var ProCatalogueList = null;
             $.ajax({
                 type: "get",
@@ -118,7 +114,6 @@
             var count;
             var SerchproductInfo = new Object();
             //查找出该客户（管理员）的进口商品信息
-            console.log('start QueryImportProduct')
             QueryImportProduct(count, SerchproductInfo);
 
             var prev = "";
@@ -169,7 +164,6 @@
 
             var YDHCustomer = layui.data('YDH-Customer');
             function QueryImportProduct(count, SerchproductInfo) {
-                console.log('in QueryImportProduct')
                 var dto_obj = new Object();
                 dto_obj.page = 1;
                 dto_obj.limit = 10;
@@ -183,7 +177,7 @@
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain + '/api/Product/QueryImportProductList?time=' + timestamp,
+                    url: BackgroundDomain + '/api/Product/QueryImportProductList',
                     data: JSON.stringify(dto_obj),
                     success: function (msg) {
                         if (!msg) {
@@ -234,7 +228,7 @@
                                     $.ajax({
                                         type: "post",
                                         contentType: "application/json",
-                                        url: BackgroundDomain + '/api/Product/QueryImportProductList?time=' + timestamp,
+                                        url: BackgroundDomain + '/api/Product/QueryImportProductList',
                                         data: JSON.stringify(dto_obj),
                                         success: function (msg) {
                                             var totalDiv = document.getElementById("total");
@@ -400,6 +394,7 @@
                                                 $(function () {
                                                     var pircturelist = msg.data[i].pictureJson;
                                                     var id = msg.data[i].id;
+                                                    var platformCode = msg.data[i].platformCode;
                                                     var flag = 0;
                                                     //点击价格,获取价格信息
                                                     $("#Images_Price" + msg.data[i].id).click(function () {
@@ -435,16 +430,19 @@
                                                                 var att = JSON.parse(data.data[0].attribute);
                                                                 if (att != null) {
                                                                     var attcount = Object.keys(att).length;
-                                                                    var width = Math.floor(34 / attcount);
+                                                                    var width = Math.floor(((platformCode == "Aliexpress" ? 10 : 0) + 34) / attcount);
                                                                     for (var key in att) {
                                                                         pricehtml += "<li  class='head_font'style='width:calc((100% - 20px) * 0." + width + ");text-align:center;' ><input type = 'text' style='width:95%;max-width:320px;border:1px solid #EEEEEE;height:28px;border-radius: 16px;text-align:center;float:left;margin-top:9px;'    data-type='" + key + "' data-key='" + id + "'  value = '" + key + "' onchange='UpdateAttributetitel(this)'/></li>";
                                                                     }
                                                                 }
                                                                 else {
                                                                     pricehtml += "<li id='attribute" + id + "'  class='head_font'style='width:calc((100% - 20px) * 0.45);;text-align:center;float:left;margin-top:9px;' >property<br/></li>";
-
                                                                 }
-                                                                pricehtml += "<li class='head_font'style='width:10%;' >仓库<br></li>";
+
+                                                                if (platformCode != "Aliexpress") {
+                                                                    pricehtml += "<li class='head_font'style='width:10%;' >warehouse<br></li>";
+                                                                }
+
                                                                 pricehtml += "<li id='currency" + id + "' class='head_font'style='width:calc((100% - 20px) * 0.15);' >币种<br></li>";
                                                                 pricehtml += "<li id='cost" + id + "' class='head_font'style='width:calc((100% - 20px) * 0.1);'>成本<br></li>";
                                                                 pricehtml += "<li id='in18price" + id + "' class='head_font'style='width:calc((100% - 20px) * 0.15);'>价格<br></li>";
@@ -484,7 +482,7 @@
                                                                     var att1 = JSON.parse(data.data[i].attribute);
                                                                     if (att1 != null) {
                                                                         var attcount1 = Object.keys(att1).length;
-                                                                        var width1 = Math.floor(34 / attcount1);
+                                                                        var width1 = Math.floor(((platformCode == "Aliexpress" ? 10 : 0) + 34) / attcount1);
                                                                         for (var key in att1) {
                                                                             pricehtml1 += "<li  class='price_body'style='width:calc((100% - 20px) * 0." + width1 + ");text-align:center;'>" +
                                                                                 "<input type = 'text' class='layui-input' style='width:95%;max-width:320px;border-radius: 16px;text-align: center;float:left;'  data-type='" + key + "' data-key='" + data.data[i].id + "'  value = '" + att1[key] + "' onchange='UpdateAttribute(this)'/> <br/></li> ";
@@ -492,20 +490,22 @@
                                                                     } else {
                                                                         pricehtml1 += "<li  class='price_body'style='width:calc((100% - 20px) * 0.45);float:left;'><br/></li > "
                                                                     }
-
-                                                                    var oen = " <option value ='0'>请选择仓库</option>";
-                                                                    if (stockAddress && stockAddress.length > 0) {
-                                                                        var stocksku = stockAddress.filter(j => j.sku == data.data[i].sku);
-                                                                        for (let index = 0; index < stocksku.length; index++) {
-                                                                            if (stocksku[index].id == data.data[i].stockId) {
-                                                                                oen += "<option value ='" + stocksku[index].id + "' selected = 'selected'>" + stocksku[index].address + "</option>";
-                                                                            } else {
-                                                                                oen += "<option value ='" + stocksku[index].id + "'>" + stocksku[index].address + "</option>";
+                                                                    if (platformCode != "Aliexpress") {
+                                                                        var oen = " <option value ='0'>Please select a warehouse</option>";
+                                                                        if (stockAddress && stockAddress.length > 0) {
+                                                                            var stocksku = stockAddress.filter(j => j.sku == data.data[i].sku);
+                                                                            for (let index = 0; index < stocksku.length; index++) {
+                                                                                if (stocksku[index].id == data.data[i].stockId) {
+                                                                                    oen += "<option value ='" + stocksku[index].id + "' selected = 'selected'>" + stocksku[index].address + "</option>";
+                                                                                } else {
+                                                                                    oen += "<option value ='" + stocksku[index].id + "'>" + stocksku[index].address + "</option>";
+                                                                                }
                                                                             }
                                                                         }
+
+                                                                        pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;'   data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >" + oen + "<select> <br></li>";
                                                                     }
 
-                                                                    pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;'   data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >" + oen + "<select> <br></li>";
                                                                     pricehtml1 += "<li class='price_body'style='width:calc((100% - 20px) * 0.15);'>" + data.data[i].currency + "<br></li>";
                                                                     pricehtml1 += "<li class='price_body'style='width:calc((100% - 20px) * 0.1);'>" + data.data[i].cost + "<br></li>";
                                                                     var onchange = "UpdatePrice(" + data.data[i].id + ")";
@@ -723,21 +723,21 @@
                                 }
                             });
                         }
-
                     }
                 })
             }
 
             i18n.loadProperties(id);
 
-            // $("#btnsearch").click(function (data) {
-            //     var result = document.getElementById("productTitle").value;
+            $("#btnsearch").click(function (data) {
+                var result = document.getElementById("productTitle").value;
 
-            //     if ($.isEmptyObject(result) != true) {
-            //         SerchproductInfo.productTitle = result;
-            //     }
-            //     QueryImportProduct(count, SerchproductInfo);
-            // })
+
+                if ($.isEmptyObject(result) != true) {
+                    SerchproductInfo.productTitle = result;
+                }
+                QueryImportProduct(count, SerchproductInfo);
+            })
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
@@ -761,7 +761,7 @@
                 //if ($.isEmptyObject(result) != true) {
                 //    SerchproductInfo.productTitle = result;
                 //}
-                // QueryImportProduct(count, SerchproductInfo);
+                QueryImportProduct(count, SerchproductInfo);
             };
         })
 

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>后台管理-登陆</title>
@@ -16,33 +17,34 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        html, body {
+        html,
+        body {
             width: 100%;
             height: 100%;
             overflow: hidden
         }
 
         body {
-           /* background: #1E9FFF;*/
+            /* background: #1E9FFF;*/
             background-image: url(../../images/background_image.png);
         }
 
-            body:after {
-                content: '';
-                background-repeat: no-repeat;
-                background-size: cover;
-                -webkit-filter: blur(3px);
-                -moz-filter: blur(3px);
-                -o-filter: blur(3px);
-                -ms-filter: blur(3px);
-                filter: blur(3px);
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: -1;
-            }
+        body:after {
+            content: '';
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-filter: blur(3px);
+            -moz-filter: blur(3px);
+            -o-filter: blur(3px);
+            -ms-filter: blur(3px);
+            filter: blur(3px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
 
         .layui-container {
             width: 100%;
@@ -66,11 +68,11 @@
             padding: 14px 0;
         }
 
-            .logo-title h1 {
-                color: #1E9FFF;
-                font-size: 25px;
-                font-weight: bold;
-            }
+        .logo-title h1 {
+            color: #1E9FFF;
+            font-size: 25px;
+            font-weight: bold;
+        }
 
         .login-form {
             background-color: #fff;
@@ -80,23 +82,23 @@
             box-shadow: 0 0 8px #eeeeee;
         }
 
-            .login-form .layui-form-item {
-                position: relative;
-            }
+        .login-form .layui-form-item {
+            position: relative;
+        }
 
-                .login-form .layui-form-item label {
-                    position: absolute;
-                    left: 1px;
-                    top: 1px;
-                    width: 38px;
-                    line-height: 36px;
-                    text-align: center;
-                    color: #d2d2d2;
-                }
+        .login-form .layui-form-item label {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
 
-                .login-form .layui-form-item input {
-                    padding-left: 36px;
-                }
+        .login-form .layui-form-item input {
+            padding-left: 36px;
+        }
 
         .captcha {
             width: 60%;
@@ -109,12 +111,12 @@
             float: right;
         }
 
-            .captcha-img img {
-                height: 34px;
-                border: 1px solid #e6e6e6;
-                height: 36px;
-                width: 100%;
-            }
+        .captcha-img img {
+            height: 34px;
+            border: 1px solid #e6e6e6;
+            height: 36px;
+            width: 100%;
+        }
 
         .layui-btn-container {
             position: absolute;
@@ -122,6 +124,7 @@
             top: 5%;
             z-index: 1;
         }
+
         #canvas {
             float: right;
             display: inline-block;
@@ -129,6 +132,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layui-container">
         <div class="layui-btn-container">
@@ -143,26 +147,31 @@
                     <div class="layui-form-item logo-title">
                         <!--<h1 i18n_Text="login.h1.Text">anderdrop系统</h1>-->
                         <img src="../../images/ander/Ander rop .svg" />
-          
+
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-username" for="username"></label>
-                        <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" name="username" lay-verify="required|account" placeholder="用户名或者邮箱" autocomplete="off" class="layui-input">
+                        <input i18n_Attr="placeholder:login.input.username.placeholder;" type="text" name="username"
+                            lay-verify="required|account" placeholder="用户名或者邮箱" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-password" for="password"></label>
-                        <input i18n_Attr="placeholder:login.input.password.placeholder;" type="password" name="password" lay-verify="required|password" placeholder="密码" autocomplete="off" class="layui-input">
+                        <input i18n_Attr="placeholder:login.input.password.placeholder;" type="password" name="password"
+                            lay-verify="required|password" placeholder="密码" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-vercode" for="captcha"></label>
-                        <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="">
+                        <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码"
+                            autocomplete="off" class="layui-input verification captcha" value="">
                         <div class="captcha-img">
                             <img id="imgObj" style="width:80%;height:60%" alt="验证码" src="" onclick="changeImg()" />
                             <!--<canvas id="canvas" width="100" height="43" class="admin-captcha"></canvas>-->
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <button i18n_Text="login.button.login.Text" class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="login">登 入</button>
+                        <button i18n_Text="login.button.login.Text"
+                            class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit=""
+                            lay-filter="login">登 入</button>
                     </div>
                 </form>
             </div>
@@ -175,12 +184,11 @@
     <script src="/lib/jquery-3.4.1/jquery.cookie.min.js"></script>
     <script src="/js/lay-config.js"></script>
     <script>
-         var code;
+        var code;
         // 登录过期的时候，跳出ifram框架
         if (top.location != self.location)
             top.location = self.location;
-        else
-        {
+        else {
             layui.use(['form', 'i18n', 'dropdown'], function () {
                 var form = layui.form,
                     layer = layui.layer,
@@ -247,7 +255,7 @@
                     var code1 = code;
                     $.ajax({
                         type: "post",
-                        url: BackgroundDomain +"/api/Login/Login",
+                        url: BackgroundDomain + "/api/Login/Login",
                         contentType: "application/json;",
                         data: JSON.stringify({ "UserCode": data.username, "Encrypt": Encrypt, "TimeStamp": timestamp, "VerificationCode": val, "Code": code1 }),
                         dataType: "json",
@@ -283,9 +291,9 @@
             });
         }
 
-       
 
-      
+
+
 
         function changeImg() {
             var imgSrc = $("#imgObj");
@@ -297,11 +305,12 @@
         //为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳     
         function chgUrl(url) {
             code = (new Date()).valueOf();
-            url =BackgroundDomain + "/api/Login/GetLoginVerificationCode?TimeStamp=" + code
+            url = BackgroundDomain + "/api/Login/GetLoginVerificationCode?TimeStamp=" + code
             return url;
-        }  
+        }
 
 
     </script>
 </body>
+
 </html>

@@ -1,112 +1,136 @@
-﻿body {
-}
+﻿body {}
+
 /*最外面大的div*/
 .productInfo {
-    width: 1620px;
+    max-width: 90%;
+    width: 100%;
     background: #FFFFFF;
     opacity: 1;
     border-radius: 10px;
-    margin:0 auto;
 }
+
 /*头部DIV*/
 .divtop {
-    margin-left: 50px;
+    /* margin-left: 50px; */
     padding-top: 46px;
 }
+
 /*头部文字*/
 .labeltop {
     width: 106px;
     height: 17px;
     font-size: 21px;
-    
+
     font-weight: 400;
     line-height: 18px;
     color: #333333;
     opacity: 1;
+    margin-left: 20px;
 }
+
 /*头部分割线*/
 .cutoff_rule {
-    width: 1520px;
+    width: 100%;
     height: 1px;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #292828;
     opacity: 1;
-    background-color: #FFFFFF;
+    background-color: #292828;
 }
+
 /*价格显示部分*/
 .pricelist {
-    width: 1470px;
-    margin-left:100px;
-    margin-top:20px;
-    height: 554px;
+    max-width: 100%;
+    /* 设置最大宽度 */
+    width: 100%;
+    height: 500px;
+    margin-bottom: 50px;
 }
+
+.product-detail {
+    width: 100%;
+    height: 200px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+
 /*图片部分*/
 .indexpicture {
-    width: 400px;
+    width: 35%;
     float: left;
-    height: 494px;
+    height: 460px;
     background-color: #ffffff;
 }
-/*大图*/
-.bigimg {
-    max-width: 400px;
-    max-height: 400px;
-}
+
+
 /*小图片列表*/
 .divimglist {
-    height:64px;
-    margin-top:10px;
-    width:400px;
+    height: 64px;
+    margin-top: 10px;
+    width: 400px;
 }
+
+/*大图*/
+.bigimg {
+    max-width: 70%;
+    max-height: 400px;
+    margin-left: 30px;
+}
+
 /*小图片样式*/
 .smallimg {
+    width: 30%px;
     height: 62px;
-    width: 62px;
     margin-right: 9px;
     border: 1px solid #029803;
 }
+
 /*右边信息div样式*/
 .product-introduce {
-    width: 1040px;
-    height: 478px;
-    margin-left:30px;
+    width: 62%;
+    height: auto;
+    /* margin-left: 30px; */
     float: right;
-   
+
 }
+
 /*标题*/
 .title {
-    width: 1016px;
-    height: 45px;
+    width: 100%;
+    height: auto;
     font-size: 16px;
+
     font-weight: bold;
     line-height: 24px;
     color: #333333;
     opacity: 1;
-    margin-left: 30px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    /* margin-left: 30px; */
 }
+
 /*运输相关的选择下拉框的大DIV*/
 .transport {
-    width: 1016px;
+    width: 100%;
     height: 32px;
-    margin-top:20px;
-   /* text-align:center;*/
+    margin-top: 20px;
+    /* text-align:center;*/
 }
+
 /*运输相关的选择下拉框样式*/
 .layui-select-title {
-    width: 200px !important;
+    width: 100px !important;
 }
+
 .countryselect {
     width: 200px;
     height: 32px;
     background: #FFFFFF;
-    border:  #DDDDDD;
+    border: #DDDDDD;
     opacity: 1;
 }
-.layui-input, .layui-select, .layui-textarea {
+
+.layui-input,
+.layui-select,
+.layui-textarea {
     border-radius: 5px;
 }
 
@@ -114,35 +138,37 @@
     border-radius: 5px;
 }
 
-    .layui-form-select dl dd.layui-this {
-        background-color: #029803;
-    }
+.layui-form-select dl dd.layui-this {
+    background-color: #029803;
+}
+
 /* 整个价格栏的div样式*/
 .priceInfo {
-   width: 1016px;
+    width: 100%;
     /* height: 364px; */
     background: #FFFFFF;
     opacity: 1;
     border-radius: 10px;
-    margin-top :30px;
+    margin-top: 30px;
 }
 
-.priceInfo_contain
-{
-    overflow: auto;
-    height: 364px;
-    min-width: 100%;
+.priceInfo_contain {
+    /* overflow: auto; */
+    height: 200px;
+    width: 100%;
 }
+
 /*价格栏目标题的ul样式*/
 .table-header {
-    width: 1016px;
+    width: 100%;
     height: 36px;
-    line-height:36px;
+    line-height: 36px;
     background: #F2F3F5;
     opacity: 1;
     text-align: center;
-    margin:0 auto;
+    margin: 0 auto;
 }
+
 /*价格栏目标题的li样式*/
 .head_font {
     height: 36px;
@@ -152,11 +178,12 @@
     position: relative;
     cursor: pointer;
     font-size: 14px;
-    
+
     font-weight: 400;
     color: #333333;
     opacity: 1;
 }
+
 /*每条变体的单个li样式*/
 .price_body {
     height: 55px;
@@ -164,33 +191,41 @@
     display: block;
     line-height: 55px;
     float: left;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 /*每条变体的div样式*/
 .table-body {
     height: 55px;
 }
-    /*每条变体的div鼠标指向样式*/
-    .table-body:hover {
-        background-color: #F2F3F5;
-    }
+
+/*每条变体的div鼠标指向样式*/
+.table-body:hover {
+    background-color: #F2F3F5;
+}
+
 /*库存数量的inout框及上下按钮样式*/
 .input-stack {
-    text-align:center;
-    margin-top:10px;
-    margin-left:10px;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 10px;
 }
-    .input-stack input {
-        text-align: center;
-        width: 64px;
-        height: 32px;
-        border: 1px solid #DDDDDD;
-        opacity: 1;
-     /*   border-radius: 5px !important;*/
-        line-height: 32px;
-        font-size: 16px;
-        border-radius: 2px;
-        float:left;
-    }
+
+.input-stack input {
+    text-align: center;
+    width: 50px;
+    height: 32px;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    /*   border-radius: 5px !important;*/
+    line-height: 32px;
+    font-size: 16px;
+    border-radius: 2px;
+    float: left;
+}
+
 /*    加减按钮样式*/
 .add {
     height: 34px;
@@ -202,33 +237,69 @@
     font-size: 24px;
     line-height: 34px;
 }
+
 /*导入商品按钮样式*/
 .importbtn {
     width: 240px;
     height: 36px;
-    border:1px solid #029803;
     background: #029803;
     opacity: 1;
     border-radius: 18px;
-    margin-top:20px;
-    margin-left:25px;
+    /* margin-top: 10px;*/
+    /* display: none; */
+    margin-top: 20px;
+    margin-left: 70px;
+    border-style: solid;
+    border-color: #029803;
+    cursor: pointer;
+    float: left;
+    color: #ffffff;
 }
-/*layui.msg的样式*/
-.layui-layer-msg .layui-layer-content {
-    background-color: #FFD401;
-    color: #FFFFFF;
-    font-size: 16px;
-}
-/*描述详情分隔符*/
-.buttom_rule {
 
-}
+/*描述详情分隔符*/
+.buttom_rule {}
+
 /*layui.msg的样式*/
 .layui-layer-msg .layui-layer-content {
     font-size: 16px;
 }
+
 /*layui.msg的样式改为圆角为5px透明度为0.8*/
 .layui-layer-hui {
-    background-color: rgba(0,0,0,.8) !important;
+    background-color: rgba(0, 0, 0, .8) !important;
     border-radius: 5px !important;
+}
+
+@media screen and (max-width: 1366px) and (max-height: 768px) {
+
+    .pricelist {
+        max-width: 100%;
+        /* 设置最大宽度 */
+        width: 100%;
+        height: 500px;
+        margin-bottom: 20px;
+    }
+
+    /* 设置产品图像的大小 */
+    .product-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .product-title {
+        font-size: 2em;
+        /* 在小屏幕设备上将标题字体大小调整为 2em */
+    }
+
+    .product-description {
+        font-size: 1em;
+        /* 在小屏幕设备上将描述字体大小调整为 1em */
+    }
+
+    /* 调整购买按钮尺寸 */
+    .btn-buy {
+        width: 150px;
+        height: 50px;
+        font-size: 20px;
+    }
 }

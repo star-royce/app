@@ -302,7 +302,7 @@
                       var att = JSON.parse(data.data[0].attribute)
                       if (att != null) {
                         var attcount = Object.keys(att).length
-                        var width = Math.floor(34 / attcount)
+                        var width = Math.floor(20 / attcount)
                         for (var key in att) {
                           pricehtml +=
                             "<li  class='head_font'style='width:" +
@@ -321,6 +321,7 @@
                           id +
                           "'  class='head_font'style='width:34%;text-align:left;' >属性<br/></li>"
                       }
+                      pricehtml += "<li class='head_font'style='width:10%;' >仓库<br></li>";
                       pricehtml +=
                         "<li class='head_font'style='width:4%;' ><button type='button' class='layui-btn layui-btn-primary layui-btn-xs AllQuantity ' data-quantity='" +
                         id +
@@ -342,13 +343,24 @@
                         id +
                         "'>维护采购价</button></li>"
                       pricehtml +=
-                        "<li class='head_font'style='width:5%;'>已维护属性</li>"
+                        "<li class='head_font'style='width:8%;'>已维护属性</li>"
                       pricehtml +=
                         "<li class='head_font'style='width:8%;'><button type='button' class='layui-btn layui-btn-normal  layui-btn-xs AllEetendChange 'data-productid='" +
                         id +
                         "'>维护扩展属性</button></li>"
                       priceul.innerHTML = pricehtml
-
+                      var stockAddress =[];
+                      $.ajax({
+                          type: "post",
+                          contentType: "application/json",
+                          url: BackgroundDomain +'/api/Product/GetProProductStockAddressBySku',
+                          data: JSON.stringify({productId:id}),
+                          async:false,
+                          success: function (ret) 
+                              {
+                                  stockAddress = ret.data;
+                              }
+                         })
                       //循环数据添加主体部分
                       for (var i = 0; i < data.data.length; i++) {
                         var pricediv1 = document.createElement('div')
@@ -377,7 +389,7 @@
                         var att1 = JSON.parse(data.data[i].attribute)
                         if (att1 != null) {
                           var attcount1 = Object.keys(att1).length
-                          var width1 = Math.floor(34 / attcount1)
+                          var width1 = Math.floor(20 / attcount1)
                           for (var key in att1) {
                             pricehtml1 +=
                               "<li  class='price_body'style='width:" +
@@ -395,13 +407,33 @@
                           pricehtml1 +=
                             "<li  class='price_body'style='width:34%;float:left;'><br/></li > "
                         }
+                        var quantity = data.data[i].quantity;
+                        var oen = " <option value ='0'>请选择仓库</option>";
+                          if(stockAddress && stockAddress.length>0)
+                            {
+                              var stocksku= stockAddress.filter(j=>j.sku==data.data[i].sku);
+                                 for (let index = 0; index < stocksku.length; index++) {
+                                   if(stocksku[index].id == data.data[i].stockId)
+                                   {
+                                       oen+="<option value ='"+stocksku[index].id+"' selected = 'selected'>"+stocksku[index].address+"</option>";
+                                       quantity = stocksku[index].stock;
+                                   }else
+                                   {
+                                       oen+="<option value ='"+stocksku[index].id+"'>"+stocksku[index].address+"</option>";
+                                   }    
+                                 }
+                             }
+                                                                 
+                                                               
+                                                              
+                        pricehtml1 += "<li class='price_body' style='width:10%;'> <select class='layui-select' style='width:90%;'  data-key='" + data.data[i].id + "'  onchange='UpdateStock(this)' >"+oen+"<select> <br></li>";
                         pricehtml1 +=
                           "<li class='price_body'style='width:4%;'><input type = 'text' class='layui-input' style='float:left;width:100%;' data-productid = '" +
                           id +
-                          "'  data-key='" +
+                          "'  data-quantity-detail='"+data.data[i].id+"'   data-key='" +
                           data.data[i].id +
                           "'  value = '" +
-                          data.data[i].quantity +
+                          quantity +
                           "' onchange='UpdateQuantity(this)'/> </li>"
                         pricehtml1 +=
                           "<li class='price_body'style='width:4%;'>" +
@@ -431,7 +463,7 @@
                           IsCompleteExtend = '是'
                         }
                         pricehtml1 +=
-                          "<li class='price_body' style='width:5%;' >" +
+                          "<li class='price_body' style='width:8%;' >" +
                           IsCompleteExtend +
                           '</li>'
                         pricehtml1 +=
@@ -1281,6 +1313,24 @@
           },
         })
       }
+      //修改变体库存
+      function UpdateStock(input) {
+            var priceInfo = new Object();
+            priceInfo.id = $(input).attr("data-key");
+            priceInfo.stockId = $(input).val();
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Product/UpdateProductStock',
+                data: JSON.stringify(priceInfo),
+                success: function (data) {
+                    if (data.code > 0) {
+                        layer.msg("修改仓库成功!")
+                        $("input[data-quantity-detail='"+priceInfo.id+"']").val(data.dto.stock);
+                    }
+                }
+            })
+        }
       // 修改商品所有库存
       $(document).on('click', '.AllQuantity', function () {
         var id = $(this).attr('data-quantity')
@@ -1481,15 +1531,10 @@
           <div class="layui-form-item">
             <label class="layui-form-label">是否带电：</label>
             <div class="layui-input-inline">
-              <input
-                class="layui-input attribute"
-                type="number"
-                name="attribute"
-                value=""
-                lay-verify="required"
-                lay-reqtext="属性不能为空"
-                autocomplete="off"
-              />
+              <select  name="attribute" >
+                <option value='0'>否</option>
+                <option value='1'>是</option>
+            </select>
             </div>
           </div>
           <div class="layui-form-item">

@@ -20,7 +20,7 @@
     width: 106px;
     height: 17px;
     font-size: 21px;
-
+    
     font-weight: 400;
     line-height: 18px;
     color: #333333;
@@ -91,7 +91,7 @@
     height: auto;
     /* margin-left: 30px; */
     float: right;
-
+   
 }
 
 /*标题*/
@@ -106,15 +106,17 @@
     opacity: 1;
     /* margin-left: 30px; */
 }
-
+.title:hover
+{
+    -webkit-line-clamp: inherit;
+}
 /*运输相关的选择下拉框的大DIV*/
 .transport {
     width: 100%;
     height: 32px;
     margin-top: 20px;
-    /* text-align:center;*/
+   /* text-align:center;*/
 }
-
 /*运输相关的选择下拉框样式*/
 .layui-select-title {
     width: 100px !important;
@@ -138,9 +140,9 @@
     border-radius: 5px;
 }
 
-.layui-form-select dl dd.layui-this {
-    background-color: #029803;
-}
+    .layui-form-select dl dd.layui-this {
+        background-color: #029803;
+    }
 
 /* 整个价格栏的div样式*/
 .priceInfo {
@@ -178,7 +180,7 @@
     position: relative;
     cursor: pointer;
     font-size: 14px;
-
+    
     font-weight: 400;
     color: #333333;
     opacity: 1;
@@ -229,10 +231,10 @@
     height: 55px;
 }
 
-/*每条变体的div鼠标指向样式*/
-.table-body:hover {
-    background-color: #F2F3F5;
-}
+    /*每条变体的div鼠标指向样式*/
+    .table-body:hover {
+        background-color: #F2F3F5;
+    }
 
 /*库存数量的inout框及上下按钮样式*/
 .input-stack {
@@ -241,18 +243,18 @@
     margin-left: 10px;
 }
 
-.input-stack input {
-    text-align: center;
+    .input-stack input {
+        text-align: center;
     width: 50px;
-    height: 32px;
-    border: 1px solid #DDDDDD;
-    opacity: 1;
-    /*   border-radius: 5px !important;*/
-    line-height: 32px;
-    font-size: 16px;
-    border-radius: 2px;
+        height: 32px;
+        border: 1px solid #DDDDDD;
+        opacity: 1;
+     /*   border-radius: 5px !important;*/
+        line-height: 32px;
+        font-size: 16px;
+        border-radius: 2px;
     float: left;
-}
+    }
 
 /*    加减按钮样式*/
 .add {
@@ -265,11 +267,11 @@
     font-size: 24px;
     line-height: 34px;
 }
-
 /*导入商品按钮样式*/
 .importbtn {
     width: 240px;
     height: 36px;
+    border:1px solid #029803;
     background: #029803;
     opacity: 1;
     border-radius: 18px;
@@ -283,15 +285,20 @@
     float: left;
     color: #ffffff;
 }
-
+/*layui.msg的样式*/
+.layui-layer-msg .layui-layer-content {
+    background-color: #FFD401;
+    color: #FFFFFF;
+    font-size: 16px;
+}
 /*描述详情分隔符*/
-.buttom_rule {}
+.buttom_rule {
 
+}
 /*layui.msg的样式*/
 .layui-layer-msg .layui-layer-content {
     font-size: 16px;
 }
-
 /*layui.msg的样式改为圆角为5px透明度为0.8*/
 .layui-layer-hui {
     background-color: rgba(0, 0, 0, .8) !important;

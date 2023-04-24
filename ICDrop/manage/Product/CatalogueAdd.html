@@ -38,7 +38,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">上级分类</label>
                 <div class="layui-input-block">
-                    <select id="superiorId" name="superiorId" lay-search lay-verify="">
+                    <select id="superiorId" name="superiorId" >
                         <option value='0'>无上级</option>
                     </select>
                 </div>
@@ -102,7 +102,7 @@
                 url: BackgroundDomain +'/api/Product/GetProCatalogueList',
                 async:false,
                 success: function (data) {
-                    var str = "<option value='0'>无上级</option>";
+                    var str = "<option value='0'></option>";
                     for (let i of data.filter(i => i.superiorId < 1)) {
                         //组装数据
                         str += `<option value='${i.id}'>${i.catalogueName}</option>`;
@@ -110,7 +110,7 @@
                     //jquery赋值方式
                     $("#superiorId").html(str);
                     //重新渲染生效
-                    form.render();
+                    //form.render();
                 }
             });
             if (catalogueid)

@@ -1,58 +1,753 @@
 ﻿<!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8" />
+  <head>
+    <meta charset="utf-8" />
   <title>Product Details</title>
-  <meta name="renderer" content="webkit" />
-  <meta name="referrer" content="no-referrer" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all" />
-  <link rel="stylesheet" href="/css/public.css" media="all" />
-  <link rel="stylesheet" href="/css/ProductDetail.css?v=2" media="all" />
+    <link rel="stylesheet" href="/lib/layui-v2.6.3/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/css/public.css" media="all" />
+    <link rel="stylesheet" href="/css/ProductDetail.css?v=2" media="all" />
   <link rel="icon" href="/images/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+  </head>
 
-<body>
-  <div id="productInfo" class="productInfo"></div>
+  <body>
+    <div id="productInfo" class="productInfo"></div>
 
-  <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-  <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
-  <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
-  <script src="/js/web-template.js"></script>
-  <script src="/js/web-diff.js"></script>
-  <script type="text/javascript">
-    //用来保存物流价格信息
-    var LogisticspriceList = new Object()
-    //选中的物流价格信息
-    var Logisticspricethis = new Object()
-    //变体列表
-    var variantList = new Object()
-    var YDHConfig
+    <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=2.0.1" charset="utf-8"></script>
+    <script
+      src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"
+      charset="utf-8"
+    ></script>
+    <script src="/js/web-template.js"></script>
+    <script src="/js/web-diff.js"></script>
+    <script type="text/javascript">
+      //用来保存物流价格信息
+      var LogisticspriceList = new Object()
+      //选中的物流价格信息
+      var Logisticspricethis = new Object()
+      //变体列表
+      var variantList = new Object()
+      var YDHConfig
 
-    function getQueryVariable(variable) {
-      var query = window.location.search.substring(1)
-      var vars = query.split('&')
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=')
-        if (pair[0] == variable) {
-          return pair[1]
+      function getQueryVariable(variable) {
+        var query = window.location.search.substring(1)
+        var vars = query.split('&')
+        for (var i = 0; i < vars.length; i++) {
+          var pair = vars[i].split('=')
+          if (pair[0] == variable) {
+            return pair[1]
+          }
+        }
+        return false
+      }
+
+      var stockAddress = []
+
+      layui.use(['form', 'laypage', 'i18n'], function () {
+        var $ = layui.jquery,
+          layer = layui.layer,
+          form = layui.form,
+          i18n = layui.i18n
+
+        YDHConfig = layui.data('YDH-Customer')
+        // 请求拦截器，添加请求头
+        $.ajaxSetup({
+          beforeSend: function (req) {
+            if (YDHConfig.Secret) {
+              req.setRequestHeader('YDHAuthToken', YDHConfig.Secret)
+              req.setRequestHeader('ETag', 0)
+              req.setRequestHeader('Last-Modified', 0)
+            }
+          },
+        })
+
+        var id = getQueryVariable('id')
+        var RoleName = getQueryVariable('RoleName')
+        //获取div
+        var divf = document.getElementById('productInfo')
+
+        var divtop = document.createElement('div')
+        divtop.setAttribute('class', 'divtop')
+        divf.appendChild(divtop)
+
+        var labeltop = document.createElement('label')
+        labeltop.setAttribute('class', 'labeltop')
+        labeltop.setAttribute('i18n_Text', 'Product.details')
+        divtop.appendChild(labeltop)
+        //头部分隔符
+        var fg = document.createElement('hr')
+        fg.setAttribute('class', 'cutoff_rule')
+        divtop.appendChild(fg)
+
+        //增加价格信息
+        var div = document.createElement('div')
+        div.setAttribute('class', 'pricelist')
+        divf.appendChild(div)
+
+        $.ajax({
+          type: 'post',
+          contentType: 'application/json',
+          url: BackgroundDomain + '/api/Product/GetProProductStockAddressBySku',
+          async: false,
+          data: JSON.stringify({ ProductId: Number(getQueryVariable('id')) }),
+          success: function (ret) {
+            stockAddress = ret.data
+          },
+        })
+
+        var pircturelist = new Object()
+        var pirctureindex = 1
+        var picture = new Object()
+        //获取物流价格
+        //获取物流价格信息
+        Logisticsprice()
+        function Logisticsprice() {
+          var Logisticsprice = new Object()
+          Logisticsprice.limit = 1000
+          Logisticsprice.page = 1
+          var PriceRule = new Object()
+          PriceRule.Status = 'Y'
+          Logisticsprice.dto = PriceRule
+
+          $.ajax({
+            type: 'post',
+            contentType: 'application/json',
+            url: BackgroundDomain + '/api/Price/QueryPriceRuleList',
+            data: JSON.stringify(Logisticsprice),
+            success: function (data) {
+              LogisticspriceList = data.data
+              //因为js是顺序执行，先获取物流价格规则然后再选择物流
+              GetBody()
+            },
+          })
+        }
+
+        function GetBody() {
+          var SerchproductInfo = new Object()
+          SerchproductInfo.id = id
+          var dto_obj = new Object()
+          dto_obj.page = 1
+          dto_obj.limit = 10
+          dto_obj.dto = SerchproductInfo
+          var url = BackgroundDomain + '/api/Product/QueryImportProductInfo'
+          if (RoleName == 'Client') {
+            url = BackgroundDomain + '/api/Product/QueryClientProductInfo'
+          }
+          $.ajax({
+            type: 'post',
+            contentType: 'application/json',
+            url: url,
+            data: JSON.stringify(dto_obj),
+            success: function (msg) {
+              if (msg.data != null) {
+                pircturelist = msg.data[0].pictureJson
+                picture = pircturelist
+                  .replace('[', '')
+                  .replace(']', '')
+                  .split(',')
+                //添加主图
+                var div1 = document.createElement('div')
+                div1.setAttribute('class', 'indexpicture')
+                div.appendChild(div1)
+
+                var img = document.createElement('img')
+                img.setAttribute('id', 'bigimg')
+                img.setAttribute('src', msg.data[0].indexPicture)
+                img.setAttribute('referrerPolicy', 'no-referrer')
+                img.setAttribute('class', 'bigimg')
+                div1.appendChild(img)
+                //小图片列表
+                var divimglist = document.createElement('div')
+                divimglist.setAttribute('class', 'divimglist')
+                div1.appendChild(divimglist)
+                //上一页按钮
+                var preva = document.createElement('a')
+                preva.setAttribute('style', 'margin-right:10px;')
+                preva.innerHTML =
+                  "<img src='../../images/prev.png' id='Prevapicture'/>"
+                divimglist.appendChild(preva)
+
+                //每一页五个小图片
+                for (var i = 0; i < 5; i++) {
+                  var smallimg = document.createElement('img')
+                  smallimg.setAttribute('class', 'smallimg')
+                  smallimg.setAttribute('onclick', 'UpdateBigImg(' + i + ')')
+                  smallimg.setAttribute('id', 'smallimg_' + i)
+                  smallimg.setAttribute('referrerPolicy', 'no-referrer')
+                  divimglist.appendChild(smallimg)
+                }
+                //图片列表增加图片地址
+                PictureAddUrl(pirctureindex)
+                //下一页按钮
+                var next = document.createElement('a')
+                next.innerHTML =
+                  "<img src='../../images/next.png' id='Nextpicture' />"
+                divimglist.appendChild(next)
+
+                //添加产品信息介绍
+                var div2 = document.createElement('div')
+                div2.setAttribute('class', 'product-introduce')
+                div.appendChild(div2)
+                //标题
+                var div3 = document.createElement('div')
+                div3.setAttribute('class', 'title')
+                div2.appendChild(div3)
+                div3.innerHTML = msg.data[0].productTitle
+
+                //时效和城市选择框
+                var divtransport = document.createElement('div')
+                divtransport.setAttribute('class', 'transport')
+                div2.appendChild(divtransport)
+
+                var from = document.createElement('from')
+                from.setAttribute('class', 'layui-form')
+                divtransport.appendChild(from)
+
+                var countryLable = document.createElement('lable')
+                countryLable.setAttribute('i18n_Text', 'country')
+                countryLable.setAttribute('style', 'margin-left:10px;')
+                countryLable.innerHTML = $.i18n.prop('country')
+                from.appendChild(countryLable)
+
+                var countrydiv = document.createElement('div')
+                countrydiv.setAttribute('class', 'layui-input-inline')
+                countrydiv.setAttribute('style', 'margin-left:10px;')
+                from.appendChild(countrydiv)
+
+                var countryselect = document.createElement('select')
+                countryselect.setAttribute('class', 'countryselect')
+                countryselect.setAttribute('onchange', 'countryselectchange')
+                countryselect.setAttribute('id', 'countryselect')
+                countryselect.setAttribute('lay-filter', 'countryselect')
+                countrydiv.appendChild(countryselect)
+
+                var shipinglable = document.createElement('lable')
+                shipinglable.setAttribute('i18n_Text', 'travelling.speed')
+                shipinglable.setAttribute('style', 'margin-left:10px;')
+                shipinglable.innerHTML = $.i18n.prop('travelling.speed')
+                from.appendChild(shipinglable)
+
+                var shipingdiv = document.createElement('div')
+                shipingdiv.setAttribute('class', 'layui-input-inline')
+                shipingdiv.setAttribute('style', 'margin-left:10px;')
+                from.appendChild(shipingdiv)
+
+                var shipingselect = document.createElement('select')
+                shipingselect.setAttribute('class', 'countryselect')
+                shipingselect.setAttribute('id', 'shipingselect')
+                shipingselect.setAttribute('lay-filter', 'shipingselect')
+                shipingdiv.appendChild(shipingselect)
+
+                var arr = new Array()
+                let str = ''
+                for (let i of LogisticspriceList) {
+                  //组装数据
+                  if (arr.indexOf(i.countryCode) == -1) {
+                    str += `<option value='${i.countryCode}'>${i.country}</option>`
+                    arr.push(i.countryCode)
+                  }
+                }
+                //jquery赋值方式
+                $('#countryselect').html(str)
+
+                layui.form.render('select')
+
+                var shoppingFrom = document.createElement('lable')
+                shoppingFrom.setAttribute(
+                  'i18n_Text',
+                  'travelling.shoppingFrom',
+                )
+                shoppingFrom.setAttribute('style', 'margin-left:10px;')
+                shoppingFrom.innerHTML = $.i18n.prop('travelling.shoppingFrom')
+                from.appendChild(shoppingFrom)
+
+                var shoppingFromdiv = document.createElement('div')
+                shoppingFromdiv.setAttribute('class', 'layui-input-inline')
+                shoppingFromdiv.setAttribute('style', 'margin-left:10px;')
+                from.appendChild(shoppingFromdiv)
+
+                var shoppingFromselect = document.createElement('select')
+                shoppingFromselect.setAttribute('class', 'shoppingFrom')
+                shoppingFromselect.setAttribute('id', 'shoppingFrom')
+                shoppingFromselect.setAttribute('lay-filter', 'shoppingFrom')
+                shoppingFromselect.setAttribute('onchange', " OperateInventory();");
+                shoppingFromdiv.appendChild(shoppingFromselect)
+
+                var arrshoppingFrom = new Array()
+                let strshoppingFrom = ''
+                
+                for (let i of stockAddress) {
+                  //组装数据
+
+                  if (arr.indexOf(i.stockCode) == -1) {
+                    strshoppingFrom += `<option value='${i.stockCode}'>${i.address}</option>`
+                    arr.push(i.stockCode)
+                  }
+                }
+                //jquery赋值方式
+                $('#shoppingFrom').html(strshoppingFrom)
+                layui.form.render('select')
+
+                //运输时效根据选择的城市来显示有哪些运输时效
+                //先获取选择的国家二字码
+                var countryCode = $('#countryselect').val()
+                var shipingarr = new Array()
+                var shipingstr = ''
+                var dex = 0
+                for (let i of LogisticspriceList) {
+                  if (
+                    shipingstr.indexOf(i.aging) == -1 &&
+                    i.countryCode == countryCode
+                  ) {
+                    shipingstr += `<option value='${i.id}'>${i.aging}</option>`
+                    shipingarr.push(i.aging)
+                    if (dex == 0) {
+                      Logisticspricethis = i
+                    }
+                    dex++
+                  }
+                }
+                //jquery赋值方式
+                $('#shipingselect').html(shipingstr)
+
+                layui.form.render('select')
+
+                //获取价格信息
+                var productprice = new Object()
+                productprice.productId = id
+                $.ajax({
+                  type: 'post',
+                  contentType: 'application/json',
+                  url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
+                  data: JSON.stringify(productprice),
+                  success: function (data) {
+                    variantList = data.data
+                    //价格信息
+                    var div4 = document.createElement('div')
+                    div4.setAttribute('class', 'priceInfo')
+                    div2.appendChild(div4)
+                    var div10 = document.createElement('div')
+                    div10.setAttribute('class', 'priceInfo_contain')
+                    div4.appendChild(div10)
+
+                    var pricehtml = ''
+                    var priceul = document.createElement('ul')
+                    /*    priceul.setAttribute('style', 'width:95%;height:10%;text-align:center;margin:10px 5px  auto auto;');*/
+                    priceul.setAttribute('class', 'table-header')
+                    div10.appendChild(priceul)
+                    pricehtml +=
+                      "<li class='head_font'style='width:5%;background: #FFFFFF;' ><br></li>"
+                    //将属性字段分隔成单个属性
+                    var att = JSON.parse(data.data[0].attribute)
+                    if (att != null) {
+                    // var attcount = Object.keys(att).length
+                    // var width = Math.floor(40 / attcount)
+                      for (var key in att) {
+                      console.log('key: ' + key);
+                      if (key == "color" || key == "Color") {
+                        pricehtml +=
+                          "<li  class='head_font'style='width: 15%;' >" +
+                          key +
+                          '<br></li>'
+                    } else {
+                      pricehtml +=
+                          "<li  class='head_font'style='width: 5%;' >" +
+                          key +
+                        '<br></li>'
+                    }
+                    }
+                  }
+                    pricehtml +=
+                      "<li class='head_font'style='width:10%;' >" +
+                      $.i18n.prop('productDetail.Stock') +
+                      '<br></li>'
+                    pricehtml +=
+                    "<li class='head_font'style='width:20%;' >" +
+                    $.i18n.prop('Quantity') +
+                    '<br></li>'
+                  pricehtml +=
+                    "<li class='head_font'style='width:10%;' >" +
+                      $.i18n.prop('Weight.kg') +
+                      '<br></li>'
+                    pricehtml +=
+                    "<li class='head_font'style='width:20%;'>" +
+                    $.i18n.prop('cost.$') +
+                      '<br></li>'
+                    pricehtml +=
+                      "<li class='head_font'style='width:15%;'>" +
+                      $.i18n.prop('freight.$') +
+                      '<br></li>'
+                    priceul.innerHTML = pricehtml
+
+                    var div5 = document.createElement('div')
+                    div10.appendChild(div5)
+
+                    for (var i = 0; i < data.data.length; i++) {
+                      var pricediv1 = document.createElement('div')
+                      pricediv1.setAttribute('class', 'table-body')
+                      div5.appendChild(pricediv1)
+
+                      var priceul1 = document.createElement('ul')
+                      pricediv1.appendChild(priceul1)
+                      var pricehtml1 = ''
+                      pricehtml1 +=
+                      "<li class='price_body' style='width:5%;background: #FFFFFF;'><img src='" +
+                        data.data[i].pictureUrl +
+                        "' style='height:40px;width:40px;' referrerPolicy='no-referrer'><br></li>"
+                      //将属性字段分隔成单个属性
+                      var att1 = JSON.parse(data.data[i].attribute)
+                      if (att1 != null) {
+                        for (var key in att1) {
+                        if (key == "color" || key == "Color") {
+                          pricehtml1 +=
+                            "<li  class='long-price_body'style='width:15%;' data-fulltext="+ att1[key] +" >" +
+                            att1[key] +
+                            '<br></li>'
+                      } else {
+                        pricehtml1 +=
+                            "<li  class='price_body'style='width:5%;' >" +
+                            att1[key] +
+                          '<br></li>'
+                      }
+                      }
+                    }
+                      pricehtml1 +=
+                        "<li class='price_body'style='width:10%;' id='inventory" +
+                        data.data[i].sku +
+                        "'>" +
+                        12 +
+                        '<br></li>'
+                      pricehtml1 +=
+                        "<li class='price_body'style='width:15%;'>" +
+                        data.data[i].variantExtend.weight +
+                        '<br></li>'
+                      pricehtml1 +=
+                        "<li class='price_body'style='width:15%;'>" +
+                        data.data[i].price +
+                        '<br></li>'
+
+                      //计算预估运费
+                      var Logisticspriceid = $('#shipingselect').val
+                      var isElectricity =
+                        data.data[i].variantExtend.attribute == 0 ? 'N' : 'Y'
+                      var unitweight = data.data[i].variantExtend.weight
+                      var quantity = 1
+                      var weight = unitweight * quantity
+                      var freight = ''
+                      for (let i of LogisticspriceList) {
+                        if (
+                          i.countryCode == Logisticspricethis.countryCode &&
+                          i.aging == Logisticspricethis.aging &&
+                          weight > i.minWeight &&
+                          weight < i.maxWeight &&
+                          isElectricity == i.attribute
+                        ) {
+                          freight =
+                            i.price * weight + i.registrationFee + i.handlingFee
+                        }
+                      }
+                      pricehtml1 +=
+                        "<li class='price_body'style='width:10%;'><div class='freight' id='freight" +
+                        data.data[i].id +
+                        "'>" +
+                        freight +
+                        '</div><br></li>'
+                      priceul1.innerHTML = pricehtml1
+                    }
+                  
+                    OperateInventory()
+                  },
+                })
+
+                //添加导入商品的按钮,如果是登录状态则显示，否则不显示
+                if (YDHConfig.Secret) {
+                  var importdiv = document.createElement('div')
+                  importdiv.setAttribute('class', 'importproduct')
+                  div.appendChild(importdiv)
+
+                  var importinput = document.createElement('input')
+                  importinput.setAttribute('type', 'button')
+                  importinput.setAttribute('id', 'importbtn' + id)
+                importinput.setAttribute('class', 'layui-icon importbtn')
+                  importinput.setAttribute('value', $.i18n.prop('Import.goods'))
+                  importinput.setAttribute(
+                    'onclick',
+                    'ImportProduct(' + id + ')',
+                  )
+                  importdiv.appendChild(importinput)
+                }
+
+                //描叙详情
+                var descriptiondiv = document.createElement('div')
+                descriptiondiv.setAttribute(
+                  'style',
+                  'max-width:984px;margin:0px auto',
+                )
+                divf.appendChild(descriptiondiv)
+
+                var div6 = document.createElement('div')
+                div6.setAttribute('style', 'max-width:984px;margin:30px auto')
+                divf.appendChild(div6)
+
+                var span = document.createElement('span')
+                descriptiondiv.appendChild(span)
+                span.setAttribute('style', 'font-size:21px;')
+                span.innerHTML = $.i18n.prop('Product.description')
+
+                //尾部分隔符
+                var fgbuttom = document.createElement('hr')
+                fgbuttom.setAttribute('class', 'buttom_rule')
+                descriptiondiv.appendChild(fgbuttom)
+
+                var productdescription = new Object()
+                productdescription.productId = id
+                $.ajax({
+                  type: 'post',
+                  contentType: 'application/json',
+                  url:
+                    BackgroundDomain +
+                    '/api/Product/QueryProductDescriptionInfo',
+                  data: JSON.stringify(productdescription),
+                  success: function (data) {
+                    div6.innerHTML = data.dto.content
+                  },
+                })
+
+                //点击上一页的图片
+                $('#Prevapicture').click(function () {
+                  var count = picture.length
+                  var index = Math.ceil(count / 5)
+                  pirctureindex--
+                  if (pirctureindex == 0) {
+                    pirctureindex = index
+                  }
+                  PictureAddUrl(pirctureindex)
+                })
+
+                //点击下一页的图片
+                $('#Nextpicture').click(function () {
+                  var count = picture.length
+                  var index = Math.ceil(count / 5)
+                  pirctureindex++
+                  if (pirctureindex > index) {
+                    pirctureindex = 1
+                  }
+                  PictureAddUrl(pirctureindex)
+                })
+              }
+            },
+          })
+        }
+
+        // 国际化初始化
+        var YDHConfigc = layui.data('YDH')
+        var cid = 'en_us'
+        if (YDHConfigc.Lang) {
+          cid = YDHConfigc.Lang.id
+        }
+
+        i18n.loadProperties(cid)
+
+        //城市下拉框选择值改变后的处理（运输速度绑定选项也出现变化，运费重算）
+        form.on('select(countryselect)', function (data) {
+          var opt = $('#countryselect').val()
+          var shipingarr = new Array()
+          var shipingstr = ''
+          var dex = 0
+          for (let i of LogisticspriceList) {
+            if (shipingstr.indexOf(i.aging) == -1 && i.countryCode == opt) {
+              shipingstr += `<option value='${i.id}'>${i.aging}</option>`
+              shipingarr.push(i.aging)
+              if (dex == 0) {
+                Logisticspricethis = i
+              }
+              dex++
+            }
+          }
+          //jquery赋值方式
+          $('#shipingselect').html(shipingstr)
+          layui.form.render('select')
+          GetEstimateFreight()
+        })
+
+        //运输速度下拉框选择值改变后的处理（运费重算）
+        form.on('select(shipingselect)', function (data) {
+          for (let i of LogisticspriceList) {
+            var shipingstr = ''
+            if (i.id == data.value) {
+              shipingstr += `<option value='${i.id}'>${i.aging}</option>`
+              Logisticspricethis = i
+            }
+          }
+          GetEstimateFreight()
+        })
+
+        //计算所有产品变体的预估运费
+        function GetEstimateFreight() {
+          var Logisticspriceid = $('#shipingselect').val
+
+          for (var i = 0; i < variantList.length; i++) {
+            var freightdiv = document.getElementById(
+              'freight' + variantList[i].id,
+            )
+
+            //计算预估运费
+            var isElectricity =
+              variantList[i].variantExtend.attribute == 0 ? 'N' : 'Y'
+            var unitweight = variantList[i].variantExtend.weight
+            var quantity = 1
+            var weight = unitweight * quantity
+            var freight = ''
+            for (let i of LogisticspriceList) {
+              if (
+                i.countryCode == Logisticspricethis.countryCode &&
+                i.aging == Logisticspricethis.aging &&
+                weight > i.minWeight &&
+                weight < i.maxWeight &&
+                isElectricity == i.attribute
+              ) {
+                freight = i.price * weight + i.registrationFee + i.handlingFee
+              }
+            }
+            freightdiv.innerHTML = freight
+          }
+        }
+
+        //图片列表添加图片地址
+        function PictureAddUrl(id) {
+          try {
+          var count = picture.length
+          var index = Math.ceil(count / 5)
+          var yu = count % 5
+          if (id > index) {
+            pirctureindex = 1
+          }
+          var reg = new RegExp('"', 'g')
+          var fristindex = (pirctureindex - 1) * 5
+          var src0
+          var src1
+          var src2
+          var src3
+          var src4
+          if (pirctureindex == index) {
+            if (yu == 1) {
+              src0 = picture[fristindex].replace(reg, '')
+              src1 = picture[0].replace(reg, '')
+              src2 = picture[1].replace(reg, '')
+              src3 = picture[2].replace(reg, '')
+              src4 = picture[3].replace(reg, '')
+            } else if (yu == 2) {
+              src0 = picture[fristindex].replace(reg, '')
+              src1 = picture[fristindex + 1].replace(reg, '')
+              src2 = picture[0].replace(reg, '')
+              src3 = picture[1].replace(reg, '')
+              src4 = picture[2].replace(reg, '')
+            } else if (yu == 3) {
+              src0 = picture[fristindex].replace(reg, '')
+              src1 = picture[fristindex + 1].replace(reg, '')
+              src2 = picture[fristindex + 2].replace(reg, '')
+              src3 = picture[0].replace(reg, '')
+              src4 = picture[1].replace(reg, '')
+            } else if (yu == 4) {
+              src0 = picture[fristindex].replace(reg, '')
+              src1 = picture[fristindex + 1].replace(reg, '')
+              src2 = picture[fristindex + 2].replace(reg, '')
+              src3 = picture[fristindex + 3].replace(reg, '')
+              src4 = picture[0].replace(reg, '')
+            }
+          } else {
+            src0 = picture[fristindex].replace(reg, '')
+            src1 = picture[fristindex + 1].replace(reg, '')
+            src2 = picture[fristindex + 2].replace(reg, '')
+            src3 = picture[fristindex + 3].replace(reg, '')
+            src4 = picture[fristindex + 4].replace(reg, '')
+          }
+
+          $('#bigimg').attr('src', src0)
+          $('#smallimg_' + 0).attr('src', src0)
+          $('#smallimg_' + 1).attr('src', src1)
+          $('#smallimg_' + 2).attr('src', src2)
+          $('#smallimg_' + 3).attr('src', src3)
+          $('#smallimg_' + 4).attr('src', src4)
+        } catch (error) {
+            
+          }
+        }
+      })
+      //数量加按钮的单击事件（数量发生改变，预估运费发生改变）
+      function upclick(id) {
+        var input = document.getElementById('quantity' + id)
+        input.value = Number(input.value) + 1
+        UpdateQuantity(id)
+      }
+      //数量减按钮的单击事件（数量发生改变，预估运费发生改变）
+      function downclick(id) {
+        var input = document.getElementById('quantity' + id)
+        if (Number(input.value) > 1) {
+          input.value = Number(input.value) - 1
+          UpdateQuantity(id)
         }
       }
-      return false
-    }
 
-    var stockAddress = []
+      function OperateInventory() {
+        var address = document.querySelector('#shoppingFrom').value;
 
-    layui.use(['form', 'laypage', 'i18n'], function () {
-      var $ = layui.jquery,
-        layer = layui.layer,
-        form = layui.form,
-        i18n = layui.i18n
+        for (let index = 0; index < variantList.length; index++) {
+          const variant = variantList[index]
+          var isUpd = false
+          for (let j = 0; j < stockAddress.length; j++) {
+            const stock = stockAddress[j]
+            if (stock.address == address && stock.sku == variant.sku) {
+              isUpd = true
+              $('#inventory' + stock.sku).text(stock.stock)
+            }
+          }
+          if (!isUpd) {
+            $('#inventory' + variant.sku).text(0)
+          }
+        }
+      }
 
-      YDHConfig = layui.data('YDH-Customer')
+      //数量更改事件，运费相应的发生改变
+      function UpdateQuantity(id) {
+        //计算预估运费
+        var input = document.getElementById('quantity' + id)
+        var Logisticspriceid = $('#shipingselect').val
+        var unitweight = $('#quantity' + id).attr('data-weight')
+        var isElectricity =
+          $('#quantity' + id).attr('data-isElectricity') == 0 ? 'N' : 'Y'
+
+        var quantity = input.value
+        var weight = unitweight * quantity
+        var freight = ''
+        for (let i of LogisticspriceList) {
+          if (
+            i.countryCode == Logisticspricethis.countryCode &&
+            i.aging == Logisticspricethis.aging &&
+            weight > i.minWeight &&
+            weight <= i.maxWeight &&
+            isElectricity == i.attribute
+          ) {
+            freight = i.price * weight + i.registrationFee + i.handlingFee
+          }
+        }
+        var freightdiv = document.getElementById('freight' + id)
+        $('#freight' + id).innerHTML = ''
+        freightdiv.innerHTML = freight
+      }
+
+      //点击小图片的时候更改主图的src
+      function UpdateBigImg(id) {
+        var src = $('#smallimg_' + id).attr('src')
+        $('#bigimg').attr('src', src)
+      }
+
       // 请求拦截器，添加请求头
       $.ajaxSetup({
         beforeSend: function (req) {
@@ -64,742 +759,42 @@
         },
       })
 
-      var id = getQueryVariable('id')
-      var RoleName = getQueryVariable('RoleName')
-      //获取div
-      var divf = document.getElementById('productInfo')
-
-      var divtop = document.createElement('div')
-      divtop.setAttribute('class', 'divtop')
-      divf.appendChild(divtop)
-
-      var labeltop = document.createElement('label')
-      labeltop.setAttribute('class', 'labeltop')
-      labeltop.setAttribute('i18n_Text', 'Product.details')
-      divtop.appendChild(labeltop)
-      //头部分隔符
-      var fg = document.createElement('hr')
-      fg.setAttribute('class', 'cutoff_rule')
-      divtop.appendChild(fg)
-
-      //增加价格信息
-      var div = document.createElement('div')
-      div.setAttribute('class', 'pricelist')
-      divf.appendChild(div)
-
-      $.ajax({
-        type: 'post',
-        contentType: 'application/json',
-        url: BackgroundDomain + '/api/Product/GetProProductStockAddressBySku',
-        async: false,
-        data: JSON.stringify({ ProductId: Number(getQueryVariable('id')) }),
-        success: function (ret) {
-          stockAddress = ret.data
-        },
-      })
-
-      var pircturelist = new Object()
-      var pirctureindex = 1
-      var picture = new Object()
-      //获取物流价格
-      //获取物流价格信息
-      Logisticsprice()
-      function Logisticsprice() {
-        var Logisticsprice = new Object()
-        Logisticsprice.limit = 1000
-        Logisticsprice.page = 1
-        var PriceRule = new Object()
-        PriceRule.Status = 'Y'
-        Logisticsprice.dto = PriceRule
-
+      ////导入产品
+      function ImportProduct(id) {
+        var productInfo = new Object()
+        productInfo.id = id
         $.ajax({
           type: 'post',
           contentType: 'application/json',
-          url: BackgroundDomain + '/api/Price/QueryPriceRuleList',
-          data: JSON.stringify(Logisticsprice),
+          url: BackgroundDomain + '/api/Product/ImportProductInfo',
+          data: JSON.stringify(productInfo),
           success: function (data) {
-            LogisticspriceList = data.data
-            //因为js是顺序执行，先获取物流价格规则然后再选择物流
-            GetBody()
-          },
-        })
-      }
-
-      function GetBody() {
-        var SerchproductInfo = new Object()
-        SerchproductInfo.id = id
-        var dto_obj = new Object()
-        dto_obj.page = 1
-        dto_obj.limit = 10
-        dto_obj.dto = SerchproductInfo
-        var url = BackgroundDomain + '/api/Product/QueryImportProductInfo'
-        if (RoleName == 'Client') {
-          url = BackgroundDomain + '/api/Product/QueryClientProductInfo'
-        }
-        $.ajax({
-          type: 'post',
-          contentType: 'application/json',
-          url: url,
-          data: JSON.stringify(dto_obj),
-          success: function (msg) {
-            if (msg.data != null) {
-              pircturelist = msg.data[0].pictureJson
-              picture = pircturelist
-                .replace('[', '')
-                .replace(']', '')
-                .split(',')
-              //添加主图
-              var div1 = document.createElement('div')
-              div1.setAttribute('class', 'indexpicture')
-              div.appendChild(div1)
-
-              var img = document.createElement('img')
-              img.setAttribute('id', 'bigimg')
-              img.setAttribute('src', msg.data[0].indexPicture)
-              img.setAttribute('referrerPolicy', 'no-referrer')
-              img.setAttribute('class', 'bigimg')
-              div1.appendChild(img)
-              //小图片列表
-              var divimglist = document.createElement('div')
-              divimglist.setAttribute('class', 'divimglist')
-              div1.appendChild(divimglist)
-              //上一页按钮
-              var preva = document.createElement('a')
-              preva.setAttribute('style', 'margin-right:10px;')
-              preva.innerHTML =
-                "<img src='../../images/prev.png' id='Prevapicture'/>"
-              divimglist.appendChild(preva)
-
-              //每一页五个小图片
-              for (var i = 0; i < 5; i++) {
-                var smallimg = document.createElement('img')
-                smallimg.setAttribute('class', 'smallimg')
-                smallimg.setAttribute('onclick', 'UpdateBigImg(' + i + ')')
-                smallimg.setAttribute('id', 'smallimg_' + i)
-                smallimg.setAttribute('referrerPolicy', 'no-referrer')
-                divimglist.appendChild(smallimg)
-              }
-              //图片列表增加图片地址
-              PictureAddUrl(pirctureindex)
-              //下一页按钮
-              var next = document.createElement('a')
-              next.innerHTML =
-                "<img src='../../images/next.png' id='Nextpicture' />"
-              divimglist.appendChild(next)
-
-              //添加产品信息介绍
-              var div2 = document.createElement('div')
-              div2.setAttribute('class', 'product-introduce')
-              div.appendChild(div2)
-              //标题
-              var div3 = document.createElement('div')
-              div3.setAttribute('class', 'title')
-              div2.appendChild(div3)
-              div3.innerHTML = msg.data[0].productTitle
-
-              //时效和城市选择框
-              var divtransport = document.createElement('div')
-              divtransport.setAttribute('class', 'transport')
-              div2.appendChild(divtransport)
-
-              var from = document.createElement('from')
-              from.setAttribute('class', 'layui-form')
-              divtransport.appendChild(from)
-
-              var countryLable = document.createElement('lable')
-              countryLable.setAttribute('i18n_Text', 'country')
-              countryLable.setAttribute('style', 'margin-left:10px;')
-              countryLable.innerHTML = $.i18n.prop('country')
-              from.appendChild(countryLable)
-
-              var countrydiv = document.createElement('div')
-              countrydiv.setAttribute('class', 'layui-input-inline')
-              countrydiv.setAttribute('style', 'margin-left:10px;')
-              from.appendChild(countrydiv)
-
-              var countryselect = document.createElement('select')
-              countryselect.setAttribute('class', 'countryselect')
-              countryselect.setAttribute('onchange', 'countryselectchange')
-              countryselect.setAttribute('id', 'countryselect')
-              countryselect.setAttribute('lay-filter', 'countryselect')
-              countrydiv.appendChild(countryselect)
-
-              var shipinglable = document.createElement('lable')
-              shipinglable.setAttribute('i18n_Text', 'travelling.speed')
-              shipinglable.setAttribute('style', 'margin-left:10px;')
-              shipinglable.innerHTML = $.i18n.prop('travelling.speed')
-              from.appendChild(shipinglable)
-
-              var shipingdiv = document.createElement('div')
-              shipingdiv.setAttribute('class', 'layui-input-inline')
-              shipingdiv.setAttribute('style', 'margin-left:10px;')
-              from.appendChild(shipingdiv)
-
-              var shipingselect = document.createElement('select')
-              shipingselect.setAttribute('class', 'countryselect')
-              shipingselect.setAttribute('id', 'shipingselect')
-              shipingselect.setAttribute('lay-filter', 'shipingselect')
-              shipingdiv.appendChild(shipingselect)
-
-              var arr = new Array()
-              let str = ''
-              for (let i of LogisticspriceList) {
-                //组装数据
-                if (arr.indexOf(i.countryCode) == -1) {
-                  str += `<option value='${i.countryCode}'>${i.country}</option>`
-                  arr.push(i.countryCode)
-                }
-              }
-              //jquery赋值方式
-              $('#countryselect').html(str)
-
-              layui.form.render('select')
-
-              var shoppingFrom = document.createElement('lable')
-              shoppingFrom.setAttribute(
-                'i18n_Text',
-                'travelling.shoppingFrom',
-              )
-              shoppingFrom.setAttribute('style', 'margin-left:10px;')
-              shoppingFrom.innerHTML = $.i18n.prop('travelling.shoppingFrom')
-              from.appendChild(shoppingFrom)
-
-              var shoppingFromdiv = document.createElement('div')
-              shoppingFromdiv.setAttribute('class', 'layui-input-inline')
-              shoppingFromdiv.setAttribute('style', 'margin-left:10px;')
-              from.appendChild(shoppingFromdiv)
-
-              var shoppingFromselect = document.createElement('select')
-              shoppingFromselect.setAttribute('class', 'shoppingFrom')
-              shoppingFromselect.setAttribute('id', 'shoppingFrom')
-              shoppingFromselect.setAttribute('lay-filter', 'shoppingFrom')
-              shoppingFromselect.setAttribute('onchange', " OperateInventory();");
-              shoppingFromdiv.appendChild(shoppingFromselect)
-
-              var arrshoppingFrom = new Array()
-              let strshoppingFrom = ''
-
-              for (let i of stockAddress) {
-                //组装数据
-
-                if (arr.indexOf(i.stockCode) == -1) {
-                  strshoppingFrom += `<option value='${i.stockCode}'>${i.address}</option>`
-                  arr.push(i.stockCode)
-                }
-              }
-              //jquery赋值方式
-              $('#shoppingFrom').html(strshoppingFrom)
-              layui.form.render('select')
-
-              //运输时效根据选择的城市来显示有哪些运输时效
-              //先获取选择的国家二字码
-              var countryCode = $('#countryselect').val()
-              var shipingarr = new Array()
-              var shipingstr = ''
-              var dex = 0
-              for (let i of LogisticspriceList) {
-                if (
-                  shipingstr.indexOf(i.aging) == -1 &&
-                  i.countryCode == countryCode
-                ) {
-                  shipingstr += `<option value='${i.id}'>${i.aging}</option>`
-                  shipingarr.push(i.aging)
-                  if (dex == 0) {
-                    Logisticspricethis = i
-                  }
-                  dex++
-                }
-              }
-              //jquery赋值方式
-              $('#shipingselect').html(shipingstr)
-
-              layui.form.render('select')
-
-              //获取价格信息
-              var productprice = new Object()
-              productprice.productId = id
-              $.ajax({
-                type: 'post',
-                contentType: 'application/json',
-                url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
-                data: JSON.stringify(productprice),
-                success: function (data) {
-                  variantList = data.data
-                  //价格信息
-                  var div4 = document.createElement('div')
-                  div4.setAttribute('class', 'priceInfo')
-                  div2.appendChild(div4)
-                  var div10 = document.createElement('div')
-                  div10.setAttribute('class', 'priceInfo_contain')
-                  div4.appendChild(div10)
-
-                  var pricehtml = ''
-                  var priceul = document.createElement('ul')
-                  /*    priceul.setAttribute('style', 'width:95%;height:10%;text-align:center;margin:10px 5px  auto auto;');*/
-                  priceul.setAttribute('class', 'table-header')
-                  div10.appendChild(priceul)
-                  pricehtml +=
-                    "<li class='head_font'style='width:5%;background: #FFFFFF;' ><br></li>"
-                  //将属性字段分隔成单个属性
-                  var att = JSON.parse(data.data[0].attribute)
-                  if (att != null) {
-                    // var attcount = Object.keys(att).length
-                    // var width = Math.floor(40 / attcount)
-                    for (var key in att) {
-                      console.log('key: ' + key);
-                      if (key == "color" || key == "Color") {
-                        pricehtml +=
-                          "<li  class='head_font'style='width: 15%;' >" +
-                          key +
-                          '<br></li>'
-                      } else {
-                        pricehtml +=
-                          "<li  class='head_font'style='width: 5%;' >" +
-                          key +
-                          '<br></li>'
-                      }
-                    }
-                  }
-                  pricehtml +=
-                    "<li class='head_font'style='width:10%;' >" +
-                    $.i18n.prop('productDetail.Stock') +
-                    '<br></li>'
-                  pricehtml +=
-                    "<li class='head_font'style='width:20%;' >" +
-                    $.i18n.prop('Quantity') +
-                    '<br></li>'
-                  pricehtml +=
-                    "<li class='head_font'style='width:10%;' >" +
-                    $.i18n.prop('Weight.kg') +
-                    '<br></li>'
-                  pricehtml +=
-                    "<li class='head_font'style='width:20%;'>" +
-                    $.i18n.prop('cost.$') +
-                    '<br></li>'
-                  pricehtml +=
-                    "<li class='head_font'style='width:15%;'>" +
-                    $.i18n.prop('freight.$') +
-                    '<br></li>'
-                  priceul.innerHTML = pricehtml
-
-                  var div5 = document.createElement('div')
-                  div10.appendChild(div5)
-
-                  for (var i = 0; i < data.data.length; i++) {
-                    var pricediv1 = document.createElement('div')
-                    pricediv1.setAttribute('class', 'table-body')
-                    div5.appendChild(pricediv1)
-
-                    var priceul1 = document.createElement('ul')
-                    pricediv1.appendChild(priceul1)
-                    var pricehtml1 = ''
-                    pricehtml1 +=
-                      "<li class='price_body' style='width:5%;background: #FFFFFF;'><img src='" +
-                      data.data[i].pictureUrl +
-                      "' style='height:40px;width:40px;' referrerPolicy='no-referrer'><br></li>"
-                    //将属性字段分隔成单个属性
-                    var att1 = JSON.parse(data.data[i].attribute)
-                    if (att1 != null) {
-                      for (var key in att1) {
-                        if (key == "color" || key == "Color") {
-                          pricehtml1 +=
-                            "<li  class='long-price_body'style='width:15%;' data-fulltext="+ att1[key] + 'ddddddddddd' +" >" +
-                            att1[key] + 'ddddddddddd' +
-                            '<br></li>'
-                        } else {
-                          pricehtml1 +=
-                            "<li  class='price_body'style='width:5%;' >" +
-                            att1[key] +
-                            '<br></li>'
-                        }
-                      }
-                    }
-                    pricehtml1 +=
-                      "<li class='price_body'style='width:10%;' id='inventory" +
-                      data.data[i].sku +
-                      "'>" +
-                      12 +
-                      '<br></li>'
-                    pricehtml1 +=
-                      "<li class='price_body'style='width:20%;'><div class='input-stack'><div class='add' onclick='upclick(" +
-                      data.data[i].id +
-                      ")'>+</div><input id = 'quantity" +
-                      data.data[i].id +
-                      "' class='form-control' type = 'text' value='1' data-weight='" +
-                      data.data[i].variantExtend.weight +
-                      "' data-isElectricity='" +
-                      data.data[i].variantExtend.attribute +
-                      "' onchange='UpdateQuantity(" +
-                      data.data[i].id +
-                      ")' padding-left='20px;' /><div class='add' onclick='downclick(" +
-                      data.data[i].id +
-                      ")'>-</div></div></input><br></li>"
-                    pricehtml1 +=
-                      "<li class='price_body'style='width:10%;'>" +
-                      data.data[i].variantExtend.weight +
-                      '<br></li>'
-                    pricehtml1 +=
-                      "<li class='price_body'style='width:20%;'>" +
-                      data.data[i].cost +
-                      '<br></li>'
-
-                    //计算预估运费
-                    var Logisticspriceid = $('#shipingselect').val
-                    var isElectricity =
-                      data.data[i].variantExtend.attribute == 0 ? 'N' : 'Y'
-                    var unitweight = data.data[i].variantExtend.weight
-                    var quantity = 1
-                    var weight = unitweight * quantity
-                    var freight = 'undefined'
-                    for (let i of LogisticspriceList) {
-                      if (
-                        i.countryCode == Logisticspricethis.countryCode &&
-                        i.aging == Logisticspricethis.aging &&
-                        weight > i.minWeight &&
-                        weight < i.maxWeight &&
-                        isElectricity == i.attribute
-                      ) {
-                        freight =
-                          i.price * weight + i.registrationFee + i.handlingFee
-                      }
-                    }
-                    pricehtml1 +=
-                      "<li class='price_body'style='width:15%;'><div class='freight' id='freight" +
-                      data.data[i].id +
-                      "'>" +
-                      freight +
-                      '</div><br></li>'
-                    priceul1.innerHTML = pricehtml1
-                  }
-                  OperateInventory()
-                },
-              })
-
-              //添加导入商品的按钮,如果是登录状态则显示，否则不显示
-              if (YDHConfig.Secret) {
-                var importdiv = document.createElement('div')
-                importdiv.setAttribute('class', 'importproduct')
-                div1.appendChild(importdiv)
-
-                var importinput = document.createElement('input')
-                importinput.setAttribute('type', 'button')
-                importinput.setAttribute('id', 'importbtn' + id)
-                importinput.setAttribute('class', 'layui-icon importbtn')
-                importinput.setAttribute('value', $.i18n.prop('Import.goods'))
-                importinput.setAttribute(
-                  'onclick',
-                  'ImportProduct(' + id + ')',
-                )
-                importdiv.appendChild(importinput)
-              }
-
-              //描叙详情
-              var descriptiondiv = document.createElement('div')
-              divf.appendChild(descriptiondiv)
-
-              var div6x = document.createElement('div')
-              div6x.setAttribute('style', 'max-width:984px;margin-left:20px')
-              descriptiondiv.appendChild(div6x)
-              div6x.innerHTML = $.i18n.prop('Product.description')
-
-              var div6 = document.createElement('div')
-              div6.setAttribute('style', 'max-width:984px;margin-top:20px;margin-left:30px')
-              descriptiondiv.appendChild(div6)
-
-              // var span = document.createElement('span')
-              // descriptiondiv.appendChild(span)
-              // span.setAttribute('style', 'font-size:21px;')
-              // span.innerHTML = $.i18n.prop('Product.description')
-
-
-              var productdescription = new Object()
-              productdescription.productId = id
-              $.ajax({
-                type: 'post',
-                contentType: 'application/json',
-                url:
-                  BackgroundDomain +
-                  '/api/Product/QueryProductDescriptionInfo',
-                data: JSON.stringify(productdescription),
-                success: function (data) {
-                  div6.innerHTML = data.dto.content
-                },
-              })
-
-              //点击上一页的图片
-              $('#Prevapicture').click(function () {
-                var count = picture.length
-                var index = Math.ceil(count / 5)
-                pirctureindex--
-                if (pirctureindex == 0) {
-                  pirctureindex = index
-                }
-                PictureAddUrl(pirctureindex)
-              })
-
-              //点击下一页的图片
-              $('#Nextpicture').click(function () {
-                var count = picture.length
-                var index = Math.ceil(count / 5)
-                pirctureindex++
-                if (pirctureindex > index) {
-                  pirctureindex = 1
-                }
-                PictureAddUrl(pirctureindex)
-              })
+            if (data.code == 1) {
+              layer.msg('Successfully !')
+            } else {
             }
           },
+          error: function (jqXHR) {},
         })
       }
 
-      // 国际化初始化
-      var YDHConfigc = layui.data('YDH')
-      var cid = 'en_us'
-      if (YDHConfigc.Lang) {
-        cid = YDHConfigc.Lang.id
-      }
-
-      i18n.loadProperties(cid)
-
-      //城市下拉框选择值改变后的处理（运输速度绑定选项也出现变化，运费重算）
-      form.on('select(countryselect)', function (data) {
+      $('#countryselect').change(function () {
         var opt = $('#countryselect').val()
+        console.log(opt)
         var shipingarr = new Array()
         var shipingstr = ''
-        var dex = 0
         for (let i of LogisticspriceList) {
-          if (shipingstr.indexOf(i.aging) == -1 && i.countryCode == opt) {
+          if (shipingstr.indexOf(i.id) == -1 && i.countryCode == opt) {
             shipingstr += `<option value='${i.id}'>${i.aging}</option>`
-            shipingarr.push(i.aging)
-            if (dex == 0) {
-              Logisticspricethis = i
-            }
-            dex++
-          }
-        }
-        //jquery赋值方式
-        $('#shipingselect').html(shipingstr)
-
-        layui.form.render('select')
-        GetEstimateFreight()
-      })
-
-      //运输速度下拉框选择值改变后的处理（运费重算）
-      form.on('select(shipingselect)', function (data) {
-        for (let i of LogisticspriceList) {
-          var shipingstr = ''
-          if (i.id == data.value) {
-            shipingstr += `<option value='${i.id}'>${i.aging}</option>`
+            shipingarr.push(i.id)
             Logisticspricethis = i
           }
+          //jquery赋值方式
+          $('#shipingselect').html(shipingstr)
+
+          layui.form.render('select')
         }
-        GetEstimateFreight()
       })
-
-      //计算所有产品变体的预估运费
-      function GetEstimateFreight() {
-        var Logisticspriceid = $('#shipingselect').val
-
-        for (var i = 0; i < variantList.length; i++) {
-          var freightdiv = document.getElementById(
-            'freight' + variantList[i].id,
-          )
-
-          //计算预估运费
-          var isElectricity =
-            variantList[i].variantExtend.attribute == 0 ? 'N' : 'Y'
-          var unitweight = variantList[i].variantExtend.weight
-          var quantity = 1
-          var weight = unitweight * quantity
-          var freight = 'undefined'
-          for (let i of LogisticspriceList) {
-            if (
-              i.countryCode == Logisticspricethis.countryCode &&
-              i.aging == Logisticspricethis.aging &&
-              weight > i.minWeight &&
-              weight < i.maxWeight &&
-              isElectricity == i.attribute
-            ) {
-              freight = i.price * weight + i.registrationFee + i.handlingFee
-            }
-          }
-          freightdiv.innerHTML = freight
-        }
-      }
-
-      //图片列表添加图片地址
-      function PictureAddUrl(id) {
-        var count = picture.length
-        var index = Math.ceil(count / 5)
-        var yu = count % 5
-        if (id > index) {
-          pirctureindex = 1
-        }
-        var reg = new RegExp('"', 'g')
-        var fristindex = (pirctureindex - 1) * 5
-        var src0
-        var src1
-        var src2
-        var src3
-        var src4
-        if (pirctureindex == index) {
-          if (yu == 1) {
-            src0 = picture[fristindex].replace(reg, '')
-            src1 = picture[0].replace(reg, '')
-            src2 = picture[1].replace(reg, '')
-            src3 = picture[2].replace(reg, '')
-            src4 = picture[3].replace(reg, '')
-          } else if (yu == 2) {
-            src0 = picture[fristindex].replace(reg, '')
-            src1 = picture[fristindex + 1].replace(reg, '')
-            src2 = picture[0].replace(reg, '')
-            src3 = picture[1].replace(reg, '')
-            src4 = picture[2].replace(reg, '')
-          } else if (yu == 3) {
-            src0 = picture[fristindex].replace(reg, '')
-            src1 = picture[fristindex + 1].replace(reg, '')
-            src2 = picture[fristindex + 2].replace(reg, '')
-            src3 = picture[0].replace(reg, '')
-            src4 = picture[1].replace(reg, '')
-          } else if (yu == 4) {
-            src0 = picture[fristindex].replace(reg, '')
-            src1 = picture[fristindex + 1].replace(reg, '')
-            src2 = picture[fristindex + 2].replace(reg, '')
-            src3 = picture[fristindex + 3].replace(reg, '')
-            src4 = picture[0].replace(reg, '')
-          }
-        } else {
-          src0 = picture[fristindex].replace(reg, '')
-          src1 = picture[fristindex + 1].replace(reg, '')
-          src2 = picture[fristindex + 2].replace(reg, '')
-          src3 = picture[fristindex + 3].replace(reg, '')
-          src4 = picture[fristindex + 4].replace(reg, '')
-        }
-
-        $('#bigimg').attr('src', src0)
-        $('#smallimg_' + 0).attr('src', src0)
-        $('#smallimg_' + 1).attr('src', src1)
-        $('#smallimg_' + 2).attr('src', src2)
-        $('#smallimg_' + 3).attr('src', src3)
-        $('#smallimg_' + 4).attr('src', src4)
-      }
-    })
-    //数量加按钮的单击事件（数量发生改变，预估运费发生改变）
-    function upclick(id) {
-      var input = document.getElementById('quantity' + id)
-      input.value = Number(input.value) + 1
-      UpdateQuantity(id)
-    }
-    //数量减按钮的单击事件（数量发生改变，预估运费发生改变）
-    function downclick(id) {
-      var input = document.getElementById('quantity' + id)
-      if (Number(input.value) > 1) {
-        input.value = Number(input.value) - 1
-        UpdateQuantity(id)
-      }
-    }
-
-    function OperateInventory() {
-      var address = document.querySelector('#shoppingFrom').value;
-
-      for (let index = 0; index < variantList.length; index++) {
-        const variant = variantList[index]
-        var isUpd = false
-        for (let j = 0; j < stockAddress.length; j++) {
-          const stock = stockAddress[j]
-          if (stock.address == address && stock.sku == variant.sku) {
-            isUpd = true
-            $('#inventory' + stock.sku).text(stock.stock)
-          }
-        }
-        if (!isUpd) {
-          $('#inventory' + variant.sku).text(0)
-        }
-      }
-    }
-
-    //数量更改事件，运费相应的发生改变
-    function UpdateQuantity(id) {
-      //计算预估运费
-      var input = document.getElementById('quantity' + id)
-      var Logisticspriceid = $('#shipingselect').val
-      var unitweight = $('#quantity' + id).attr('data-weight')
-      var isElectricity =
-        $('#quantity' + id).attr('data-isElectricity') == 0 ? 'N' : 'Y'
-
-      var quantity = input.value
-      var weight = unitweight * quantity
-      var freight = 'undefined'
-      for (let i of LogisticspriceList) {
-        if (
-          i.countryCode == Logisticspricethis.countryCode &&
-          i.aging == Logisticspricethis.aging &&
-          weight > i.minWeight &&
-          weight <= i.maxWeight &&
-          isElectricity == i.attribute
-        ) {
-          freight = i.price * weight + i.registrationFee + i.handlingFee
-        }
-      }
-      var freightdiv = document.getElementById('freight' + id)
-      $('#freight' + id).innerHTML = ''
-      freightdiv.innerHTML = freight
-    }
-
-    //点击小图片的时候更改主图的src
-    function UpdateBigImg(id) {
-      var src = $('#smallimg_' + id).attr('src')
-      $('#bigimg').attr('src', src)
-    }
-
-    // 请求拦截器，添加请求头
-    $.ajaxSetup({
-      beforeSend: function (req) {
-        if (YDHConfig.Secret) {
-          req.setRequestHeader('YDHAuthToken', YDHConfig.Secret)
-          req.setRequestHeader('ETag', 0)
-          req.setRequestHeader('Last-Modified', 0)
-        }
-      },
-    })
-
-    ////导入产品
-    function ImportProduct(id) {
-      var productInfo = new Object()
-      productInfo.id = id
-      $.ajax({
-        type: 'post',
-        contentType: 'application/json',
-        url: BackgroundDomain + '/api/Product/ImportProductInfo',
-        data: JSON.stringify(productInfo),
-        success: function (data) {
-          if (data.code == 1) {
-            layer.msg('Successfully !')
-          } else {
-          }
-        },
-        error: function (jqXHR) { },
-      })
-    }
-
-    $('#countryselect').change(function () {
-      var opt = $('#countryselect').val()
-      console.log(opt)
-      var shipingarr = new Array()
-      var shipingstr = ''
-      for (let i of LogisticspriceList) {
-        if (shipingstr.indexOf(i.id) == -1 && i.countryCode == opt) {
-          shipingstr += `<option value='${i.id}'>${i.aging}</option>`
-          shipingarr.push(i.id)
-          Logisticspricethis = i
-        }
-        //jquery赋值方式
-        $('#shipingselect').html(shipingstr)
-
-        layui.form.render('select')
-      }
-    })
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

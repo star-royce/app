@@ -106,6 +106,12 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
+
+          if(data.field.CountryCode.length>2)
+          {
+            layer.msg('国家二字码，超长了')
+            return false;
+          }
           $.ajax({
             type: 'post',
             url: BackgroundDomain + '/api/Price/AddTaxes',

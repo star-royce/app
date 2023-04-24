@@ -308,16 +308,16 @@
                                             budiv.appendChild(delinput);
                                             $(".deletepro").val($.i18n.prop('deleteproduct'));
 
-                                            if (YDHCustomer.Secret != null) {
-                                                var pushInput = document.createElement("input");
-                                                pushInput.setAttribute('type', 'button');
-                                                pushInput.setAttribute('id', 'pushproduct' + msg.data[i].id);
-                                                pushInput.setAttribute('class', 'pushpro');
-                                                pushInput.setAttribute('value', '推送到商店');
-                                                pushInput.setAttribute('onclick', 'PushProduct(' + msg.data[i].id + ')');
-                                                budiv.appendChild(pushInput);
-                                                $(".pushpro").val($.i18n.prop('pushpro'));
-                                            }
+//                                             if (YDHCustomer.Secret != null) {
+//                                                 var pushInput = document.createElement("input");
+//                                                 pushInput.setAttribute('type', 'button');
+//                                                 pushInput.setAttribute('id', 'pushproduct' + msg.data[i].id);
+//                                                 pushInput.setAttribute('class', 'pushpro');
+//                                                 pushInput.setAttribute('value', '推送到商店');
+//                                                 pushInput.setAttribute('onclick', 'PushProduct(' + msg.data[i].id + ')');
+//                                                 budiv.appendChild(pushInput);
+//                                                 $(".pushpro").val($.i18n.prop('pushpro'));
+//                                             }
 
                                             //li选中切换
                                             $(function () {
@@ -410,7 +410,7 @@
                                                                     pricehtml1 += "<li  class='price_body'style='width:34%;float:left;'><br/></li > "
                                                                 }
 
-                                                          
+                                                               var quantity = data.data[i].quantity;
                                                                var oen = " <option value ='0'>请选择仓库</option>";
                                                                if(stockAddress && stockAddress.length>0)
                                                                  {
@@ -419,6 +419,7 @@
                                                                         if(stocksku[index].id == data.data[i].stockId)
                                                                         {
                                                                             oen+="<option value ='"+stocksku[index].id+"' selected = 'selected'>"+stocksku[index].address+"</option>";
+                                                                            quantity = stocksku[index].stock;
                                                                         }else
                                                                         {
                                                                             oen+="<option value ='"+stocksku[index].id+"'>"+stocksku[index].address+"</option>";
@@ -1284,6 +1285,7 @@
                 success: function (data) {
                     if (data.code > 0) {
                         layer.msg("修改仓库成功!")
+                        $("input[data-quantity-detail='"+priceInfo.id+"']").val(data.dto.stock);
                     }
                 }
             })
@@ -1408,7 +1410,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">是否带电：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input attribute" type="number" name="attribute" value="" lay-verify="required" lay-reqtext="属性不能为空" autocomplete="off" />
+                        <select  name="attribute" >
+                            <option value='0'>否</option>
+                            <option value='1'>是</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">

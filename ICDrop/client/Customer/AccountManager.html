@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title></title>
@@ -13,7 +12,6 @@
     <link rel="stylesheet" href="../../../css/Message.css?v=2" media="all">
     <link rel="stylesheet" href="/lib/layui-v2.6.3/font/font/iconfont.css" media="all">
 </head>
-
 <body>
     <div class="big">
         <div class="left">
@@ -55,7 +53,7 @@
     <script src="/js/web-template.js"></script>
     <script src="/js/web-diff.js"></script>
     <script src="../../../js/lay-module/Message/Message.js?v=2" charset="utf-8"></script>
-
+   
     <script type="text/javascript">
         var app = null;
         var $ = null;
@@ -94,7 +92,7 @@
             // 获取用户信息
             function GetShopify(data) {
                 $.ajax({
-                    url: BackgroundDomain + "/api/Customer/GetCusCustomerAccount",
+                    url: BackgroundDomain +"/api/Customer/GetCusCustomerAccount",
                     type: "post",
                     contentType: "application/json;",
                     data: JSON.stringify(data),
@@ -115,9 +113,9 @@
             } else {
                 GetAccountBalance();
             }
+        
 
-
-
+           
 
             /*点击账户余额*/
             $("#AccountBalance").click(function () {
@@ -172,7 +170,7 @@
                 BalanceContent.appendChild(topdivl);
                 GetShopify(dto_obj);//获取店铺信息
                 $.ajax({
-                    url: BackgroundDomain + "/api/Customer/GetCusCustomerAccount",
+                    url: BackgroundDomain +"/api/Customer/GetCusCustomerAccount",
                     type: "post",
                     contentType: "application/json;",
                     data: JSON.stringify({ "Email": UserEmail }),
@@ -216,9 +214,9 @@
                         //exclamationdiv.setAttribute("id", "exclamation");
                         //exclamationdiv.setAttribute("src", "../../../images/exclamation.png");
                         //rewardsDiv.appendChild(exclamationdiv);
-                        //分销说明大的div
+                       //分销说明大的div
                         var DistributionShows = document.createElement("div");
-                        DistributionShows.setAttribute("class", "DistributionShows");
+                        DistributionShows.setAttribute("class","DistributionShows");
                         BalanceContent.appendChild(DistributionShows);
 
                         var arrowsdiv = document.createElement("div");
@@ -226,8 +224,8 @@
                         DistributionShows.appendChild(arrowsdiv);
                         //分销图片
                         var distributionImg = document.createElement("img");
-                        distributionImg.setAttribute("style", "margin-top:30px;margin-bottom:30px;");
-                        distributionImg.setAttribute("src", "../../../images/distribution.png");
+                        distributionImg.setAttribute("style","margin-top:30px;margin-bottom:30px;");
+                        distributionImg.setAttribute("src","../../../images/distribution.png");
                         DistributionShows.appendChild(distributionImg);
                         //分销说明标题
                         var explainTitleDiv = document.createElement("div");
@@ -246,7 +244,7 @@
                         DistributionShows.appendChild(InterpretationDiv);
 
 
-
+              
                         //分销链接
                         var DistributionText = document.createElement("div");
                         DistributionText.innerHTML = $.i18n.prop('Refer.a.Friend');
@@ -280,7 +278,7 @@
 
                         console.log("邀请链接的长度：" + $("#Invitationlable").width());
                         console.log($("#InvitationUrl").val().length);
-                        var width = $("#Invitationlable").width() + 20;
+                        var width = $("#Invitationlable").width()+20;
                         $("#InvitationUrl").css("width", width + "px");
 
                         //充值记录和邀请记录按钮
@@ -295,12 +293,12 @@
                         Invitation.setAttribute('id', 'Invitation');
                         Invitation.innerHTML = $.i18n.prop('Invitation')
                         RecordsTextDiv.appendChild(Invitation);
-
+                       
 
                         var Record = document.createElement("div");
                         Record.setAttribute('style', 'margin-left:50px;width: 55px;height:30px;float:left;');
                         Record.setAttribute('onclick', 'QueryRecordList()');
-                        Record.setAttribute("class", "thisCut");
+                        Record.setAttribute("class","thisCut");
                         Record.setAttribute('id', 'Record');
                         Record.innerHTML = $.i18n.prop('Record')
                         RecordsTextDiv.appendChild(Record);
@@ -312,7 +310,7 @@
                         Marketing.setAttribute('id', 'Marketing');
                         Marketing.innerHTML = $.i18n.prop('Marketing')
                         RecordsTextDiv.appendChild(Marketing);
-
+                      
                         //充值记录列表
                         var RecordsDiv = document.createElement("div");
                         RecordsDiv.setAttribute('class', 'Records');
@@ -324,11 +322,11 @@
                         Recordsul.setAttribute('class', 'table-header');
                         RecordsDiv.appendChild(Recordsul);
                         var herderhtml = "";
-
+                 
                         herderhtml += "<li id='type' class='head_font'>类型<br></li>";
                         herderhtml += "<li id='paytime' class='head_font'>支付时间<br></li>";
                         herderhtml += "<li id='money' class='head_font'>金额<br></li>";
-
+                
                         Recordsul.innerHTML = herderhtml;
                         $("#type").html($.i18n.prop('type'));
                         $("#money").html($.i18n.prop('OrderDetails.orderModule.div.money'));
@@ -341,10 +339,10 @@
                         $.ajax({
                             type: "post",
                             contentType: "application/json",
-                            url: BackgroundDomain + '/api/Customer/QueryRechargeRecords',
+                            url: BackgroundDomain +'/api/Customer/QueryRechargeRecords',
                             data: JSON.stringify({ "Email": UserEmail }),
                             success: function (data) {
-                                if (data.data && data.data.length != 0) {
+                                if (data.data && data.data.length!=0) {
                                     //循环数据添加主体部分
                                     for (var i = 0; i < data.data.length; i++) {
 
@@ -387,34 +385,35 @@
                         })
 
                         //鼠标移入移出感叹号
+                      
+                            var exclamation = document.getElementById("exclamation");
 
-                        var exclamation = document.getElementById("exclamation");
-
-                        exclamation.onmouseover = function () {
-                            $(".DistributionShows").show();
-                        };
-                        exclamation.onmouseout = function () {
-                            $(".DistributionShows").hide();
-                        };
-
+                            exclamation.onmouseover = function () {
+                                $(".DistributionShows").show();
+                            };
+                            exclamation.onmouseout = function () {
+                                $(".DistributionShows").hide();
+                            };
+                      
 
                     }
                 })
 
 
-
-
+           
+            
             }
 
-            function settings() {
+            function settings()
+            {
                 var rightdiv = document.getElementById("right");
                 rightdiv.innerHTML = "";
-
-                //智能设置
+                
+                  //智能设置
                 $.ajax({
                     type: "post",
                     contentType: "application/json",
-                    url: BackgroundDomain + '/api/Customer/GetCustomerInfoByEmail',
+                    url: BackgroundDomain +'/api/Customer/GetCustomerInfoByEmail',
                     data: JSON.stringify({ "Email": UserEmail }),
                     async: false,
                     success: function (data) {
@@ -486,7 +485,7 @@
                         //otherDiv.appendChild(otherlabel);
                     }
                 })
-                //用户设置
+              //用户设置
                 //$.ajax({
                 //    type: "post",
                 //    contentType: "application/json",
@@ -539,7 +538,7 @@
 
                 //        var UserNameInput = document.createElement("input");
                 //        UserNameInput.setAttribute('class', 'AccountSettingInput');
-                //       UserNameInput.setAttribute('autocomplete', 'off');
+                 //       UserNameInput.setAttribute('autocomplete', 'off');
                 //        UserNameInput.setAttribute('id', 'UserName');
                 //        UserNameInput.setAttribute('value', data.userName);
                 //        UserNametext.appendChild(UserNameInput);
@@ -660,26 +659,26 @@
                 AccountSettingContent.appendChild(ModifyPasswordButton);
                 $(".ModifyAccountSetting").val($.i18n.prop('Submit.modification'));
             }
-
+            
             function AccountSettings() {
-
+               
             }
-
+            
             function IntelligentSettings() {
-
+               
             }
 
             //修改密码
             function ChangePassword() {
                 /* 获取右边的大div,并清空里面内容后，再按要求填充内容*/
                 var rightdiv = document.getElementById("right");
-                // rightdiv.innerHTML = "";
+               // rightdiv.innerHTML = "";
 
-
+               
             }
-
-
-
+            
+       
+       
         })
         //获取店铺
         function GetMyShop() {
@@ -696,11 +695,11 @@
             MyShopul.setAttribute('class', 'table-header');
             MyShopDiv.appendChild(MyShopul);
             var herderhtml = "";
-            herderhtml += "<li id='StoreName' class='head_font' style='width:20%;'>Store Name<br></li>";
-            herderhtml += "<li id='Platform' class='head_font' style='width:15%;'>Platform<br></li>";
-            herderhtml += "<li id='StoreLink' class='head_font' style='width:30%;' >Store Link<br></li>";
-            herderhtml += "<li id='BindingTime' class='head_font' style='width:20%;'>Binding time<br></li>";
-            herderhtml += "<li id='Operation' class='head_font' style='width:15%;'>Operation<br></li>";
+            herderhtml += "<li id='StoreName' class='head_font' style='width:20%;'>店铺名<br></li>";
+            herderhtml += "<li id='Platform' class='head_font' style='width:15%;'>平台<br></li>";
+            herderhtml += "<li id='StoreLink' class='head_font' style='width:30%;' >店铺连接<br></li>";
+            herderhtml += "<li id='BindingTime' class='head_font' style='width:20%;'>绑定时间<br></li>";
+            herderhtml += "<li id='Operation' class='head_font' style='width:15%;'>操作<br></li>";
             MyShopul.innerHTML = herderhtml;
             $("#StoreName").html($.i18n.prop('StoreName'));
             $("#Platform").html($.i18n.prop('Platform'));
@@ -724,7 +723,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/GetCustomerShopify',
+                url: BackgroundDomain +'/api/Customer/GetCustomerShopify',
                 data: JSON.stringify(data),
                 success: function (data) {
                     if (data.data) {
@@ -741,7 +740,7 @@
                             var shopifyShop = String(data.data[i].shopifyShop).substring(0, shopname);
                             MyShopBodyhtml += "<li class='body_font' style='width:20%;'>" + shopifyShop + "<br></li>";
                             MyShopBodyhtml += "<li class='body_font' style='width:15%;'>" + data.data[i].platform + "<br></li>";
-                            MyShopBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #3399FF;width:30%;'>https://" + data.data[i].shopifyShop + "<br></li>";
+                            MyShopBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #3399FF;width:30%;'><a style='color: #3399FF;' target='_blank' href='https://" + data.data[i].shopifyShop + "'>https://" + data.data[i].shopifyShop + "</a> <br></li>";
                             MyShopBodyhtml += "<li class='body_font'style='width:20%;'>" + data.data[i].bindingTime + "<br></li>";
                             if (data.data[i].isShow == "0") {
                                 MyShopBodyhtml += "<li class='body_font'style='width:15%;'><button class='operationButton' id='hide" + data.data[i].id + "' onclick = 'Updateshopstatus(this)' shopId='" + data.data[i].id + "' shopstatus='show'></button><br></li>";
@@ -835,7 +834,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/Updateshopstatus',
+                url: BackgroundDomain +'/api/Customer/Updateshopstatus',
                 data: JSON.stringify({ "Id": shopId }),
                 success: function (data) {
 
@@ -849,7 +848,7 @@
                     }
                     var dto_obj = new Object();
                     dto_obj.email = UserEmail;
-                    window.parent.GetShopifytest("#Shopify", BackgroundDomain + "/api/Customer/GetCustomerShopifyList", "post", "选择店铺", dto_obj);
+                    window.parent.GetShopifytest("#Shopify", BackgroundDomain +"/api/Customer/GetCustomerShopifyList", "post", "选择店铺", dto_obj);
                 }
             })
         }
@@ -860,7 +859,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/UpdateAccountSettingByEmail',
+                url: BackgroundDomain +'/api/Customer/UpdateAccountSettingByEmail',
                 data: JSON.stringify({ "Email": UserEmail, "UserName": UserName, "phone": phone }),
                 success: function (data) {
                     layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
@@ -868,8 +867,8 @@
                         app = layui.app;
                         var layer = layui.layer,
                             message = layui.message;
-                        message.run("modify successfully!");
-                    });
+                            message.run("modify successfully!");
+                });
                 }
             })
         }
@@ -879,7 +878,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/UpdatePriceMultipleByEmail',
+                url: BackgroundDomain +'/api/Customer/UpdatePriceMultipleByEmail',
                 data: JSON.stringify({ "Email": UserEmail, "PriceMultiples": PriceMultiple }),
                 success: function (data) {
                     layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
@@ -899,7 +898,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/UpdatePriceSwitchStatusByEmail',
+                url: BackgroundDomain +'/api/Customer/UpdatePriceSwitchStatusByEmail',
                 data: JSON.stringify({ "Email": UserEmail, "PriceSwitch": checked }),
                 success: function (data) {
                     layui.use(['i18n', 'app', 'layer', 'form', 'element', 'laypage'], function () {
@@ -918,39 +917,39 @@
                 $ = layui.jquery;
                 app = layui.app;
                 var layer = layui.layer,
-                    message = layui.message;
+                message = layui.message;
 
-                var OldPsd = $("#OldPsd").val();
-                var NewPsd = $("#NewPsd").val();
-                var ReEnterPsd = $("#ReEnterPsd").val();
-                if (NewPsd != ReEnterPsd) {
-                    var ReEnterHint = document.getElementById("ReEnterPsdHint");
-                    ReEnterHint.style.display = "inline";
-                    return false;
-                }
-                $.ajax({
-                    type: "post",
-                    contentType: "application/json",
-                    url: BackgroundDomain + '/api/Customer/UpdatePasswordByOrdPsa',
-                    data: JSON.stringify({ "Email": UserEmail, "OrdPassword": OldPsd, "Pw": NewPsd }),
-                    success: function (data) {
-                        if (data.code == 200) {
-                            var OldPsdHint = document.getElementById("OrdpsdHint");
-                            OldPsdHint.style.display = "none";
+            var OldPsd = $("#OldPsd").val();
+            var NewPsd = $("#NewPsd").val();
+            var ReEnterPsd = $("#ReEnterPsd").val();
+            if (NewPsd != ReEnterPsd) {
+                var ReEnterHint = document.getElementById("ReEnterPsdHint");
+                ReEnterHint.style.display = "inline";
+                return false;
+            }
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                url: BackgroundDomain +'/api/Customer/UpdatePasswordByOrdPsa',
+                data: JSON.stringify({ "Email": UserEmail, "OrdPassword": OldPsd, "Pw": NewPsd }),
+                success: function (data) {
+                    if (data.code == 200) {
+                        var OldPsdHint = document.getElementById("OrdpsdHint");
+                        OldPsdHint.style.display = "none";
 
-                            var ReEnterHint = document.getElementById("ReEnterPsdHint");
-                            ReEnterHint.style.display = "none";
+                        var ReEnterHint = document.getElementById("ReEnterPsdHint");
+                        ReEnterHint.style.display = "none";
 
-                            message.run("modify successfully!");
-
-                        } if (data.code == -1) {
-                            var OldPsdHint = document.getElementById("OrdpsdHint");
-                            OldPsdHint.style.display = "inline";
-                            return false;
-                        }
-
+                        message.run("modify successfully!");
+                 
+                    } if (data.code == -1) {
+                        var OldPsdHint = document.getElementById("OrdpsdHint");
+                        OldPsdHint.style.display = "inline";
+                        return false;
                     }
-                })
+
+                }
+            })
             })
 
         }
@@ -1015,10 +1014,10 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/GetCustomerInvitation',
+                url: BackgroundDomain +'/api/Customer/GetCustomerInvitation',
                 data: JSON.stringify(dto_obj),
                 success: function (data) {
-                    if (data.data && data.data.length != 0) {
+                    if (data.data && data.data.length !=0) {
                         //循环数据添加主体部分
                         for (var i = 0; i < data.data.length; i++) {
 
@@ -1054,7 +1053,7 @@
                     }
                 }
             })
-
+         
         }
         //查询充值记录列表
         function QueryRecordList() {
@@ -1090,10 +1089,10 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Customer/QueryRechargeRecords',
+                url: BackgroundDomain +'/api/Customer/QueryRechargeRecords',
                 data: JSON.stringify({ "Email": UserEmail }),
                 success: function (data) {
-                    if (data.data && data.data.length != 0) {
+                    if (data.data && data.data.length!=0) {
                         //循环数据添加主体部分
                         for (var i = 0; i < data.data.length; i++) {
 
@@ -1172,7 +1171,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Marketing/QueryMarketingSucceedGroupList',
+                url: BackgroundDomain +'/api/Marketing/QueryMarketingSucceedGroupList',
                 data: JSON.stringify({ "Email": UserEmail }),
                 success: function (data) {
                     if (data.data && data.data.length != 0) {
@@ -1187,7 +1186,7 @@
                             RecordsBodyhtml += "<li class='body_font'>" + data.data[i].code + "<br></li>";
                             RecordsBodyhtml += "<li class='body_font'>" + data.data[i].createTime + "<br></li>";
                             RecordsBodyhtml += "<li class='body_font' style='font-size: 14px;font - family: Arial;font - weight: 400;color: #FF5555;'>+$" + data.data[i].amountReward + "<br></li>";
-
+                           
                             RecordsBodyul.innerHTML = RecordsBodyhtml;
                         }
                     }
@@ -1215,10 +1214,9 @@
             })
 
         }
-
-
+      
+       
     </script>
 
 </body>
-
 </html>

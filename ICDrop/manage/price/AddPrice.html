@@ -108,6 +108,15 @@
 
             //监听提交
             form.on('submit(saveBtn)', function (data) {
+                const itself = $(this);           // 按钮id值
+                if (itself.attr("disabled") == "true") {
+                    return false;
+                }
+                itself.attr("disabled", "true");  //禁用
+                setTimeout(() => {
+                    itself.attr("disabled", "false");  // 解除禁用
+                }, 1000)
+
                 $.ajax({
                     type: "post",
                     url: BackgroundDomain +"/api/Price/AddPrice",

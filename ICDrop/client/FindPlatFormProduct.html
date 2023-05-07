@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>查找产品</title>
@@ -21,21 +20,17 @@
     <!--下载产品-->
     <div class="getmaterial">
         <div style="width: 100%; text-align: center; margin-bottom: 38px;">
-            <div class="getMaterialText"><img src="../../images/ander/Ander rop .svg"
-                    style="height:62px;width:372px;" /></div>
+            <div class="getMaterialText"><img src="../../images/ander/Ander rop .svg" style="height:62px;width:372px;" /></div>
         </div>
         <form action="" lay-filter="formTest" class="layui-form layui-form-pane">
             <div style="margin-left: 8%; margin-bottom: 3px;">
-                <button class="layui-btn layui-btn-primary" id="demo4" style="float: left; margin-right: 10px"
-                    onclick="return false;">
+                <button class="layui-btn layui-btn-primary" id="demo4" style="float: left; margin-right: 10px" onclick="return false;">
                     <i class="layui-icon layui-icon-spread-left layui-font-12"></i>
                 </button>
                 <input type="text" i18n_Attr="placeholder:Input.commodity.title;"
-                    style="width: 80%; background-color: #F5F5F5 !important;" name="productTitle" id="productTitle"
-                    lay-verify="title" autocomplete="off" placeholder="Search" class="inputprotitle" />
-                <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn"
-                    style="float: left; width: 68px; background-color: #F5F5F5 !important;"><img
-                        src="../../../images/button/search.svg" /></button>
+                       style="width: 80%; background-color: #F5F5F5 !important;"
+                       name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle" />
+                <button type="submit" class="importpro" lay-submit lay-filter="data-search-btn" style="float: left; width: 68px; background-color: #F5F5F5 !important;"><img src="../../../images/find1.png" /></button>
             </div>
         </form>
     </div>
@@ -43,41 +38,25 @@
     <div class="label" style="margin-bottom: 20px;">
         <div class="label" style="margin: auto;">
             <ul class="layui-row">
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Hot-Trend')"
-                            src="/images/CategoryPictures/Hot-Trend.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Winning products')"
-                            src="/images/CategoryPictures/Winning products.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Discount Sale')"
-                            src="/images/CategoryPictures/Discount Sale.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Women\'s clothing')"
-                            src="/images/CategoryPictures/Women's clothing.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Men\'s clothing')"
-                            src="/images/CategoryPictures/Men's clothing.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Hot-Trend')" src="/images/CategoryPictures/Hot-Trend.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Winning products')" src="/images/CategoryPictures/Winning products.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Discount Sale')" src="/images/CategoryPictures/Discount Sale.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Women\'s clothing')" src="/images/CategoryPictures/Women's clothing.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Men\'s clothing')" src="/images/CategoryPictures/Men's clothing.svg" style="width: 100%;"/></a></li>
             </ul>
             <ul class="layui-row">
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Beauty')"
-                            src="/images/CategoryPictures/Beauty.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Electronics')"
-                            src="/images/CategoryPictures/Electronics.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Jewelry Watches and glasses')"
-                            src="/images/CategoryPictures/Jewelry Watches and glasses.svg" style="width: 100%;" /></a>
-                </li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Bags')"
-                            src="/images/CategoryPictures/Bags.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Shoes')"
-                            src="/images/CategoryPictures/Shoes.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Beauty')" src="/images/CategoryPictures/Beauty.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Electronics')" src="/images/CategoryPictures/Electronics.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Jewelry Watches and glasses')" src="/images/CategoryPictures/Jewelry Watches and glasses.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Bags')" src="/images/CategoryPictures/Bags.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Shoes')" src="/images/CategoryPictures/Shoes.svg" style="width: 100%;"/></a></li>
             </ul>
             <ul class="layui-row">
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Home & Garden')"
-                            src="/images/CategoryPictures/Home Garden.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Pet & Aminals')"
-                            src="/images/CategoryPictures/Pet Aminals.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Toys & Baby')"
-                            src="/images/CategoryPictures/Toys Baby.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Exercise & Outdoor')"
-                            src="/images/CategoryPictures/Exercise Outdoor.svg" style="width: 100%;" /></a></li>
-                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Car & Motorcycle')"
-                            src="/images/CategoryPictures/Car Motorcycle.svg" style="width: 100%;" /></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Home & Garden')" src="/images/CategoryPictures/Home Garden.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Pet & Aminals')" src="/images/CategoryPictures/Pet Aminals.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Toys & Baby')" src="/images/CategoryPictures/Toys Baby.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Exercise & Outdoor')" src="/images/CategoryPictures/Exercise Outdoor.svg" style="width: 100%;"/></a></li>
+                <li class="layui-col-sm2"><a><img onclick="GetLabelProduct('Car & Motorcycle')" src="/images/CategoryPictures/Car Motorcycle.svg" style="width: 100%;"/></a></li>
             </ul>
         </div>
     </div>
@@ -99,10 +78,8 @@
             <div class="AddSuccessMessage">
                 <img src="../../images/clickhere.png" style="margin-top:20px;" />
                 <div class="DownloadInstructions" i18n_Text="DownloadInstructions"></div>
-                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn"
-                    style="float: left;width:68px;">View</button>
-                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn"
-                    style="float: left;width:68px;">Later</button>
+                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">View</button>
+                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">Later</button>
                 <div class="nav nav-background"></div>
             </div>
             <!--分页-->
@@ -156,7 +133,7 @@
             function GetPlatform(form) {
                 $.ajax({
                     type: "post",
-                    url: BackgroundDomain + "/api/Product/QueryPlatformType",
+                    url:BackgroundDomain + "/api/Product/QueryPlatformType",
                     contentType: "application/json;",
                     data: JSON.stringify("GetPlatformProduct"),
                     dataType: "json",
@@ -181,7 +158,7 @@
             var CatalogueMenu;
             $.ajax({
                 type: "Get",
-                url: BackgroundDomain + "/api/Product/GetCatalogueMenu",
+                url:BackgroundDomain + "/api/Product/GetCatalogueMenu",
                 async: false,
                 success: function (data) {
                     CatalogueMenu = data;
@@ -220,6 +197,7 @@
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
+            
                 var result = JSON.stringify(data.field);
                 obj = JSON.parse(result);
                 if ($.isEmptyObject(obj.productTitle) != true) {
@@ -263,7 +241,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Product/ImportProductInfo',
+                url: BackgroundDomain +'/api/Product/ImportProductInfo',
                 data: JSON.stringify(productInfo),
                 success: function (data) {
                     layer.close(myMsg);//手动关闭
@@ -328,13 +306,23 @@
 
         //查看物流时效列表
         function ViewFreightList(FreightLine) {
-
             //
             /*    console.log(id);*/
             $("#FreightList" + FreightLine).css("display", "block");
 
+            $("#FreightLine" + FreightLine).mouseout(function () 
+            {
+                $('#FreightList' + FreightLine).css("display", "none");
+            })
 
-
+            $('#FreightList' + FreightLine).mouseover(function () {
+                 /* $('#price' + id).css("display", "none")*/
+                 $(this).css("display", "block");
+             })
+            $('#FreightList' + FreightLine).mouseout(function () 
+            {
+                $('#FreightList' + FreightLine).css("display", "none");
+            })
         }
         //获取当前时间
         function getNowTime(tempminit) {
@@ -366,6 +354,7 @@
             $(".schedule-view").hide();
         }
 
+
         function QueryImportProduct(count, SerchproductInfo) {
             var myMsg = layer.msg("loading...", {
                 icon: 16,
@@ -378,7 +367,7 @@
             $.ajax({
                 type: "post",
                 contentType: "application/json",
-                url: BackgroundDomain + '/api/Product/QueryPlatformProductList',
+                url: BackgroundDomain +'/api/Product/QueryPlatformProductList',
                 data: JSON.stringify(dto_obj),
                 success: function (msg) {
                     layer.close(myMsg);//手动关闭
@@ -397,7 +386,7 @@
                             $.ajax({
                                 type: "post",
                                 contentType: "application/json",
-                                url: BackgroundDomain + '/api/Product/QueryPlatformProductList',
+                                url: BackgroundDomain +'/api/Product/QueryPlatformProductList',
                                 data: JSON.stringify(dto_obj),
                                 success: function (msg) {
                                     $("#productList").empty();
@@ -464,15 +453,16 @@
                                         $.ajax({
                                             type: "post",
                                             contentType: "application/json",
-                                            url: BackgroundDomain + '/api/Product/QueryProductPriceInfo',
+                                            url: BackgroundDomain +'/api/Product/QueryProductPriceInfo',
                                             data: JSON.stringify(productprice),
                                             success: function (data) {
                                                 var fontadd = document.getElementById("price" + data.data[0].productId);
-                                                var currency = layui.data('currency');
+                                                var currency= layui.data('currency');
                                                 if (currency.currency) {
                                                     currency = currency.currency.id;
-                                                } else {
-                                                    currency = "USD";
+                                                }else
+                                                {
+                                                    currency ="USD";
                                                 }
                                                 //采购价
                                                 var listCostLine = document.createElement("div");
@@ -483,7 +473,7 @@
                                                 var listcostLabel = document.createElement("label");
                                                 listcostLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #FF5555;");
                                                 listCostLine.appendChild(listcostLabel);
-                                                listcostLabel.innerHTML = currency + ":" + data.data[0].price;
+                                                listcostLabel.innerHTML = currency +":"+ data.data[0].price;
 
                                                 //零售价
                                                 var RetailPriceLine = document.createElement("div");
@@ -494,12 +484,13 @@
                                                 var RetailPriceLabel = document.createElement("label");
                                                 RetailPriceLabel.setAttribute("style", "font-size: 16px;font-weight: bold;color: #333333;");
                                                 RetailPriceLine.appendChild(RetailPriceLabel);
-                                                RetailPriceLabel.innerHTML = currency + ":" + data.data[0].cost;
+                                                RetailPriceLabel.innerHTML = currency +":"+ data.data[0].cost;
                                             }
                                         })
                                         //物流时效
                                         var FreightLine = document.createElement("div");
                                         FreightLine.setAttribute("style", "height:24px;");
+                                        FreightLine.setAttribute("class", "FreightLine");
                                         FreightLine.setAttribute("id", "FreightLine" + msg.data[i].id);
                                         FreightLine.setAttribute("onclick", "ViewFreightList(" + msg.data[i].id + ")");
                                         changediv.appendChild(FreightLine);
@@ -537,9 +528,9 @@
                                         div4.appendChild(input);
 
 
-
+                                     
                                         //鼠标移入移出事件
-
+                                      
                                     }
                                 }
                             })
@@ -554,16 +545,18 @@
             QueryImportProduct(count, { "Label": Labelname });
         }
 
-        function productlistMouseover(id) {
+        function productlistMouseover(id)
+        {
             $('#product-list' + id).mouseover(function () {
-                /* $('#price' + id).css("display", "none")*/
-                $('#importbtn' + id).css("display", "block");
-                $("#product-list" + id).addClass("shadow");
-            })
-
+                 /* $('#price' + id).css("display", "none")*/
+                 $('#importbtn' + id).css("display", "block");
+                 $("#product-list" + id).addClass("shadow");
+                 $("#ProcessingFee" + id).css("display", "none");
+             })
+                                            
         }
-        function productlistMouseout(id) {
-
+        function productlistMouseout(id)
+        {
             $('#product-list' + id).mouseout(function () {
                 /*     $('#price' + id).css("display", "block")*/
                 $('#importbtn' + id).css("display", "none")
@@ -573,5 +566,4 @@
         }
     </script>
 </body>
-
 </html>

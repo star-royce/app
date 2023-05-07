@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
   <head>
     <meta charset="utf-8" />
   <title>Product Details</title>
@@ -696,14 +695,13 @@
       }
 
       function OperateInventory() {
-        var address = document.querySelector('#shoppingFrom').value;
-
+        var stockCode = document.querySelector('#shoppingFrom').value;
         for (let index = 0; index < variantList.length; index++) {
           const variant = variantList[index]
           var isUpd = false
           for (let j = 0; j < stockAddress.length; j++) {
             const stock = stockAddress[j]
-            if (stock.address == address && stock.sku == variant.sku) {
+            if (stock.stockCode == stockCode && stock.sku == variant.sku) {
               isUpd = true
               $('#inventory' + stock.sku).text(stock.stock)
             }

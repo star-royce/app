@@ -117,7 +117,7 @@ body {
 
 /*取消同步按钮样式*/
 .outsync {
-    width: 100%;
+    width: 170px;
     /* height: 32px; */
     background: #FFFFFf;
     border-radius: 16px 16px 16px 16px;
@@ -131,6 +131,7 @@ body {
 
 /*同步按钮样式*/
 .sync {
+    width: 170px;
     /* width: 170px;
     height: 32px; */
     background: #029803;

@@ -196,7 +196,7 @@
                             <script type="text/html" id="importOperation">
                                 <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
                             </script>
-
+                            <div style="height:36px;line-height:36px;font-size: 18px;font-weight: bold;color: red;margin:30px 0px;"> 尽量不要有空的，和金钱的有关的请使用数字，可以带小数点。库存字段使用数字,描述是html代码，长宽高重量这些使用数字，带电使用Y或者N，图片使用url。</div>
                             <table class="layui-table" id="Product_import"
                                    lay-filter="Product_import"></table>
                         </div>
@@ -437,6 +437,9 @@
 
 
             $("#import").change(function () {
+                var loading = layer.load('正在整理表格数据请等待...', {
+                          shade: [0.1,'#fff'] //0.1透明度的白色背景
+                      });
                 var formData = new FormData();
                 if (!this.files[0]) {
                     return;
@@ -451,10 +454,13 @@
                     processData: false,   // jQuery不要去处理发送的数据
                     contentType: false,   // jQuery不要去设置Content-Type请求头
                     success: function (retData) {
+                        layer.close(loading);
                         if (!retData || retData.length == 0) {
-                            alert("导入数据异常！请重试");
+                            document.querySelector("#import").value=''
+                            alert("整理表格数据异常！请检查数据格式，再重试");
                             return;
                         }
+
                         table.render({
                             elem: '#Product_import'
                             , data: retData
@@ -493,6 +499,8 @@
                         });
                         return false;
                     },error: (err, vm, info) => {
+                        alert("整理表格数据异常！请检查数据格式，再重试");
+                        layer.close(loading);
                         document.querySelector("#import").value=''
                     },
                 });

@@ -120,7 +120,7 @@ body {
     width: 170px;
     /* height: 32px; */
     background: #FFFFFf;
-    border-radius: 16px 16px 16px 16px;
+    border-radius: 6px 6px 6px 6px;
     opacity: 1;
     border: 1px solid #DDDDDD;
     font-size: 14px;
@@ -135,7 +135,7 @@ body {
     /* width: 170px;
     height: 32px; */
     background: #029803;
-    border-radius: 16px 16px 16px 16px;
+    border-radius: 6px 6px 6px 6px;
     opacity: 1;
     border: 1px solid #029803;
     font-size: 14px;

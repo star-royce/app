@@ -201,9 +201,10 @@
 
 
 
-        layui.use(['form', 'i18n', 'dropdown'], function () {
+        layui.use(['form', 'i18n', 'dropdown','layer'], function () {
             var form = layui.form,
                 i18n = layui.i18n,
+                layer = layui.layer,
                 dropdown = layui.dropdown;
 
 
@@ -211,17 +212,28 @@
 
             if (GetRequest('TokenKey')) {
                 Brand(GetRequest('TokenKey'), GetRequest('Email'));
+                var YDHCustomerConfig = layui.data('YDH-Customer');
+               if(YDHCustomerConfig.Secret)
+                {
+                  setTimeout(function () {
+                     window.location.href = "/client/index.html";
+                }, 3000);
+               }
+           
             }
             else {
                 var YDHConfig = layui.data('YDH-Customer');
                 if (YDHConfig.Secret) {
-
-                    // 判断是否登录
+                    layer.confirm(`Bind email account or not：${YDHConfig.email} ？ `,
+                    {offset: '100px', title: 'Binding account number',btn: ['bind', 'cancel']},
+                     function(index) {
+                        var customer = layui.data('YDH-Customer');
+                    // 绑定账号
                     $.ajax({
                         type: "post",
                         url:BackgroundDomain + "/api/Shopify/BindingShopify",
                         contentType: "application/json;",
-                        data: JSON.stringify({ "ShopifyShop": shop, "Email": YDHConfig.email }),
+                        data: JSON.stringify({ "ShopifyShop": shop, "Email": customer.email }),
                         dataType: "json",
                         success: function (sre) {
                             if (sre) {
@@ -236,7 +248,7 @@
                             }
                         },
                         beforeSend: function (req) {
-                            req.setRequestHeader("YDHAuthToken", YDHConfig.Secret);
+                            req.setRequestHeader("YDHAuthToken", customer.Secret);
                         },
                         complete: function (err) {
                             if (err.status === 401) {
@@ -244,13 +256,26 @@
                                     key: 'Secret'
                                     , remove: true
                                 });
-                                layui.data('YDH', {
+                                layui.data('YDH-Customer', {
                                     key: 'email'
                                     , remove: true
                                 });
                             }
                         }
                     });
+                   },
+                    function(){
+                        layui.data('YDH-Customer', {
+                            key: 'Secret'
+                            , remove: true
+                        });
+                        layui.data('YDH-Customer', {
+                            key: 'email'
+                            , remove: true
+                        });
+                        window.location.href = "/client/Customer/Index.html?shop=" + shop;
+	                 }
+                   )
                 }
             };
 
@@ -265,10 +290,9 @@
 
             i18n.loadProperties(id);
             var YDHCustomerConfig = layui.data('YDH-Customer');
-            setTimeout(function () {
-                window.location.href = "/client/index.html";
-            }, 3000);
-
+            // setTimeout(function () {
+            //     window.location.href = "/client/index.html";
+            // }, 3000);
 
             function Brand(Secret, email) {
                 layui.data('YDH-Customer', {
@@ -280,7 +304,6 @@
                     , value: email
                 });
             }
-
         });
 
         function GetRequest(key) {

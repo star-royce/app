@@ -166,10 +166,10 @@
                     OrdWares.exchangeRate = $(".exchangeRate").val();
                     var profitlist = document.getElementsByClassName("profit");
                     var profit = profitlist[0];
-                    if ($(profit).val() == 0) {
-                        layer.msg("单个税费利润不能为空", { icon: 5, time: 2000, shift: 6 });
-                        return false;
-                    }
+                    // if ($(profit).val() == 0) {
+                    //     layer.msg("单个税费利润不能为空", { icon: 5, time: 2000, shift: 6 });
+                    //     return false;
+                    // }
                     OrdWares.id = wareId;
                     OrdWares.UnitTaxesProfit = $(profit).val();
          

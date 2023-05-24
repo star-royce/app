@@ -23,8 +23,7 @@
         <div class="" style="width: 100%;height:40px; margin: 20px 0px;">
             <form class="layui-form layui-form-pane" action="/share/ImportCommodity.html" method="get">
                 <div class="model-select-box">
-                    <div class="model-select-text" id="selectshop" value="" i18n_text="Input.Please.select;"><img
-                            class="shoplogo" src="../../../images/shop.png" />Please Select</div>
+                    <div class="model-select-text" id="selectshop" value="" i18n_text="Input.Please.select;"><img class="shoplogo" src="../../../images/shop.png" />Please Select</div>
                     <b class="bg1"></b>
 
                     <ul class="model-select-option" id="model-select-option">
@@ -32,11 +31,8 @@
                 </div>
 
                 <div id="top-right" style="width: calc(100% - 310px); float: right;margin-left:30px; ">
-                    <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle"
-                        id="productTitle" lay-verify="title" autocomplete="off" placeholder="Search"
-                        class="inputprotitle">
-                    <button id="searchBtn" type="submit" class="searchButton" lay-submit
-                        lay-filter="data-search-btn"><img src="../../../images/sousuo.png" /></button>
+                    <input type="text" i18n_Attr="placeholder:Input.commodity.title;" name="productTitle" id="productTitle" lay-verify="title" autocomplete="off" placeholder="请输入商品标题" class="inputprotitle">
+                    <button type="submit" class="searchButton" lay-submit lay-filter="data-search-btn"><img src="../../../images/sousuo.png" /></button>
                 </div>
 
 
@@ -51,16 +47,10 @@
         <div id="test1" style="float:right;margin-right:40px;margin-bottom:50px;"></div>
         <!--批量操作栏-->
         <div id="total">
-            <input class='TotalChk'
-                style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;'
-                type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
+            <input class='TotalChk' style='border-color: #DDDDDD;border-radius: 5px;width: 20px;height: 20px;margin-top:20px;margin-left:40px;' type='checkbox' id='TotalChk' onclick="checkAllChange(this)">
             <span id="tatalSelect"></span>
-            <input type="button" id="PushAllProduct" class="pushpro"
-                style="float:right;margin-right:40px !important;margin-top:14px;" value="推送到商店"
-                onclick="PushAllProduct()">
-            <input type="button" id="DelAllProduct" class="deletepro"
-                style="float: right; margin-top: 14px; border: 1px solid #DDDDDD; " i18n_text="deleteproduct"
-                value="删除产品" onclick="DelAllProduct()">
+            <input type="button" id="PushAllProduct" class="pushpro" style="float:right;margin-right:40px !important;margin-top:14px;" value="推送到商店" onclick="PushAllProduct()">
+            <input type="button" id="DelAllProduct" class="deletepro" style="float: right; margin-top: 14px; border: 1px solid #DDDDDD; " i18n_text="deleteproduct" value="删除产品" onclick="DelAllProduct()">
 
         </div>
     </div>
@@ -434,10 +424,11 @@
                                                                 }
                                                             }
                                                             else {
-                                                                pricehtml += "<li id='attribute" + id + "'  class='head_font'style='width:calc((100% - 20px) * 0.45);;text-align:center;float:left;margin-top:9px;' >property<br/></li>";
+                                                                pricehtml += "<li id='attribute" + id + "'  class='head_font'style='width:calc((100% - 20px) * 0.34);;text-align:center;float:left;' >property<br/></li>";
                                                             }
                                                          
-                                                            if (platformCode != "Aliexpress") {
+                                                            if(platformCode!="Aliexpress")
+                                                            {
                                                                 pricehtml += "<li class='head_font'style='width:10%;' >warehouse<br></li>";
                                                             }
                                                             
@@ -487,7 +478,7 @@
                                                                             "<input type = 'text' class='layui-input' style='width:95%;max-width:320px;border-radius: 16px;text-align: center;float:left;'  data-type='" + key + "' data-key='" + data.data[i].id + "'  value = '" + att1[key] + "' onchange='UpdateAttribute(this)'/> <br/></li> ";
                                                                     }
                                                                 } else {
-                                                                    pricehtml1 += "<li  class='price_body'style='width:calc((100% - 20px) * 0.45);float:left;'><br/></li > "
+                                                                    pricehtml1 += "<li  class='price_body'style='width:calc((100% - 20px) * 0.34);float:left;'><br/></li > "
                                                                 }
                                                                 if(platformCode!="Aliexpress")
                                                                 {

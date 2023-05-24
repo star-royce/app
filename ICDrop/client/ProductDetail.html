@@ -348,30 +348,29 @@
                     // var attcount = Object.keys(att).length
                     // var width = Math.floor(40 / attcount)
                       for (var key in att) {
-                      console.log('key: ' + key);
-                      if (key == "color" || key == "Color") {
                         pricehtml +=
-                          "<li  class='head_font'style='width: 15%;' >" +
+                          "<li  class='head_font'style='width:" +
+                          width +
+                          "%;' >" +
                           key +
                           '<br></li>'
+                      }
                     } else {
                       pricehtml +=
-                          "<li  class='head_font'style='width: 5%;' >" +
-                          key +
+                        "<li  class='head_font'style='width:40%;' >" +
+                        $.i18n.prop('attribute') +
                         '<br></li>'
                     }
-                    }
-                  }
                     pricehtml +=
                       "<li class='head_font'style='width:10%;' >" +
                       $.i18n.prop('productDetail.Stock') +
                       '<br></li>'
                     pricehtml +=
-                    "<li class='head_font'style='width:20%;' >" +
-                    $.i18n.prop('Quantity') +
-                    '<br></li>'
-                  pricehtml +=
-                    "<li class='head_font'style='width:10%;' >" +
+                      "<li class='head_font'style='width:15%;' >" +
+                      $.i18n.prop('Quantity') +
+                      '<br></li>'
+                    pricehtml +=
+                      "<li class='head_font'style='width:10%;' >" +
                       $.i18n.prop('Weight.kg') +
                       '<br></li>'
                     pricehtml +=
@@ -379,7 +378,7 @@
                     $.i18n.prop('cost.$') +
                       '<br></li>'
                     pricehtml +=
-                      "<li class='head_font'style='width:15%;'>" +
+                      "<li class='head_font'style='width:10%;'>" +
                       $.i18n.prop('freight.$') +
                       '<br></li>'
                     priceul.innerHTML = pricehtml
@@ -396,26 +395,26 @@
                       pricediv1.appendChild(priceul1)
                       var pricehtml1 = ''
                       pricehtml1 +=
-                      "<li class='price_body' style='width:5%;background: #FFFFFF;'><img src='" +
+                        "<li class='price_body'style=''><img src='" +
                         data.data[i].pictureUrl +
                         "' style='height:40px;width:40px;' referrerPolicy='no-referrer'><br></li>"
                       //将属性字段分隔成单个属性
                       var att1 = JSON.parse(data.data[i].attribute)
                       if (att1 != null) {
                         for (var key in att1) {
-                        if (key == "color" || key == "Color") {
                           pricehtml1 +=
-                            "<li  class='long-price_body'style='width:15%;' data-fulltext="+ att1[key] +" >" +
+                            "<li  class='price_body'style='width:" +
+                            width +
+                            "%;' >" +
                             att1[key] +
                             '<br></li>'
+                        }
                       } else {
                         pricehtml1 +=
-                            "<li  class='price_body'style='width:5%;' >" +
-                            att1[key] +
+                          "<li  class='price_body'style='width:40%;'>" +
+                          (data.data[i].attribute==null?"":data.data[i].attribute) +
                           '<br></li>'
                       }
-                      }
-                    }
                       pricehtml1 +=
                         "<li class='price_body'style='width:10%;' id='inventory" +
                         data.data[i].sku +
@@ -423,11 +422,25 @@
                         12 +
                         '<br></li>'
                       pricehtml1 +=
-                        "<li class='price_body'style='width:15%;'>" +
+                        "<li class='price_body'style='width:15%;'><div class='input-stack'><div class='add' onclick='upclick(" +
+                        data.data[i].id +
+                        ")'>+</div><input id = 'quantity" +
+                        data.data[i].id +
+                        "' class='form-control' type = 'text' value='1' data-weight='" +
+                        data.data[i].variantExtend.weight +
+                        "' data-isElectricity='" +
+                        data.data[i].variantExtend.attribute +
+                        "' onchange='UpdateQuantity(" +
+                        data.data[i].id +
+                        ")' padding-left='20px;' /><div class='add' onclick='downclick(" +
+                        data.data[i].id +
+                        ")'>-</div></div></input><br></li>"
+                      pricehtml1 +=
+                        "<li class='price_body'style='width:10%;'>" +
                         data.data[i].variantExtend.weight +
                         '<br></li>'
                       pricehtml1 +=
-                        "<li class='price_body'style='width:15%;'>" +
+                        "<li class='price_body'style='width:10%;'>" +
                         data.data[i].price +
                         '<br></li>'
 
@@ -451,6 +464,10 @@
                             i.price * weight + i.registrationFee + i.handlingFee
                         }
                       }
+                      if(freight)
+                       {
+                          freight = freight.toFixed(2)
+                       }
                       pricehtml1 +=
                         "<li class='price_body'style='width:10%;'><div class='freight' id='freight" +
                         data.data[i].id +
@@ -614,6 +631,10 @@
                 freight = i.price * weight + i.registrationFee + i.handlingFee
               }
             }
+            if(freight)
+            {
+              freight = freight.toFixed(2)
+            }
             freightdiv.innerHTML = freight
           }
         }
@@ -737,6 +758,10 @@
         }
         var freightdiv = document.getElementById('freight' + id)
         $('#freight' + id).innerHTML = ''
+        if(freight)
+            {
+              freight = freight.toFixed(2)
+            }
         freightdiv.innerHTML = freight
       }
 

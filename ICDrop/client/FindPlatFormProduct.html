@@ -78,11 +78,26 @@
             <div class="AddSuccessMessage">
                 <img src="../../images/clickhere.png" style="margin-top:20px;" />
                 <div class="DownloadInstructions" i18n_Text="DownloadInstructions"></div>
-                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn"
-                    style="float: left;width:68px;">View</button>
-                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn"
-                    style="float: left;width:68px;">Later</button>
+                <button type="submit" class="ViewImpro" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">View</button>
+                <button type="submit" class="LaterBtn" lay-submit lay-filter="data-search-btn" style="float: left;width:68px;">Later</button>
                 <div class="nav nav-background"></div>
+            </div>
+            <!--添加进度栏收缩状态-->
+            <div class="schedule-shrink">
+                <i class="layui-icon icon-a-ImportList" style=" margin-left:23px;margin-right:10px;"></i>
+                <label i18n_Text="ImportList" style="font-size: 16px;  font-weight: bold; line-height: 20px; color: #333333;"></label>
+                <label i18n_Text="ViewProduct" style="margin-left:150px;font-size: 14px;  font-weight: 400; line-height: 16px; color: #3399FF;margin-right:20px;" onclick="ViewImportList()"></label>
+            </div>
+            <!--添加进度栏查看状态-->
+            <div class="schedule-view">
+                <div class="schedule-top">
+                    <i class="layui-icon icon-a-ImportList" style="margin-right:10px;"></i>
+                    <label i18n_Text="ImportList" style="font-size: 16px;  font-weight: bold; line-height: 20px; color: #333333;"></label>
+                    <label i18n_Text="PutAway" style="margin-left:125px;font-size: 14px;  font-weight: 400; line-height: 16px; color: #3399FF;" onclick="PutAwayImportList()"></label>
+                </div>
+                <div class="schedule-body" id="schedule-body">
+                    <span onchange=""></span>
+                </div>
             </div>
             <!--分页-->
             <div id="test1" style="float:right;margin-right:70px;"></div>
@@ -233,11 +248,6 @@
         })
         ////导入产品
         function ImportProduct(id) {
-            var myMsg = layer.msg("loading...", {
-                icon: 16,
-                time: -1
-            })
-
             var productInfo = new Object();
             productInfo.id = id;
             $.ajax({

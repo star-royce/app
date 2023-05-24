@@ -168,6 +168,7 @@
                     url: BackgroundDomain +'/api/Product/QueryImportProductList',
                     data: JSON.stringify(dto_obj),
                     success: function (msg) {
+                        $("#productList").empty();
                         if (!msg) {
                             $("#productList").empty();
                             //获取div
@@ -717,7 +718,7 @@
                                 })
                             }
                         });
-                        }
+                    }
                     }
                 })
             }

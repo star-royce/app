@@ -342,11 +342,13 @@
                     div10.appendChild(priceul)
                     pricehtml +=
                       "<li class='head_font'style='width:5%;background: #FFFFFF;' ><br></li>"
+                   
                     //将属性字段分隔成单个属性
                     var att = JSON.parse(data.data[0].attribute)
                     if (att != null) {
-                    // var attcount = Object.keys(att).length
-                    // var width = Math.floor(40 / attcount)
+                      var attcount = Object.keys(att).length
+                      var width = Math.floor(40 / attcount)
+                      console.log(width)
                       for (var key in att) {
                         pricehtml +=
                           "<li  class='head_font'style='width:" +
